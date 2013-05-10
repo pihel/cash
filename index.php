@@ -8,9 +8,7 @@
 
 try {
   require_once('lib/init.php');
-  $some_var = NULL;
-  $tpl = getTpl("template_main", $some_var);
-  echo getTpl("index", $site_name, $tpl);
+  echo getTpl("index", $site_name);
 }
 catch(Error $e) {
   $err = getTpl("error", $e->message);

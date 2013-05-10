@@ -76,7 +76,7 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
 		  tooltip: 'Удалить запись',
 		  handler: function(grid, rowIndex, colIndex) {
 		      var rec = grid.getStore().getAt(rowIndex);
-		      Ext.Msg.alert('del', rec.get('id'));
+		      deleteItem(rec.get('id'));
 		  }
 	      }]
 	  }
@@ -115,6 +115,40 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
 
 var loadMask_cash_list_grid = new Ext.LoadMask(cash_list_grid, {msg:'Загрузка списка операций...', store: cash_list_store});
 
+
+function deleteItem(v_id) {
+  Ext.Msg.show({
+      title:'Удаление операции',
+      msg: 'Удалить операцию?',
+      icon: Ext.MessageBox.QUESTION,
+      buttons: Ext.Msg.OKCANCEL,
+      fn: function(buttonId) {
+	//if clicked ok
+	if(buttonId == "ok") {
+	    cash_list_grid.setLoading("Удаляю операцию...");
+	    Ext.Ajax.request({
+	      url: "ajax/delete.php",
+	      method: "GET",
+	      params: {
+		  id: v_id
+	      },
+	      success: function(data) {
+		  // if response is not empty - error msg
+		  if(data.responseText != "") {
+		    error(data.responseText, function() {
+		      cash_list_grid.setLoading(false);
+		      //listRefresh();
+		      return;
+		    });
+		  }
+		  cash_list_grid.setLoading(false);
+		  listRefresh();
+	      } //success
+	  }); //Ext.Ajax.request
+	} //buttonId == "ok"
+      } // fn - button click
+  });//Ext.Msg.show
+}
 
 
 /* panel with grid */

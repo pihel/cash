@@ -39,6 +39,8 @@ var cash_item_nmcl_store = Ext.create('Ext.data.Store', {
 
 var cash_item_nmcl_cb = Ext.create('Ext.form.field.ComboBox', {
     store: cash_item_nmcl_store,
+    id: "cash_item_nmcl_cb",
+    name: "cash_item_nmcl_cb",
     fieldLabel: 'Товар',
     labelWidth: 100,
     displayField: 'name',
@@ -75,6 +77,8 @@ var cash_item_prod_type_store = Ext.create('Ext.data.Store', {
 
 var cash_item_prod_type_cb = Ext.create('Ext.form.field.ComboBox', {
     store: cash_item_prod_type_store,
+    id: "cash_item_prod_type_cb",
+    name: "cash_item_prod_type_cb",
     fieldLabel: 'Группа',
     labelWidth: 100,
     displayField: 'name',
@@ -93,8 +97,8 @@ var cash_item_prod_type_cb = Ext.create('Ext.form.field.ComboBox', {
 //----price
 var cash_item_price = {
     xtype: 'numberfield',
-    name: 'cash_item_price',
     id: "cash_item_price",
+    name: "cash_item_price",
     fieldLabel: 'Цена',
     allowBlank: false,
     labelWidth: 100,
@@ -119,6 +123,8 @@ var cash_item_currency_store = Ext.create('Ext.data.Store', {
 
 var cash_item_currency_cb = Ext.create('Ext.form.field.ComboBox', {
     store: cash_item_currency_store,
+    id: "cash_item_currency_cb",
+    name: "cash_item_currency_cb",
     displayField: 'name',
     valueField: 'id',
     queryMode: 'local',
@@ -143,19 +149,21 @@ var cash_item_ctype_store = Ext.create('Ext.data.Store', {
 
 var cash_item_ctype_cb = Ext.create('Ext.form.field.ComboBox', {
     store: cash_item_ctype_store,
+    id: "cash_item_ctype_cb",
+    name: "cash_item_ctype_cb",
     displayField: 'name',
     valueField: 'id',
     queryMode: 'local',
     width: 170,
     value: 1
-}); //cash_item_currency_cb
+}); //cash_item_ctype_cb
 
 
 //----qnt
 var cash_item_qnt = {
     xtype: 'numberfield',
-    name: 'cash_item_qnt',
     id: "cash_item_qnt",
+    name: "cash_item_qnt",
     fieldLabel: 'Количество',
     allowBlank: false,
     labelWidth: 100,
@@ -180,6 +188,8 @@ var cash_item_org_store = Ext.create('Ext.data.Store', {
 
 var cash_item_org_cb = Ext.create('Ext.form.field.ComboBox', {
     store: cash_item_org_store,
+    id: "cash_item_org_cb",
+    name: "cash_item_org_cb",
     displayField: 'name',
     valueField: 'id',
     queryMode: 'local',
@@ -206,6 +216,8 @@ var cash_item_toper_store = Ext.create('Ext.data.Store', {
 
 var cash_item_toper_cb = Ext.create('Ext.form.field.ComboBox', {
     store: cash_item_toper_store,
+    id: "cash_item_toper_cb",
+    name: "cash_item_toper_cb",
     displayField: 'name',
     valueField: 'id',
     queryMode: 'local',
@@ -220,7 +232,8 @@ var cash_item_toper_cb = Ext.create('Ext.form.field.ComboBox', {
 //---- file
 var cash_item_file = {
     xtype: 'filefield',
-    name: 'cash_item_file',
+    id: "cash_item_file",
+    name: "cash_item_file",
     fieldLabel: 'Файл',
     labelWidth: 100,
     width: 474,
@@ -239,25 +252,39 @@ var cash_item_note = {
 };
 
 //---  save
-var cash_item_save =
-{
-	xtype: 'button',
+var cash_item_save = Ext.create('Ext.button.Button', {
 	text: 'Сохранить',
+	formBind: true,
+	id: "cash_item_save",
 	icon: "static/ext/resources/themes/images/default/tree/drop-yes.gif",
+	disabled: true,
 	handler : function() {
-	  alert(1);
+	  cash_list_add.setLoading("Сохранение операции...");
+
+	  var form = this.up('form').getForm();
+	    form.submit({
+		success: function(form, action) {
+		    cash_list_add.setLoading(false);
+		    cash_list_add.hide();
+		    listRefresh();
+		},
+		failure: function(form, action) {
+		    error(action.result.msg, function() {
+		      cash_list_add.setLoading(false);
+		    });
+		}
+	    });
 	}
-}
+});
 
 
-var cash_item_cancel =
+var cash_item_cancel = Ext.create('Ext.button.Button',
 {
-	xtype: 'button',
 	text: 'Отмена',
 	handler : function() {
 	  cash_list_add.hide();
 	}
-}
+});
 
 //---price
 var cash_item_price_tb = {
@@ -268,35 +295,36 @@ var cash_item_price_tb = {
 	      cash_item_ctype_cb,]
 }; //cash_item_price_tb
 
-//save button
-var cash_item_tb = {
-      xtype: 'toolbar',
-      dock: 'bottom',
-      ui: 'footer',
-      items: ["->", cash_item_save, " ", cash_item_cancel]
-}; //cash_list_tb
 
+//---- form add
+var cash_item_form_add = new Ext.FormPanel({
+  url:'ajax/add.php',
+  bodyPadding: 0,
+  id: "cash_item_form_add",
+  frame: true,
+  items: [cash_item_date,
+	  cash_item_nmcl_cb,
+	  cash_item_prod_type_cb,
+	  cash_item_price_tb,
+	  cash_item_qnt,
+	  cash_item_org_cb,
+	  cash_item_toper_cb,
+	  cash_item_file,
+	  cash_item_note
+ 	 ],
+  buttons: ["->", cash_item_save, " ", cash_item_cancel]
+});
 
 ///-----window
 var cash_list_add = Ext.create('Ext.Window', {
       title: 'Добавление операции',
-      width: 500,
-      height: 345,
+      width: 510,
+      height: 355,
       closeAction: 'hide',
       modal: true,
       headerPosition: 'top',
       bodyPadding: 5,
-      items: [cash_item_date,
-	      cash_item_nmcl_cb,
-	      cash_item_prod_type_cb,
-	      cash_item_price_tb,
-	      cash_item_qnt,
-	      cash_item_org_cb,
-	      cash_item_toper_cb,
-	      cash_item_file,
-	      cash_item_note,
-	      cash_item_tb
- 	    ],
+      items: [cash_item_form_add],
       listeners: {
 	show: function(){
 	  cash_list_add.setLoading("Загрузка формы...");
@@ -305,6 +333,21 @@ var cash_list_add = Ext.create('Ext.Window', {
 	      cash_item_currency_store.load(function() {
 		cash_item_ctype_store.load(function() {
 		  cash_item_org_store.load(function() {
+		    Ext.getCmp('cash_item_nmcl_cb').focus(false, 200);
+
+		    //add - default value
+		    Ext.getCmp('cash_item_date').setValue(new Date());
+		    Ext.getCmp('cash_item_nmcl_cb').setValue("");
+		    Ext.getCmp('cash_item_prod_type_cb').setValue("");
+		    Ext.getCmp('cash_item_price').setValue(0);
+		    Ext.getCmp('cash_item_currency_cb').setValue(1);
+		    Ext.getCmp('cash_item_ctype_cb').setValue(1);
+		    Ext.getCmp('cash_item_qnt').setValue(1);
+		    Ext.getCmp('cash_item_org_cb').setValue("");
+		    Ext.getCmp('cash_item_toper_cb').setValue(0);
+		    Ext.getCmp('cash_item_file').setValue("");
+		    Ext.getCmp('cash_item_note').setValue("");
+
 		    cash_list_add.setLoading(false);
 		  });
 		});

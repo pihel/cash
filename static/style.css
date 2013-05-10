@@ -24,7 +24,7 @@ img {
   text-align: right !important;
   font-weight: bold !important;
 }
-.x-toolbar-default {
+.x-toolbar-default, #cash_item_form_add {
   background: none !important;
   border-width: 0px !important;
 }

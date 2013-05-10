@@ -42,6 +42,7 @@ class SQLITE_DB extends DB {
   protected function _exec($sql, $args) {
     $this->_stmt = $this->_con->prepare($sql);
     foreach($args as $k=>$v) {
+      //echo $k."=>".$v."<br>";
       $this->_stmt->bindValue($k, $v);
     }
 
@@ -49,8 +50,10 @@ class SQLITE_DB extends DB {
 
     $result = $this->_stmt->execute();
 
-    while($res = $result->fetchArray(SQLITE3_ASSOC)){
-      $ret[] = $res;
+    if($result) {
+      while($res = $result->fetchArray(SQLITE3_ASSOC)){
+	$ret[] = $res;
+      }
     }
 
     $this->_stmt->close();
@@ -61,7 +64,13 @@ class SQLITE_DB extends DB {
   public function getRealSql($sql, $args) {
     $rsql = $sql;
     foreach($args as $k=>$v) {
-      $rsql = str_replace($k, $v, $rsql);
+      if(is_array($v)) {
+	foreach($v as $kk=>$vv) {
+	  $rsql = str_replace($kk, $vv, $rsql);
+	}
+      } else {
+	$rsql = str_replace($k, $v, $rsql);
+      }
     }
 
     return $rsql;

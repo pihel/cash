@@ -34,7 +34,7 @@ var loginForm = new Ext.FormPanel({
 		    authOk(action.result.msg);
 		},
 		failure: function(form, action) {
-		    Ext.Msg.alert('Ошибка входа', action.result.msg);
+		    error(action.result.msg);
 		}
 	    });
 	}

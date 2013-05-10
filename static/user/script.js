@@ -64,6 +64,18 @@ function dateTimeRender(value) {
   return val;
 }
 
+function error(text, _cb) {
+  Ext.Msg.show({
+	title:'Ошибка',
+	msg: text,
+	icon: Ext.MessageBox.ERROR,
+	buttons: Ext.Msg.OK,
+	fn: function() {
+	  if(_cb != undefined) _cb();
+	}
+  });
+}
+
 /* --END RENDER function */
 
 
