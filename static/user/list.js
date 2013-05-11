@@ -57,7 +57,7 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
 	{text: "Курс", 			dataIndex: 'rate', 		hidden: true },
 	{text: "Знак валюты", 		dataIndex: 'sign',		hidden: true },
 	{text: "Тип валюты", 		dataIndex: 'cash_type_id', 	hidden: true, 	tdCls: 'x-center-cell' },
-	{text: "Валюта", 		dataIndex: 'cash_type', 	hidden: true, 	tdCls: 'x-center-cell' },
+	{text: "Кошелек", 		dataIndex: 'cash_type', 	hidden: true, 	tdCls: 'x-center-cell' },
 	{
 	      menuDisabled: true,
 	      sortable: false,

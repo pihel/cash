@@ -225,7 +225,8 @@ var cash_item_toper_cb = Ext.create('Ext.form.field.ComboBox', {
     fieldLabel: 'Тип операции',
     allowBlank: false,
     labelWidth: 100,
-    value: 0
+    value: 0,
+    editable: false
 }); //cash_item_currency_cb
 
 

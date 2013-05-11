@@ -8,25 +8,20 @@ Ext.Loader.setPath('Ext.ux', 'static/ext/ux');
  * included modules
 ***************************/
 Ext.require([
-    'Ext.tree.*',
     'Ext.data.*',
-    'Ext.tip.*',
+    //'Ext.tip.*',
     'Ext.grid.*',
     'Ext.util.*',
     'Ext.state.*',
-    'Ext.tip.QuickTipManager',
+    //'Ext.tip.QuickTipManager',
     'Ext.menu.*',
     'Ext.form.field.ComboBox',
     'Ext.layout.container.Table',
     'Ext.view.View',
     'Ext.button.*',
     'Ext.Msg',
-    'Ext.ux.grid.FiltersFeature',
-    'Ext.ux.statusbar.StatusBar',
-    'Ext.ux.CheckColumn',
-    'Ext.selection.CellModel',
-    'Ext.tab.*',
-    'Ext.Window.*'
+    //'Ext.ux.grid.FiltersFeature',
+    'Ext.tab.*'
 ]);
 
 

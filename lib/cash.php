@@ -153,60 +153,107 @@ class Cash {
     $this->db->commit();
   }
 
-  public function add($data) {
-    $ret = array('success'=>true, 'msg'=>1);
-    //$ret = array('failure'=>true, 'msg'=>2);
-    return $ret;
+  protected function add_refbook($name, $ref) {
+    if(intval($name) > 0) return $name;
 
-    /*$this->db->start_tran();
+    $ref_id = 0;
+    $ref_id = $this->db->element("SELECT MAX(id) id from ".$ref." WHERE name = ?", $name );
+    $ref_id = intval($ref_id);
+
+    if($ref_id == 0) {
+      $this->db->exec("INSERT INTO ".$ref."(name) VALUES(?)",  $name);
+      $ref_id = $this->db->last_id();
+    }
+    return intval( $ref_id );
+  }
+
+  public function add($data, $files) {
+    $this->db->start_tran();
+
+    /*
+    BEGIN;
+    INSERT INTO `cashes` (nmcl_id, `group`, price, cash_type_id, qnt, `date`, org_id, uid, `file`, `type` ,note, cur_id)
+     VALUES(626, 2, 150, 1, 1, '2013-05-11', 4, 1, '', 0, 'test', 1);
+   commit;
+    */
 
     $file = '';
-    if(is_array($_FILES)) {
+    /*if(is_array($_FILES)) {
     if(move_uploaded_file($_FILES['tmp_name'], $_SERVER['DOCUMENT_ROOT'].'/files/'.$_FILES['name'])) {
       $file = '/files/'.$_FILES['name'];
     }
-    }
+    }*/
 
-    $data['org'] = mysql_real_escape_string($data['org']);
-    $data['nom'] = mysql_real_escape_string($data['nom']);
-    $nmcl = $data['nom'];
-    $org = $data['org'];
+    $cash_item_date = $data['cash_item_date'];
+    if(empty($cash_item_date)) 		{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните дату'); }
 
-    //определим номенклатуру
-    $nmcl = select(sprintf("SELECT MAX(id) id from cashes_nom WHERE name = '%s' limit 1", $data['nom']));
-    $nmcl = intval($nmcl[0]['id']);
-    if($nmcl == 0) {
-      query(sprintf("INSERT INTO cashes_nom(name) VALUES('%s')", $data['nom']) );
-      $nmcl = mysql_insert_id();
-    }
+    $cash_item_nmcl_cb = $this->add_refbook($data["cash_item_nmcl_cb"], "cashes_nom");
+    if($cash_item_nmcl_cb == 0) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления товара'); }
 
-    //определим организацию
-    $org = select(sprintf("SELECT MAX(id) id from cashes_org WHERE name = '%s' limit 1", $data['org']));
-    $org = intval($org[0]['id']);
-    if($org == 0) {
-      query(sprintf("INSERT INTO cashes_org(name) VALUES('%s')", $data['org']) );
-      $org = mysql_insert_id();
-    }
+    $cash_item_prod_type_cb = $this->add_refbook($data["cash_item_prod_type_cb"], "cashes_type");
+    if($cash_item_prod_type_cb == 0) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления группы товара'); }
 
-    $sql = sprintf("INSERT INTO `cashes`(nmcl_id, `group`, price, cash_type_id, qnt, date, org_id, uid, `file`, type ,note,cur_id)
-		    VALUES(%u, %u, %s, %u, %u, '%s', '%s', %u, '%s', %u, '%s',%u)",
-      $nmcl,
-      (int)$data['group'],
-      (double)str_replace(",", ".", $data['price']),
-      (int)$data['cash_type'],
-      (int)$data['qnt'],
-      mysql_real_escape_string($data['datepick']." ".date("H:i:s")),
-      $org,
-      (int)$_SESSION['uid'],
-      mysql_real_escape_string($file),
-      (int)$data['type'],
-      mysql_real_escape_string($data['note']),
-      (int)$data['curr']
+    $cash_item_price = $data['cash_item_price'];
+    if(empty($cash_item_price)) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните цену'); }
+
+    $cash_item_currency_cb = $this->add_refbook($data["cash_item_currency_cb"], "currency");
+    if($cash_item_currency_cb == 0) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления валюты'); }
+
+    $cash_item_ctype_cb = $this->add_refbook($data["cash_item_ctype_cb"], "cashes_type");
+    if($cash_item_ctype_cb == 0) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления кошелька'); }
+
+    $cash_item_qnt = $data['cash_item_qnt'];
+    if(empty($cash_item_qnt)) 		{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните количество'); }
+
+    $cash_item_org_cb = $this->add_refbook($data["cash_item_org_cb"], "cashes_org");
+    if($cash_item_org_cb == 0) 		{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления организации'); }
+
+    $cash_item_toper_cb = intval($data['cash_item_toper_cb']);
+    if( !in_array($cash_item_toper_cb, array(0,1)) )	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Неверный тип операции'); }
+
+    $cash_item_note = $data['cash_item_note'];
+
+    $sql =
+    "INSERT INTO `cashes` (nmcl_id, `group`, price, cash_type_id, qnt, `date`, org_id, uid, `file`, `type` ,note, cur_id)
+     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    $this->db->exec($sql,
+	$cash_item_nmcl_cb,
+	$cash_item_prod_type_cb,
+	$cash_item_price,
+	$cash_item_ctype_cb,
+	$cash_item_qnt,
+	$cash_item_date,
+	$cash_item_org_cb,
+	1,
+	$file,
+	$cash_item_toper_cb,
+	$cash_item_note,
+	$cash_item_currency_cb
     );
+
+    /*$this->db->exec("INSERT INTO `cashes` (nmcl_id, `group`, price, cash_type_id, qnt, `date`, org_id, uid, `file`, `type` ,note, cur_id)
+     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+	$data['cash_item_nmcl_cb'],
+	$data['cash_item_prod_type_cb'],
+	$data['cash_item_price'],
+	$data['cash_item_ctype_cb'],
+	$data['cash_item_qnt'],
+	$data['cash_item_date'],
+	$data['cash_item_org_cb'],
+	1,
+	'',
+	$data['cash_item_toper_cb'],
+	$data['cash_item_note'],
+	$data['cash_item_currency_cb']
+    );*/
+
+    $id = intval( $this->db->last_id() );
+    if($id == 0) { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления операции'); }
 
     $this->db->commit();
 
-    return query($sql);*/
+    return array('success'=>true, 'msg'=> $id );
   } //add
 }
 ?>
