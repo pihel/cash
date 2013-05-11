@@ -1,3 +1,6 @@
 Домашняя бухгалтерия на ExtJS 4, PHP 5, SQLite 3.
 Демо - cash2.pihel.jino.ru
 chown -R www-data ./
+
+git commit -a -m ''
+git push -u origin master
