@@ -12,5 +12,12 @@ require_once("../lib/init.php");
     'cash_item_toper_cb' => 0,
     'cash_item_note' => 'test'
 );*/
-$ret = $ch->add($_POST, $_FILES);
+
+$id = intval( $_POST['cash_item_edit_id'] );
+$ret = "";
+if($id > 0) {
+  $ret = $ch->edit($_POST, $_FILES);
+} else {
+  $ret = $ch->add($_POST, $_FILES);
+}
 echo json_encode( $ret );

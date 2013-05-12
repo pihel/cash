@@ -69,7 +69,10 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
 		  tooltip: 'Редактировать запись',
 		  handler: function(grid, rowIndex, colIndex) {
 		      var rec = grid.getStore().getAt(rowIndex);
-		      Ext.Msg.alert('edit', rec.get('id'));
+		      loadScript('static/user/add.js', function() {
+			v_edit_id = rec.get('id');
+			cash_list_add.show();
+		      });
 		  }
 	      }, {
 		  iconCls: 'del-cash-col',
@@ -224,6 +227,7 @@ var cash_list_edit_btn_add =
 	icon: "static/ext/resources/themes/images/default/dd/drop-add.gif",
 	handler : function (){
 		loadScript('static/user/add.js', function() {
+		  v_edit_id = 0;
 		  cash_list_add.show();
 		});
 	}

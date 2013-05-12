@@ -18,7 +18,7 @@ class Cash {
 
     $sql =
     " SELECT
-      c.id, c.nmcl_id, cn.name as nom, c.`group`, cg.name gname, c.price, c.qnt, c.date as oper_date, c.date_edit,
+      c.id, c.nmcl_id, cn.name as nom, c.`group`, cg.name gname, c.price, c.qnt, c.date as oper_date, datetime(c.date_edit, 'localtime') date_edit,
       c.org_id, co.name as oname, c.type, c.note, c.file, c.uid, cr.rate, cr.sign, c.cash_type_id, ct.name as cash_type,
       CASE WHEN c.type = 0 THEN -1 ELSE 1 END * c.price * c.qnt * cr.rate as amount
      FROM cashes c
@@ -46,20 +46,9 @@ class Cash {
   public function getItem($id) {
     $sql =
     " SELECT
-      c.id, c.nmcl_id, cn.name as nom, c.`group`, cg.name gname, c.price, c.qnt, c.date as oper_date, c.date_edit,
-      c.org_id, co.name as oname, c.type, c.note, c.file, c.uid, cr.rate, cr.sign, c.cash_type_id, ct.name as cash_type,
-      CASE WHEN c.type = 0 THEN -1 ELSE 1 END * c.price * c.qnt * cr.rate as amount
+      c.nmcl_id, c.`group`, c.price, c.qnt, c.date as oper_date, c.cur_id,
+      c.org_id, c.type, c.note, c.file, c.uid, c.cash_type_id, c.type
      FROM cashes c
-     INNER JOIN currency cr
-      ON(c.cur_id = cr.id)
-     INNER JOIN cashes_nom cn
-      ON(c.nmcl_id = cn.id)
-     INNER JOIN cashes_org co
-      ON(c.org_id = co.id)
-     INNER JOIN cashes_type ct
-      ON(c.cash_type_id = ct.id)
-     LEFT JOIN cashes_group cg
-      ON(cg.id = c.`group`)
      WHERE
       c.id = ?
       AND c.uid = ?";
@@ -70,7 +59,7 @@ class Cash {
   public function nmcl_list() {
     $sql =
     "SELECT
-	DISTINCT cn.id, cn.name
+	cn.id, cn.name
       FROM
 	cashes c, cashes_nom cn
       WHERE
@@ -83,34 +72,22 @@ class Cash {
     return $this->db->select($sql, 1);
   }
 
-  public function nmcl_param($name) {
+  public function nmcl_param($nmcl_id) {
+    //cn.id, cn.name,
     $sql =
     "SELECT
-	cn.id, cn.name, MAX(c.`group`) grp,
-	(
-	  SELECT
-	    co.id
-	  FROM
-	    cashes_org co, cashes c1
-	  WHERE
-	    c1.nmcl_id = c.nmcl_id
-	    AND co.id = c1.org_id
-	    AND c1.uid = ?
-	  GROUP BY co.name
-	  ORDER BY count(1) DESC
-	  limit 1
-	) as org
-      FROM
-	cashes c, cashes_nom cn
-      WHERE
-	cn.id = c.nmcl_id
-	AND c.uid = ?
-	AND UPPER( co.name ) LIKE UPPER(%?%)
-      GROUP BY
-	cn.name
-      ORDER BY
-	COUNT(1) DESC, LENGTH(cn.name)";
-    return $this->db->select($sql, 1, 1, $name);
+      c.`group` grp,
+      c.org_id
+    FROM
+      cashes c
+    WHERE
+      c.nmcl_id = ?
+      AND c.uid = ?
+      GROUP BY c.`group`, c.org_id
+    ORDER BY
+      COUNT(1) DESC
+      limit 1 ";
+    return $this->db->line($sql, $nmcl_id, 1);
   }
 
   public function prod_type_list() {
@@ -167,86 +144,121 @@ class Cash {
     return intval( $ref_id );
   }
 
+  protected function refbook_check($data) {
+    $ret = array();
+
+    if(empty($data)) return array('failure'=>true, 'msg'=> 'Нет данных');
+
+    $ret['file'] = '';
+    /*if(is_array($files)) {
+      if(move_uploaded_file($files['tmp_name'], '../files/'.$files['name'])) {
+	$file = 'files/'.$files['name'];
+      }
+    }*/
+
+    $ret['cash_item_date'] = $data['cash_item_date'];
+    if(empty($ret['cash_item_date'])) 		{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните дату'); }
+
+    $ret['cash_item_nmcl_cb'] = $this->add_refbook($data["cash_item_nmcl_cb"], "cashes_nom");
+    if( $ret['cash_item_nmcl_cb'] == 0) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления товара'); }
+
+    $ret['cash_item_prod_type_cb'] = $this->add_refbook($data["cash_item_prod_type_cb"], "cashes_type");
+    if($ret['cash_item_prod_type_cb'] == 0) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления группы товара'); }
+
+    $ret['cash_item_price'] = $data['cash_item_price'];
+    if(empty($ret['cash_item_price'])) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните цену'); }
+
+    $ret['cash_item_currency_cb'] = $this->add_refbook($data["cash_item_currency_cb"], "currency");
+    if($ret['cash_item_currency_cb'] == 0) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления валюты'); }
+
+    $ret['cash_item_ctype_cb'] = $this->add_refbook($data["cash_item_ctype_cb"], "cashes_type");
+    if($ret['cash_item_ctype_cb'] == 0) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления кошелька'); }
+
+    $ret['cash_item_qnt'] = $data['cash_item_qnt'];
+    if(empty($ret['cash_item_qnt'])) 		{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните количество'); }
+
+    $ret['cash_item_org_cb'] = $this->add_refbook($data["cash_item_org_cb"], "cashes_org");
+    if($ret['cash_item_org_cb'] == 0) 		{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления организации'); }
+
+    $ret['cash_item_toper_cb'] = intval($data['cash_item_toper_cb']);
+    if( !in_array($ret['cash_item_toper_cb'], array(0,1)) )	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Неверный тип операции'); }
+
+    $ret['cash_item_note'] = $data['cash_item_note'];
+
+    return $ret;
+  }
+
+  public function edit($data, $files) {
+    $this->db->start_tran();
+
+    $refb = $this->refbook_check($data);
+
+    if($refb['failure']) return $refb;
+
+    $sql =
+    "UPDATE `cashes`
+      SET nmcl_id = ?,
+	  `group` = ?,
+	  price = ?,
+	  cash_type_id = ?,
+	  qnt = ?,
+	  `date` = ?,
+	  org_id = ?,
+	  `file` = ?,
+	  `type` = ?,
+	  note = ?,
+	  cur_id = ?,
+	  date_edit = CURRENT_TIMESTAMP
+     WHERE id = ? ";
+
+    $this->db->exec($sql,
+	$refb['cash_item_nmcl_cb'],
+	$refb['cash_item_prod_type_cb'],
+	$refb['cash_item_price'],
+	$refb['cash_item_ctype_cb'],
+	$refb['cash_item_qnt'],
+	$refb['cash_item_date'],
+	$refb['cash_item_org_cb'],
+	$refb['file'],
+	$refb['cash_item_toper_cb'],
+	$refb['cash_item_note'],
+	$refb['cash_item_currency_cb'],
+	intval($data['cash_item_edit_id'])
+    );
+
+    $cnt = intval( $this->db->affect() );
+    if($cnt == 0) { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка обновления операции'); }
+
+    $this->db->commit();
+
+    return array('success'=>true, 'msg'=> $cnt );
+  }
+
   public function add($data, $files) {
     $this->db->start_tran();
 
-    /*
-    BEGIN;
-    INSERT INTO `cashes` (nmcl_id, `group`, price, cash_type_id, qnt, `date`, org_id, uid, `file`, `type` ,note, cur_id)
-     VALUES(626, 2, 150, 1, 1, '2013-05-11', 4, 1, '', 0, 'test', 1);
-   commit;
-    */
+    $refb = $this->refbook_check($data);
 
-    $file = '';
-    /*if(is_array($_FILES)) {
-    if(move_uploaded_file($_FILES['tmp_name'], $_SERVER['DOCUMENT_ROOT'].'/files/'.$_FILES['name'])) {
-      $file = '/files/'.$_FILES['name'];
-    }
-    }*/
-
-    $cash_item_date = $data['cash_item_date'];
-    if(empty($cash_item_date)) 		{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните дату'); }
-
-    $cash_item_nmcl_cb = $this->add_refbook($data["cash_item_nmcl_cb"], "cashes_nom");
-    if($cash_item_nmcl_cb == 0) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления товара'); }
-
-    $cash_item_prod_type_cb = $this->add_refbook($data["cash_item_prod_type_cb"], "cashes_type");
-    if($cash_item_prod_type_cb == 0) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления группы товара'); }
-
-    $cash_item_price = $data['cash_item_price'];
-    if(empty($cash_item_price)) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните цену'); }
-
-    $cash_item_currency_cb = $this->add_refbook($data["cash_item_currency_cb"], "currency");
-    if($cash_item_currency_cb == 0) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления валюты'); }
-
-    $cash_item_ctype_cb = $this->add_refbook($data["cash_item_ctype_cb"], "cashes_type");
-    if($cash_item_ctype_cb == 0) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления кошелька'); }
-
-    $cash_item_qnt = $data['cash_item_qnt'];
-    if(empty($cash_item_qnt)) 		{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните количество'); }
-
-    $cash_item_org_cb = $this->add_refbook($data["cash_item_org_cb"], "cashes_org");
-    if($cash_item_org_cb == 0) 		{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления организации'); }
-
-    $cash_item_toper_cb = intval($data['cash_item_toper_cb']);
-    if( !in_array($cash_item_toper_cb, array(0,1)) )	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Неверный тип операции'); }
-
-    $cash_item_note = $data['cash_item_note'];
+    if($refb['failure']) return $refb;
 
     $sql =
     "INSERT INTO `cashes` (nmcl_id, `group`, price, cash_type_id, qnt, `date`, org_id, uid, `file`, `type` ,note, cur_id)
      VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $this->db->exec($sql,
-	$cash_item_nmcl_cb,
-	$cash_item_prod_type_cb,
-	$cash_item_price,
-	$cash_item_ctype_cb,
-	$cash_item_qnt,
-	$cash_item_date,
-	$cash_item_org_cb,
+	$refb['cash_item_nmcl_cb'],
+	$refb['cash_item_prod_type_cb'],
+	$refb['cash_item_price'],
+	$refb['cash_item_ctype_cb'],
+	$refb['cash_item_qnt'],
+	$refb['cash_item_date'],
+	$refb['cash_item_org_cb'],
 	1,
-	$file,
-	$cash_item_toper_cb,
-	$cash_item_note,
-	$cash_item_currency_cb
+	$refb['file'],
+	$refb['cash_item_toper_cb'],
+	$refb['cash_item_note'],
+	$refb['cash_item_currency_cb']
     );
-
-    /*$this->db->exec("INSERT INTO `cashes` (nmcl_id, `group`, price, cash_type_id, qnt, `date`, org_id, uid, `file`, `type` ,note, cur_id)
-     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-	$data['cash_item_nmcl_cb'],
-	$data['cash_item_prod_type_cb'],
-	$data['cash_item_price'],
-	$data['cash_item_ctype_cb'],
-	$data['cash_item_qnt'],
-	$data['cash_item_date'],
-	$data['cash_item_org_cb'],
-	1,
-	'',
-	$data['cash_item_toper_cb'],
-	$data['cash_item_note'],
-	$data['cash_item_currency_cb']
-    );*/
 
     $id = intval( $this->db->last_id() );
     if($id == 0) { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления операции'); }
