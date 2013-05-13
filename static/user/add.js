@@ -62,6 +62,7 @@ var cash_item_nmcl_cb = Ext.create('Ext.form.field.ComboBox', {
 		},
 		success: function(data) {
 		    var obj = Ext.decode(data.responseText);
+
 		    Ext.getCmp('cash_item_prod_type_cb').setValue(obj.grp);
 		    Ext.getCmp('cash_item_org_cb').setValue(obj.org_id);
 		    Ext.getCmp('cash_item_price').focus(false, 200);
@@ -347,6 +348,13 @@ var cash_item_edit_id = Ext.create('Ext.form.field.Hidden', {
     value: v_edit_id
 });//cash_item_edit_id
 
+var cash_item_edit_id_label = {
+  xtype: 'label',
+  id: "cash_item_edit_id_label",
+  name: "cash_item_edit_id_label",
+  text: '0'
+}
+
 
 //---- form add
 var cash_item_form_add = new Ext.FormPanel({
@@ -365,7 +373,7 @@ var cash_item_form_add = new Ext.FormPanel({
 	  cash_item_note,
 	  cash_item_edit_id
  	 ],
-  buttons: ["->", cash_item_add, cash_item_save, " ", cash_item_cancel]
+  buttons: [cash_item_edit_id_label, "->", cash_item_add, cash_item_save, " ", cash_item_cancel]
 });
 
 function setDefault() {
@@ -389,12 +397,14 @@ function setDefault() {
 
 function cash_list_add_load() {
   Ext.getCmp('cash_item_edit_id').setValue(v_edit_id);
+  Ext.getCmp('cash_item_edit_id_label').setText(v_edit_id);
+
 
   if(v_edit_id == 0) {
     setDefault();
     Ext.getCmp('cash_item_add').setVisible(true);
     cash_list_add.setLoading(false);
-    //v_edit_id
+    Ext.getCmp('cash_item_edit_id_label').setText("");
     return;
   }
 

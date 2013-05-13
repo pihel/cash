@@ -185,10 +185,12 @@ var cash_list_to_date =
     onChange: listRefresh
 }; // cash_list_to_date
 
-function listRefresh() {
+function listRefresh(_cb) {
   cash_list_store.proxy.url = "ajax/list.php?from=" + Ext.Date.format(Ext.getCmp('cash_list_from_date').getValue(),'Y-m-d') +
 					    "&to=" + Ext.Date.format(Ext.getCmp('cash_list_to_date').getValue(),'Y-m-d');
-  cash_list_store.load();
+  cash_list_store.load(function(e) {
+    if(_cb != undefined) _cb(e);
+  });
 
   setAnkhor();
 }
@@ -204,6 +206,18 @@ function listRefresh() {
 	handler : listRefresh
 }*/
 
+var cash_list_filter_loading = Ext.create('Ext.Img', {
+    src: 'static/ext/resources/themes/images/default/tree/loading.gif',
+    id: 'cash_list_filter_loading',
+    name: "cash_list_filter_loading",
+    mode: 'element',
+    title: "Загрузка фильтра",
+    style: {
+	//display: "none",
+	margin: "1px 0px 0px 5px"
+    }
+});//w_img
+
 var cash_list_filter = {
     xtype:      'checkboxfield',
     boxLabel  : 'Расширенный поиск',
@@ -211,12 +225,22 @@ var cash_list_filter = {
     inputValue: '0',
     id        : 'cash_list_filter',
     onChange: function(newVal, oldVal) {
-      if(newVal) {
-	cash_list_panel.items.items[1].show();
-      } else {
-	cash_list_panel.items.items[1].hide();
-      }
-      listRefresh();
+      Ext.getCmp('cash_list_filter_loading').show();
+      loadScript("static/user/add.js", function() {
+	loadScript("static/user/filter.js", function() {
+	  loadFilter(function() {
+	    if(newVal) {
+	      Ext.getCmp('cash_list_tb_filter').show();
+	    } else {
+	      Ext.getCmp('cash_list_tb_filter').hide();
+	    }
+	    listRefresh(function() {
+	      //Ext.getCmp('cash_list_filter_loading').hide();
+	    });
+	    Ext.getCmp('cash_list_filter_loading').hide();
+	  }); //loadFilter
+	}); //loadScript
+      }); //loadScript
     } //onChange
 }; //cash_list_filter
 
@@ -237,17 +261,19 @@ var cash_list_tb = {
       xtype: 'toolbar',
       dock: 'top',
       ui: 'footer',
-      items: [cash_list_from_date, " ", cash_list_to_date, " ", cash_list_filter,'->', cash_list_edit_btn_add],
+      items: [cash_list_from_date, " ", cash_list_to_date, " ", cash_list_filter, cash_list_filter_loading, '->', cash_list_edit_btn_add],
       region: 'north',
       id: "cash_list_tb",
 }; //cash_list_tb
 
 var cash_list_tb_filter = {
-      xtype: 'toolbar',
-      dock: 'top',
-      ui: 'footer',
-      items: ["В разработке"],
-      region: 'north'
+  id: "cash_list_tb_filter",
+  name: "cash_list_tb_filter",
+  xtype: 'toolbar',
+  dock: 'top',
+  ui: 'footer',
+  items: [],
+  region: 'north'
 }; //cash_list_tb
 
 
@@ -261,7 +287,8 @@ var cash_list_panel = Ext.create('Ext.Panel', {
     items: [cash_list_tb,cash_list_tb_filter, cash_list_grid],
     listeners: {
 	render: function(){
-	  cash_list_panel.items.items[1].hide();
+	  Ext.getCmp('cash_list_tb_filter').hide();
+	  Ext.getCmp('cash_list_filter_loading').hide();
 	}
     }
 

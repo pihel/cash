@@ -54,3 +54,7 @@ img {
 #cash_item_price_tb {
   padding: 1px 0 5px 0px;
 }
+#cash_item_edit_id_label {
+  font-size: 10px !important;
+  color: #666666;
+}

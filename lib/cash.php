@@ -195,6 +195,7 @@ class Cash {
 
     if($refb['failure']) return $refb;
 
+    //CURRENT_TIMESTAMP перенести на сторону БД
     $sql =
     "UPDATE `cashes`
       SET nmcl_id = ?,
