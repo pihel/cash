@@ -189,7 +189,7 @@ function listRefresh(_cb) {
   cash_list_store.proxy.url = "ajax/list.php?from=" + Ext.Date.format(Ext.getCmp('cash_list_from_date').getValue(),'Y-m-d') +
 					    "&to=" + Ext.Date.format(Ext.getCmp('cash_list_to_date').getValue(),'Y-m-d');
   cash_list_store.load(function(e) {
-    if(_cb != undefined) _cb(e);
+    if(typeof _cb == "function") _cb(e);
   });
 
   setAnkhor();
@@ -272,7 +272,16 @@ var cash_list_tb_filter = {
   xtype: 'toolbar',
   dock: 'top',
   ui: 'footer',
-  items: [],
+  columns: 2,
+  items: [{
+            xtype: 'buttongroup',
+	    id: "cash_list_tb_filter_bgrp",
+	    name: "cash_list_tb_filter_bgrp",
+            title: 'Расширенный фильтр',
+	    width: 590,
+            columns: 2,
+            items:[]
+        }],
   region: 'north'
 }; //cash_list_tb
 

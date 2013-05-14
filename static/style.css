@@ -58,3 +58,15 @@ img {
   font-size: 10px !important;
   color: #666666;
 }
+#cash_list_tb_filter {
+  margin-bottom: 10px;
+}
+#cash_list_tb_filter_bgrp-body {
+  padding: 10px 0px 5px 0px;
+}
+#cash_list_tb_filter .x-form-item {
+  margin-left: 10px;
+}
+#cash_list_tb_filter .x-form-field {
+  max-height: 19px !important;
+}
