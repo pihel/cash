@@ -188,6 +188,29 @@ var cash_list_to_date =
 function listRefresh(_cb) {
   cash_list_store.proxy.url = "ajax/list.php?from=" + Ext.Date.format(Ext.getCmp('cash_list_from_date').getValue(),'Y-m-d') +
 					    "&to=" + Ext.Date.format(Ext.getCmp('cash_list_to_date').getValue(),'Y-m-d');
+  //extend filter
+  if(Ext.getCmp('cash_item_nmcl_cb_fltr') != undefined &&
+     Ext.getCmp('cash_list_filter').getValue()
+  ) {
+    cash_list_store.proxy.url += "&exfilter=1";
+    cash_list_store.proxy.url += "&nmcl_id=" + Ext.getCmp('cash_item_nmcl_cb_fltr').getValue();
+    cash_list_store.proxy.url += "&nmcl_id_no=" + (0+Ext.getCmp('cash_item_nmcl_cb_fltr_no').getValue());
+    cash_list_store.proxy.url += "&pt_id=" + Ext.getCmp('cash_item_prod_type_cb_fltr').getValue();
+    cash_list_store.proxy.url += "&pt_id_no=" + (0+Ext.getCmp('cash_item_prod_type_cb_fltr_no').getValue());
+    cash_list_store.proxy.url += "&price_from=" + (0+Ext.getCmp('cash_item_price_frm_fltr').getValue());
+    cash_list_store.proxy.url += "&price_to=" + (0+Ext.getCmp('cash_item_price_to_fltr').getValue());
+    cash_list_store.proxy.url += "&cur_id=" + Ext.getCmp('cash_item_currency_fltr_cb').getValue();
+    cash_list_store.proxy.url += "&oper_id=" + Ext.getCmp('cash_item_toper_cb_fltr').getValue();
+    cash_list_store.proxy.url += "&ctype_id=" + Ext.getCmp('cash_item_ctype_fltr_cb').getValue();
+    cash_list_store.proxy.url += "&org_id=" + Ext.getCmp('cash_item_org_fltr_cb').getValue();
+    cash_list_store.proxy.url += "&org_id_no=" + (0+Ext.getCmp('cash_item_org_fltr_cb_no').getValue());
+    cash_list_store.proxy.url += "&note=" + Ext.getCmp('cash_item_note_fltr').getValue();
+    cash_list_store.proxy.url += "&note_no=" + (0+Ext.getCmp('cash_item_note_fltr_no').getValue());
+    cash_list_store.proxy.url += "&file=" + (0+Ext.getCmp('cash_item_file_fltr').getValue());
+    cash_list_store.proxy.url += "&del=" + (0+Ext.getCmp('cash_item_del_fltr').getValue());
+  }
+
+
   cash_list_store.load(function(e) {
     if(typeof _cb == "function") _cb(e);
   });
@@ -277,7 +300,7 @@ var cash_list_tb_filter = {
             xtype: 'buttongroup',
 	    id: "cash_list_tb_filter_bgrp",
 	    name: "cash_list_tb_filter_bgrp",
-            title: 'Расширенный фильтр',
+            //title: 'Расширенный фильтр',
 	    width: 590,
             columns: 2,
             items:[]

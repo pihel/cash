@@ -10,11 +10,57 @@ class Cash {
     $this->usr = $_usr;
   }
 
-  public function getList($from, $to) {
+  protected function makeFilter($name, $name_str, $val, $is_int, $not) {
+    $f = "";
+    if(empty($val)) return $f;
+
+    $no = "";
+    $nos = "";
+    if($not) {
+      $nos = "NOT";
+      $no = "!";
+    }
+    if($is_int) {
+      $f = " AND ".$name." ".$no."= ". $val;
+    } else {
+      $f = " AND UPPER(".$name_str.") ".$nos." like UPPER('%". $this->db->escape($val)."%')";
+    }
+    return $f;
+  }
+
+  public function getExFilter($f) {
+    $ret = "";
+
+    if(intval($f['exfilter']) == 0) return $ret;
+
+    /*
+    [pt_id] => 12
+    [pt_id_no] => 0
+    [price_from] => 0
+    [price_to] => 0
+    [cur_id] =>
+    [oper_id] =>
+    [ctype_id] =>
+    [org_id] => 7
+    [org_id_no] => 0
+    [note] => test
+    [note_no] => 0
+    [file] => 1
+    [del] => 1
+    */
+    $ret .= $this->makeFilter("c.nmcl_id", "cn.name", $f['nmcl_id'], intval($f['nmcl_id']), $f['nmcl_id_no'] );
+
+    //echo $ret;
+    return $ret;
+  }
+
+  public function getList($from, $to, $exfltr) {
     $filter = "";
 
     if(empty($from)) $from = date("Y-m-d");
     if(empty($to)) $to = date("Y-m-d");
+
+    $filter = $this->getExFilter($exfltr);
 
     $sql =
     " SELECT

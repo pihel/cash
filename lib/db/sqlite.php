@@ -39,6 +39,10 @@ class SQLITE_DB extends DB {
     return $this->_con->changes();
   }
 
+  public function escape($s) {
+    return $this->_con->escapeString($s);
+  }
+
   protected function _exec($sql, $args) {
     $this->_stmt = $this->_con->prepare($sql);
 
