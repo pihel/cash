@@ -9,7 +9,7 @@ var cash_list_tabs = Ext.widget('tabpanel', {
 	title: 'Аналитика',
 	listeners: {
 	    activate: function(tab){
-	      //alert(tab.title + ' was activated.');
+	      setAnkhor();
 	    }
 	},
 	html: "В разработке"
@@ -18,7 +18,7 @@ var cash_list_tabs = Ext.widget('tabpanel', {
 	title: 'Настройки',
 	listeners: {
 	    activate: function(tab){
-	      //alert(tab.title + ' was activated.');
+	      setAnkhor();
 	    }
 	},
 	html: "В разработке"

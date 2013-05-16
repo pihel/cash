@@ -33,22 +33,25 @@ class Cash {
 
     if(intval($f['exfilter']) == 0) return $ret;
 
-    /*
-    [pt_id] => 12
-    [pt_id_no] => 0
-    [price_from] => 0
-    [price_to] => 0
-    [cur_id] =>
-    [oper_id] =>
-    [ctype_id] =>
-    [org_id] => 7
-    [org_id_no] => 0
-    [note] => test
-    [note_no] => 0
-    [file] => 1
-    [del] => 1
-    */
     $ret .= $this->makeFilter("c.nmcl_id", "cn.name", $f['nmcl_id'], intval($f['nmcl_id']), $f['nmcl_id_no'] );
+    $ret .= $this->makeFilter("c.`group`", "cg.name", $f['pt_id'], intval($f['pt_id']), $f['pt_id_no'] );
+    if( floatval($f['price_from']) != 0 ) $ret .= " AND c.price >= ".floatval($f['price_from']);
+    if( floatval($f['price_to']) != 0 ) $ret .= " AND c.price <= ".floatval($f['price_to']);
+    $ret .= $this->makeFilter("c.cash_type_id", "ct.name", $f['ctype_id'], intval($f['ctype_id']), 0 );
+    $ret .= $this->makeFilter("c.cur_id", "cr.name", $f['cur_id'], intval($f['cur_id']), 0 );
+    if($f['oper_id'] === "0") $ret .= " AND c.type = 0";
+    if($f['oper_id'] === "1") $ret .= " AND c.type = 1";
+    //$ret .= $this->makeFilter("c.type", "", $f['oper_id'], 1, 0 );
+    $ret .= $this->makeFilter("c.org_id", "co.name", $f['org_id'], intval($f['org_id']), $f['org_id_no'] );
+    $ret .= $this->makeFilter("", "c.note", $f['c.note'], 0, $f['note_no'] );
+    if( intval($f['del']) == 1 ) {
+      $ret .= " AND c.visible = 0 ";
+    } else {
+      $ret .= " AND c.visible = 1 ";
+    }
+    if( intval($f['file']) == 1 ) {
+      $ret .= " AND c.file <> '' "; //IS NOT NULL ???
+    }
 
     //echo $ret;
     return $ret;
@@ -61,6 +64,7 @@ class Cash {
     if(empty($to)) $to = date("Y-m-d");
 
     $filter = $this->getExFilter($exfltr);
+    if(empty($filter)) $filter = " AND c.visible = 1 ";
 
     $sql =
     " SELECT
@@ -81,12 +85,11 @@ class Cash {
      WHERE
       c.date BETWEEN ? AND ?
       AND c.uid = ?
-      AND c.visible = ?
       ". $filter ."
      ORDER BY
       c.date, c.date_edit";
 
-     return $this->db->select($sql, $from, $to, 1, 1);
+     return $this->db->select($sql, $from, $to, 1);
   }
 
   public function getItem($id) {

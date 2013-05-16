@@ -84,20 +84,6 @@ function loadScript(path, _calb) {
     }
   }
 
-  /*var head = document.getElementsByTagName('head')[0];
-  var script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.onreadystatechange= function () {
-     if (this.readyState == 'complete')  {
-       if(_calb != undefined) _calb();
-     }
-  }
-  if(_calb != undefined) {
-    script.onload = _calb;
-  }
-  script.src = path;
-  head.appendChild(script);*/
-
   path = path + "?v="+Math.random();//debug
 
   Ext.Loader.loadScript({url: path, scope: this,
@@ -109,10 +95,56 @@ function loadScript(path, _calb) {
   return true;
 } //loadScript
 
+function restoreAnkhor() {
+  console.log(window.location.hash);
+
+  return false;
+}
+
 
 function setAnkhor() {
   //save location
-  window.location.hash = "#";
+  var hash = "#";
+
+
+  //first tab --- title->id
+  var tab = Ext.getCmp('cash_list_tabs').getActiveTab().title;
+
+  if(tab == "Операции") {
+    hash += "act=list";
+    hash += "&from=" + Ext.Date.format(Ext.getCmp('cash_list_from_date').getValue(),'Y-m-d');
+    hash += "&to=" + Ext.Date.format(Ext.getCmp('cash_list_to_date').getValue(),'Y-m-d');
+
+    //extend filter
+    if(Ext.getCmp('cash_item_nmcl_cb_fltr') != undefined &&
+      Ext.getCmp('cash_list_filter').getValue()
+    ) {
+      hash += "&exfilter=1";
+      hash += "&nmcl_id=" + Ext.getCmp('cash_item_nmcl_cb_fltr').getValue();
+      hash += "&nmcl_id_no=" + (0+Ext.getCmp('cash_item_nmcl_cb_fltr_no').getValue());
+      hash += "&pt_id=" + Ext.getCmp('cash_item_prod_type_cb_fltr').getValue();
+      hash += "&pt_id_no=" + (0+Ext.getCmp('cash_item_prod_type_cb_fltr_no').getValue());
+      hash += "&price_from=" + (0+Ext.getCmp('cash_item_price_frm_fltr').getValue());
+      hash += "&price_to=" + (0+Ext.getCmp('cash_item_price_to_fltr').getValue());
+      hash += "&cur_id=" + Ext.getCmp('cash_item_currency_fltr_cb').getValue();
+      hash += "&oper_id=" + Ext.getCmp('cash_item_toper_cb_fltr').getValue();
+      hash += "&ctype_id=" + Ext.getCmp('cash_item_ctype_fltr_cb').getValue();
+      hash += "&org_id=" + Ext.getCmp('cash_item_org_fltr_cb').getValue();
+      hash += "&org_id_no=" + (0+Ext.getCmp('cash_item_org_fltr_cb_no').getValue());
+      hash += "&note=" + Ext.getCmp('cash_item_note_fltr').getValue();
+      hash += "&note_no=" + (0+Ext.getCmp('cash_item_note_fltr_no').getValue());
+      hash += "&file=" + (0+Ext.getCmp('cash_item_file_fltr').getValue());
+      hash += "&del=" + (0+Ext.getCmp('cash_item_del_fltr').getValue());
+    }
+  }
+  else if(tab == "Аналитика") {
+    hash += "act=analit";
+  }
+  else if(tab == "Настройки") {
+    hash += "act=set";
+  }
+
+  window.location.hash = hash;
   return false;
 }
 
@@ -121,6 +153,9 @@ function authOk(id) {
 
   if(uid > 0) {
     if(typeof loginWindow != "undefined") loginWindow.hide();
+
+    if(restoreAnkhor()) return;
+
     loadScript("static/user/list.js", function() {
       loadScript("static/user/tabs.js", function() {
 	listRefresh();

@@ -321,6 +321,9 @@ var cash_list_panel = Ext.create('Ext.Panel', {
 	render: function(){
 	  Ext.getCmp('cash_list_tb_filter').hide();
 	  Ext.getCmp('cash_list_filter_loading').hide();
+	},
+	activate: function(tab){
+	  setAnkhor();
 	}
     }
 
