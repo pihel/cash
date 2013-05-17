@@ -87,7 +87,7 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
     features: [{
         ftype: 'summary'
     },
-    /*{
+    {
       ftype: 'filters',
       encode: true,
       local: true,
@@ -97,22 +97,22 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
 	{dataIndex: 'nom', 		type: 'string'},
 	{dataIndex: 'group', 		type: 'int'},
 	{dataIndex: 'gname', 		type: 'string'},
-	{dataIndex: 'price', 		type: 'double'},
-	{dataIndex: 'qnt', 		type: 'double'},
-	{dataIndex: 'amount', 		type: 'double'},
-	{dataIndex: 'oper_date',	type: 'DATE'},
-	{dataIndex: 'date_edit', 	type: 'DATE'},
+	{dataIndex: 'price', 		type: 'numeric'},
+	{dataIndex: 'qnt', 		type: 'numeric'},
+	{dataIndex: 'amount', 		type: 'numeric'},
+	{dataIndex: 'oper_date'	},
+	{dataIndex: 'date_edit'	},
 	{dataIndex: 'org_id', 		type: 'int'},
 	{dataIndex: 'oname', 		type: 'string'},
 	{dataIndex: 'type', 		type: 'int'},
 	{dataIndex: 'note',		type: 'string'},
 	{dataIndex: 'file', 		type: 'string'},
 	{dataIndex: 'uid', 		type: 'int'},
-	{dataIndex: 'rate', 		type: 'double'},
+	{dataIndex: 'rate', 		type: 'numeric'},
 	{dataIndex: 'sign', 		type: 'string'},
 	{dataIndex: 'cash_type_id', 	type: 'int'},
 	{dataIndex: 'cash_type', 	type: 'string'}]
-    }*/],
+    }],
     region:'center'
 }); //cash_list_grid
 

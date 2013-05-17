@@ -141,7 +141,7 @@ Ext.define('Ext.ux.grid.FiltersFeature', {
      * @cfg {String} menuFilterText
      * defaults to <tt>'Filters'</tt>.
      */
-    menuFilterText : 'Filters',
+    menuFilterText : 'Фильтры',
     /**
      * @cfg {String} paramPrefix
      * The url parameter prefix for the filters.
@@ -259,7 +259,7 @@ Ext.define('Ext.ux.grid.FiltersFeature', {
                 add(column.dataIndex, column.filter, column.filterable);
             }
         });
-        
+
 
         me.removeAll();
         if (filters.items) {
@@ -589,14 +589,14 @@ Ext.define('Ext.ux.grid.FiltersFeature', {
             columns = me.getGridPanel().columns,
             i, columnsLength, column, filtersLength, filter;
 
-        
+
         for (i = 0, columnsLength = columns.length; i < columnsLength; i++) {
             column = columns[i];
             if (column.dataIndex === config.dataIndex) {
                 column.filter = config;
             }
         }
-        
+
         if (me.view.headerCt.menu) {
             me.createFilters();
         } else {
@@ -606,7 +606,7 @@ Ext.define('Ext.ux.grid.FiltersFeature', {
             // and then add a new filter before the menu is recreated.
             me.view.headerCt.getMenu();
         }
-        
+
         for (i = 0, filtersLength = me.filters.items.length; i < filtersLength; i++) {
             filter = me.filters.items[i];
             if (filter.dataIndex === config.dataIndex) {

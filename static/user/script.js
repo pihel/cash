@@ -20,7 +20,7 @@ Ext.require([
     'Ext.view.View',
     'Ext.button.*',
     'Ext.Msg',
-    //'Ext.ux.grid.FiltersFeature',
+    'Ext.ux.grid.FiltersFeature',
     'Ext.tab.*'
 ]);
 
