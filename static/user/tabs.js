@@ -7,6 +7,7 @@ var cash_list_tabs = Ext.widget('tabpanel', {
     border: false,
     items: [cash_list_panel, {
 	title: 'Аналитика',
+	id: "cash_analit",
 	listeners: {
 	    activate: function(tab){
 	      setAnkhor();
@@ -16,6 +17,7 @@ var cash_list_tabs = Ext.widget('tabpanel', {
     },
     {
 	title: 'Настройки',
+	id: "cash_sett",
 	listeners: {
 	    activate: function(tab){
 	      setAnkhor();

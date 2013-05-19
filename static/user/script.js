@@ -95,46 +95,33 @@ function loadScript(path, _calb) {
   return true;
 } //loadScript
 
+
 function restoreAnkhor() {
-  console.log(window.location.hash);
+  var p = window.location.hash.split("&");
+  if(p.length < 1) return false;
 
-  return false;
+  var r = false;
+  if(typeof setListAnkhor != "undefined" && p[0] == "#act=list") {
+    r = setListAnkhor();
+  } else if(p[0] == "#act=analit") {
+    Ext.getCmp('cash_list_tabs').setActiveTab("cash_analit");
+  } else if(p[0] == "#act=set") {
+    Ext.getCmp('cash_list_tabs').setActiveTab("cash_sett");
+  }
+
+  return r;
 }
-
 
 function setAnkhor() {
   //save location
   var hash = "#";
 
-
   //first tab --- title->id
   var tab = Ext.getCmp('cash_list_tabs').getActiveTab().title;
 
   if(tab == "Операции") {
-    hash += "act=list";
-    hash += "&from=" + Ext.Date.format(Ext.getCmp('cash_list_from_date').getValue(),'Y-m-d');
-    hash += "&to=" + Ext.Date.format(Ext.getCmp('cash_list_to_date').getValue(),'Y-m-d');
-
-    //extend filter
-    if(Ext.getCmp('cash_item_nmcl_cb_fltr') != undefined &&
-      Ext.getCmp('cash_list_filter').getValue()
-    ) {
-      hash += "&exfilter=1";
-      hash += "&nmcl_id=" + Ext.getCmp('cash_item_nmcl_cb_fltr').getValue();
-      hash += "&nmcl_id_no=" + (0+Ext.getCmp('cash_item_nmcl_cb_fltr_no').getValue());
-      hash += "&pt_id=" + Ext.getCmp('cash_item_prod_type_cb_fltr').getValue();
-      hash += "&pt_id_no=" + (0+Ext.getCmp('cash_item_prod_type_cb_fltr_no').getValue());
-      hash += "&price_from=" + (0+Ext.getCmp('cash_item_price_frm_fltr').getValue());
-      hash += "&price_to=" + (0+Ext.getCmp('cash_item_price_to_fltr').getValue());
-      hash += "&cur_id=" + Ext.getCmp('cash_item_currency_fltr_cb').getValue();
-      hash += "&oper_id=" + Ext.getCmp('cash_item_toper_cb_fltr').getValue();
-      hash += "&ctype_id=" + Ext.getCmp('cash_item_ctype_fltr_cb').getValue();
-      hash += "&org_id=" + Ext.getCmp('cash_item_org_fltr_cb').getValue();
-      hash += "&org_id_no=" + (0+Ext.getCmp('cash_item_org_fltr_cb_no').getValue());
-      hash += "&note=" + Ext.getCmp('cash_item_note_fltr').getValue();
-      hash += "&note_no=" + (0+Ext.getCmp('cash_item_note_fltr_no').getValue());
-      hash += "&file=" + (0+Ext.getCmp('cash_item_file_fltr').getValue());
-      hash += "&del=" + (0+Ext.getCmp('cash_item_del_fltr').getValue());
+    if(typeof getListAnkhor != "undefined") {
+      hash += getListAnkhor();
     }
   }
   else if(tab == "Аналитика") {
@@ -154,11 +141,12 @@ function authOk(id) {
   if(uid > 0) {
     if(typeof loginWindow != "undefined") loginWindow.hide();
 
-    if(restoreAnkhor()) return;
-
     loadScript("static/user/list.js", function() {
       loadScript("static/user/tabs.js", function() {
-	listRefresh();
+	if(!restoreAnkhor()) {
+	  setDefaultListVal();
+	  //listRefresh();
+	}
       });
     });
   }

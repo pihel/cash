@@ -70,3 +70,6 @@ img {
 #cash_list_tb_filter .x-form-field {
   max-height: 19px !important;
 }
+.x-grid-row-summary {
+  /*position: absolute;*/
+}

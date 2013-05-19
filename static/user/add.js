@@ -261,7 +261,7 @@ var cash_item_file = {
 
 //---- note
 var cash_item_note = {
-    xtype: 'textfield',
+    xtype: 'textarea',
     name: 'cash_item_note',
     id: "cash_item_note",
     fieldLabel: 'Примечание',

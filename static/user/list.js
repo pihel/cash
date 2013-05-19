@@ -29,6 +29,7 @@ var cash_list_model = Ext.define('cash_list_model', {
 
 var cash_list_store = Ext.create('Ext.data.Store', {
     model: 'cash_list_model',
+    autoLoad: false,
     proxy: {
 	type: 'ajax',
 	url: 'ajax/list.php?'
@@ -92,7 +93,8 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
       encode: true,
       local: true,
       autoReload: false,
-      filters: [{dataIndex: 'id', 	type: 'int'},
+      filters: [
+	{dataIndex: 'id', 		type: 'int'},
 	{dataIndex: 'nmcl_id', 		type: 'int'},
 	{dataIndex: 'nom', 		type: 'string'},
 	{dataIndex: 'group', 		type: 'int'},
@@ -162,7 +164,6 @@ var cash_list_from_date =
     fieldLabel: 'Период',
     name: 'cash_list_from_date',
     id: 'cash_list_from_date',
-    value: new Date((new Date).getTime() - (3600000*24*7)),
     labelWidth: 55,
     format: "Y-m-d",
     maxValue: new Date(),
@@ -180,12 +181,14 @@ var cash_list_to_date =
     id: 'cash_list_to_date',
     labelWidth: 20,
     format: "Y-m-d",
-    value: new Date(),
     width: 120,
     onChange: listRefresh
 }; // cash_list_to_date
 
 function listRefresh(_cb) {
+  if(Ext.getCmp('cash_list_from_date').getValue() == null) return;
+  if(Ext.getCmp('cash_list_to_date').getValue() == null) return;
+
   cash_list_store.proxy.url = "ajax/list.php?from=" + Ext.Date.format(Ext.getCmp('cash_list_from_date').getValue(),'Y-m-d') +
 					    "&to=" + Ext.Date.format(Ext.getCmp('cash_list_to_date').getValue(),'Y-m-d');
   //extend filter
@@ -248,6 +251,7 @@ var cash_list_filter = {
     inputValue: '0',
     id        : 'cash_list_filter',
     onChange: function(newVal, oldVal) {
+      if(newVal && Ext.getCmp('cash_list_tb_filter').isVisible()) return;
       Ext.getCmp('cash_list_filter_loading').show();
       loadScript("static/user/add.js", function() {
 	loadScript("static/user/filter.js", function() {
@@ -308,6 +312,101 @@ var cash_list_tb_filter = {
   region: 'north'
 }; //cash_list_tb
 
+function getListAnkhor() {
+  var hash = "";
+  hash += "act=list";
+  hash += "&from=" + Ext.Date.format(Ext.getCmp('cash_list_from_date').getValue(),'Y-m-d');
+  hash += "&to=" + Ext.Date.format(Ext.getCmp('cash_list_to_date').getValue(),'Y-m-d');
+
+  //extend filter
+  if(Ext.getCmp('cash_item_nmcl_cb_fltr') != undefined &&
+    Ext.getCmp('cash_list_filter').getValue()
+  ) {
+    hash += "&exfilter=1";
+    hash += "&nmcl_id=" + Ext.getCmp('cash_item_nmcl_cb_fltr').getValue();
+    hash += "&nmcl_id_no=" + (0+Ext.getCmp('cash_item_nmcl_cb_fltr_no').getValue());
+    hash += "&pt_id=" + Ext.getCmp('cash_item_prod_type_cb_fltr').getValue();
+    hash += "&pt_id_no=" + (0+Ext.getCmp('cash_item_prod_type_cb_fltr_no').getValue());
+    hash += "&price_from=" + (0+Ext.getCmp('cash_item_price_frm_fltr').getValue());
+    hash += "&price_to=" + (0+Ext.getCmp('cash_item_price_to_fltr').getValue());
+    hash += "&cur_id=" + Ext.getCmp('cash_item_currency_fltr_cb').getValue();
+    hash += "&oper_id=" + Ext.getCmp('cash_item_toper_cb_fltr').getValue();
+    hash += "&ctype_id=" + Ext.getCmp('cash_item_ctype_fltr_cb').getValue();
+    hash += "&org_id=" + Ext.getCmp('cash_item_org_fltr_cb').getValue();
+    hash += "&org_id_no=" + (0+Ext.getCmp('cash_item_org_fltr_cb_no').getValue());
+    hash += "&note=" + Ext.getCmp('cash_item_note_fltr').getValue();
+    hash += "&note_no=" + (0+Ext.getCmp('cash_item_note_fltr_no').getValue());
+    hash += "&file=" + (0+Ext.getCmp('cash_item_file_fltr').getValue());
+    hash += "&del=" + (0+Ext.getCmp('cash_item_del_fltr').getValue());
+  }
+  return hash;
+}
+
+function setListAnkhorEx(hash, _cb) {
+  Ext.Array.each(hash, function(name, index, countriesItSelf) {
+    var h = name.split("=");
+    if(h.length < 2) return false;
+    if( parseInt(h[1]) > 0 ) h[1] = parseInt(h[1]);
+
+    if(h[0] == "nmcl_id") Ext.getCmp('cash_item_nmcl_cb_fltr').setValue(h[1]);
+    if(h[0] == "nmcl_id_no") Ext.getCmp('cash_item_nmcl_cb_fltr_no').setValue(h[1]==1);
+    if(h[0] == "pt_id") Ext.getCmp('cash_item_prod_type_cb_fltr').setValue(h[1]);
+    if(h[0] == "pt_id_no") Ext.getCmp('cash_item_prod_type_cb_fltr_no').setValue(h[1]==1);
+    if(h[0] == "price_from") Ext.getCmp('cash_item_price_frm_fltr').setValue(h[1]);
+    if(h[0] == "price_to") Ext.getCmp('cash_item_price_to_fltr').setValue(h[1]);
+    if(h[0] == "cur_id") Ext.getCmp('cash_item_currency_fltr_cb').setValue(h[1]);
+    if(h[0] == "oper_id") Ext.getCmp('cash_item_toper_cb_fltr').setValue(h[1]);
+    if(h[0] == "ctype_id") Ext.getCmp('cash_item_ctype_fltr_cb').setValue(h[1]);
+    if(h[0] == "org_id") Ext.getCmp('cash_item_org_fltr_cb').setValue(h[1]);
+    if(h[0] == "org_id_no") Ext.getCmp('cash_item_org_fltr_cb_no').setValue(h[1]==1);
+    if(h[0] == "note") Ext.getCmp('cash_item_note_fltr').setValue(h[1]);
+    if(h[0] == "note_no") Ext.getCmp('cash_item_note_fltr_no').setValue(h[1]==1);
+    if(h[0] == "file") Ext.getCmp('cash_item_note_fltr_no').setValue(h[1]==1);
+    if(h[0] == "del") Ext.getCmp('cash_item_del_fltr').setValue(h[1]==1);
+
+  }); //Ext.Array.each
+
+
+  if(typeof _cb != undefined) _cb();
+}
+
+function setListAnkhor() {
+  var p = window.location.hash.split("&");
+  if(p.length < 2) return false;
+  if(p[0] != "#act=list") return false;
+
+  Ext.Array.each(p, function(name, index, countriesItSelf) {
+    var h = name.split("=");
+    if(h.length < 2) return false;
+
+    if(h[0] == "from") Ext.getCmp('cash_list_from_date').setValue(h[1]);
+    if(h[0] == "to") Ext.getCmp('cash_list_to_date').setValue(h[1]);
+
+    if(h[0] == "exfilter" && h[1] == "1") {
+      Ext.getCmp('cash_list_filter_loading').show();
+      loadScript("static/user/add.js", function() {
+	loadScript("static/user/filter.js", function() {
+	  loadFilter(function() {
+	    Ext.getCmp('cash_list_tb_filter').show();
+	    setListAnkhorEx(p, function() {
+	      Ext.getCmp('cash_list_filter').setValue(true);
+	      listRefresh();
+	      Ext.getCmp('cash_list_filter_loading').hide();
+	    }); //setListAnkhorEx
+	  }); //loadFilter
+	}); //loadScript
+      }); //loadScript
+    }
+  }); //Ext.Array.each
+
+  return true;
+}
+
+function setDefaultListVal() {
+  Ext.getCmp('cash_list_from_date').setValue(new Date((new Date).getTime() - (3600000*24*7)));
+  Ext.getCmp('cash_list_to_date').setValue(new Date());
+}
+
 
 var cash_list_panel = Ext.create('Ext.Panel', {
     frame: true,
@@ -323,7 +422,8 @@ var cash_list_panel = Ext.create('Ext.Panel', {
 	  Ext.getCmp('cash_list_filter_loading').hide();
 	},
 	activate: function(tab){
-	  setAnkhor();
+	  //setAnkhor();
+	  listRefresh();
 	}
     }
 

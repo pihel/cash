@@ -12,7 +12,7 @@ class Cash {
 
   protected function makeFilter($name, $name_str, $val, $is_int, $not) {
     $f = "";
-    if(empty($val)) return $f;
+    if(empty($val) || $val == "null" || $val == "undefined") return $f;
 
     $no = "";
     $nos = "";
@@ -211,7 +211,7 @@ class Cash {
     $ret['cash_item_nmcl_cb'] = $this->add_refbook($data["cash_item_nmcl_cb"], "cashes_nom");
     if( $ret['cash_item_nmcl_cb'] == 0) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления товара'); }
 
-    $ret['cash_item_prod_type_cb'] = $this->add_refbook($data["cash_item_prod_type_cb"], "cashes_type");
+    $ret['cash_item_prod_type_cb'] = $this->add_refbook($data["cash_item_prod_type_cb"], "cashes_group");
     if($ret['cash_item_prod_type_cb'] == 0) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления группы товара'); }
 
     $ret['cash_item_price'] = $data['cash_item_price'];
