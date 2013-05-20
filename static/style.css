@@ -35,14 +35,17 @@ img {
   background-image: url("delete.gif");
   margin-left: 7px;
 }
-#cash_list_tabs .x-tab-bar {
+#cash_list_tabs .x-tab-bar, #cash_analit_tabs-body {
   border: 0px !important;
 }
 #cash_list_tabs-body .x-panel, #cash_list_tabs-body {
   border-top: 0px !important;
   border-radius: 0 0 4px 4px;
 }
-#cash_list_from_date-inputCell .x-form-text, #cash_list_to_date-inputCell .x-form-text {
+#cash_list_from_date-inputCell .x-form-text,
+#cash_list_to_date-inputCell .x-form-text,
+#cash_analiz_com_from_date-inputCell .x-form-text,
+#cash_analiz_com_to_date-inputCell .x-form-text {
   height: 19px !important;
 }
 #cash_list_tb {
@@ -72,4 +75,13 @@ img {
 }
 .x-grid-row-summary {
   /*position: absolute;*/
+}
+.cash_analiz_lbl {
+  font-size: 14px !important;
+  font-weight: bold !important;
+  color: #15498B;
+}
+#cash_analiz_com_date {
+  padding-top: 15px;
+  margin-left: -5px;
 }

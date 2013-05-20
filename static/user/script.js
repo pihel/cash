@@ -21,7 +21,8 @@ Ext.require([
     'Ext.button.*',
     'Ext.Msg',
     'Ext.ux.grid.FiltersFeature',
-    'Ext.tab.*'
+    'Ext.tab.*',
+    'Ext.chart.*'
 ]);
 
 
