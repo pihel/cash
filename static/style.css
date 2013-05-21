@@ -45,7 +45,9 @@ img {
 #cash_list_from_date-inputCell .x-form-text,
 #cash_list_to_date-inputCell .x-form-text,
 #cash_analiz_com_from_date-inputCell .x-form-text,
-#cash_analiz_com_to_date-inputCell .x-form-text {
+#cash_analiz_com_to_date-inputCell .x-form-text,
+#cash_analiz_dyn_from_date-inputCell .x-form-text,
+#cash_analiz_dyn_to_date-inputCell .x-form-text {
   height: 19px !important;
 }
 #cash_list_tb {
@@ -81,7 +83,7 @@ img {
   font-weight: bold !important;
   color: #15498B;
 }
-#cash_analiz_com_date {
-  padding-top: 15px;
-  margin-left: -5px;
+#cash_analiz_com_date, .cash_analiz_date {
+  padding-top: 15px !important;
+  margin-left: -5px !important;
 }
