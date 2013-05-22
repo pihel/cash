@@ -55,6 +55,78 @@ class CashAnaliz {
 
       return $this->db->select($sql, $from, 1, $from, $to);
   }
+
+  public function getGroups($from, $to, $in = 0) {
+    if(empty($from)) $from = date("Y-m-01");
+    if(empty($to)) $to = date("Y-m-d");
+
+    $sql =
+    "SELECT g.name|| ' ('||SUM(c.price*c.qnt*cr.rate)||'р.)' as tname,
+	SUM( c.price * c.qnt * cr.rate ) out_amount
+    FROM `cashes` c, cashes_group g, currency cr
+    WHERE
+    c.visible = 1 AND c.uid = ? AND c.type = ?
+    AND g.id = c.`group`
+    AND c.cur_id = cr.id
+    AND c.date BETWEEN ? AND ?
+    group by g.name
+    order by out_amount DESC";
+
+    return $this->db->select($sql, 1, intval($in), $from, $to);
+  }
+
+  public function getOrgs($from, $to) {
+    if(empty($from)) $from = date("Y-m-01");
+    if(empty($to)) $to = date("Y-m-d");
+
+    $sql =
+    "SELECT o.name|| ' ('||SUM(c.price*c.qnt*cr.rate)||'р.)' as tname,
+	SUM( c.price * c.qnt * cr.rate ) out_amount
+    FROM `cashes` c, cashes_org o, currency cr
+    WHERE
+    c.visible = 1 AND c.uid = ? AND c.type = 0
+    AND o.id = c.org_id
+    AND c.cur_id = cr.id
+    AND c.date BETWEEN ? AND ?
+    group by o.name
+    order by out_amount DESC";
+
+    return $this->db->select($sql, 1, $from, $to);
+  }
+
+  public function getPurs($from, $to, $in = 0) {
+    if(empty($from)) $from = date("Y-m-01");
+    if(empty($to)) $to = date("Y-m-d");
+
+    $sql =
+    "SELECT t.name|| ' ('||SUM(c.price*c.qnt*cr.rate)||'р.)' as tname,
+	SUM( c.price * c.qnt * cr.rate ) out_amount
+    FROM `cashes` c, cashes_type t, currency cr
+    WHERE
+    c.visible = 1 AND c.uid = ? AND c.type = ?
+    AND t.id = c.cash_type_id
+    AND c.cur_id = cr.id
+    AND c.date BETWEEN ? AND ?
+    group by t.name
+    order by out_amount";
+
+    return $this->db->select($sql, 1, intval($in), $from, $to);
+  }
+
+  public function getStorage() {
+    $sql =
+    "SELECT 'Достигнуто ' || SUM( CASE WHEN c.type = 1 THEN 1 ELSE -1 END * c.price * c.qnt * cr.rate ) ||'р.' as tname, SUM( CASE WHEN c.type = 1 THEN 1 ELSE -1 END * c.price * c.qnt * cr.rate ) out_amount
+    FROM `cashes` c, currency cr
+    WHERE
+    c.visible =1 AND c.uid = ?
+    AND c.cur_id = cr.id ";
+    $r = $this->db->select($sql, 1);
+
+    $r[1]['out_amount'] = 500000 - $r[0]['out_amount'];
+    $r[1]['tname'] = 'Осталось '.$r[1]['out_amount']."р.";
+
+    return $r;
+  }
 }
 ?>
 

@@ -2,5 +2,6 @@
 Демо - cash2.pihel.jino.ru
 chown -R www-data ./
 
+git add *
 git commit -a -m ''
 git push -u origin master
