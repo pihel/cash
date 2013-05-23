@@ -52,6 +52,8 @@ function cash_analiz_com_refresh() {
   cash_analiz_com_store.proxy.url = "ajax/analiz/common.php?from=" + Ext.Date.format(Ext.getCmp('cash_analiz_com_from_date').getValue(),'Y-m-d') +
 				    "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_com_to_date').getValue(),'Y-m-d');
   cash_analiz_com_store.load();
+
+  setAnkhor();
 } //cash_analiz_com_refresh
 
 var cash_analiz_com_model = Ext.define('cash_analiz_com_model', {

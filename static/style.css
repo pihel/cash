@@ -55,7 +55,11 @@ img {
 #cash_analiz_ingrp_from_date-inputCell .x-form-text,
 #cash_analiz_ingrp_to_date-inputCell .x-form-text,
 #cash_analiz_purs_from_date-inputCell .x-form-text,
-#cash_analiz_purs_to_date-inputCell .x-form-text {
+#cash_analiz_purs_to_date-inputCell .x-form-text,
+#cash_analiz_mdyn_from_date-inputCell .x-form-text,
+#cash_analiz_mdyn_to_date-inputCell .x-form-text,
+#cash_analiz_cur_from_date-inputCell .x-form-text,
+#cash_analiz_cur_to_date-inputCell .x-form-text{
   height: 19px !important;
 }
 #cash_list_tb {
@@ -92,7 +96,8 @@ img {
   color: #15498B;
 }
 #cash_analiz_com_date, .cash_analiz_date, #cash_analiz_grp_date,
-#cash_analiz_org_date, #cash_analiz_ingrp_date, #cash_analiz_purs_date {
+#cash_analiz_org_date, #cash_analiz_ingrp_date, #cash_analiz_purs_date,
+#cash_analiz_mdyn_date, #cash_analiz_cur_date {
   padding-top: 15px !important;
   margin-left: -5px !important;
 }

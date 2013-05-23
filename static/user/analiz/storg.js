@@ -8,6 +8,7 @@ var cash_analiz_strg_lbl = {
 
 function cash_analiz_strg_refresh() {
   cash_analiz_strg_store.load();
+  setAnkhor();
 } //cash_analiz_strg_refresh
 
 var cash_analiz_strg_model = Ext.define('cash_analiz_strg_model', {

@@ -11,10 +11,10 @@ var cash_analiz_com = Ext.create('Ext.Panel', {
     listeners: {
 	activate: function(tab){
 	  Ext.getCmp('cash_analiz_com').setLoading("Загрузка общей статистики...");
-	  setAnkhor();
 	  loadScript("static/user/analiz/common.js", function() {
 	    cash_analiz_com_load(function() {
 	      Ext.getCmp('cash_analiz_com').setLoading(false);
+	      setAnkhor();
 	    });
 	  });
 	}
@@ -32,10 +32,10 @@ var cash_analiz_dyn = Ext.create('Ext.Panel', {
     listeners: {
 	activate: function(tab){
 	  Ext.getCmp('cash_analiz_dyn').setLoading("Загрузка баланса...");
-	  setAnkhor();
 	  loadScript("static/user/analiz/dynamic.js", function() {
 	    cash_analiz_dyn_load(function() {
 	      Ext.getCmp('cash_analiz_dyn').setLoading(false);
+	      setAnkhor();
 	    });
 	  });
 	}
@@ -53,10 +53,10 @@ var cash_analiz_group = Ext.create('Ext.Panel', {
     listeners: {
 	activate: function(tab){
 	  Ext.getCmp('cash_analiz_group').setLoading("Загрузка статистики по группам...");
-	  setAnkhor();
 	  loadScript("static/user/analiz/groups.js", function() {
 	    cash_analiz_grp_load(function() {
 	      Ext.getCmp('cash_analiz_group').setLoading(false);
+	      setAnkhor();
 	    });
 	  });
 	}
@@ -74,10 +74,10 @@ var cash_analiz_org = Ext.create('Ext.Panel', {
     listeners: {
 	activate: function(tab){
 	  Ext.getCmp('cash_analiz_org').setLoading("Загрузка статистики по организациям...");
-	  setAnkhor();
 	  loadScript("static/user/analiz/orgs.js", function() {
 	    cash_analiz_org_load(function() {
 	      Ext.getCmp('cash_analiz_org').setLoading(false);
+	      setAnkhor();
 	    });
 	  });
 	}
@@ -94,7 +94,13 @@ var cash_analiz_mondyn = Ext.create('Ext.Panel', {
     items: [],
     listeners: {
 	activate: function(tab){
-	  //
+	  Ext.getCmp('cash_analiz_mondyn').setLoading("Загрузка динамики по месяцам...");
+	  loadScript("static/user/analiz/mon_dyn.js", function() {
+	    cash_analiz_mdyn_load(function() {
+	      Ext.getCmp('cash_analiz_mondyn').setLoading(false);
+	      setAnkhor();
+	    });
+	  });
 	}
     }
 
@@ -110,10 +116,10 @@ var cash_analiz_cash_type = Ext.create('Ext.Panel', {
     listeners: {
 	activate: function(tab){
 	  Ext.getCmp('cash_analiz_cash_type').setLoading("Загрузка статистики по кошелькам...");
-	  setAnkhor();
 	  loadScript("static/user/analiz/purs.js", function() {
 	    cash_analiz_purs_load(function() {
 	      Ext.getCmp('cash_analiz_cash_type').setLoading(false);
+	      setAnkhor();
 	    });
 	  });
 	}
@@ -131,10 +137,10 @@ var cash_analiz_rest = Ext.create('Ext.Panel', {
     listeners: {
 	activate: function(tab){
 	  Ext.getCmp('cash_analiz_rest').setLoading("Загрузка накоплений...");
-	  setAnkhor();
 	  loadScript("static/user/analiz/storg.js", function() {
 	    cash_analiz_strg_load(function() {
 	      Ext.getCmp('cash_analiz_rest').setLoading(false);
+	      setAnkhor();
 	    });
 	  });
 	}
@@ -151,12 +157,36 @@ var cash_analiz_curr = Ext.create('Ext.Panel', {
     items: [],
     listeners: {
 	activate: function(tab){
-	  //
+	  Ext.getCmp('cash_analiz_curr').setLoading("Загрузка статистики по валютам...");
+	  loadScript("static/user/analiz/cur_amount.js", function() {
+	    cash_analiz_cur_load(function() {
+	      Ext.getCmp('cash_analiz_curr').setLoading(false);
+	      setAnkhor();
+	    });
+	  });
 	}
     }
 
 });//cash_analiz_curr
 
+
+function getAnalitAnkhor() {
+  var hash = "";
+  hash += "act=analit";
+  hash += "&type=" + Ext.getCmp('cash_analit_tabs').getActiveTab().id;
+
+  if(typeof Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1] != "undefined" &&
+     typeof Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items != "undefined"
+  ) {
+    hash += "&from=" + Ext.Date.format(Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].getValue(),'Y-m-d');
+    hash += "&to=" + Ext.Date.format(Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[2].getValue(),'Y-m-d');
+
+    if(Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items.length > 3 ) {
+      hash += "&in=" + (0+Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[4].getValue());
+    }
+  }
+  return hash;
+}
 
 var cash_analit_tabs = Ext.widget('tabpanel', {
     id: "cash_analit_tabs",
@@ -164,5 +194,6 @@ var cash_analit_tabs = Ext.widget('tabpanel', {
 	bodyPadding: 5
     },
     border: false,
-    items: [cash_analiz_com, cash_analiz_dyn, cash_analiz_group, cash_analiz_org, cash_analiz_mondyn, cash_analiz_cash_type, cash_analiz_rest, cash_analiz_curr]
+    items: [cash_analiz_com, cash_analiz_dyn, cash_analiz_mondyn, cash_analiz_group,
+	    cash_analiz_org, cash_analiz_cash_type, cash_analiz_curr, cash_analiz_rest]
 }); //cash_analit_tabs

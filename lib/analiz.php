@@ -127,6 +127,44 @@ class CashAnaliz {
 
     return $r;
   }
+
+  public function getMothDyn($from, $to) {
+    if(empty($from)) $from = date("Y-01-01");
+    if(empty($to)) $to = date("Y-m-d");
+
+    $sql =
+    "SELECT
+	    strftime('%Y-%m', c.date) as tname,
+	    IFNULL(SUM( CASE WHEN c.type = 1 THEN c.price * c.qnt * cr.rate END ),0) in_amount,
+	    IFNULL(SUM( CASE WHEN c.type = 0 THEN  c.price * c.qnt * cr.rate END ),0) out_amount
+    FROM `cashes` c, currency cr
+    WHERE
+	    c.visible = 1 AND c.uid = ?
+	    AND c.cur_id = cr.id
+	    AND c.date BETWEEN ? AND  ?
+    GROUP BY  strftime('%Y-%m', c.date)
+    ORDER BY tname";
+
+    return $this->db->select($sql, 1, $from, $to);
+  }
+
+  public function getCurAmount($from, $to, $in = 0) {
+    if(empty($from)) $from = date("Y-m-01");
+    if(empty($to)) $to = date("Y-m-d");
+
+    $sql =
+    "SELECT
+	    cr.name||', '||SUM( c.price * c.qnt * cr.rate )||'р.' as tname,
+	    SUM( c.price * c.qnt * cr.rate ) amount
+    FROM `cashes` c, currency cr
+    WHERE
+	c.visible =1 AND c.uid = ? AND c.type = ?
+	AND c.cur_id = cr.id
+	AND c.date BETWEEN ? AND ?
+    GROUP BY cr.name";
+
+    return $this->db->select($sql, 1, $in, $from, $to);
+  }
 }
 ?>
 

@@ -126,7 +126,9 @@ function setAnkhor() {
     }
   }
   else if(tab == "Аналитика") {
-    hash += "act=analit";
+    if(typeof getAnalitAnkhor != "undefined") {
+      hash += getAnalitAnkhor();
+    }
   }
   else if(tab == "Настройки") {
     hash += "act=set";

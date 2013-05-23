@@ -64,6 +64,7 @@ function cash_analiz_grp_refresh() {
 				    "&from=" + Ext.Date.format(Ext.getCmp('cash_analiz_grp_from_date').getValue(),'Y-m-d') +
 				    "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_grp_to_date').getValue(),'Y-m-d');
   cash_analiz_grp_store.load();
+  setAnkhor();
 } //cash_analiz_grp_refresh
 
 var cash_analiz_grp_model = Ext.define('cash_analiz_grp_model', {
