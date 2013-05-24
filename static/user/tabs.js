@@ -10,10 +10,12 @@ var cash_analit = Ext.create('Ext.Panel', {
     listeners: {
 	activate: function(tab){
 	  Ext.getCmp('cash_analit').setLoading("Загрузка аналитики...");
+	  var p = window.location.hash.split("&");
 	  loadScript("static/user/analiz.js", function() {
 	    Ext.getCmp('cash_analit').add(Ext.getCmp('cash_analit_tabs'));
 	    setAnkhor();
 	    Ext.getCmp('cash_analit').setLoading(false);
+	    setAnalitAnkhor(p);
 	  });
 	}
     }

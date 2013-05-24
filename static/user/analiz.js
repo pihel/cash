@@ -1,3 +1,4 @@
+var glob_hash = [];
 var w = Ext.getCmp('cash_analit').getWidth() - 20;
 var h = Ext.getCmp('cash_analit').getHeight() - 45;
 
@@ -14,6 +15,7 @@ var cash_analiz_com = Ext.create('Ext.Panel', {
 	  loadScript("static/user/analiz/common.js", function() {
 	    cash_analiz_com_load(function() {
 	      Ext.getCmp('cash_analiz_com').setLoading(false);
+	      setAnalitAnkhorParam();
 	      setAnkhor();
 	    });
 	  });
@@ -35,6 +37,7 @@ var cash_analiz_dyn = Ext.create('Ext.Panel', {
 	  loadScript("static/user/analiz/dynamic.js", function() {
 	    cash_analiz_dyn_load(function() {
 	      Ext.getCmp('cash_analiz_dyn').setLoading(false);
+	      setAnalitAnkhorParam();
 	      setAnkhor();
 	    });
 	  });
@@ -56,6 +59,7 @@ var cash_analiz_group = Ext.create('Ext.Panel', {
 	  loadScript("static/user/analiz/groups.js", function() {
 	    cash_analiz_grp_load(function() {
 	      Ext.getCmp('cash_analiz_group').setLoading(false);
+	      setAnalitAnkhorParam();
 	      setAnkhor();
 	    });
 	  });
@@ -186,6 +190,49 @@ function getAnalitAnkhor() {
     }
   }
   return hash;
+}
+
+function setAnalitAnkhorParam() {
+  if(glob_hash == undefined || glob_hash == "" || glob_hash == []) return false;
+  if(glob_hash.length < 2) return false;
+  if(glob_hash[0] != "#act=analit") return false;
+
+  if(typeof Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1] == "undefined" ||
+      typeof Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items == "undefined"
+    ) return false;
+
+  //alert(glob_hash);
+
+  Ext.Array.each(glob_hash, function(name, index, countriesItSelf) {
+    var h = name.split("=");
+    if(h.length < 2) return false;
+
+    if(h[0] == "from") Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].setValue(h[1]);
+    if(h[0] == "to") Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[2].setValue(h[1]);
+    if(h[0] == "in") Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[4].setValue(parseInt(h[1])==1);
+  }); //Ext.Array.each
+
+  glob_hash = [];
+
+  return true;
+}
+
+function setAnalitAnkhor(p) {
+  if(p.length < 2) return false;
+  if(p[0] != "#act=analit") return false;
+
+  Ext.Array.each(p, function(name, index, countriesItSelf) {
+    var h = name.split("=");
+    if(h.length < 2) return false;
+
+    if(h[0] == "type") {
+      glob_hash = p;
+      Ext.getCmp('cash_analit_tabs').setActiveTab(h[1]);
+      return true;
+    }
+  }); //Ext.Array.each
+
+  return true;
 }
 
 var cash_analit_tabs = Ext.widget('tabpanel', {
