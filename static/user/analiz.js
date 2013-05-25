@@ -15,7 +15,6 @@ var cash_analiz_com = Ext.create('Ext.Panel', {
 	  loadScript("static/user/analiz/common.js", function() {
 	    cash_analiz_com_load(function() {
 	      Ext.getCmp('cash_analiz_com').setLoading(false);
-	      setAnalitAnkhorParam();
 	      setAnkhor();
 	    });
 	  });
@@ -37,7 +36,6 @@ var cash_analiz_dyn = Ext.create('Ext.Panel', {
 	  loadScript("static/user/analiz/dynamic.js", function() {
 	    cash_analiz_dyn_load(function() {
 	      Ext.getCmp('cash_analiz_dyn').setLoading(false);
-	      setAnalitAnkhorParam();
 	      setAnkhor();
 	    });
 	  });
@@ -59,7 +57,6 @@ var cash_analiz_group = Ext.create('Ext.Panel', {
 	  loadScript("static/user/analiz/groups.js", function() {
 	    cash_analiz_grp_load(function() {
 	      Ext.getCmp('cash_analiz_group').setLoading(false);
-	      setAnalitAnkhorParam();
 	      setAnkhor();
 	    });
 	  });
@@ -209,7 +206,10 @@ function setAnalitAnkhorParam() {
 
     if(h[0] == "from") Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].setValue(h[1]);
     if(h[0] == "to") Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[2].setValue(h[1]);
-    if(h[0] == "in") Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[4].setValue(parseInt(h[1])==1);
+    if(h[0] == "in") {
+      Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[4].setDisabled(false);
+      Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[4].setValue(parseInt(h[1])==1);
+    }
   }); //Ext.Array.each
 
   glob_hash = [];
@@ -233,6 +233,12 @@ function setAnalitAnkhor(p) {
   }); //Ext.Array.each
 
   return true;
+}
+
+function isDefaultAnaliz() {
+  return glob_hash == undefined ||
+	 glob_hash == "" || glob_hash == [] || glob_hash.length < 2;
+	 //|| ( "type=" + Ext.getCmp('cash_analit_tabs').getActiveTab().id == "cash_analiz_com" && typeof glob_hash[1] != "type=cash_analiz_com" );
 }
 
 var cash_analit_tabs = Ext.widget('tabpanel', {

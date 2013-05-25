@@ -318,6 +318,14 @@ function getListAnkhor() {
   hash += "&from=" + Ext.Date.format(Ext.getCmp('cash_list_from_date').getValue(),'Y-m-d');
   hash += "&to=" + Ext.Date.format(Ext.getCmp('cash_list_to_date').getValue(),'Y-m-d');
 
+  if(Ext.getCmp('cash_list_add') != undefined && Ext.getCmp('cash_list_add').isVisible()) {
+    if( Ext.getCmp('cash_item_edit_id') != undefined && Ext.getCmp('cash_item_edit_id').getValue() > 0 ) {
+      hash += "&item=" + Ext.getCmp('cash_item_edit_id').getValue();
+    } else {
+      hash += "&item=-1";
+    }
+  }
+
   //extend filter
   if(Ext.getCmp('cash_item_nmcl_cb_fltr') != undefined &&
     Ext.getCmp('cash_list_filter').getValue()
@@ -379,8 +387,15 @@ function setListAnkhor() {
     var h = name.split("=");
     if(h.length < 2) return false;
 
-    if(h[0] == "from") Ext.getCmp('cash_list_from_date').setValue(h[1]);
-    if(h[0] == "to") Ext.getCmp('cash_list_to_date').setValue(h[1]);
+    if(h[0] == "from" && h[1] != undefined) Ext.getCmp('cash_list_from_date').setValue(h[1]);
+    if(h[0] == "to" && h[1] != undefined) Ext.getCmp('cash_list_to_date').setValue(h[1]);
+    if(h[0] == "item")  {
+      loadScript('static/user/add.js', function() {
+	v_edit_id = parseInt(h[1]);
+	if(v_edit_id == undefined || v_edit_id == -1) v_edit_id = 0;
+	cash_list_add.show();
+      });
+    }
 
     if(h[0] == "exfilter" && h[1] == "1") {
       Ext.getCmp('cash_list_filter_loading').show();
@@ -398,6 +413,8 @@ function setListAnkhor() {
       }); //loadScript
     }
   }); //Ext.Array.each
+
+  if(Ext.getCmp('cash_list_from_date').getValue() == null || Ext.getCmp('cash_list_to_date').getValue() == null) setDefaultListVal();
 
   return true;
 }

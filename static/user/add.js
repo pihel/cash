@@ -405,6 +405,7 @@ function cash_list_add_load() {
     Ext.getCmp('cash_item_add').setVisible(true);
     cash_list_add.setLoading(false);
     Ext.getCmp('cash_item_edit_id_label').setText("");
+    setAnkhor();
     return;
   }
 
@@ -433,6 +434,7 @@ function cash_list_add_load() {
 	  Ext.getCmp('cash_list_add').setTitle("Редактирование операции");
 
 	  Ext.getCmp('cash_item_add').setVisible(false);
+	  setAnkhor();
 
 	  cash_list_add.setLoading(false);
       }//success
@@ -451,6 +453,9 @@ var cash_list_add = Ext.create('Ext.Window', {
       bodyPadding: 5,
       items: [cash_item_form_add],
       listeners: {
+	hide: function() {
+	  setAnkhor();
+	},
 	show: function(){
 	  cash_list_add.setLoading("Загрузка формы...");
 	  cash_item_nmcl_store.load(function() {

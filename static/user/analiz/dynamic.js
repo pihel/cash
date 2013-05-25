@@ -213,10 +213,14 @@ function cash_analiz_dyn_load(_cb) {
   Ext.getCmp('cash_analiz_dyn').add(cash_analiz_dyn_date);
   Ext.getCmp('cash_analiz_dyn').add(cash_analiz_dyn_chart);
 
-  var cd = new Date();
-
-  Ext.getCmp('cash_analiz_dyn_from_date').setValue(new Date(cd.getFullYear(), cd.getMonth(), 1));
-  Ext.getCmp('cash_analiz_dyn_to_date').setValue(cd);
+  if(isDefaultAnaliz()) {
+    var cd = new Date();
+    Ext.getCmp('cash_analiz_dyn_from_date').setValue(new Date(cd.getFullYear(), cd.getMonth(), 1));
+    Ext.getCmp('cash_analiz_dyn_to_date').setValue(cd);
+  } else {
+    setAnalitAnkhorParam();
+  }
+  cash_analiz_dyn_refresh();
 
   if(_cb != undefined) _cb();
 }

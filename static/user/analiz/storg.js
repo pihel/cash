@@ -81,7 +81,6 @@ function cash_analiz_strg_load(_cb) {
 
   Ext.getCmp('cash_analiz_rest').add(cash_analiz_strg_lbl);
   Ext.getCmp('cash_analiz_rest').add(cash_analiz_strg_chart);
-
   cash_analiz_strg_refresh();
 
   if(_cb != undefined) _cb();

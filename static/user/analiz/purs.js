@@ -38,7 +38,7 @@ var cash_analiz_purs_in = {
     xtype:      'checkboxfield',
     boxLabel  : 'По приходу',
     name      : 'cash_analiz_purs_in',
-    inputValue: '0',
+    disabled  : true,
     id        : 'cash_analiz_purs_in',
     onChange: function(newVal, oldVal) {
       cash_analiz_purs_refresh();
@@ -59,6 +59,7 @@ var cash_analiz_purs_date = {
 function cash_analiz_purs_refresh() {
   if(Ext.getCmp('cash_analiz_purs_from_date').getValue() == null) return;
   if(Ext.getCmp('cash_analiz_purs_to_date').getValue() == null) return;
+  if(Ext.getCmp('cash_analiz_purs_in').disabled) return;
 
   cash_analiz_purs_store.proxy.url = "ajax/analiz/purs.php?in=" + (0+Ext.getCmp('cash_analiz_purs_in').getValue()) +
 				     "&from=" + Ext.Date.format(Ext.getCmp('cash_analiz_purs_from_date').getValue(),'Y-m-d') +
@@ -138,10 +139,17 @@ function cash_analiz_purs_load(_cb) {
   Ext.getCmp('cash_analiz_cash_type').add(cash_analiz_purs_date);
   Ext.getCmp('cash_analiz_cash_type').add(cash_analiz_purs_chart);
 
-  var cd = new Date();
 
-  Ext.getCmp('cash_analiz_purs_from_date').setValue(new Date(cd.getFullYear(), cd.getMonth(), 1));
-  Ext.getCmp('cash_analiz_purs_to_date').setValue(cd);
+  if(isDefaultAnaliz()) {
+    var cd = new Date();
+    Ext.getCmp('cash_analiz_purs_from_date').setValue(new Date(cd.getFullYear(), cd.getMonth(), 1));
+    Ext.getCmp('cash_analiz_purs_in').setDisabled(false);
+    Ext.getCmp('cash_analiz_purs_in').setValue(false);
+    Ext.getCmp('cash_analiz_purs_to_date').setValue(cd);
+  } else {
+    setAnalitAnkhorParam();
+  }
+  cash_analiz_purs_refresh();
 
   if(_cb != undefined) _cb();
 }
