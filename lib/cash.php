@@ -84,7 +84,7 @@ class Cash {
       ON(cg.id = c.`group`)
      WHERE
       c.date BETWEEN ? AND ?
-      AND c.uid = ?
+      AND c.bd_id = ?
       ". $filter ."
      ORDER BY
       c.date, c.date_edit";
@@ -100,7 +100,7 @@ class Cash {
      FROM cashes c
      WHERE
       c.id = ?
-      AND c.uid = ?";
+      AND c.bd_id = ?";
 
      return $this->db->line($sql, $id, 1);
   }
@@ -113,7 +113,7 @@ class Cash {
 	cashes c, cashes_nom cn
       WHERE
 	cn.id = c.nmcl_id
-	AND c.uid = ?
+	AND c.bd_id = ?
       GROUP BY
 	cn.id, cn.name
       ORDER BY
@@ -131,7 +131,7 @@ class Cash {
       cashes c
     WHERE
       c.nmcl_id = ?
-      AND c.uid = ?
+      AND c.bd_id = ?
       GROUP BY c.`group`, c.org_id
     ORDER BY
       COUNT(1) DESC
@@ -165,7 +165,7 @@ class Cash {
       cashes c, cashes_org co
     WHERE
       co.id = c.org_id
-      AND c.uid = ?
+      AND c.bd_id = ?
     GROUP BY
       co.id, co.name
     ORDER BY
@@ -175,7 +175,7 @@ class Cash {
 
   public function del($id) {
     $this->db->start_tran();
-    $this->db->exec("UPDATE cashes SET visible = 0 WHERE id = ? AND uid = ?", $id, 1 );
+    $this->db->exec("UPDATE cashes SET visible = 0 WHERE id = ? AND bd_id = ?", $id, 1 );
     $this->db->commit();
   }
 
@@ -292,8 +292,8 @@ class Cash {
     if($refb['failure']) return $refb;
 
     $sql =
-    "INSERT INTO `cashes` (nmcl_id, `group`, price, cash_type_id, qnt, `date`, org_id, uid, `file`, `type` ,note, cur_id)
-     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO `cashes` (nmcl_id, `group`, price, cash_type_id, qnt, `date`, org_id, bd_id, uid, `file`, `type` ,note, cur_id)
+     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $this->db->exec($sql,
 	$refb['cash_item_nmcl_cb'],
@@ -303,6 +303,7 @@ class Cash {
 	$refb['cash_item_qnt'],
 	$refb['cash_item_date'],
 	$refb['cash_item_org_cb'],
+	1,
 	1,
 	$refb['file'],
 	$refb['cash_item_toper_cb'],

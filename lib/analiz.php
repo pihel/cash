@@ -15,7 +15,7 @@ class CashAnaliz {
     $sql =
     " SELECT CASE WHEN c.type = 1 THEN 'Приход' ELSE 'Расход' END || ' ('||SUM(price*qnt*cr.rate)||'р.)' as tname, SUM(price*qnt*cr.rate) data
       FROM `cashes` c, currency cr
-      WHERE c.visible = 1 AND c.uid = ?
+      WHERE c.visible = 1 AND c.bd_id = ?
       AND c.cur_id = cr.id
       AND c.date BETWEEN ? AND ?
       group by c.type order by c.type ";
@@ -40,14 +40,14 @@ class CashAnaliz {
 		  FROM
 			  `cashes` c1, currency cr1
 		  WHERE
-			  c1.visible = c.visible AND c1.uid = c.uid
+			  c1.visible = c.visible AND c1.bd_id = c.bd_id
 			  AND cr1.id = c1.cur_id
 			  AND c1.date BETWEEN ? AND c.date
 	      ),0) as dif_data
       FROM
 	      `cashes` c, currency cr
       WHERE
-	      c.visible = 1 AND c.uid = ?
+	      c.visible = 1 AND c.bd_id = ?
 	      AND cr.id = c.cur_id
 	      AND c.date BETWEEN ? AND ?
       GROUP BY c.date
@@ -65,7 +65,7 @@ class CashAnaliz {
 	SUM( c.price * c.qnt * cr.rate ) out_amount
     FROM `cashes` c, cashes_group g, currency cr
     WHERE
-    c.visible = 1 AND c.uid = ? AND c.type = ?
+    c.visible = 1 AND c.bd_id = ? AND c.type = ?
     AND g.id = c.`group`
     AND c.cur_id = cr.id
     AND c.date BETWEEN ? AND ?
@@ -84,7 +84,7 @@ class CashAnaliz {
 	SUM( c.price * c.qnt * cr.rate ) out_amount
     FROM `cashes` c, cashes_org o, currency cr
     WHERE
-    c.visible = 1 AND c.uid = ? AND c.type = 0
+    c.visible = 1 AND c.bd_id = ? AND c.type = 0
     AND o.id = c.org_id
     AND c.cur_id = cr.id
     AND c.date BETWEEN ? AND ?
@@ -103,7 +103,7 @@ class CashAnaliz {
 	SUM( c.price * c.qnt * cr.rate ) out_amount
     FROM `cashes` c, cashes_type t, currency cr
     WHERE
-    c.visible = 1 AND c.uid = ? AND c.type = ?
+    c.visible = 1 AND c.bd_id = ? AND c.type = ?
     AND t.id = c.cash_type_id
     AND c.cur_id = cr.id
     AND c.date BETWEEN ? AND ?
@@ -118,7 +118,7 @@ class CashAnaliz {
     "SELECT 'Достигнуто ' || SUM( CASE WHEN c.type = 1 THEN 1 ELSE -1 END * c.price * c.qnt * cr.rate ) ||'р.' as tname, SUM( CASE WHEN c.type = 1 THEN 1 ELSE -1 END * c.price * c.qnt * cr.rate ) out_amount
     FROM `cashes` c, currency cr
     WHERE
-    c.visible =1 AND c.uid = ?
+    c.visible =1 AND c.bd_id = ?
     AND c.cur_id = cr.id ";
     $r = $this->db->select($sql, 1);
 
@@ -139,7 +139,7 @@ class CashAnaliz {
 	    IFNULL(SUM( CASE WHEN c.type = 0 THEN  c.price * c.qnt * cr.rate END ),0) out_amount
     FROM `cashes` c, currency cr
     WHERE
-	    c.visible = 1 AND c.uid = ?
+	    c.visible = 1 AND c.bd_id = ?
 	    AND c.cur_id = cr.id
 	    AND c.date BETWEEN ? AND  ?
     GROUP BY  strftime('%Y-%m', c.date)
@@ -158,7 +158,7 @@ class CashAnaliz {
 	    SUM( c.price * c.qnt * cr.rate ) amount
     FROM `cashes` c, currency cr
     WHERE
-	c.visible =1 AND c.uid = ? AND c.type = ?
+	c.visible =1 AND c.bd_id = ? AND c.type = ?
 	AND c.cur_id = cr.id
 	AND c.date BETWEEN ? AND ?
     GROUP BY cr.name";
