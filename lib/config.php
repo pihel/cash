@@ -1,4 +1,4 @@
 <?
-$sqlite_path = "/var/www/cash2/data/cash.sqlite";
+$sqlite_path = __DIR__."/../data/cash.sqlite";
 $site_name = 'Домашняя бухгалтерия';
 ?>

@@ -22,7 +22,9 @@ Ext.require([
     'Ext.Msg',
     'Ext.ux.grid.FiltersFeature',
     'Ext.tab.*',
-    'Ext.chart.*'
+    'Ext.chart.*',
+    'Ext.ux.CheckColumn',
+    'Ext.selection.CellModel'
 ]);
 
 

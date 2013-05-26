@@ -101,3 +101,6 @@ img {
   padding-top: 15px !important;
   margin-left: -5px !important;
 }
+#cash_set_panel-body {
+  background-color: transparent;
+}

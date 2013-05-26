@@ -66,6 +66,7 @@ class Cash {
     $filter = $this->getExFilter($exfltr);
     if(empty($filter)) $filter = " AND c.visible = 1 ";
 
+    //INDEXED BY XIF_CASHES_DBV
     $sql =
     " SELECT
       c.id, c.nmcl_id, cn.name as nom, c.`group`, cg.name gname, c.price, c.qnt, c.date as oper_date, datetime(c.date_edit, 'localtime') date_edit,
@@ -80,7 +81,7 @@ class Cash {
       ON(c.org_id = co.id)
      INNER JOIN cashes_type ct
       ON(c.cash_type_id = ct.id)
-     LEFT JOIN cashes_group cg
+     INNER JOIN cashes_group cg
       ON(cg.id = c.`group`)
      WHERE
       c.date BETWEEN ? AND ?
@@ -110,10 +111,11 @@ class Cash {
     "SELECT
 	cn.id, cn.name
       FROM
-	cashes c, cashes_nom cn
+	cashes c
+      INNER JOIN cashes_nom cn
+	ON(cn.id = c.nmcl_id)
       WHERE
-	cn.id = c.nmcl_id
-	AND c.bd_id = ?
+	c.bd_id = ? AND c.visible = 1
       GROUP BY
 	cn.id, cn.name
       ORDER BY
@@ -131,7 +133,7 @@ class Cash {
       cashes c
     WHERE
       c.nmcl_id = ?
-      AND c.bd_id = ?
+      AND c.bd_id = ? AND c.visible = 1
       GROUP BY c.`group`, c.org_id
     ORDER BY
       COUNT(1) DESC
@@ -162,10 +164,11 @@ class Cash {
     "SELECT
       co.id, co.name
     FROM
-      cashes c, cashes_org co
+      cashes c
+    INNER JOIN cashes_org co
+      ON(co.id = c.org_id)
     WHERE
-      co.id = c.org_id
-      AND c.bd_id = ?
+      c.bd_id = ? AND c.visible = 1
     GROUP BY
       co.id, co.name
     ORDER BY
@@ -318,5 +321,19 @@ class Cash {
 
     return array('success'=>true, 'msg'=> $id );
   } //add
+
+  public function analize() {
+    $this->db->exec("analyze cashes;");
+    $this->db->exec("analyze cashes_group;");
+    $this->db->exec("analyze cashes_nom;");
+    $this->db->exec("analyze cashes_org;");
+    $this->db->exec("analyze cashes_type;");
+    $this->db->exec("analyze currency;");
+    $this->db->exec("analyze db;");
+    $this->db->exec("analyze users;");
+    $this->db->exec("vacuum;");
+
+    return true;
+  }
 }
 ?>
