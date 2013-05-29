@@ -20,7 +20,20 @@ var cash_set_db_add = Ext.create('Ext.button.Button', {
   text: 'Добавить',
   icon: "static/ext/resources/themes/images/access/tree/drop-add.gif",
   handler : function () {
-    cash_set_db_store.add({id:0, name: "Новая БД"});
+    var res = "";
+    Ext.MessageBox.prompt('Имя БД', 'Введи имя базы данных', function(id, txt) {
+      Ext.Ajax.request({
+	  url: "ajax/add_db.php",
+	  method: "POST",
+	  params: {
+	      name: txt
+	  },
+	  success: function(data) {
+	      cash_set_db_store.load();
+	  }//success
+      }); //Ext.Ajax.request
+      //cash_set_db_store.add({id:0, name: txt});
+    });
   }
 }); //cash_set_db_add
 
