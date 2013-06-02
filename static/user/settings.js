@@ -22,34 +22,22 @@ var cash_set_db_add = Ext.create('Ext.button.Button', {
   handler : function () {
     var res = "";
     Ext.MessageBox.prompt('Имя БД', 'Введи имя базы данных', function(id, txt) {
-      Ext.Ajax.request({
-	  url: "ajax/add_db.php",
-	  method: "POST",
-	  params: {
-	      name: txt
-	  },
-	  success: function(data) {
-	      cash_set_db_store.load();
-	  }//success
-      }); //Ext.Ajax.request
+      if (id == 'ok') {
+	Ext.Ajax.request({
+	    url: "ajax/add_db.php",
+	    method: "POST",
+	    params: {
+		name: txt
+	    },
+	    success: function(data) {
+		cash_set_db_store.load();
+	    }//success
+	}); //Ext.Ajax.request
+      }
       //cash_set_db_store.add({id:0, name: txt});
     });
   }
 }); //cash_set_db_add
-
-var cash_set_db_del = Ext.create('Ext.button.Button', {
-  text: 'Удалить',
-  icon: "static/delete.gif",
-  disabled: true,
-  handler : function () {
-    var selection = cash_set_db_grid.getView().getSelectionModel().getSelection()[0];
-    if (selection) {
-	cash_set_db_store.remove(selection);
-	cash_set_db_del.setDisabled(true);
-    }
-  }
-}); //cash_set_db_del
-
 
 var cash_set_db_grid = Ext.create('Ext.grid.Panel', {
     store: cash_set_db_store,
@@ -61,21 +49,57 @@ var cash_set_db_grid = Ext.create('Ext.grid.Panel', {
     dockedItems: [{
           xtype: 'toolbar',
 	  border: true,
-          items: [cash_set_db_add, cash_set_db_del]
+          items: [cash_set_db_add]
     }],
     columns: [
 	{text: "ID", 	dataIndex: 'id', 	hidden: true, 	tdCls: 'x-center-cell' },
-	{text: "База", 	dataIndex: 'name', 	flex: 1, 	hideable: false}
+	{text: "База", 	dataIndex: 'name', 	flex: 1, 	hideable: false},
+	{
+	  menuDisabled: true,
+	  sortable: false,
+	  hideable: false,
+	  xtype: 'actioncolumn',
+	  width: 30,
+	  items: [{
+	      iconCls: 'del-cash-col',
+	      tooltip: 'Удалить запись',
+	      handler: function(grid, rowIndex, colIndex) {
+		  var rec = grid.getStore().getAt(rowIndex);
+		  //deleteItem(rec.get('id'));
+		  Ext.Msg.show({
+		    title:'Удалить БД?',
+		    msg: 'Удалить БД "' + rec.get("name") + '"?',
+		    buttons: Ext.Msg.YESNO,
+		    icon: Ext.Msg.QUESTION,
+		    fn: function(id) {
+		      if(id == 'yes') {
+			  Ext.Ajax.request({
+			      url: "ajax/del_db.php",
+			      method: "GET",
+			      params: {
+				  id: rec.get('id')
+			      },
+			      success: function(data) {
+				  if(parseInt(data.responseText) > 0) {
+				    cash_set_db_store.load();
+				  } else {
+				    error(data.responseText);
+				  }
+			      }//success
+			  }); //Ext.Ajax.request
+		      }
+		    } //fn
+		}); //Ext.Msg.show
+	      }
+	  }]
+      }
     ],
     listeners: {
 	itemclick: function(view,rec,item,index,eventObj) {
 	    cash_set_usr_store.proxy.url = 'ajax/usr_list.php?DB_ID=' + rec.get('id');
 	    cash_set_usr_store.load(function() {
 	      cash_set_usr_grid.setTitle("Список пользователей базы '" + rec.get('name') + "' и их права");
-	      cash_set_db_del.setDisabled(false);
 	      cash_set_usr_add.setDisabled(false);
-	      cash_set_usr_save.setDisabled(false);
-	      cash_set_usr_del.setDisabled(true);
 	    });
 	}
     },
@@ -99,7 +123,7 @@ var cash_set_usr_model = Ext.define('cash_set_usr_model', {
 	{name: 's_write', 	type: 'bool'},
 	{name: 's_analiz', 	type: 'bool'},
 	{name: 's_setting', 	type: 'bool'},
-	{name: 'oper_date',	type: 'DATE', dateFormat : "d.m.Y H:i"}
+	{name: 'oper_date',	type: 'DATE', dateFormat : "Y-m-d H:i:s"}
     ],
     idProperty: 'id'
 });
@@ -119,31 +143,11 @@ var cash_set_usr_add = Ext.create('Ext.button.Button', {
   disabled: true,
   icon: "static/ext/resources/themes/images/access/tree/drop-add.gif",
   handler : function () {
-    cash_set_usr_store.add({id:0, bd_id: cash_set_db_grid.getView().getSelectionModel().getSelection()[0].data.id }); //oper_date: new Date()
+    cash_set_usr_store.add({id:0,
+			    bd_id: cash_set_db_grid.getView().getSelectionModel().getSelection()[0].data.id,
+			    oper_date: new Date() }); //oper_date: new Date()
   }
 }); //cash_set_usr_add
-
-var cash_set_usr_del = Ext.create('Ext.button.Button', {
-  text: 'Удалить',
-  disabled: true,
-  icon: "static/delete.gif",
-  handler : function () {
-    var selection = cash_set_usr_grid.getView().getSelectionModel().getSelection()[0];
-    if (selection) {
-	cash_set_usr_store.remove(selection);
-	cash_set_usr_del.setDisabled(true);
-    }
-  }
-}); //cash_set_usr_del
-
-var cash_set_usr_save = Ext.create('Ext.button.Button', {
-  text: 'Сохранить',
-  disabled: true,
-  icon: "static/ext/resources/themes/images/access/tree/drop-yes.gif",
-  handler : function () {
-    cash_set_usr_grid.setLoading("Подождите, идет сохранение фотографий...");
-  }
-}); //cash_set_usr_save
 
 var cash_set_usr_grid = Ext.create('Ext.grid.Panel', {
     store: cash_set_usr_store,
@@ -153,7 +157,7 @@ var cash_set_usr_grid = Ext.create('Ext.grid.Panel', {
     width: Ext.getBody().getWidth() - 350,
     height: 400,
     forceFit: true,
-    tbar: [cash_set_usr_add, cash_set_usr_del, " ", " ", cash_set_usr_save],
+    tbar: [cash_set_usr_add],
     columns: [
 	{text: "ID", 		dataIndex: 'id', 	tdCls: 'x-center-cell', width: 20 },
 	{text: "ID базы", 	dataIndex: 'bd_id', 	hidden: true, 	tdCls: 'x-center-cell' },
@@ -163,12 +167,63 @@ var cash_set_usr_grid = Ext.create('Ext.grid.Panel', {
 	{text: "Запись", 	dataIndex: 's_write'	,xtype: 'checkcolumn'},
 	{text: "Аналитика", 	dataIndex: 's_analiz'	,xtype: 'checkcolumn'},
 	{text: "Настройки", 	dataIndex: 's_setting'	,xtype: 'checkcolumn'},
-	{text: "Последний вход",dataIndex: 'oper_date'	}
+	{text: "Последний вход",dataIndex: 'oper_date', renderer: dateTimeRender },
+	{
+	    menuDisabled: true,
+	    sortable: false,
+	    hideable: false,
+	    xtype: 'actioncolumn',
+	    width: 55,
+	    items: [{
+		iconCls: 'del-cash-col',
+		tooltip: 'Удалить запись',
+		handler: function(grid, rowIndex, colIndex) {
+		    var rec = grid.getStore().getAt(rowIndex);
+		    //rec.get('id')
+		    if(rec.get('id') == 0) {
+		      cash_set_usr_store.remove(rec);
+		    } else {
+		      Ext.Ajax.request({
+			  url: "ajax/del_usr.php",
+			  method: "GET",
+			  params: {
+			    id: rec.get('id')
+			  },
+			  success: function(data) {
+			      if(parseInt(data.responseText) > 0) {
+				cash_set_usr_store.load();
+			      } else {
+				error(data.responseText);
+			      }
+			  }//success
+		      }); //Ext.Ajax.request
+		    }
+		}
+	    }, " ", {
+		icon: "static/ext/resources/themes/images/access/tree/drop-yes.gif",
+		tooltip: 'Сохранить запись',
+		handler: function(grid, rowIndex, colIndex) {
+		    var rec = grid.getStore().getAt(rowIndex);
+		    Ext.Ajax.request({
+			url: "ajax/save_usr.php",
+			method: "POST",
+			params: rec.data,
+			success: function(data) {
+			    if(parseInt(data.responseText) > 0) {
+			      cash_set_usr_store.load();
+			    } else {
+			      error(data.responseText);
+			    }
+			}//success
+		    }); //Ext.Ajax.request
+		}
+	    }]
+	}
     ],
     selType: 'cellmodel',
     listeners: {
 	itemclick: function(view,rec,item,index,eventObj) {
-	  cash_set_usr_del.setDisabled(false);
+	  //cash_set_usr_del.setDisabled(false);
 	}
     },
     plugins: [
