@@ -1,4 +1,3 @@
 <?
-$ret = array('success'=>true, 'msg'=>1);
-//$ret = array('failure'=>true, 'msg'=>1);
-echo json_encode($ret);
+require_once("../lib/init.php");
+echo json_encode($usr->auth($_POST));

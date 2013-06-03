@@ -18,6 +18,11 @@ class CashSett {
     return $this->db->select($sql, intval($db_id) );
   }
 
+  public function getUsrNames($db_id = 0 ) {
+    $sql = "SELECT id, login as name FROM users WHERE bd_id = ?";
+    return $this->db->select($sql, intval($db_id) );
+  }
+
   public function addDB($name) {
     $this->db->start_tran();
     $this->db->exec("INSERT INTO db(name) VALUES(?)", $name);
@@ -57,7 +62,7 @@ class CashSett {
 
       $this->db->exec("INSERT INTO `users` (id, bd_id, login, pasw, `read`, `write`, analiz, setting, oper_date)
 		      VALUES( NULL, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)", intval($data['bd_id']),
-		      $data['login'], $data['pasw'], intval($data['s_read'] == "true"), intval($data['s_write'] == "true"), intval($data['s_analiz'] == "true"), intval($data['s_setting'] == "true"));
+		      $data['login'], $this->usr->hash_pasw($data['pasw']), intval($data['s_read'] == "true"), intval($data['s_write'] == "true"), intval($data['s_analiz'] == "true"), intval($data['s_setting'] == "true"));
       $id = $this->db->last_id();
     } else {
       //update
@@ -65,7 +70,7 @@ class CashSett {
 	$this->db->exec("UPDATE `users`
 		      SET login = ?, pasw = ?, `read` = ?, `write` = ?, analiz = ?, setting = ?, oper_date = CURRENT_TIMESTAMP
 		      WHERE id = ? ",
-		      $data['login'], $data['pasw'], intval($data['s_read'] == "true"), intval($data['s_write'] == "true"), intval($data['s_analiz'] == "true"), intval($data['s_setting'] == "true"), $id);
+		      $data['login'], $this->usr->hash_pasw($data['pasw']), intval($data['s_read'] == "true"), intval($data['s_write'] == "true"), intval($data['s_analiz'] == "true"), intval($data['s_setting'] == "true"), $id);
       } else {
 	$this->db->exec("UPDATE `users`
 		      SET login = ?, `read` = ?, `write` = ?, analiz = ?, setting = ?, oper_date = CURRENT_TIMESTAMP

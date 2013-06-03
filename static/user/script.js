@@ -31,7 +31,7 @@ Ext.require([
 /* GLOBAL variables */
 
 //user id
-var uid = 1;
+var uid = 0;
 var def_currency = "р.";
 
 /* RENDER function */
@@ -160,14 +160,19 @@ function authOk(id) {
 Ext.onReady(function(){
   Ext.QuickTips.init();
 
-  //if user id is empty - login form
-  if(uid == 0) {
-    loadScript("static/user/auth.js", function() {
-	loginWindow.show();
-    });
-
-  } else {
-    authOk(uid);
-  }
+  Ext.Ajax.request({
+      url: "ajax/get_usr.php",
+      method: "GET",
+      success: function(data) {
+	  if( parseInt(data.responseText) > 0 ) {
+	    uid = parseInt(data.responseText);
+	    authOk(uid);
+	  } else {
+	    loadScript("static/user/auth.js", function() {
+		loginWindow.show();
+	    });
+	  }
+      } //success
+  }); //Ext.Ajax.request
 
 }); //Ext.onReady
