@@ -90,7 +90,7 @@ class Cash {
      ORDER BY
       c.date, c.date_edit";
 
-     return $this->db->select($sql, $from, $to, 1);
+     return $this->db->select($sql, $from, $to, $this->usr->db_id);
   }
 
   public function getItem($id) {
@@ -103,7 +103,7 @@ class Cash {
       c.id = ?
       AND c.bd_id = ?";
 
-     return $this->db->line($sql, $id, 1);
+     return $this->db->line($sql, $id, $this->usr->db_id);
   }
 
   public function nmcl_list() {
@@ -120,7 +120,7 @@ class Cash {
 	cn.id, cn.name
       ORDER BY
 	COUNT(1) DESC, cn.id";
-    return $this->db->select($sql, 1);
+    return $this->db->select($sql, $this->usr->db_id);
   }
 
   public function nmcl_param($nmcl_id) {
@@ -138,7 +138,7 @@ class Cash {
     ORDER BY
       COUNT(1) DESC
       limit 1 ";
-    return $this->db->line($sql, $nmcl_id, 1);
+    return $this->db->line($sql, $nmcl_id, $this->usr->db_id);
   }
 
   public function prod_type_list() {
@@ -173,12 +173,12 @@ class Cash {
       co.id, co.name
     ORDER BY
       COUNT( 1 )  DESC, co.id";
-    return $this->db->select($sql, 1);
+    return $this->db->select($sql, $this->usr->db_id);
   }
 
   public function del($id) {
     $this->db->start_tran();
-    $this->db->exec("UPDATE cashes SET visible = 0 WHERE id = ? AND bd_id = ?", $id, 1 );
+    $this->db->exec("UPDATE cashes SET visible = 0 WHERE id = ? AND bd_id = ?", $id, $this->usr->db_id );
     $this->db->commit();
   }
 
@@ -306,8 +306,8 @@ class Cash {
 	$refb['cash_item_qnt'],
 	$refb['cash_item_date'],
 	$refb['cash_item_org_cb'],
-	1,
-	1,
+	$this->usr->db_id,
+	$this->usr->id,
 	$refb['file'],
 	$refb['cash_item_toper_cb'],
 	$refb['cash_item_note'],

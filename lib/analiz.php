@@ -27,7 +27,7 @@ class CashAnaliz {
       ORDER BY
 	c.type ";
 
-     return $this->db->select($sql,1, $from, $to);
+     return $this->db->select($sql, $this->usr->db_id, $from, $to);
   }
 
   public function getDynamic($from, $to) {
@@ -61,7 +61,7 @@ class CashAnaliz {
       GROUP BY c.date
       ORDER BY c.date";
 
-      return $this->db->select($sql, $from, 1, $from, $to);
+      return $this->db->select($sql, $from, $this->usr->db_id, $from, $to);
   }
 
   public function getGroups($from, $to, $in = 0) {
@@ -86,7 +86,7 @@ class CashAnaliz {
     ORDER BY
       out_amount DESC";
 
-    return $this->db->select($sql, 1, intval($in), $from, $to);
+    return $this->db->select($sql, $this->usr->db_id, intval($in), $from, $to);
   }
 
   public function getOrgs($from, $to) {
@@ -111,7 +111,7 @@ class CashAnaliz {
     ORDER BY
       out_amount DESC";
 
-    return $this->db->select($sql, 1, $from, $to);
+    return $this->db->select($sql, $this->usr->db_id, $from, $to);
   }
 
   public function getPurs($from, $to, $in = 0) {
@@ -136,7 +136,7 @@ class CashAnaliz {
     ORDER BY
       out_amount";
 
-    return $this->db->select($sql, 1, intval($in), $from, $to);
+    return $this->db->select($sql, $this->usr->db_id, intval($in), $from, $to);
   }
 
   public function getStorage() {
@@ -150,7 +150,7 @@ class CashAnaliz {
       ON( c.cur_id = cr.id )
     WHERE
     c.visible =1 AND c.bd_id = ? ";
-    $r = $this->db->select($sql, 1);
+    $r = $this->db->select($sql, $this->usr->db_id);
 
     $r[1]['out_amount'] = 500000 - $r[0]['out_amount'];
     $r[1]['tname'] = 'Осталось '.$r[1]['out_amount']."р.";
@@ -179,7 +179,7 @@ class CashAnaliz {
     ORDER BY
       tname";
 
-    return $this->db->select($sql, 1, $from, $to);
+    return $this->db->select($sql, $this->usr->db_id, $from, $to);
   }
 
   public function getCurAmount($from, $to, $in = 0) {
@@ -200,7 +200,7 @@ class CashAnaliz {
     GROUP BY
       cr.name";
 
-    return $this->db->select($sql, 1, $in, $from, $to);
+    return $this->db->select($sql, $this->usr->db_id, $in, $from, $to);
   }
 }
 ?>
