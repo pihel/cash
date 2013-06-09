@@ -104,3 +104,6 @@ img {
 #cash_set_panel-body {
   background-color: transparent;
 }
+#cash_item_file-inputEl {
+  cursor: pointer;
+}

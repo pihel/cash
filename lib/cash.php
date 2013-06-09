@@ -58,6 +58,8 @@ class Cash {
   }
 
   public function getList($from, $to, $exfltr) {
+    if(!$this->usr->canRead()) return array();
+
     $filter = "";
 
     if(empty($from)) $from = date("Y-m-d");
@@ -94,6 +96,8 @@ class Cash {
   }
 
   public function getItem($id) {
+    if(!$this->usr->canRead()) return array();
+
     $sql =
     " SELECT
       c.nmcl_id, c.`group`, c.price, c.qnt, c.date as oper_date, c.cur_id,
@@ -107,6 +111,8 @@ class Cash {
   }
 
   public function nmcl_list() {
+    if(!$this->usr->canRead()) return array();
+
     $sql =
     "SELECT
 	cn.id, cn.name
@@ -124,6 +130,8 @@ class Cash {
   }
 
   public function nmcl_param($nmcl_id) {
+    if(!$this->usr->canRead()) return array();
+
     //cn.id, cn.name,
     $sql =
     "SELECT
@@ -142,24 +150,32 @@ class Cash {
   }
 
   public function prod_type_list() {
+    if(!$this->usr->canRead()) return array();
+
     $sql =
     "SELECT id,name FROM cashes_group";
     return $this->db->select($sql);
   }
 
   public function currency_list() {
+    if(!$this->usr->canRead()) return array();
+
     $sql =
     "SELECT id,name FROM currency";
     return $this->db->select($sql);
   }
 
   public function cashes_type_list() {
+    if(!$this->usr->canRead()) return array();
+
     $sql =
     "SELECT id,name FROM cashes_type";
     return $this->db->select($sql);
   }
 
   public function org_list() {
+    if(!$this->usr->canRead()) return array();
+
     $sql =
     "SELECT
       co.id, co.name
@@ -177,12 +193,16 @@ class Cash {
   }
 
   public function del($id) {
+    if(!$this->usr->canWrite()) return "Ошибка доступа";
+
     $this->db->start_tran();
     $this->db->exec("UPDATE cashes SET visible = 0 WHERE id = ? AND bd_id = ?", $id, $this->usr->db_id );
     $this->db->commit();
   }
 
   protected function add_refbook($name, $ref) {
+    if(!$this->usr->canWrite()) return NULL;
+
     if(intval($name) > 0) return $name;
 
     $ref_id = 0;
@@ -196,17 +216,20 @@ class Cash {
     return intval( $ref_id );
   }
 
-  protected function refbook_check($data) {
+  protected function refbook_check($data, $files = array() ) {
+
     $ret = array();
 
-    if(empty($data)) return array('failure'=>true, 'msg'=> 'Нет данных');
+    if(empty($data) || !$this->usr->canWrite()) return array('failure'=>true, 'msg'=> 'Нет данных');
 
     $ret['file'] = '';
-    /*if(is_array($files)) {
-      if(move_uploaded_file($files['tmp_name'], '../files/'.$files['name'])) {
-	$file = 'files/'.$files['name'];
+    if(is_array($files['cash_item_file'])) {
+      $ext = pathinfo($files['cash_item_file']['name'], PATHINFO_EXTENSION);
+      $fname = 'files/'.crc32(time().$files['cash_item_file']['name']).".".$ext;
+      if(move_uploaded_file($files['cash_item_file']['tmp_name'], "../".$fname)) {
+	$ret['file'] = $fname;
       }
-    }*/
+    }
 
     $ret['cash_item_date'] = $data['cash_item_date'];
     if(empty($ret['cash_item_date'])) 		{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните дату'); }
@@ -241,9 +264,11 @@ class Cash {
   }
 
   public function edit($data, $files) {
+    if(!$this->usr->canWrite()) return "Ошибка доступа";
+
     $this->db->start_tran();
 
-    $refb = $this->refbook_check($data);
+    $refb = $this->refbook_check($data, $files);
 
     if($refb['failure']) return $refb;
 
@@ -284,13 +309,18 @@ class Cash {
 
     $this->db->commit();
 
+    //1% to check db
+    if(rand(1,100) == 50) $this->analize();
+
     return array('success'=>true, 'msg'=> $cnt );
   }
 
   public function add($data, $files) {
+    if(!$this->usr->canWrite()) return "Ошибка доступа";
+
     $this->db->start_tran();
 
-    $refb = $this->refbook_check($data);
+    $refb = $this->refbook_check($data, $files);
 
     if($refb['failure']) return $refb;
 
@@ -323,6 +353,8 @@ class Cash {
   } //add
 
   public function analize() {
+    if(!$this->usr->canWrite()) return "Ошибка доступа";
+
     $this->db->exec("analyze cashes;");
     $this->db->exec("analyze cashes_group;");
     $this->db->exec("analyze cashes_nom;");

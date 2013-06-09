@@ -13,7 +13,6 @@ require_once('db/db.php');
 require_once('db/sqlite.php');
 require_once('user.php');
 require_once('template.php');
-require_once('functions.php');
 require_once('cash.php');
 
 

@@ -38,6 +38,7 @@ var login_db_name_list_cb = Ext.create('Ext.form.field.ComboBox', {
 
 	    login_usr_name_list.proxy.url = 'ajax/usr_list_name.php?DB_ID=' + records[0].get('id');
 	    login_usr_name_list.load();
+	    Ext.getCmp('password').focus(false, 100);
 	  }
 	}
     }
@@ -72,13 +73,31 @@ var login_usr_name_list_cb = Ext.create('Ext.form.field.ComboBox', {
     listeners: {
 	select: function( combo, records, e) {
 	  Ext.getCmp('password').setValue("");
+	  Ext.getCmp('password').focus(false, 100);
 	}
     }
 }); //login_usr_name_list_cb
 
+function submt() {
+  if(Ext.getCmp('password').getValue() == "") return;
+  var form = Ext.getCmp('loginForm').getForm();
+  form.submit({
+      waitTitle: 'Пожалуйста подождите...',
+      waitMsg: 'Вход в систему выполняется',
+      success: function(form, action) {
+	  authOk(action.result.msg);
+      },
+      failure: function(form, action) {
+	  error(action.result.msg);
+	  Ext.getCmp('password').focus(false, 100);
+      }
+  });
+}
+
 var loginForm = new Ext.FormPanel({
   url:'ajax/login.php',
   bodyPadding: 5,
+  id: "loginForm",
   frame: true,
   items: [login_db_name_list_cb, login_usr_name_list_cb,
       {
@@ -91,24 +110,21 @@ var loginForm = new Ext.FormPanel({
 	  allowBlank:false
       }
   ],
-
+  listeners: {
+    afterRender: function(thisForm, options){
+        this.keyNav = Ext.create('Ext.util.KeyNav', this.el, {
+            enter: submt,
+            scope: this
+        });
+    }
+  },
   buttons: [
       {
 	text: 'Войти',
 	formBind: true,
         disabled: true,
 	handler: function() {
-	    var form = this.up('form').getForm();
-	    form.submit({
-		waitTitle: 'Пожалуйста подождите...',
-		waitMsg: 'Вход в систему выполняется',
-		success: function(form, action) {
-		    authOk(action.result.msg);
-		},
-		failure: function(form, action) {
-		    error(action.result.msg);
-		}
-	    });
+	    submt();
 	}
       }
   ]
@@ -124,7 +140,9 @@ var loginWindow = new Ext.Window({
   listeners: {
     show: function(){
       login_db_name_list.load(function() {
-	login_usr_name_list.load();
+	login_usr_name_list.load(function() {
+	  Ext.getCmp('password').focus(false, 100);
+	});
       });
     }
   }

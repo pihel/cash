@@ -42,6 +42,12 @@ class User {
 
     //rights
     $this->rghts = $this->getRights();
+
+    //last auth
+    $this->db->start_tran();
+    $this->db->exec("UPDATE `users` SET oper_date = CURRENT_TIMESTAMP WHERE bd_id = ? AND id = ? ", $this->db_id, $this->id);
+    $this->db->commit();
+
     return array('success'=>true, 'msg'=> $this->id);
   }
 
@@ -51,6 +57,22 @@ class User {
 
   public function getRights() {
      return $this->db->line("SELECT `read`, `write`, analiz, setting FROM `users` WHERE id = ? AND bd_id = ?", $this->id, $this->db_id);
+  }
+
+  public function canRead() {
+    return intval($this->rghts['read']) == 1;
+  }
+
+  public function canWrite() {
+    return intval($this->rghts['write']) == 1;
+  }
+
+  public function canAnaliz() {
+    return intval($this->rghts['analiz']) == 1;
+  }
+
+  public function canSetting() {
+    return intval($this->rghts['setting']) == 1;
   }
 }
 

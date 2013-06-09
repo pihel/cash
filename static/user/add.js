@@ -75,6 +75,7 @@ var cash_item_nmcl_cb = Ext.create('Ext.form.field.ComboBox', {
         this.expand();
         this.store.clearFilter(true);
         this.store.filter(this.displayField, new RegExp(Ext.String.escapeRegex(queryString), 'i'));
+	Ext.getCmp('cash_item_nmcl_cb').focus(false, 1);
     }
 }); //cash_item_nmcl_cb
 
@@ -108,6 +109,7 @@ var cash_item_prod_type_cb = Ext.create('Ext.form.field.ComboBox', {
         this.expand();
         this.store.clearFilter(true);
         this.store.filter(this.displayField, new RegExp(Ext.String.escapeRegex(queryString), 'i'));
+	Ext.getCmp('cash_item_prod_type_cb').focus(false, 1);
     }
 }); //cash_item_prod_type_cb
 
@@ -219,6 +221,7 @@ var cash_item_org_cb = Ext.create('Ext.form.field.ComboBox', {
         this.expand();
         this.store.clearFilter(true);
         this.store.filter(this.displayField, new RegExp(Ext.String.escapeRegex(queryString), 'i'));
+	Ext.getCmp('cash_item_org_cb').focus(false, 1);
     }
 }); //cash_item_currency_cb
 
@@ -278,21 +281,7 @@ var cash_item_save = Ext.create('Ext.button.Button', {
 	icon: "static/ext/resources/themes/images/default/tree/drop-yes.gif",
 	disabled: true,
 	handler : function() {
-	  cash_list_add.setLoading("Сохранение операции...");
-
-	  var form = this.up('form').getForm();
-	  form.submit({
-	      success: function(form, action) {
-		  cash_list_add.setLoading(false);
-		  cash_list_add.hide();
-		  listRefresh();
-	      },
-	      failure: function(form, action) {
-		  error(action.result.msg, function() {
-		    cash_list_add.setLoading(false);
-		  });
-	      }
-	  }); //form.submit
+	  submt_add();
 	}
 });
 
@@ -355,6 +344,24 @@ var cash_item_edit_id_label = {
   text: '0'
 }
 
+function submt_add() {
+  if(Ext.getCmp('cash_item_save').isDisabled()) return;
+  cash_list_add.setLoading("Сохранение операции...");
+  var form = Ext.getCmp('cash_item_form_add').getForm();
+  form.submit({
+      success: function(form, action) {
+	  cash_list_add.setLoading(false);
+	  cash_list_add.hide();
+	  listRefresh();
+      },
+      failure: function(form, action) {
+	  error(action.result.msg, function() {
+	    cash_list_add.setLoading(false);
+	  });
+      }
+  }); //form.submit
+}
+
 
 //---- form add
 var cash_item_form_add = new Ext.FormPanel({
@@ -373,6 +380,14 @@ var cash_item_form_add = new Ext.FormPanel({
 	  cash_item_note,
 	  cash_item_edit_id
  	 ],
+  listeners: {
+    afterRender: function(thisForm, options){
+        this.keyNav = Ext.create('Ext.util.KeyNav', this.el, {
+            enter: submt_add,
+            scope: this
+        });
+    }
+  },
   buttons: [cash_item_edit_id_label, "->", cash_item_add, cash_item_save, " ", cash_item_cancel]
 });
 
@@ -389,7 +404,9 @@ function setDefault() {
   Ext.getCmp('cash_item_qnt').setValue(1);
   Ext.getCmp('cash_item_org_cb').setValue("");
   Ext.getCmp('cash_item_toper_cb').setValue(0);
-  Ext.getCmp('cash_item_file').setValue("");
+  //Ext.getCmp('cash_item_file_value').setText("");
+  document.getElementById('cash_item_file-inputEl').value = "";
+  document.getElementById('cash_item_file-inputEl').onclick = undefined;
   Ext.getCmp('cash_item_note').setValue("");
   Ext.getCmp('cash_item_edit_id').setValue(0);
   Ext.getCmp('cash_list_add').setTitle("Добавление операции");
@@ -429,7 +446,14 @@ function cash_list_add_load() {
 	  Ext.getCmp('cash_item_qnt').setValue(obj.qnt);
 	  Ext.getCmp('cash_item_org_cb').setValue(obj.org_id);
 	  Ext.getCmp('cash_item_toper_cb').setValue(obj.type);
-	  Ext.getCmp('cash_item_file').setValue(obj.file);
+	  //Ext.getCmp('cash_item_file_value').setText(obj.file);
+	  document.getElementById('cash_item_file-inputEl').value = obj.file;
+	  if(obj.file) {
+	    document.getElementById('cash_item_file-inputEl').onclick = function() {
+	      window.open(obj.file, "_blank");
+	      return false;
+	    }
+	  }
 	  Ext.getCmp('cash_item_note').setValue(obj.note);
 	  Ext.getCmp('cash_list_add').setTitle("Редактирование операции");
 
@@ -457,6 +481,7 @@ var cash_list_add = Ext.create('Ext.Window', {
 	  setAnkhor();
 	},
 	show: function(){
+	  Ext.getCmp('cash_list_add').setDisabled(parseInt(rights.write) == 0);
 	  cash_list_add.setLoading("Загрузка формы...");
 	  cash_item_nmcl_store.load(function() {
 	    cash_item_prod_type_store.load(function() {

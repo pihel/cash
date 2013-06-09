@@ -9,6 +9,8 @@ class CashAnaliz {
   }
 
   public function getCommon($from, $to) {
+    if(!$this->usr->canAnaliz()) return array();
+
     if(empty($from)) $from = date("Y-m-01");
     if(empty($to)) $to = date("Y-m-d");
 
@@ -31,6 +33,8 @@ class CashAnaliz {
   }
 
   public function getDynamic($from, $to) {
+    if(!$this->usr->canAnaliz()) return array();
+
     //--нарастающий итог - жаль что нет аналитической функции
 
     if(empty($from)) $from = date("Y-m-01");
@@ -65,6 +69,8 @@ class CashAnaliz {
   }
 
   public function getGroups($from, $to, $in = 0) {
+    if(!$this->usr->canAnaliz()) return array();
+
     if(empty($from)) $from = date("Y-m-01");
     if(empty($to)) $to = date("Y-m-d");
 
@@ -90,6 +96,8 @@ class CashAnaliz {
   }
 
   public function getOrgs($from, $to) {
+    if(!$this->usr->canAnaliz()) return array();
+
     if(empty($from)) $from = date("Y-m-01");
     if(empty($to)) $to = date("Y-m-d");
 
@@ -115,6 +123,8 @@ class CashAnaliz {
   }
 
   public function getPurs($from, $to, $in = 0) {
+    if(!$this->usr->canAnaliz()) return array();
+
     if(empty($from)) $from = date("Y-m-01");
     if(empty($to)) $to = date("Y-m-d");
 
@@ -140,6 +150,8 @@ class CashAnaliz {
   }
 
   public function getStorage() {
+    if(!$this->usr->canAnaliz()) return array();
+
     $sql =
     "SELECT
       'Достигнуто ' || SUM( CASE WHEN c.type = 1 THEN 1 ELSE -1 END * c.price * c.qnt * cr.rate ) ||'р.' as tname,
@@ -152,13 +164,15 @@ class CashAnaliz {
     c.visible =1 AND c.bd_id = ? ";
     $r = $this->db->select($sql, $this->usr->db_id);
 
-    $r[1]['out_amount'] = 500000 - $r[0]['out_amount'];
+    $r[1]['out_amount'] = 700000 - $r[0]['out_amount'];//TODO
     $r[1]['tname'] = 'Осталось '.$r[1]['out_amount']."р.";
 
     return $r;
   }
 
   public function getMothDyn($from, $to) {
+    if(!$this->usr->canAnaliz()) return array();
+
     if(empty($from)) $from = date("Y-01-01");
     if(empty($to)) $to = date("Y-m-d");
 
@@ -183,6 +197,8 @@ class CashAnaliz {
   }
 
   public function getCurAmount($from, $to, $in = 0) {
+    if(!$this->usr->canAnaliz()) return array();
+
     if(empty($from)) $from = date("Y-m-01");
     if(empty($to)) $to = date("Y-m-d");
 

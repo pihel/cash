@@ -33,6 +33,7 @@ Ext.require([
 //user id
 var uid = 0;
 var def_currency = "р.";
+var rights = [];
 
 /* RENDER function */
 function price(val, metaData, record) {
@@ -87,7 +88,7 @@ function loadScript(path, _calb) {
     }
   }
 
-  path = path + "?v=0.9";//+Math.random();//debug
+  path = path + "?v=0.91";//+Math.random();//debug
 
   Ext.Loader.loadScript({url: path, scope: this,
     onLoad: function() {
@@ -146,14 +147,30 @@ function authOk(id) {
   if(uid > 0) {
     if(typeof loginWindow != "undefined") loginWindow.hide();
 
-    loadScript("static/user/list.js", function() {
-      loadScript("static/user/tabs.js", function() {
-	if(!restoreAnkhor()) {
-	  setDefaultListVal();
-	  //listRefresh();
-	}
-      });
-    });
+    //load rights
+    Ext.Ajax.request({
+	url: "ajax/get_usr_rght.php",
+	method: "GET",
+	success: function(data) {
+	  rights = Ext.decode(data.responseText);
+
+	  loadScript("static/user/list.js", function() {
+	    loadScript("static/user/tabs.js", function() {
+	      Ext.getCmp('cash_sett').setDisabled(parseInt(rights.setting) == 0);
+	      Ext.getCmp('cash_analit').setDisabled(parseInt(rights.analiz) == 0);
+	      Ext.getCmp('cash_list_panel').setDisabled(parseInt(rights.read) == 0);
+
+	      Ext.getCmp('cash_list_edit_btn_add').setDisabled(parseInt(rights.write) == 0);
+	      Ext.getCmp('cash_list_edit_col').setVisible(parseInt(rights.write) == 1);
+
+	      if(!restoreAnkhor()) {
+		setDefaultListVal();
+		//listRefresh();
+	      }
+	    });
+	  });
+	} //success
+    }); //Ext.Ajax.request
   }
 } //authOk
 

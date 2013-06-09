@@ -11,7 +11,7 @@ var cash_list_model = Ext.define('cash_list_model', {
 	{name: 'price', 	type: 'double'},
 	{name: 'qnt', 		type: 'double'},
 	{name: 'amount', 	type: 'double'},
-	{name: 'oper_date',	type: 'DATE', dateFormat : "Y-m-d"},//TODO ?????
+	{name: 'oper_date',	type: 'DATE', dateFormat : "Y-m-d"},
 	{name: 'date_edit', 	type: 'DATE', dateFormat: "Y-m-d H:i:s"},
 	{name: 'org_id', 	type: 'int'},
 	{name: 'oname', 	type: 'string'},
@@ -65,15 +65,13 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
 	      hideable: false,
 	      xtype: 'actioncolumn',
 	      width: 50,
+	      id: "cash_list_edit_col",
 	      items: [{
 		  iconCls: 'edit-cash-col',
 		  tooltip: 'Редактировать запись',
 		  handler: function(grid, rowIndex, colIndex) {
 		      var rec = grid.getStore().getAt(rowIndex);
-		      loadScript('static/user/add.js', function() {
-			v_edit_id = rec.get('id');
-			cash_list_add.show();
-		      });
+		      editItem(rec.get('id'));
 		  }
 	      }, {
 		  iconCls: 'del-cash-col',
@@ -85,6 +83,19 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
 	      }]
 	  }
     ],
+    listeners: {
+      cellkeydown: function( obj, td, cellIndex, record, tr, rowIndex, e, eOpts ){
+	  var key = e.getKey();
+	  if(key == Ext.EventObject.ENTER) {
+	    editItem(record.get('id'));
+	  } else if(key == Ext.EventObject.DELETE) {
+	    deleteItem(record.get('id'));
+	  }
+      },
+      itemdblclick: function(dv, record, item, index, e) {
+	editItem(record.get('id'));
+      }
+    },
     features: [{
         ftype: 'summary'
     },
@@ -121,7 +132,17 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
 var loadMask_cash_list_grid = new Ext.LoadMask(cash_list_grid, {msg:'Загрузка списка операций...', store: cash_list_store});
 
 
+function editItem(v_id) {
+  if(parseInt(rights.write) == 0) return;
+  loadScript('static/user/add.js', function() {
+    v_edit_id = v_id;
+    cash_list_add.show();
+  });
+}
+
+
 function deleteItem(v_id) {
+  if(parseInt(rights.write) == 0) return;
   Ext.Msg.show({
       title:'Удаление операции',
       msg: 'Удалить операцию?',
@@ -275,6 +296,7 @@ var cash_list_edit_btn_add =
 {
 	xtype: 'button',
 	text: 'Добавить',
+	id: "cash_list_edit_btn_add",
 	icon: "static/ext/resources/themes/images/default/dd/drop-add.gif",
 	handler : function (){
 		loadScript('static/user/add.js', function() {
@@ -429,6 +451,7 @@ var cash_list_panel = Ext.create('Ext.Panel', {
     frame: true,
     layout: 'border',
     collapsible: false,
+    id: "cash_list_panel",
     title: 'Операции',
     height: Ext.getBody().getHeight() - 50,
     header: true,
