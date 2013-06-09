@@ -88,7 +88,7 @@ function loadScript(path, _calb) {
     }
   }
 
-  path = path + "?v=0.91";//+Math.random();//debug
+  path = path + "?v=0.92";//+Math.random();//debug
 
   Ext.Loader.loadScript({url: path, scope: this,
     onLoad: function() {

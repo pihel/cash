@@ -196,6 +196,10 @@ class Cash {
     if(!$this->usr->canWrite()) return "Ошибка доступа";
 
     $this->db->start_tran();
+    $fl = $this->getFile($id);
+    if(!empty($fl)) {
+      @unlink(__DIR__."/".$fl);
+    }
     $this->db->exec("UPDATE cashes SET visible = 0 WHERE id = ? AND bd_id = ?", $id, $this->usr->db_id );
     $this->db->commit();
   }
@@ -263,10 +267,20 @@ class Cash {
     return $ret;
   }
 
+  public function getFile($id) {
+    if(!$this->usr->canRead()) return "";
+    return $this->db->element("SELECT `file` FROM `cashes` WHERE id = ? AND bd_id = ?", $id, $this->usr->db_id);
+  }
+
   public function edit($data, $files) {
     if(!$this->usr->canWrite()) return "Ошибка доступа";
 
     $this->db->start_tran();
+
+    $fl = $this->getFile($data['cash_item_edit_id']);
+    if(!empty($fl)) {
+      @unlink(__DIR__."/../".$fl);
+    }
 
     $refb = $this->refbook_check($data, $files);
 

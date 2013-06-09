@@ -447,10 +447,10 @@ function cash_list_add_load() {
 	  Ext.getCmp('cash_item_org_cb').setValue(obj.org_id);
 	  Ext.getCmp('cash_item_toper_cb').setValue(obj.type);
 	  //Ext.getCmp('cash_item_file_value').setText(obj.file);
-	  document.getElementById('cash_item_file-inputEl').value = obj.file;
+	  document.getElementById('cash_item_file-inputEl').value = "get.php?id=" + v_edit_id;
 	  if(obj.file) {
 	    document.getElementById('cash_item_file-inputEl').onclick = function() {
-	      window.open(obj.file, "_blank");
+	      window.open("get.php?id=" + v_edit_id, "_blank");
 	      return false;
 	    }
 	  }
