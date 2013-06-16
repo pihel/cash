@@ -1,5 +1,6 @@
 Ext.Loader.setConfig({
-    enabled: true
+    enabled: true,
+    disableCaching: false
 });
 
 Ext.Loader.setPath('Ext.ux', 'static/ext/ux');
@@ -88,7 +89,7 @@ function loadScript(path, _calb) {
     }
   }
 
-  path = path + "?v=0.92";//+Math.random();//debug
+  path = path + "?v=0.93";//+Math.random();//debug
 
   Ext.Loader.loadScript({url: path, scope: this,
     onLoad: function() {
