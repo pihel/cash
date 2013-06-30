@@ -55,7 +55,7 @@ var cash_item_nmcl_cb = Ext.create('Ext.form.field.ComboBox', {
     valueField: 'id',
     //queryMode: 'local',
     minChars: 3,
-    typeAhead: true,
+    //typeAhead: true,
     //pageSize: true,
     width: 474,
     allowBlank: false,
@@ -73,11 +73,8 @@ var cash_item_nmcl_cb = Ext.create('Ext.form.field.ComboBox', {
 		    var obj = Ext.decode(data.responseText);
 
 		    Ext.getCmp('cash_item_prod_type_cb').setValue(obj.grp);
-		    if(v_edit_id == 0) {
-		      Ext.getCmp('cash_item_org_cb').setValue(obj.org_name);
-		    } else {
-		      Ext.getCmp('cash_item_org_cb').setValue(obj.rg_id);
-		    }
+		    Ext.getCmp('cash_item_org_cb').setValue(obj.org_name);
+		    //Ext.getCmp('cash_item_org_cb').setValue(obj.org_id);
 		    Ext.getCmp('cash_item_price').focus(false, 200);
 		}//success
 	    }); //Ext.Ajax.request

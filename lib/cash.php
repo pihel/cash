@@ -1,6 +1,4 @@
 <?
-/*добавить везде проверку пользователя */
-
 class Cash {
   private $db;
   private $usr;
@@ -115,9 +113,12 @@ class Cash {
     if(empty($query) && $id == 0) return array();
     if(!$this->usr->canRead()) return array();
 
-    $filter = " AND UPPER(cn.name) like UPPER('%". $this->db->escape($query) ."%') ";
-    if($id > 0) {
+    if( !empty($query) && $id > 0 ) {
+      $filter = " AND ( UPPER(cn.name) like UPPER('%". $this->db->escape($query) ."%') OR c.id = ". $id ." )";
+    } else if($id > 0) {
       $filter = " AND c.id = ". $id;
+    } else if(!empty($query)) {
+      $filter = " AND UPPER(cn.name) like UPPER('%". $this->db->escape($query) ."%') ";
     }
 
     $sql =
@@ -145,14 +146,14 @@ class Cash {
     "SELECT
       c.`group` grp,
       c.org_id,
-      cn.name as org_name
+      co.name as org_name
     FROM
       cashes c
-    INNER JOIN cashes_nom cn
+    INNER JOIN cashes_org co
     WHERE
       c.nmcl_id = ?
       AND c.bd_id = ? AND c.visible = 1
-      AND cn.id = c.nmcl_id
+      AND co.id = c.org_id
     GROUP BY c.`group`, c.org_id
     ORDER BY
       COUNT(1) DESC
@@ -189,9 +190,12 @@ class Cash {
     if(empty($query) && $id == 0) return array();
     if(!$this->usr->canRead()) return array();
 
-    $filter = " AND UPPER(co.name) like UPPER('%". $this->db->escape($query) ."%') ";
-    if($id > 0) {
+    if( !empty($query) && $id > 0 ) {
+      $filter = " AND ( UPPER(co.name) like UPPER('%". $this->db->escape($query) ."%') OR c.id = ". $id ." )";
+    } else if($id > 0) {
       $filter = " AND c.id = ". $id;
+    } else if(!empty($query)) {
+      $filter = " AND UPPER(cn.name)co like UPPER('%". $this->db->escape($query) ."%') ";
     }
 
     $sql =
