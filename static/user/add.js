@@ -48,7 +48,7 @@ var cash_item_nmcl_cb = Ext.create('Ext.form.field.ComboBox', {
     labelWidth: 100,
     displayField: 'name',
     valueField: 'id',
-    queryMode: 'local',
+    //queryMode: 'local',
     minChars: 3,
     typeAhead: true,
     //pageSize: true,
@@ -74,13 +74,13 @@ var cash_item_nmcl_cb = Ext.create('Ext.form.field.ComboBox', {
 	    }); //Ext.Ajax.request
 	  }
 	}
-    },
+    }/*,
     doQuery: function(queryString, forceAll) {
         this.expand();
         this.store.clearFilter(true);
         this.store.filter(this.displayField, new RegExp(Ext.String.escapeRegex(queryString), 'i'));
 	Ext.getCmp('cash_item_nmcl_cb').focus(false, 1);
-    }
+    }*/
 }); //cash_item_nmcl_cb
 
 
@@ -96,7 +96,7 @@ var cash_item_prod_type_store = Ext.create('Ext.data.Store', {
 	  type: 'json'
       }
   }
-}); //cash_item_nmcl_store
+}); //cash_item_prod_type_store
 
 var cash_item_prod_type_cb = Ext.create('Ext.form.field.ComboBox', {
     store: cash_item_prod_type_store,
@@ -143,7 +143,7 @@ var cash_item_currency_store = Ext.create('Ext.data.Store', {
 	  type: 'json'
       }
   }
-}); //cash_item_nmcl_store
+}); //cash_item_currency_store
 
 var cash_item_currency_cb = Ext.create('Ext.form.field.ComboBox', {
     store: cash_item_currency_store,
@@ -208,7 +208,7 @@ var cash_item_org_store = Ext.create('Ext.data.Store', {
 	  type: 'json'
       }
   }
-}); //cash_item_nmcl_store
+}); //cash_item_org_store
 
 var cash_item_org_cb = Ext.create('Ext.form.field.ComboBox', {
     store: cash_item_org_store,
@@ -216,18 +216,18 @@ var cash_item_org_cb = Ext.create('Ext.form.field.ComboBox', {
     name: "cash_item_org_cb",
     displayField: 'name',
     valueField: 'id',
-    queryMode: 'local',
+    //queryMode: 'local',
     width: 474,
     fieldLabel: 'Получатель',
     allowBlank: false,
-    labelWidth: 100,
+    labelWidth: 100/*,
     doQuery: function(queryString, forceAll) {
         this.expand();
         this.store.clearFilter(true);
         this.store.filter(this.displayField, new RegExp(Ext.String.escapeRegex(queryString), 'i'));
 	Ext.getCmp('cash_item_org_cb').focus(false, 1);
-    }
-}); //cash_item_currency_cb
+    }*/
+}); //cash_item_org_cb
 
 
 //---- type oper list
@@ -237,7 +237,7 @@ var cash_item_toper_store = Ext.create('Ext.data.Store', {
          {id: 0,    name: 'Расход'},
          {id: 1,    name: 'Приход'}
      ]
-}); //cash_item_nmcl_store
+}); //cash_item_toper_store
 
 var cash_item_toper_cb = Ext.create('Ext.form.field.ComboBox', {
     store: cash_item_toper_store,
@@ -487,17 +487,18 @@ var cash_list_add = Ext.create('Ext.Window', {
 	show: function(){
 	  Ext.getCmp('cash_list_add').setDisabled(parseInt(rights.write) == 0);
 	  cash_list_add.setLoading("Загрузка формы...");
-	  cash_item_nmcl_store.load(function() {
+
+	  //cash_item_nmcl_store.load(function() {
 	    cash_item_prod_type_store.load(function() {
 	      cash_item_currency_store.load(function() {
 		cash_item_ctype_store.load(function() {
-		  cash_item_org_store.load(function() {
+		  //cash_item_org_store.load(function() {
 		    cash_list_add_load();
-		  });
+		  //});
 		});
 	      });
 	    });
-	  });
+	  //});
 	}
       }
 }); //cash_list_add

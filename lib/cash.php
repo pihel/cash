@@ -110,7 +110,8 @@ class Cash {
      return $this->db->line($sql, $id, $this->usr->db_id);
   }
 
-  public function nmcl_list() {
+  public function nmcl_list($query) {
+    if(empty($query)) return array();
     if(!$this->usr->canRead()) return array();
 
     $sql =
@@ -122,6 +123,7 @@ class Cash {
 	ON(cn.id = c.nmcl_id)
       WHERE
 	c.bd_id = ? AND c.visible = 1
+	AND UPPER(cn.name) like UPPER('%". $this->db->escape($query) ."%')
       GROUP BY
 	cn.id, cn.name
       ORDER BY
@@ -173,7 +175,8 @@ class Cash {
     return $this->db->select($sql);
   }
 
-  public function org_list() {
+  public function org_list($query) {
+    if(empty($query)) return array();
     if(!$this->usr->canRead()) return array();
 
     $sql =
@@ -185,6 +188,7 @@ class Cash {
       ON(co.id = c.org_id)
     WHERE
       c.bd_id = ? AND c.visible = 1
+      AND UPPER(co.name) like UPPER('%". $this->db->escape($query) ."%')
     GROUP BY
       co.id, co.name
     ORDER BY
