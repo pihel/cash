@@ -37,7 +37,12 @@ var cash_item_nmcl_store = Ext.create('Ext.data.Store', {
       reader: {
 	  type: 'json'
       }
-  }
+  },
+  listeners: {
+      load: function( o, records, successful, eOpts ){
+	  Ext.getCmp('cash_item_nmcl_cb').focus(false, 1);
+      }
+    }
 }); //cash_item_nmcl_store
 
 var cash_item_nmcl_cb = Ext.create('Ext.form.field.ComboBox', {
@@ -68,13 +73,17 @@ var cash_item_nmcl_cb = Ext.create('Ext.form.field.ComboBox', {
 		    var obj = Ext.decode(data.responseText);
 
 		    Ext.getCmp('cash_item_prod_type_cb').setValue(obj.grp);
-		    Ext.getCmp('cash_item_org_cb').setValue(obj.org_id);
+		    if(v_edit_id == 0) {
+		      Ext.getCmp('cash_item_org_cb').setValue(obj.org_name);
+		    } else {
+		      Ext.getCmp('cash_item_org_cb').setValue(obj.rg_id);
+		    }
 		    Ext.getCmp('cash_item_price').focus(false, 200);
 		}//success
 	    }); //Ext.Ajax.request
 	  }
 	}
-    }/*,
+    }    /*,
     doQuery: function(queryString, forceAll) {
         this.expand();
         this.store.clearFilter(true);
@@ -488,17 +497,33 @@ var cash_list_add = Ext.create('Ext.Window', {
 	  Ext.getCmp('cash_list_add').setDisabled(parseInt(rights.write) == 0);
 	  cash_list_add.setLoading("Загрузка формы...");
 
-	  //cash_item_nmcl_store.load(function() {
-	    cash_item_prod_type_store.load(function() {
-	      cash_item_currency_store.load(function() {
-		cash_item_ctype_store.load(function() {
-		  //cash_item_org_store.load(function() {
-		    cash_list_add_load();
-		  //});
+	  cash_item_nmcl_store.proxy.url = "ajax/nmcl_list.php?edit_id=" + v_edit_id;
+	  cash_item_org_store.proxy.url = "ajax/org_list.php?edit_id=" + v_edit_id;
+	  if(v_edit_id == 0) {
+	    //cash_item_nmcl_store.load(function() {
+	      cash_item_prod_type_store.load(function() {
+		cash_item_currency_store.load(function() {
+		  cash_item_ctype_store.load(function() {
+		    //cash_item_org_store.load(function() {
+		      cash_list_add_load();
+		    //});
+		  });
+		});
+	      });
+	    //});
+	  } else {
+	    cash_item_nmcl_store.load(function() {
+	      cash_item_prod_type_store.load(function() {
+		cash_item_currency_store.load(function() {
+		  cash_item_ctype_store.load(function() {
+		    cash_item_org_store.load(function() {
+		      cash_list_add_load();
+		    });
+		  });
 		});
 	      });
 	    });
-	  //});
+	  }
 	}
       }
 }); //cash_list_add

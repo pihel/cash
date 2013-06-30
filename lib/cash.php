@@ -110,9 +110,15 @@ class Cash {
      return $this->db->line($sql, $id, $this->usr->db_id);
   }
 
-  public function nmcl_list($query) {
-    if(empty($query)) return array();
+  public function nmcl_list($query, $id) {
+    $id = intval($id);
+    if(empty($query) && $id == 0) return array();
     if(!$this->usr->canRead()) return array();
+
+    $filter = " AND UPPER(cn.name) like UPPER('%". $this->db->escape($query) ."%') ";
+    if($id > 0) {
+      $filter = " AND c.id = ". $id;
+    }
 
     $sql =
     "SELECT
@@ -123,7 +129,7 @@ class Cash {
 	ON(cn.id = c.nmcl_id)
       WHERE
 	c.bd_id = ? AND c.visible = 1
-	AND UPPER(cn.name) like UPPER('%". $this->db->escape($query) ."%')
+	" . $filter . "
       GROUP BY
 	cn.id, cn.name
       ORDER BY
@@ -138,13 +144,16 @@ class Cash {
     $sql =
     "SELECT
       c.`group` grp,
-      c.org_id
+      c.org_id,
+      cn.name as org_name
     FROM
       cashes c
+    INNER JOIN cashes_nom cn
     WHERE
       c.nmcl_id = ?
       AND c.bd_id = ? AND c.visible = 1
-      GROUP BY c.`group`, c.org_id
+      AND cn.id = c.nmcl_id
+    GROUP BY c.`group`, c.org_id
     ORDER BY
       COUNT(1) DESC
       limit 1 ";
@@ -175,9 +184,15 @@ class Cash {
     return $this->db->select($sql);
   }
 
-  public function org_list($query) {
-    if(empty($query)) return array();
+  public function org_list($query, $id) {
+    $id = intval($id);
+    if(empty($query) && $id == 0) return array();
     if(!$this->usr->canRead()) return array();
+
+    $filter = " AND UPPER(co.name) like UPPER('%". $this->db->escape($query) ."%') ";
+    if($id > 0) {
+      $filter = " AND c.id = ". $id;
+    }
 
     $sql =
     "SELECT
@@ -188,11 +203,11 @@ class Cash {
       ON(co.id = c.org_id)
     WHERE
       c.bd_id = ? AND c.visible = 1
-      AND UPPER(co.name) like UPPER('%". $this->db->escape($query) ."%')
+      " . $filter . "
     GROUP BY
       co.id, co.name
     ORDER BY
-      COUNT( 1 )  DESC, co.id";
+      COUNT( 1 )  DESC, co.id ";
     return $this->db->select($sql, $this->usr->db_id);
   }
 
