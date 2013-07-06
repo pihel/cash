@@ -54,7 +54,7 @@ var cash_item_nmcl_cb = Ext.create('Ext.form.field.ComboBox', {
     displayField: 'name',
     valueField: 'id',
     //queryMode: 'local',
-    minChars: 3,
+    minChars: 2,
     //typeAhead: true,
     //pageSize: true,
     width: 474,
@@ -62,7 +62,7 @@ var cash_item_nmcl_cb = Ext.create('Ext.form.field.ComboBox', {
     listeners: {
 	select: function( combo, records, e) {
 	  if(records != undefined && records[0].get('id') != 0) {
-
+	    cash_list_add.setLoading("Загрузка параметров номенклатуры...");
 	    Ext.Ajax.request({
 		url: "ajax/nmcl_param.php",
 		method: "GET",
@@ -70,6 +70,7 @@ var cash_item_nmcl_cb = Ext.create('Ext.form.field.ComboBox', {
 		    nmcl_id: records[0].get('id')
 		},
 		success: function(data) {
+		    cash_list_add.setLoading(false);
 		    var obj = Ext.decode(data.responseText);
 
 		    Ext.getCmp('cash_item_prod_type_cb').setValue(obj.grp);

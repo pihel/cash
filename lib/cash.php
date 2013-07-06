@@ -1,4 +1,5 @@
 <?
+error_reporting(E_ALL);
 class Cash {
   private $db;
   private $usr;
@@ -21,7 +22,7 @@ class Cash {
     if($is_int) {
       $f = " AND ".$name." ".$no."= ". $val;
     } else {
-      $f = " AND UPPER(".$name_str.") ".$nos." like UPPER('%". $this->db->escape($val)."%')";
+      $f = " AND UPPER_UTF8(".$name_str.") ".$nos." like UPPER_UTF8('%". $this->db->escape($val)."%')";
     }
     return $f;
   }
@@ -110,15 +111,15 @@ class Cash {
 
   public function nmcl_list($query, $id) {
     $id = intval($id);
-    if(empty($query) && $id == 0) return array();
+    //if(empty($query) && $id == 0) return array();
     if(!$this->usr->canRead()) return array();
 
     if( !empty($query) && $id > 0 ) {
-      $filter = " AND ( UPPER(cn.name) like UPPER('%". $this->db->escape($query) ."%') OR c.id = ". $id ." )";
+      $filter = " AND ( UPPER_UTF8(cn.name) like UPPER_UTF8('%". $this->db->escape($query) ."%') OR c.id = ". $id ." )";
     } else if($id > 0) {
       $filter = " AND c.id = ". $id;
     } else if(!empty($query)) {
-      $filter = " AND UPPER(cn.name) like UPPER('%". $this->db->escape($query) ."%') ";
+      $filter = " AND UPPER_UTF8(cn.name) like UPPER_UTF8('%". $this->db->escape($query) ."%') ";
     }
 
     $sql =
@@ -134,7 +135,9 @@ class Cash {
       GROUP BY
 	cn.id, cn.name
       ORDER BY
-	COUNT(1) DESC, cn.id";
+	COUNT(1) DESC, cn.id
+      LIMIT 50 ";
+
     return $this->db->select($sql, $this->usr->db_id);
   }
 
@@ -157,7 +160,7 @@ class Cash {
     GROUP BY c.`group`, c.org_id
     ORDER BY
       COUNT(1) DESC
-      limit 1 ";
+    LIMIT 1  ";
     return $this->db->line($sql, $nmcl_id, $this->usr->db_id);
   }
 
@@ -187,15 +190,15 @@ class Cash {
 
   public function org_list($query, $id) {
     $id = intval($id);
-    if(empty($query) && $id == 0) return array();
+    //if(empty($query) && $id == 0) return array();
     if(!$this->usr->canRead()) return array();
 
     if( !empty($query) && $id > 0 ) {
-      $filter = " AND ( UPPER(co.name) like UPPER('%". $this->db->escape($query) ."%') OR c.id = ". $id ." )";
+      $filter = " AND ( UPPER_UTF8(co.name) like UPPER_UTF8('%". $this->db->escape($query) ."%') OR c.id = ". $id ." )";
     } else if($id > 0) {
       $filter = " AND c.id = ". $id;
     } else if(!empty($query)) {
-      $filter = " AND UPPER(cn.name)co like UPPER('%". $this->db->escape($query) ."%') ";
+      $filter = " AND UPPER_UTF8(co.name) like UPPER_UTF8('%". $this->db->escape($query) ."%') ";
     }
 
     $sql =
@@ -211,7 +214,8 @@ class Cash {
     GROUP BY
       co.id, co.name
     ORDER BY
-      COUNT( 1 )  DESC, co.id ";
+      COUNT( 1 )  DESC, co.id
+    LIMIT 50 ";
     return $this->db->select($sql, $this->usr->db_id);
   }
 
