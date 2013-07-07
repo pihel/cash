@@ -8,12 +8,15 @@ var cash_item_nmcl_cb_fltr = Ext.create('Ext.form.field.ComboBox', {
     labelWidth: 100,
     displayField: 'name',
     valueField: 'id',
-    queryMode: 'local',
+    //queryMode: 'local',
+    minChars: 2,
+    //typeAhead: true,
+    //pageSize: true,
     width: 474,
     listeners: {
 	select: function( combo, records, e) {
 	  if(records != undefined && records[0].get('id') != 0) {
-
+	    Ext.getCmp('cash_list_tb_filter_bgrp').setLoading("Загрузка параметров номенклатуры...");
 	    Ext.Ajax.request({
 		url: "ajax/nmcl_param.php",
 		method: "GET",
@@ -21,18 +24,15 @@ var cash_item_nmcl_cb_fltr = Ext.create('Ext.form.field.ComboBox', {
 		    nmcl_id: records[0].get('id')
 		},
 		success: function(data) {
+		    Ext.getCmp('cash_list_tb_filter_bgrp').setLoading(false);
 		    var obj = Ext.decode(data.responseText);
+
 		    Ext.getCmp('cash_item_prod_type_cb_fltr').setValue(obj.grp);
-		    Ext.getCmp('cash_item_org_fltr_cb').setValue(obj.org_id);
+		    Ext.getCmp('cash_item_org_fltr_cb').setValue(obj.org_name);
 		}//success
 	    }); //Ext.Ajax.request
 	  }
 	}
-    },
-    doQuery: function(queryString, forceAll) {
-        this.expand();
-        this.store.clearFilter(true);
-        this.store.filter(this.displayField, new RegExp(Ext.String.escapeRegex(queryString), 'i'));
     }
 }); //cash_item_nmcl_cb_fltr
 
@@ -147,15 +147,10 @@ var cash_item_org_fltr_cb = Ext.create('Ext.form.field.ComboBox', {
     name: "cash_item_org_fltr_cb",
     displayField: 'name',
     valueField: 'id',
-    queryMode: 'local',
+    //queryMode: 'local',
     width: 474,
     fieldLabel: 'Получатель',
-    labelWidth: 100,
-    doQuery: function(queryString, forceAll) {
-        this.expand();
-        this.store.clearFilter(true);
-        this.store.filter(this.displayField, new RegExp(Ext.String.escapeRegex(queryString), 'i'));
-    }
+    labelWidth: 100
 }); //cash_item_org_fltr_cb
 
 var cash_item_org_fltr_cb_no = {

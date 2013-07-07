@@ -1,5 +1,4 @@
 <?
-error_reporting(E_ALL);
 class Cash {
   private $db;
   private $usr;

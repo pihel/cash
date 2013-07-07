@@ -1,5 +1,5 @@
 Домашняя бухгалтерия на ExtJS 4, PHP 5, SQLite 3.
-Демо - cash.pihel.jino.ru
+Демо - cash.skahin.ru
 chown -R www-data ./
 
 git add *
