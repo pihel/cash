@@ -236,7 +236,7 @@ class Cash {
     if(intval($name) > 0) return $name;
 
     $ref_id = 0;
-    $ref_id = $this->db->element("SELECT MAX(id) id from ".$ref." WHERE name = ?", $name );
+    $ref_id = $this->db->element("SELECT MAX(id) id from ".$ref." WHERE UPPER_UTF8(name) = UPPER_UTF8(?)", $name );
     $ref_id = intval($ref_id);
 
     if($ref_id == 0) {

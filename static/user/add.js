@@ -81,11 +81,14 @@ var cash_item_nmcl_cb = Ext.create('Ext.form.field.ComboBox', {
 	    }); //Ext.Ajax.request
 	  }
 	}
-    }    /*,
+    }/*,
     doQuery: function(queryString, forceAll) {
-        this.expand();
-        this.store.clearFilter(true);
-        this.store.filter(this.displayField, new RegExp(Ext.String.escapeRegex(queryString), 'i'));
+	this.store.clearFilter(true);
+	if(queryString != "") {
+	  this.store.filter(this.displayField, new RegExp(Ext.String.escapeRegex(queryString), 'i'));
+	}
+	this.store.load();
+	this.expand();
 	Ext.getCmp('cash_item_nmcl_cb').focus(false, 1);
     }*/
 }); //cash_item_nmcl_cb
@@ -482,7 +485,7 @@ var cash_list_add = Ext.create('Ext.Window', {
       id: "cash_list_add",
       width: 510,
       height: 355,
-      closeAction: 'hide',
+      //closeAction: 'hide',
       modal: true,
       headerPosition: 'top',
       bodyPadding: 5,
