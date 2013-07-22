@@ -41,7 +41,7 @@ class Cash {
     if($f['oper_id'] === "1") $ret .= " AND c.type = 1";
     //$ret .= $this->makeFilter("c.type", "", $f['oper_id'], 1, 0 );
     $ret .= $this->makeFilter("c.org_id", "co.name", $f['org_id'], intval($f['org_id']), $f['org_id_no'] );
-    $ret .= $this->makeFilter("", "c.note", $f['c.note'], 0, $f['note_no'] );
+    $ret .= $this->makeFilter("", "c.note", $f['note'], 0, $f['note_no'] );
     if( intval($f['del']) == 1 ) {
       $ret .= " AND c.visible = 0 ";
     } else {
