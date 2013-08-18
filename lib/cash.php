@@ -108,6 +108,14 @@ class Cash {
      return $this->db->line($sql, $id, $this->usr->db_id);
   }
 
+  public function getSettings() {
+    if(!$this->usr->canRead()) return array();
+
+    $sql = "SELECT c.sign FROM currency c WHERE id = ?";
+
+    return $this->db->line($sql, 1);
+  }
+
   public function nmcl_list($query, $id) {
     $id = intval($id);
     //if(empty($query) && $id == 0) return array();

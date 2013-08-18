@@ -3,9 +3,14 @@ class CashAnaliz {
   private $db;
   private $usr;
 
+  private $def_cur = "р.";
+
   public function __construct($_db, $_usr) {
     $this->db = $_db;
     $this->usr = $_usr;
+
+    //ID=1 - default currency, rate - count money per 1 default
+    $this->def_cur = $this->db->element("SELECT c.sign FROM currency c WHERE id = ?", 1 );
   }
 
   public function getCommon($from, $to) {
@@ -16,7 +21,7 @@ class CashAnaliz {
 
     $sql =
     " SELECT
-	CASE WHEN c.type = 1 THEN 'Приход' ELSE 'Расход' END || ' ('||SUM(price*qnt*cr.rate)||'р.)' as tname,
+	CASE WHEN c.type = 1 THEN 'Приход' ELSE 'Расход' END || ' ('||SUM(price*qnt*cr.rate)||'".$this->def_cur.")' as tname,
 	SUM(price*qnt*cr.rate) data
       FROM `cashes` c
       INNER JOIN currency cr
@@ -76,7 +81,7 @@ class CashAnaliz {
 
     $sql =
     "SELECT
-	g.name|| ' ('||SUM(c.price*c.qnt*cr.rate)||'р.)' as tname,
+	g.name|| ' ('||SUM(c.price*c.qnt*cr.rate)||'".$this->def_cur.")' as tname,
 	SUM( c.price * c.qnt * cr.rate ) out_amount
     FROM
       `cashes` c
@@ -103,7 +108,7 @@ class CashAnaliz {
 
     $sql =
     "SELECT
-	o.name|| ' ('||SUM(c.price*c.qnt*cr.rate)||'р.)' as tname,
+	o.name|| ' ('||SUM(c.price*c.qnt*cr.rate)||'".$this->def_cur.")' as tname,
 	SUM( c.price * c.qnt * cr.rate ) out_amount
     FROM
       `cashes` c
@@ -130,7 +135,7 @@ class CashAnaliz {
 
     $sql =
     "SELECT
-      t.name|| ' ('||SUM(c.price*c.qnt*cr.rate)||'р.)' as tname,
+      t.name|| ' ('||SUM(c.price*c.qnt*cr.rate)||'".$this->def_cur.")' as tname,
       SUM( c.price * c.qnt * cr.rate ) out_amount
     FROM
       `cashes` c
@@ -154,7 +159,7 @@ class CashAnaliz {
 
     $sql =
     "SELECT
-      'Достигнуто ' || SUM( CASE WHEN c.type = 1 THEN 1 ELSE -1 END * c.price * c.qnt * cr.rate ) ||'р.' as tname,
+      'Достигнуто ' || SUM( CASE WHEN c.type = 1 THEN 1 ELSE -1 END * c.price * c.qnt * cr.rate ) ||'".$this->def_cur."' as tname,
       SUM( CASE WHEN c.type = 1 THEN 1 ELSE -1 END * c.price * c.qnt * cr.rate ) out_amount
     FROM
       `cashes` c
@@ -165,7 +170,7 @@ class CashAnaliz {
     $r = $this->db->select($sql, $this->usr->db_id);
 
     $r[1]['out_amount'] = 700000 - $r[0]['out_amount'];//TODO
-    $r[1]['tname'] = 'Осталось '.$r[1]['out_amount']."р.";
+    $r[1]['tname'] = 'Осталось '.$r[1]['out_amount'].$this->def_cur;
 
     return $r;
   }
@@ -204,7 +209,7 @@ class CashAnaliz {
 
     $sql =
     "SELECT
-      cr.name||', '||SUM( c.price * c.qnt * cr.rate )||'р.' as tname,
+      cr.name||', '||SUM( c.price * c.qnt * cr.rate )||'".$this->def_cur."' as tname,
       SUM( c.price * c.qnt * cr.rate ) amount
     FROM
       `cashes` c

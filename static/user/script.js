@@ -33,14 +33,14 @@ Ext.require([
 
 //user id
 var uid = 0;
-var def_currency = "р.";
 var rights = [];
+var settings = [];
 
 /* RENDER function */
 function price(val, metaData, record) {
   var v_def_currency = record.get('sign');
 
-  if(v_def_currency == undefined || v_def_currency == "") v_def_currency = def_currency;
+  if(v_def_currency == undefined || v_def_currency == "") v_def_currency = settings.sign;
   var val = Ext.util.Format.number(val, "0,0.00");
   val = val.replace(".", " ");
   return val + v_def_currency;
@@ -49,7 +49,7 @@ function price(val, metaData, record) {
 function price_r (val) {
   var val = Ext.util.Format.number(val, "0,0.00");
   val = val.replace(".", " ");
-  return val + def_currency;
+  return val + settings.sign;
 }
 
 function dateRender(value) {
@@ -155,21 +155,30 @@ function authOk(id) {
 	success: function(data) {
 	  rights = Ext.decode(data.responseText);
 
-	  loadScript("static/user/list.js", function() {
-	    loadScript("static/user/tabs.js", function() {
-	      Ext.getCmp('cash_sett').setDisabled(parseInt(rights.setting) == 0);
-	      Ext.getCmp('cash_analit').setDisabled(parseInt(rights.analiz) == 0);
-	      Ext.getCmp('cash_list_panel').setDisabled(parseInt(rights.read) == 0);
+	  Ext.Ajax.request({
+	      url: "ajax/settings.php",
+	      method: "GET",
+	      success: function(data) {
+		settings = Ext.decode(data.responseText);
 
-	      Ext.getCmp('cash_list_edit_btn_add').setDisabled(parseInt(rights.write) == 0);
-	      Ext.getCmp('cash_list_edit_col').setVisible(parseInt(rights.write) == 1);
+		loadScript("static/user/list.js", function() {
+		  loadScript("static/user/tabs.js", function() {
+		    Ext.getCmp('cash_sett').setDisabled(parseInt(rights.setting) == 0);
+		    Ext.getCmp('cash_analit').setDisabled(parseInt(rights.analiz) == 0);
+		    Ext.getCmp('cash_list_panel').setDisabled(parseInt(rights.read) == 0);
 
-	      if(!restoreAnkhor()) {
-		setDefaultListVal();
-		//listRefresh();
-	      }
-	    });
-	  });
+		    Ext.getCmp('cash_list_edit_btn_add').setDisabled(parseInt(rights.write) == 0);
+		    Ext.getCmp('cash_list_edit_col').setVisible(parseInt(rights.write) == 1);
+
+		    if(!restoreAnkhor()) {
+		      setDefaultListVal();
+		      //listRefresh();
+		    }
+		  });
+		});
+
+	      } //success
+	  }); //Ext.Ajax.request
 	} //success
     }); //Ext.Ajax.request
   }
