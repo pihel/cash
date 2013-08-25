@@ -485,13 +485,16 @@ var cash_list_add = Ext.create('Ext.Window', {
       id: "cash_list_add",
       width: 510,
       height: 355,
-      //closeAction: 'hide',
+      closeAction: 'hide',
       modal: true,
       headerPosition: 'top',
       bodyPadding: 5,
       items: [cash_item_form_add],
       listeners: {
 	hide: function() {
+	  setAnkhor();
+	},
+	close: function() {
 	  setAnkhor();
 	},
 	show: function(){

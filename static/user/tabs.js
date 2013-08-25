@@ -25,7 +25,7 @@ var cash_analit = Ext.create('Ext.Panel', {
 var cash_sett = Ext.create('Ext.Panel', {
     frame: true,
     id: "cash_sett",
-    layout: 'border',
+    layout: 'vbox',
     collapsible: false,
     title: 'Настройки',
     height: Ext.getBody().getHeight() - 50,
@@ -35,9 +35,18 @@ var cash_sett = Ext.create('Ext.Panel', {
 	activate: function(tab){
 	  Ext.getCmp('cash_sett').setLoading("Загрузка настроек...");
 	  loadScript("static/user/settings.js", function() {
-	    Ext.getCmp('cash_sett').add(Ext.getCmp('cash_set_panel'));
-	    setAnkhor();
-	    Ext.getCmp('cash_sett').setLoading(false);
+	    loadScript("static/user/refbooks.js", function() {
+	      var cash_sets = Ext.create('Ext.Panel', {
+		  layout: 'vbox',
+		  border: false,
+		  id: "cash_sets",
+		  items: [cash_set_panel, cash_refb_tabs]
+	      });//cash_sets
+
+	      Ext.getCmp('cash_sett').add(cash_sets);
+	      setAnkhor();
+	      Ext.getCmp('cash_sett').setLoading(false);
+	    });
 	  });
 	}
     }

@@ -5,6 +5,33 @@ var cash_analiz_strg_lbl = {
     text: 'Накопления'
 };
 
+var cash_analiz_storg_amount = {
+    xtype: 'numberfield',
+    id: "cash_analiz_storg_amount",
+    name: "cash_analiz_storg_amount",
+    fieldLabel: 'Цель',
+    allowBlank: false,
+    labelWidth: 100,
+    width: 200,
+    allowBlank: false,
+    value: 1000000,
+    listeners: {
+      change: function( o, newValue, oldValue, eOpts ) {
+	  cash_analiz_strg_store.proxy.url = 'ajax/analiz/storg.php?amount=' + newValue
+	  cash_analiz_strg_refresh();
+      }
+    }
+};//cash_analiz_storg_amount
+
+var cash_analiz_storg = {
+      xtype: 'toolbar',
+      dock: 'top',
+      ui: 'footer',
+      items: [cash_analiz_storg_amount],
+      region: 'north',
+      id: "cash_analiz_storg",
+}; //cash_analiz_storg
+
 
 function cash_analiz_strg_refresh() {
   cash_analiz_strg_store.load();
@@ -80,6 +107,7 @@ function cash_analiz_strg_load(_cb) {
   }
 
   Ext.getCmp('cash_analiz_rest').add(cash_analiz_strg_lbl);
+  Ext.getCmp('cash_analiz_rest').add(cash_analiz_storg);
   Ext.getCmp('cash_analiz_rest').add(cash_analiz_strg_chart);
   cash_analiz_strg_refresh();
 

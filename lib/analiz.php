@@ -154,7 +154,7 @@ class CashAnaliz {
     return $this->db->select($sql, $this->usr->db_id, intval($in), $from, $to);
   }
 
-  public function getStorage() {
+  public function getStorage($amount) {
     if(!$this->usr->canAnaliz()) return array();
 
     $sql =
@@ -169,7 +169,10 @@ class CashAnaliz {
     c.visible =1 AND c.bd_id = ? ";
     $r = $this->db->select($sql, $this->usr->db_id);
 
-    $r[1]['out_amount'] = 700000 - $r[0]['out_amount'];//TODO
+    $amount = intval($amount);
+    if($amount == 0) $amount = 1000000;
+
+    $r[1]['out_amount'] = $amount - $r[0]['out_amount'];
     $r[1]['tname'] = 'Осталось '.$r[1]['out_amount'].$this->def_cur;
 
     return $r;

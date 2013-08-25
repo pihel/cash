@@ -170,6 +170,27 @@ var cash_analiz_curr = Ext.create('Ext.Panel', {
 
 });//cash_analiz_curr
 
+var cash_analiz_secr = Ext.create('Ext.Panel', {
+    frame: true,
+    id: "cash_analiz_secr",
+    height: h,
+    width: w,
+    title: 'Безопасность',
+    items: [],
+    listeners: {
+	activate: function(tab){
+	  Ext.getCmp('cash_analiz_secr').setLoading("Загрузка статистики по финансовой безопасности...");
+	  //loadScript("static/user/analiz/cur_amount.js", function() {
+	    //cash_analiz_cur_load(function() {
+	      Ext.getCmp('cash_analiz_secr').setLoading(false);
+	      setAnkhor();
+	    //});
+	  //});
+	}
+    }
+
+});//cash_analiz_secr
+
 
 function getAnalitAnkhor() {
   var hash = "";
@@ -179,8 +200,13 @@ function getAnalitAnkhor() {
   if(typeof Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1] != "undefined" &&
      typeof Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items != "undefined"
   ) {
-    hash += "&from=" + Ext.Date.format(Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].getValue(),'Y-m-d');
-    hash += "&to=" + Ext.Date.format(Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[2].getValue(),'Y-m-d');
+    if(Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].$className == "Ext.form.field.Date") {
+      hash += "&from=" + Ext.Date.format(Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].getValue(),'Y-m-d');
+    }
+    if(typeof Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[2] != "undefined" &&
+	Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[2].$className == "Ext.form.field.Date") {
+      hash += "&to=" + Ext.Date.format(Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[2].getValue(),'Y-m-d');
+    }
 
     if(Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items.length > 3 ) {
       hash += "&in=" + (0+Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[4].getValue());
@@ -248,5 +274,5 @@ var cash_analit_tabs = Ext.widget('tabpanel', {
     },
     border: false,
     items: [cash_analiz_com, cash_analiz_dyn, cash_analiz_mondyn, cash_analiz_group,
-	    cash_analiz_org, cash_analiz_cash_type, cash_analiz_curr, cash_analiz_rest]
+	    cash_analiz_org, cash_analiz_cash_type, cash_analiz_curr, cash_analiz_secr, cash_analiz_rest]
 }); //cash_analit_tabs

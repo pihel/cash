@@ -101,8 +101,12 @@ img {
   padding-top: 15px !important;
   margin-left: -5px !important;
 }
-#cash_set_panel-body {
-  background-color: transparent;
+#cash_set_panel-body, #cash_sets {
+  background-color: transparent !important;
+}
+#cash_sets #cash_sets-innerCt {
+  background-color: #DFE9F6;
+  /*background-color: transparent;*/
 }
 #cash_item_file-inputEl {
   cursor: pointer;

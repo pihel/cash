@@ -155,7 +155,7 @@ var cash_set_usr_grid = Ext.create('Ext.grid.Panel', {
     title: 'Список пользователей базы данных и их права',
     header: true,
     width: Ext.getBody().getWidth() - 350,
-    height: 400,
+    height: Ext.getBody().getHeight()/3,
     forceFit: true,
     tbar: [cash_set_usr_add],
     columns: [
@@ -243,7 +243,6 @@ var cash_set_panel = Ext.create('Ext.Panel', {
       align: 'stretchmax'
     },
     border: false,
-    height: Ext.getBody().getHeight() - 50,
     items: [cash_set_db_grid,{xtype: 'splitter'}, cash_set_usr_grid],
     listeners: {
 	afterrender: function(){
