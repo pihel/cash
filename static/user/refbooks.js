@@ -1,3 +1,5 @@
+var h = Ext.getCmp('cash_sett').getHeight()*2/3-50;
+
 var cash_refb_cur_model = Ext.define('cash_refb_cur_model', {
     extend: 'Ext.data.Model',
     fields: [
@@ -23,6 +25,7 @@ var cash_refb_cur_grid = Ext.create('Ext.grid.Panel', {
     store: cash_refb_cur_store,
     id: "cash_refb_cur_grid",
     forceFit: true,
+    height: h-60,
     columns: [
 	{text: "ID", 	dataIndex: 'id' },
 	{text: "Валюта", 	dataIndex: 'name', 	flex: 1},
@@ -52,7 +55,7 @@ var cash_refb_ptype_model = Ext.define('cash_refb_ptype_model', {
 
 var cash_refb_ptype_store = Ext.create('Ext.data.Store', {
     model: 'cash_refb_ptype_model',
-    autoLoad: true,
+    autoLoad: false,
     proxy: {
 	type: 'ajax',
 	url: 'ajax/prod_type_list.php'
@@ -62,6 +65,7 @@ var cash_refb_ptype_store = Ext.create('Ext.data.Store', {
 var cash_refb_ptype_grid = Ext.create('Ext.grid.Panel', {
     store: cash_refb_ptype_store,
     id: "cash_refb_ptype_grid",
+    height: h-60,
     forceFit: true,
     columns: [
 	{text: "ID", 	dataIndex: 'id' },
@@ -86,7 +90,7 @@ var cash_refb_org_model = Ext.define('cash_refb_org_model', {
 
 var cash_refb_org_store = Ext.create('Ext.data.Store', {
     model: 'cash_refb_org_model',
-    autoLoad: true,
+    autoLoad: false,
     proxy: {
 	type: 'ajax',
 	url: 'ajax/org_list_flat.php'
@@ -96,6 +100,7 @@ var cash_refb_org_store = Ext.create('Ext.data.Store', {
 var cash_refb_org_grid = Ext.create('Ext.grid.Panel', {
     store: cash_refb_org_store,
     id: "cash_refb_org_grid",
+    height: h-60,
     forceFit: true,
     columns: [
 	{text: "ID", 	dataIndex: 'id' },
@@ -121,7 +126,7 @@ var cash_refb_type_model = Ext.define('cash_refb_type_model', {
 
 var cash_refb_type_store = Ext.create('Ext.data.Store', {
     model: 'cash_refb_type_model',
-    autoLoad: true,
+    autoLoad: false,
     proxy: {
 	type: 'ajax',
 	url: 'ajax/cashes_type_list.php'
@@ -130,7 +135,8 @@ var cash_refb_type_store = Ext.create('Ext.data.Store', {
 
 var cash_refb_type_grid = Ext.create('Ext.grid.Panel', {
     store: cash_refb_type_store,
-    id: "cash_refb_org_grid",
+    id: "cash_refb_type_grid",
+    height: h-60,
     forceFit: true,
     columns: [
 	{text: "ID", 	dataIndex: 'id' },
@@ -154,7 +160,7 @@ var cash_refb_nmcl_model = Ext.define('cash_refb_nmcl_model', {
 
 var cash_refb_nmcl_store = Ext.create('Ext.data.Store', {
     model: 'cash_refb_nmcl_model',
-    autoLoad: true,
+    autoLoad: false,
     proxy: {
 	type: 'ajax',
 	url: 'ajax/nmcl_list_flat.php'
@@ -164,13 +170,14 @@ var cash_refb_nmcl_store = Ext.create('Ext.data.Store', {
 var cash_refb_nmcl_grid = Ext.create('Ext.grid.Panel', {
     store: cash_refb_nmcl_store,
     id: "cash_refb_nmcl_grid",
+    height: h-60,
     forceFit: true,
     columns: [
 	{text: "ID", 	dataIndex: 'id' },
 	{text: "Номенклатура", 	dataIndex: 'name', 	flex: 1}
     ]
 }); //cash_refb_nmcl_grid
-var cash_refb_nmcl_mask = new Ext.LoadMask(cash_refb_nmcl_grid, {msg:'Загрузка списка организаций...', store: cash_refb_nmcl_store});
+var cash_refb_nmcl_mask = new Ext.LoadMask(cash_refb_nmcl_grid, {msg:'Загрузка списка номенклатур...', store: cash_refb_nmcl_store});
 
 
 //------------------------
@@ -258,7 +265,7 @@ var cash_refb_tabs = Ext.widget('tabpanel', {
     title: 'Справочники',
     header: true,
     border: false,
-    height: Ext.getCmp('cash_sett').getHeight()*2/3-50,
+    height: h,
     width: Ext.getCmp('cash_sett').getWidth() - 20,
     items: [cash_refb_cur, cash_refb_group, cash_refb_org, cash_refb_type, cash_refb_nmcl]
 });
