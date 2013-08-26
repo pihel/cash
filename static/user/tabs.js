@@ -36,14 +36,8 @@ var cash_sett = Ext.create('Ext.Panel', {
 	  Ext.getCmp('cash_sett').setLoading("Загрузка настроек...");
 	  loadScript("static/user/settings.js", function() {
 	    loadScript("static/user/refbooks.js", function() {
-	      var cash_sets = Ext.create('Ext.Panel', {
-		  layout: 'vbox',
-		  border: false,
-		  id: "cash_sets",
-		  items: [cash_set_panel, cash_refb_tabs]
-	      });//cash_sets
-
-	      Ext.getCmp('cash_sett').add(cash_sets);
+	      Ext.getCmp('cash_sett').add(cash_set_panel);
+	      Ext.getCmp('cash_sett').add(cash_refb_tabs);
 	      setAnkhor();
 	      Ext.getCmp('cash_sett').setLoading(false);
 	    });

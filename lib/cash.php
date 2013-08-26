@@ -132,9 +132,7 @@ class Cash {
     $sql =
     "SELECT
 	cn.id, cn.name
-      FROM
-	cashes c
-      INNER JOIN cashes_nom cn
+      FROM cashes_nom cn
 	ON(cn.id = c.nmcl_id)
       WHERE
 	c.bd_id = ? AND c.visible = 1
@@ -146,6 +144,16 @@ class Cash {
       LIMIT 50 ";
 
     return $this->db->select($sql, $this->usr->db_id);
+  }
+
+  public function nmcl_list_flat() {
+    if(!$this->usr->canRead()) return array();
+    $sql =
+    "SELECT
+	cn.id, cn.name
+      FROM cashes_nom cn ";
+
+    return $this->db->select($sql);
   }
 
   public function nmcl_param($nmcl_id) {
@@ -175,7 +183,7 @@ class Cash {
     if(!$this->usr->canRead()) return array();
 
     $sql =
-    "SELECT id,name FROM cashes_group";
+    "SELECT id,name,pid FROM cashes_group";
     return $this->db->select($sql);
   }
 
@@ -183,7 +191,7 @@ class Cash {
     if(!$this->usr->canRead()) return array();
 
     $sql =
-    "SELECT id,name FROM currency";
+    "SELECT id,name,rate,sign,short_name FROM currency";
     return $this->db->select($sql);
   }
 
@@ -191,7 +199,16 @@ class Cash {
     if(!$this->usr->canRead()) return array();
 
     $sql =
-    "SELECT id,name FROM cashes_type";
+    "SELECT id,name,pid FROM cashes_type";
+    return $this->db->select($sql);
+  }
+
+  public function org_list_flat() {
+    if(!$this->usr->canRead()) return array();
+    $sql =
+    "SELECT
+      co.id, co.pid, co.name, co.city
+    FROM cashes_org co ";
     return $this->db->select($sql);
   }
 
