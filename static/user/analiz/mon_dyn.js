@@ -72,40 +72,6 @@ var cash_analiz_mdyn_store = Ext.create('Ext.data.Store', {
 	url: 'ajax/analiz/mon_dyn.php?'
     }
 }); //cash_analiz_mdyn_store
-//
-var cash_analiz_mdyn_chart = Ext.create('Ext.chart.Chart', {
-    id: "cash_analiz_mdyn_chart",
-    width: w - 100,
-    height: h - 100,
-    animate: true,
-    shadow: true,
-    store: cash_analiz_mdyn_store,
-    legend: {
-      position: 'right'
-    },
-    axes: [{
-	type: 'Category',
-	position: 'bottom',
-	fields: ['tname'],
-	title: 'Месяц'
-    },{
-	type: 'Numeric',
-	position: 'left',
-	fields: ['in_amount', 'out_amount'],
-	minimum: 0,
-	label: {
-	    renderer: Ext.util.Format.numberRenderer('0,0')
-	},
-	grid: true,
-	title: 'Сумма'
-    }],
-    series: [{
-	type: 'column',
-	axis: 'left',
-	yField: 'tname',
-	xField: ['in_amount', 'out_amount']
-    }]
-});
 
 var cash_analiz_mdyn_chart = Ext.create('Ext.chart.Chart', {
     id: "cash_analiz_mdyn_chart",
@@ -148,7 +114,7 @@ var cash_analiz_mdyn_chart = Ext.create('Ext.chart.Chart', {
 	label: {
 	  display: 'insideEnd',
 	  'text-anchor': 'middle',
-	    field: 'data1',
+	    field: ['in_amount', 'out_amount'],
 	    renderer: Ext.util.Format.numberRenderer('0'),
 	    orientation: 'vertical',
 	    color: '#333'

@@ -226,6 +226,27 @@ class CashAnaliz {
 
     return $this->db->select($sql, $this->usr->db_id, $in, $from, $to);
   }
+
+  public function getSecr($in, $out) {
+    if(!$this->usr->canAnaliz()) return array();
+
+    $in = intval($in);
+    $out = intval($out);
+
+    $amnt = $this->getStorage(0);
+    $amnt = $amnt[0]['out_amount'];
+
+    $secr = array();
+    $cnt = 0;
+    while($cnt < 36 && $amnt >= 0) {
+      $amnt = $amnt + $in - $out;
+      $secr[] = array('tname'=> date("Y-m", strtotime("+".$cnt." months")) , 'amount'=>$amnt);
+
+      $cnt++;
+    }
+
+    return $secr;
+  }
 }
 ?>
 

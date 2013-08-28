@@ -132,7 +132,9 @@ class Cash {
     $sql =
     "SELECT
 	cn.id, cn.name
-      FROM cashes_nom cn
+      FROM
+	cashes c
+      INNER JOIN cashes_nom cn
 	ON(cn.id = c.nmcl_id)
       WHERE
 	c.bd_id = ? AND c.visible = 1
@@ -419,6 +421,25 @@ class Cash {
 
   public function analize() {
     if(!$this->usr->canWrite()) return "Ошибка доступа";
+
+
+    $sql = "SELECT
+		MAX(cn.id) as max_id,
+		MIN(cn.id) as min_id,
+	    FROM
+		cashes_nom cn
+	    GROUP BY
+		UPPER_UTF8(cn.name)
+	    HAVING
+		COUNT(*) > 1";
+    $dbls = $this->db->select($sql);
+
+    $this->db->start_tran();
+    foreach($dbls as $dbl) {
+      $this->db->exec("UPDATE cashes c WHERE c.nmcl_id = ? WHERE c.nmcl_id = ?", $dbl['min_id'], $dbl['max_id']);
+    }
+    $this->db->exec("DELETE FROM cashes_nom WHERE NOT EXISTS(SELECT 1 FROM cashes c WHERE c.nmcl_id = cashes_nom.id)");
+    $this->db->commit();
 
     $this->db->exec("analyze cashes;");
     $this->db->exec("analyze cashes_group;");

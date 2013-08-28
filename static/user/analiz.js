@@ -180,12 +180,12 @@ var cash_analiz_secr = Ext.create('Ext.Panel', {
     listeners: {
 	activate: function(tab){
 	  Ext.getCmp('cash_analiz_secr').setLoading("Загрузка статистики по финансовой безопасности...");
-	  //loadScript("static/user/analiz/cur_amount.js", function() {
-	    //cash_analiz_cur_load(function() {
+	  loadScript("static/user/analiz/secr.js", function() {
+	    cash_analiz_secr_load(function() {
 	      Ext.getCmp('cash_analiz_secr').setLoading(false);
 	      setAnkhor();
-	    //});
-	  //});
+	    });
+	  });
 	}
     }
 
