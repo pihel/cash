@@ -6,51 +6,50 @@ var cash_analiz_secr_lbl = {
 };
 
 
-var cash_analiz_secr_from_date =
+var cash_analiz_secr_in =
 {
-    xtype: 'datefield',
-    startDay:1,
-    fieldLabel: 'Период',
-    name: 'cash_analiz_secr_from_date',
-    id: 'cash_analiz_secr_from_date',
-    labelWidth: 55,
-    format: "Y-m-d",
-    maxValue: new Date(),
-    width: 160,
+    xtype: 'numberfield',
+    fieldLabel: 'Средений месячный приход',
+    name: 'cash_analiz_secr_in',
+    id: 'cash_analiz_secr_in',
+    minValue: 0,
+    value: 0,
+    width: 300,
+    labelWidth: 200,
     onChange: cash_analiz_secr_refresh
-}; // cash_analiz_secr_from_date
+};
 
 
-var cash_analiz_secr_to_date =
+var cash_analiz_secr_out =
 {
-    xtype: 'datefield',
-    fieldLabel: 'по',
-    startDay:1,
-    name: 'cash_analiz_secr_to_date',
-    id: 'cash_analiz_secr_to_date',
-    labelWidth: 20,
-    format: "Y-m-d",
-    width: 120,
+    xtype: 'numberfield',
+    fieldLabel: 'Средний месячный расход',
+    name: 'cash_analiz_secr_out',
+    id: 'cash_analiz_secr_out',
+    minValue: 0,
+    value: 0,
+    width: 300,
+    labelWidth: 200,
     onChange: cash_analiz_secr_refresh
-}; // cash_analiz_secr_to_date
+};
 
 
-var cash_analiz_secr_date = {
+var cash_analiz_secr_amount = {
       xtype: 'toolbar',
       dock: 'top',
       ui: 'footer',
-      items: [cash_analiz_secr_from_date, " ", cash_analiz_secr_to_date],
+      items: [cash_analiz_secr_in, " ", cash_analiz_secr_out],
       region: 'north',
-      id: "cash_analiz_secr_date",
+      id: "cash_analiz_secr_amount",
 }; //cash_analiz_secr_date
 
 
 function cash_analiz_secr_refresh() {
-  if(Ext.getCmp('cash_analiz_secr_from_date').getValue() == null) return;
-  if(Ext.getCmp('cash_analiz_secr_to_date').getValue() == null) return;
+  if(Ext.getCmp('cash_analiz_secr_in').getValue() == null) return;
+  if(Ext.getCmp('cash_analiz_secr_out').getValue() == null) return;
 
-  cash_analiz_secr_store.proxy.url = "ajax/analiz/secr.php?in=1000" +
-				    "&out=20000";
+  cash_analiz_secr_store.proxy.url = "ajax/analiz/secr.php?in=" + Ext.getCmp('cash_analiz_secr_in').getValue() +
+				    "&out=" + Ext.getCmp('cash_analiz_secr_out').getValue();
   cash_analiz_secr_store.load();
   setAnkhor();
 } //cash_analiz_secr_refresh
@@ -68,7 +67,7 @@ var cash_analiz_secr_store = Ext.create('Ext.data.Store', {
     autoLoad: false,
     proxy: {
 	type: 'ajax',
-	url: 'ajax/analiz/mon_dyn.php?'
+	url: 'ajax/analiz/secr.php?'
     }
 }); //cash_analiz_secr_store
 //
@@ -88,7 +87,7 @@ var cash_analiz_secr_chart = Ext.create('Ext.chart.Chart', {
 	position: 'left',
 	fields: ['amount'],
 	label: {
-	    renderer: Ext.util.Format.numberRenderer('0,0')
+	    renderer: price_r
 	},
 	title: 'Сумма',
 	grid: true,
@@ -115,9 +114,9 @@ var cash_analiz_secr_chart = Ext.create('Ext.chart.Chart', {
 	  display: 'insideEnd',
 	  'text-anchor': 'middle',
 	    field: 'amount',
-	    renderer: Ext.util.Format.numberRenderer('0'),
+	    renderer: price_r,
 	    orientation: 'vertical',
-	    color: '#333'
+	    color: '#fff'
 	},
 	xField: 'tname',
 	yField: ['amount'],
@@ -133,17 +132,24 @@ function cash_analiz_secr_load(_cb) {
   }
 
   Ext.getCmp('cash_analiz_secr').add(cash_analiz_secr_lbl);
-  Ext.getCmp('cash_analiz_secr').add(cash_analiz_secr_date);
+  Ext.getCmp('cash_analiz_secr').add(cash_analiz_secr_amount);
   Ext.getCmp('cash_analiz_secr').add(cash_analiz_secr_chart);
 
   if(isDefaultAnaliz()) {
-    var cd = new Date();
-    Ext.getCmp('cash_analiz_secr_from_date').setValue(new Date(cd.getFullYear(), 0, 1));
-    Ext.getCmp('cash_analiz_secr_to_date').setValue(cd);
+    Ext.Ajax.request({
+	url: "ajax/analiz/avg_inout.php",
+	method: "GET",
+	success: function(data) {
+	    var obj = Ext.decode(data.responseText);
+	    Ext.getCmp('cash_analiz_secr_in').setValue(obj[1].avg_amount);
+	    Ext.getCmp('cash_analiz_secr_out').setValue(obj[0].avg_amount);
+	}//success
+    }); //Ext.Ajax.request
+
   } else {
     setAnalitAnkhorParam();
+    cash_analiz_secr_refresh();
   }
-  cash_analiz_secr_refresh();
 
   if(_cb != undefined) _cb();
 }

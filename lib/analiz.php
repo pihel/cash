@@ -227,6 +227,33 @@ class CashAnaliz {
     return $this->db->select($sql, $this->usr->db_id, $in, $from, $to);
   }
 
+  public function getAvgInOut() {
+    if(!$this->usr->canAnaliz()) return array();
+
+    $sql =
+    "SELECT
+	    type, ROUND(AVG(amount)) as avg_amount
+    FROM
+    (
+	    SELECT
+		    strftime('%Y-%m', c.date) as mnth,
+		    c.type,
+		    SUM(c.price * c.qnt) as amount
+	    FROM cashes c
+	    WHERE
+		    c.`date` >= DATETIME('now', '-11 month', 'start of month')
+		    AND c.bd_id = ?
+		    AND c.visible = 1
+	    GROUP BY
+		    c.type,
+		    strftime('%Y-%m', c.date)
+    )
+    GROUP BY type
+    ORDER BY type";
+
+    return $this->db->select($sql, $this->usr->db_id);
+  }
+
   public function getSecr($in, $out) {
     if(!$this->usr->canAnaliz()) return array();
 
@@ -238,7 +265,7 @@ class CashAnaliz {
 
     $secr = array();
     $cnt = 0;
-    while($cnt < 36 && $amnt >= 0) {
+    while($cnt < 24 && $amnt >= 0) {
       $amnt = $amnt + $in - $out;
       $secr[] = array('tname'=> date("Y-m", strtotime("+".$cnt." months")) , 'amount'=>$amnt);
 

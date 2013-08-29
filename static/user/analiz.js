@@ -263,7 +263,7 @@ function setAnalitAnkhor(p) {
 
 function isDefaultAnaliz() {
   return glob_hash == undefined ||
-	 glob_hash == "" || glob_hash == [] || glob_hash.length < 2;
+	 glob_hash == "" || glob_hash == [] || glob_hash.length < 3;
 	 //|| ( "type=" + Ext.getCmp('cash_analit_tabs').getActiveTab().id == "cash_analiz_com" && typeof glob_hash[1] != "type=cash_analiz_com" );
 }
 

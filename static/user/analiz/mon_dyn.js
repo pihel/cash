@@ -88,7 +88,7 @@ var cash_analiz_mdyn_chart = Ext.create('Ext.chart.Chart', {
 	position: 'left',
 	fields: ['in_amount', 'out_amount'],
 	label: {
-	    renderer: Ext.util.Format.numberRenderer('0,0')
+	    renderer: price_r
 	},
 	title: 'Сумма',
 	grid: true,
@@ -115,7 +115,7 @@ var cash_analiz_mdyn_chart = Ext.create('Ext.chart.Chart', {
 	  display: 'insideEnd',
 	  'text-anchor': 'middle',
 	    field: ['in_amount', 'out_amount'],
-	    renderer: Ext.util.Format.numberRenderer('0'),
+	    renderer: price_r,
 	    orientation: 'vertical',
 	    color: '#333'
 	},
