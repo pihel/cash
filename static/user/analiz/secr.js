@@ -5,6 +5,19 @@ var cash_analiz_secr_lbl = {
     text: 'Финансовая безопасность'
 };
 
+var cash_analiz_secr_amnt =
+{
+    xtype: 'numberfield',
+    fieldLabel: 'Баланс на начало',
+    name: 'cash_analiz_secr_amnt',
+    id: 'cash_analiz_secr_amnt',
+    minValue: 0,
+    width: 300,
+    labelWidth: 200,
+    colspan: 3,
+    onChange: cash_analiz_secr_refresh
+};
+
 
 var cash_analiz_secr_in =
 {
@@ -13,11 +26,63 @@ var cash_analiz_secr_in =
     name: 'cash_analiz_secr_in',
     id: 'cash_analiz_secr_in',
     minValue: 0,
-    value: 0,
     width: 300,
     labelWidth: 200,
     onChange: cash_analiz_secr_refresh
 };
+
+var cash_analiz_secr_in_proc = Ext.create('Ext.slider.Single', {
+    width: 450,
+    id: 'cash_analiz_secr_in_proc',
+    fieldLabel: '% с остатка в месяц',
+    labelWidth: 150,
+    value: 0,
+    increment: 0.5,
+    minValue: 0,
+    maxValue: 100,
+    listeners: {
+	changecomplete: function(slider, newValue, thumb, eOpts) {
+	    cash_analiz_secr_refresh();
+	}
+    }
+});
+
+var cash_analiz_secr_in_proc_qnt =
+{
+    xtype: 'textfield',
+    name: 'cash_analiz_secr_in_proc_qnt',
+    id: 'cash_analiz_secr_in_proc_qnt',
+    width: 43,
+    value: "0%",
+    disabled: true
+};
+
+var cash_analiz_secr_out_proc_qnt =
+{
+    xtype: 'textfield',
+    name: 'cash_analiz_secr_out_proc_qnt',
+    id: 'cash_analiz_secr_out_proc_qnt',
+    width: 43,
+    value: "0%",
+    disabled: true
+};
+
+
+var cash_analiz_secr_out_proc = Ext.create('Ext.slider.Single', {
+    width: 450,
+    id: 'cash_analiz_secr_out_proc',
+    fieldLabel: '% роста в месяц',
+    labelWidth: 150,
+    value: 0,
+    increment: 0.5,
+    minValue: 0,
+    maxValue: 100,
+    listeners: {
+	changecomplete: function(slider, newValue, thumb, eOpts) {
+	    cash_analiz_secr_refresh();
+	}
+    }
+});
 
 
 var cash_analiz_secr_out =
@@ -27,18 +92,32 @@ var cash_analiz_secr_out =
     name: 'cash_analiz_secr_out',
     id: 'cash_analiz_secr_out',
     minValue: 0,
-    value: 0,
     width: 300,
     labelWidth: 200,
     onChange: cash_analiz_secr_refresh
 };
+
+var cash_analiz_secr_inout_frm = Ext.create('Ext.Panel', {
+    id: "cash_analiz_secr_inout_frm",
+    frame: true,
+    layout: {
+        type: 'table',
+        columns: 3
+    },
+    width: w-100,
+    items: [cash_analiz_secr_amnt,
+	    cash_analiz_secr_in, cash_analiz_secr_in_proc, cash_analiz_secr_in_proc_qnt,
+	    cash_analiz_secr_out, cash_analiz_secr_out_proc, cash_analiz_secr_out_proc_qnt]
+});//cash_analiz_secr_inout
+
 
 
 var cash_analiz_secr_amount = {
       xtype: 'toolbar',
       dock: 'top',
       ui: 'footer',
-      items: [cash_analiz_secr_in, " ", cash_analiz_secr_out],
+      width: w-100,
+      items: [cash_analiz_secr_inout_frm],
       region: 'north',
       id: "cash_analiz_secr_amount",
 }; //cash_analiz_secr_date
@@ -47,9 +126,16 @@ var cash_analiz_secr_amount = {
 function cash_analiz_secr_refresh() {
   if(Ext.getCmp('cash_analiz_secr_in').getValue() == null) return;
   if(Ext.getCmp('cash_analiz_secr_out').getValue() == null) return;
+  if(Ext.getCmp('cash_analiz_secr_amnt').getValue() == null) return;
 
-  cash_analiz_secr_store.proxy.url = "ajax/analiz/secr.php?in=" + Ext.getCmp('cash_analiz_secr_in').getValue() +
-				    "&out=" + Ext.getCmp('cash_analiz_secr_out').getValue();
+  Ext.getCmp('cash_analiz_secr_in_proc_qnt').setValue(Ext.getCmp('cash_analiz_secr_in_proc').getValue()+"%");
+  Ext.getCmp('cash_analiz_secr_out_proc_qnt').setValue(Ext.getCmp('cash_analiz_secr_out_proc').getValue()+"%");
+
+  cash_analiz_secr_store.proxy.url = "ajax/analiz/secr.php?amount="+Ext.getCmp('cash_analiz_secr_amnt').getValue() +
+				     "&in=" + Ext.getCmp('cash_analiz_secr_in').getValue() +
+				     "&out=" + Ext.getCmp('cash_analiz_secr_out').getValue() +
+				     "&proc_in=" + Ext.getCmp('cash_analiz_secr_in_proc').getValue() +
+				     "&proc_out=" + Ext.getCmp('cash_analiz_secr_out_proc').getValue();
   cash_analiz_secr_store.load();
   setAnkhor();
 } //cash_analiz_secr_refresh
@@ -90,8 +176,8 @@ var cash_analiz_secr_chart = Ext.create('Ext.chart.Chart', {
 	    renderer: price_r
 	},
 	title: 'Сумма',
-	grid: true,
-	minimum: 0
+	grid: true/*,
+	minimum: -10000*/
     }, {
 	type: 'Category',
 	position: 'bottom',
@@ -135,14 +221,23 @@ function cash_analiz_secr_load(_cb) {
   Ext.getCmp('cash_analiz_secr').add(cash_analiz_secr_amount);
   Ext.getCmp('cash_analiz_secr').add(cash_analiz_secr_chart);
 
-  if(isDefaultAnaliz()) {
+  if(isDefaultAnaliz() || true) {//TODO
     Ext.Ajax.request({
 	url: "ajax/analiz/avg_inout.php",
 	method: "GET",
 	success: function(data) {
 	    var obj = Ext.decode(data.responseText);
-	    Ext.getCmp('cash_analiz_secr_in').setValue(obj[1].avg_amount);
-	    Ext.getCmp('cash_analiz_secr_out').setValue(obj[0].avg_amount);
+	    Ext.getCmp('cash_analiz_secr_amnt').setValue(obj[0]);
+	    if(typeof obj[1][0] != "undefined") {
+	      Ext.getCmp('cash_analiz_secr_out').setValue(obj[1][0].avg_amount);
+	    } else {
+	      Ext.getCmp('cash_analiz_secr_out').setValue(0);
+	    }
+	    if(typeof obj[1][1] != "undefined") {
+	      Ext.getCmp('cash_analiz_secr_in').setValue(obj[1][1].avg_amount);
+	    } else {
+	      Ext.getCmp('cash_analiz_secr_in').setValue(0);
+	    }
 	}//success
     }); //Ext.Ajax.request
 

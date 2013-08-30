@@ -232,7 +232,7 @@ class CashAnaliz {
 
     $sql =
     "SELECT
-	    type, ROUND(AVG(amount)) as avg_amount
+	    type, IFNULL(ROUND(AVG(amount)),0) as avg_amount
     FROM
     (
 	    SELECT
@@ -251,21 +251,36 @@ class CashAnaliz {
     GROUP BY type
     ORDER BY type";
 
-    return $this->db->select($sql, $this->usr->db_id);
+    $amnt = $this->getStorage(0);
+    $amnt = round($amnt[0]['out_amount']);
+    if($amnt < 0) $amnt = 0;
+
+    $ret = array(
+	    $amnt,
+	    $this->db->select($sql, $this->usr->db_id)
+	  );
+
+    return $ret;
   }
 
-  public function getSecr($in, $out) {
+  public function getSecr($amnt, $in, $out, $pin, $pout) {
     if(!$this->usr->canAnaliz()) return array();
 
     $in = intval($in);
     $out = intval($out);
-
-    $amnt = $this->getStorage(0);
-    $amnt = $amnt[0]['out_amount'];
+    $amnt = intval($amnt);
+    $pin = floatval($pin);
+    $pout = floatval($pout);
 
     $secr = array();
     $cnt = 0;
     while($cnt < 24 && $amnt >= 0) {
+      //получаем процент с баланса
+      $amnt = $amnt * ( 1+$pin/100 );
+
+      //арифметическая прогрессия для расхода
+      $out = $out * ( 1+$pout/100 );
+
       $amnt = $amnt + $in - $out;
       $secr[] = array('tname'=> date("Y-m", strtotime("+".$cnt." months")) , 'amount'=>$amnt);
 
