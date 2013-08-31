@@ -269,13 +269,13 @@ class CashAnaliz {
     $in = intval($in);
     $out = intval($out);
     $amnt = intval($amnt);
-    $pin = floatval($pin);
-    $pout = floatval($pout);
+    $pin = floatval($pin)/12;
+    $pout = floatval($pout)/12;
 
     $secr = array();
     $cnt = 0;
     while($cnt < 24 && $amnt >= 0) {
-      //получаем процент с баланса
+      //получаем процент с баланса (предполагается капитализация раз в месяц)
       $amnt = $amnt * ( 1+$pin/100 );
 
       //арифметическая прогрессия для расхода

@@ -34,7 +34,7 @@ var cash_analiz_secr_in =
 var cash_analiz_secr_in_proc = Ext.create('Ext.slider.Single', {
     width: 450,
     id: 'cash_analiz_secr_in_proc',
-    fieldLabel: '% с остатка в месяц',
+    fieldLabel: '% с остатка в год',
     labelWidth: 150,
     value: 0,
     increment: 0.5,
@@ -71,7 +71,7 @@ var cash_analiz_secr_out_proc_qnt =
 var cash_analiz_secr_out_proc = Ext.create('Ext.slider.Single', {
     width: 450,
     id: 'cash_analiz_secr_out_proc',
-    fieldLabel: '% роста в месяц',
+    fieldLabel: '% роста в год',
     labelWidth: 150,
     value: 0,
     increment: 0.5,
@@ -221,7 +221,7 @@ function cash_analiz_secr_load(_cb) {
   Ext.getCmp('cash_analiz_secr').add(cash_analiz_secr_amount);
   Ext.getCmp('cash_analiz_secr').add(cash_analiz_secr_chart);
 
-  if(isDefaultAnaliz() || true) {//TODO
+  if(isDefaultAnaliz()) {
     Ext.Ajax.request({
 	url: "ajax/analiz/avg_inout.php",
 	method: "GET",

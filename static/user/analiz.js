@@ -211,6 +211,17 @@ function getAnalitAnkhor() {
     if(Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items.length > 3 ) {
       hash += "&in=" + (0+Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[4].getValue());
     }
+
+    //исключение для вкладки безопасности
+    if(typeof Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].items != "undefined" &&
+      Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].items.length > 5) {
+
+       hash += "&amount=" + Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].items.items[0].getValue();
+       hash += "&in_amount=" + Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].items.items[1].getValue();
+       hash += "&in_proc=" + Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].items.items[2].getValue();
+       hash += "&out_amount=" + Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].items.items[4].getValue();
+       hash += "&out_proc=" + Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].items.items[5].getValue();
+    }
   }
   return hash;
 }
@@ -235,6 +246,16 @@ function setAnalitAnkhorParam() {
     if(h[0] == "in") {
       Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[4].setDisabled(false);
       Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[4].setValue(parseInt(h[1])==1);
+    }
+
+    //исключение для вкладки безопасности
+    if(typeof Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].items != "undefined" &&
+      Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].items.length > 5) {
+	if(h[0] == "amount" && h[1] != "null" ) Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].items.items[0].setValue(h[1]);
+	if(h[0] == "in_amount" && h[1] != "null") Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].items.items[1].setValue(h[1]);
+	if(h[0] == "in_proc") Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].items.items[2].setValue(h[1]);
+	if(h[0] == "out_amount" && h[1] != "null") Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].items.items[4].setValue(h[1]);
+	if(h[0] == "out_proc") Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[0].items.items[5].setValue(h[1]);
     }
   }); //Ext.Array.each
 
