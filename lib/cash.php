@@ -443,6 +443,7 @@ class Cash {
 
     $this->db->exec("analyze cashes;");
     $this->db->exec("analyze cashes_group;");
+    $this->db->exec("analyze cashes_group_plan;");
     $this->db->exec("analyze cashes_nom;");
     $this->db->exec("analyze cashes_org;");
     $this->db->exec("analyze cashes_type;");

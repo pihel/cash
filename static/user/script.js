@@ -112,6 +112,8 @@ function restoreAnkhor() {
     Ext.getCmp('cash_list_tabs').setActiveTab("cash_analit");
   } else if(p[0] == "#act=set") {
     Ext.getCmp('cash_list_tabs').setActiveTab("cash_sett");
+  } else if(p[0] == "#act=plan") {
+    Ext.getCmp('cash_list_tabs').setActiveTab("cash_plan");
   }
 
   return r;
@@ -133,6 +135,9 @@ function setAnkhor() {
     if(typeof getAnalitAnkhor != "undefined") {
       hash += getAnalitAnkhor();
     }
+  }
+  else if(tab == "Планирование") {
+    hash += "act=plan";
   }
   else if(tab == "Настройки") {
     hash += "act=set";
@@ -166,6 +171,7 @@ function authOk(id) {
 		    Ext.getCmp('cash_sett').setDisabled(parseInt(rights.setting) == 0);
 		    Ext.getCmp('cash_analit').setDisabled(parseInt(rights.analiz) == 0);
 		    Ext.getCmp('cash_list_panel').setDisabled(parseInt(rights.read) == 0);
+		    Ext.getCmp('cash_plan').setDisabled(parseInt(rights.read) == 0);
 
 		    Ext.getCmp('cash_list_edit_btn_add').setDisabled(parseInt(rights.write) == 0);
 		    Ext.getCmp('cash_list_edit_col').setVisible(parseInt(rights.write) == 1);
