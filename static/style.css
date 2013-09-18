@@ -84,7 +84,7 @@ img {
 #cash_list_tb_filter .x-form-item {
   margin-left: 10px;
 }
-#cash_list_tb_filter .x-form-field {
+#cash_list_tb_filter .x-form-field, #cash_plan_mnth_from_date-inputEl, #cash_plan_mnth_to_date-inputEl {
   max-height: 19px !important;
 }
 .x-grid-row-summary {
@@ -101,7 +101,7 @@ img {
   padding-top: 15px !important;
   margin-left: -5px !important;
 }
-#cash_set_panel-body, #cash_sets {
+#cash_set_panel-body, #cash_sets, #cash_plan_panel-body {
   background-color: transparent !important;
 }
 #cash_item_file-inputEl {
@@ -118,4 +118,7 @@ img {
 }
 #cash_analiz_secr_amount {
   padding-top: 0px !important;
+}
+#cash_plan_mnth_date {
+  margin-top: 20px;
 }

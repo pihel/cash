@@ -27,13 +27,119 @@ class Plan {
     $sql =
     "SELECT
 	    cgp.id, ? as db_id, ? as usr_id, cg.id as grp_id, cg.name, cgp.plan
-    FROM  cashes_group cg
-    LEFT JOIN  cashes_group_plan cgp
-	    ON( cgp.grp_id = cg.id
-		    AND cgp.db_id = ?
-		    AND cgp.usr_id = ?)";
+    FROM
+      cashes_group cg
+    LEFT JOIN
+      cashes_group_plan cgp
+	ON( cgp.grp_id = cg.id
+	    AND cgp.db_id = ?
+	    AND cgp.usr_id = ?)";
 
     return $this->db->select($sql, $this->usr->db_id, $this->usr->id, $this->usr->db_id, $this->usr->id);
+  }
+
+  public function getAvgAmount($from, $to) {
+    if(!$this->usr->canRead()) return array();
+
+    if( empty($from) ) $from = date("Y-m-01");
+    if( empty($to) ) $to = date("Y-m-d");
+
+    $sql =
+    "SELECT
+	    v.`group`, v.name,
+	    IFNULL(ROUND( AVG(v.amount)),0) as avg_amount
+    FROM
+    (
+	    select
+		    c.`group`, cg.name,
+		    SUM(c.qnt*c.price*cr.rate) as amount
+	    FROM  cashes c
+	    INNER JOIN  currency cr
+		    ON( cr.id = c.cur_id)
+	    INNER JOIN  cashes_group cg
+		    ON( cg.id = c.`group`)
+	    WHERE
+		    c.type = 0
+		    AND c.visible = 1
+		    AND c.bd_id = ?
+		    AND c.uid = ?
+		    AND c.`date` BETWEEN ? AND ?
+	    GROUP BY
+		    c.`group`, cg.name, strftime('%Y-%m', c.date)
+    ) v
+    GROUP BY
+	    v.`group`, v.name";
+
+    return $this->db->select($sql, $this->usr->db_id, $this->usr->id, $from, $to);
+  }
+
+  public function getAvgAmountPerPlan($from, $to) {
+    if(!$this->usr->canRead()) return array();
+
+    //можно заменить на FULL OUTER JOIN , когда будет реалзован в SQLITE
+
+    $amounts = $this->getAvgAmount($from, $to);
+    $plans = $this->getList();
+
+    $ret = array();
+
+    $sum_plan = 0;
+    $sum_fact = 0;
+
+    foreach($plans as $plan) {
+      $sum = 0;
+      foreach($amounts as $amount) {
+	if($amount['group'] == $plan["grp_id"]) {
+	  $sum = $amount["avg_amount"];
+	  break;
+	}
+      }
+
+      if(floatval($plan["plan"]) == 0 && $sum == 0) continue;
+
+      $sum_plan += floatval($plan["plan"]);
+      $sum_fact += $sum;
+
+      $ret[] = array('id' => $plan["grp_id"],
+		     'tname' => $plan["name"],
+		     'plan' => floatval($plan["plan"]),
+		     'fact' => $sum);
+    }
+
+    $ret[] = array('id' => -1,
+		   'tname' => "Итог",
+		   'plan' => $sum_plan,
+		   'fact' => $sum_fact);
+
+    return $ret;
+  }
+
+  public function savePlan($data) {
+    if(!$this->usr->canWrite()) return "Ошибка доступа";
+
+    if(intval($data['grp_id']) < 1) return "Укажите группу";
+    if(floatval($data['plan']) <= 0) return "Укажите План";
+    $id = intval($data['id']);
+
+    $this->db->start_tran();
+    if($id == 0) {
+      //insert
+
+      $this->db->exec("INSERT INTO cashes_group_plan(id, grp_id, db_id, usr_id, plan)
+		      VALUES(NULL, ?, ?, ?, ?)",
+		      intval($data['grp_id']), $this->usr->db_id, $this->usr->id, floatval($data['plan']) );
+      $id = $this->db->last_id();
+    } else {
+      //update
+      $this->db->exec("UPDATE cashes_group_plan
+		      SET plan = ?
+		      WHERE id = ? ",
+		      floatval($data['plan']), $id );
+      $id = intval( $this->db->affect() );
+    }
+
+    $this->db->commit();
+    return $id;
   }
 }
 ?>

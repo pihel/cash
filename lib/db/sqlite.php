@@ -5,7 +5,7 @@ class SQLITE_DB extends DB {
     return new SQLite3($srv);
   }
 
-  public function upper_ru($s) {
+  public static function upper_ru($s) {
     return mb_strtoupper($s, 'UTF-8');
   }
 

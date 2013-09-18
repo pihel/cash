@@ -37,16 +37,16 @@ class User {
       $_SESSION['db'] = $this->db_id;
       $_SESSION['login'] = $this->login;
       session_write_close();
+
+      //last auth
+      $this->db->start_tran();
+      $this->db->exec("UPDATE `users` SET oper_date = CURRENT_TIMESTAMP WHERE bd_id = ? AND id = ? ", $this->db_id, $this->id);
+      $this->db->commit();
     }
     if(intval( $this->id ) == 0) return array('success'=>false, 'msg'=> "Ошибка авторизации");
 
     //rights
     $this->rghts = $this->getRights();
-
-    //last auth
-    $this->db->start_tran();
-    $this->db->exec("UPDATE `users` SET oper_date = CURRENT_TIMESTAMP WHERE bd_id = ? AND id = ? ", $this->db_id, $this->id);
-    $this->db->commit();
 
     return array('success'=>true, 'msg'=> $this->id);
   }
