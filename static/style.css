@@ -122,3 +122,8 @@ img {
 #cash_plan_mnth_date {
   margin-top: 20px;
 }
+.x-grid-cell-inner { 
+  overflow: hidden !important;
+  padding: 7px !important;
+  white-space: nowrap !important;
+}
