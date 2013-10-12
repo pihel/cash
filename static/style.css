@@ -127,3 +127,12 @@ img {
   padding: 7px !important;
   white-space: nowrap !important;
 }
+.x-tip {
+    width: auto !important;
+}
+.x-tip-body {
+    width: auto !important;
+}
+.x-tip-body span {
+    width: auto !important;
+}
