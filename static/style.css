@@ -127,12 +127,6 @@ img {
   padding: 7px !important;
   white-space: nowrap !important;
 }
-.x-tip {
-    width: auto !important;
-}
-.x-tip-body {
-    width: auto !important;
-}
-.x-tip-body span {
+.x-tip-form-invalid, .x-tip-body-form-invalid, .x-tip-body-form-invalid span {
     width: auto !important;
 }
