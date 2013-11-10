@@ -100,11 +100,17 @@ class CashAnaliz {
     return $this->db->select($sql, $this->usr->db_id, intval($in), $from, $to);
   }
 
-  public function getOrgs($from, $to) {
+  public function getOrgs($from, $to, $gr = 0) {
     if(!$this->usr->canAnaliz()) return array();
 
     if(empty($from)) $from = date("Y-m-01");
     if(empty($to)) $to = date("Y-m-d");
+	$gr = intval($gr);
+	
+	$gr_filter = "";
+	if($gr > 0) {
+		$gr_filter = "AND c.`group` = ? ";
+	}
 
     $sql =
     "SELECT
@@ -119,12 +125,13 @@ class CashAnaliz {
     WHERE
       c.visible = 1 AND c.bd_id = ? AND c.type = 0
       AND c.date BETWEEN ? AND ?
+	  ". $gr_filter ."
     GROUP BY
       o.name
     ORDER BY
       out_amount DESC";
 
-    return $this->db->select($sql, $this->usr->db_id, $from, $to);
+    return $this->db->select($sql, $this->usr->db_id, $from, $to, $gr);
   }
 
   public function getPurs($from, $to, $in = 0) {

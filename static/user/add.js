@@ -60,27 +60,27 @@ var cash_item_nmcl_cb = Ext.create('Ext.form.field.ComboBox', {
     width: 474,
     allowBlank: false,
     listeners: {
-	select: function( combo, records, e) {
-	  if(records != undefined && records[0].get('id') != 0) {
-	    cash_list_add.setLoading("Загрузка параметров номенклатуры...");
-	    Ext.Ajax.request({
-		url: "ajax/nmcl_param.php",
-		method: "GET",
-		params: {
-		    nmcl_id: records[0].get('id')
-		},
-		success: function(data) {
-		    cash_list_add.setLoading(false);
-		    var obj = Ext.decode(data.responseText);
+        select: function( combo, records, e) {
+          if(records != undefined && records[0].get('id') != 0) {
+            cash_list_add.setLoading("Загрузка параметров номенклатуры...");
+            Ext.Ajax.request({
+            url: "ajax/nmcl_param.php",
+            method: "GET",
+            params: {
+                nmcl_id: records[0].get('id')
+            },
+            success: function(data) {
+                cash_list_add.setLoading(false);
+                var obj = Ext.decode(data.responseText);
 
-		    Ext.getCmp('cash_item_prod_type_cb').setValue(obj.grp);
-		    Ext.getCmp('cash_item_org_cb').setValue(obj.org_name);
-		    //Ext.getCmp('cash_item_org_cb').setValue(obj.org_id);
-		    Ext.getCmp('cash_item_price').focus(false, 200);
-		}//success
-	    }); //Ext.Ajax.request
-	  }
-	}
+                Ext.getCmp('cash_item_prod_type_cb').setValue(obj.grp);
+                Ext.getCmp('cash_item_org_cb').setValue(obj.org_name);
+                //Ext.getCmp('cash_item_org_cb').setValue(obj.org_id);
+                Ext.getCmp('cash_item_price').focus(false, 200);
+            }//success
+            }); //Ext.Ajax.request
+          }
+        }
     }/*,
     doQuery: function(queryString, forceAll) {
 	this.store.clearFilter(true);
@@ -123,7 +123,7 @@ var cash_item_prod_type_cb = Ext.create('Ext.form.field.ComboBox', {
         this.expand();
         this.store.clearFilter(true);
         this.store.filter(this.displayField, new RegExp(Ext.String.escapeRegex(queryString), 'i'));
-	Ext.getCmp('cash_item_prod_type_cb').focus(false, 1);
+		Ext.getCmp('cash_item_prod_type_cb').focus(false, 1);
     }
 }); //cash_item_prod_type_cb
 
@@ -176,7 +176,7 @@ var cash_item_ctype_store = Ext.create('Ext.data.Store', {
       type: 'ajax',
       url: 'ajax/cashes_type_list.php',
       reader: {
-	  type: 'json'
+        type: 'json'
       }
   }
 }); //cash_item_ctype_store
@@ -215,7 +215,7 @@ var cash_item_org_store = Ext.create('Ext.data.Store', {
       type: 'ajax',
       url: 'ajax/org_list.php',
       reader: {
-	  type: 'json'
+        type: 'json'
       }
   }
 }); //cash_item_org_store
@@ -364,14 +364,14 @@ function submt_add() {
   var form = Ext.getCmp('cash_item_form_add').getForm();
   form.submit({
       success: function(form, action) {
-	  cash_list_add.setLoading(false);
-	  cash_list_add.hide();
-	  listRefresh();
+          cash_list_add.setLoading(false);
+          cash_list_add.hide();
+          listRefresh();
       },
       failure: function(form, action) {
-	  error(action.result.msg, function() {
-	    cash_list_add.setLoading(false);
-	  });
+          error(action.result.msg, function() {
+            cash_list_add.setLoading(false);
+          });
       }
   }); //form.submit
 }
@@ -397,7 +397,14 @@ var cash_item_form_add = new Ext.FormPanel({
   listeners: {
     afterRender: function(thisForm, options){
         this.keyNav = Ext.create('Ext.util.KeyNav', this.el, {
-            enter: submt_add,
+            enter: function(e) {
+                if( e.target.name == "cash_item_note" ) {
+                    //e.preventDefault();
+                    return true;
+                }
+                submt_add();
+            },
+            //ignoreInputFields: true,
             scope: this
         });
     }
@@ -481,53 +488,53 @@ function cash_list_add_load() {
 
 ///-----window
 var cash_list_add = Ext.create('Ext.Window', {
-      title: 'Добавление операции',
-      id: "cash_list_add",
-      width: 510,
-      height: 355,
-      closeAction: 'hide',
-      modal: true,
-      headerPosition: 'top',
-      bodyPadding: 5,
-      items: [cash_item_form_add],
-      listeners: {
-	hide: function() {
-	  setAnkhor();
-	},
-	close: function() {
-	  setAnkhor();
-	},
-	show: function(){
-	  Ext.getCmp('cash_list_add').setDisabled(parseInt(rights.write) == 0);
-	  cash_list_add.setLoading("Загрузка формы...");
+    title: 'Добавление операции',
+    id: "cash_list_add",
+    width: 510,
+    height: 355,
+    closeAction: 'hide',
+    modal: true,
+    headerPosition: 'top',
+    bodyPadding: 5,
+    items: [cash_item_form_add],
+    listeners: {
+        hide: function() {
+          setAnkhor();
+        },
+        close: function() {
+          setAnkhor();
+        },
+        show: function(){
+          Ext.getCmp('cash_list_add').setDisabled(parseInt(rights.write) == 0);
+          cash_list_add.setLoading("Загрузка формы...");
 
-	  cash_item_nmcl_store.proxy.url = "ajax/nmcl_list.php?edit_id=" + v_edit_id;
-	  cash_item_org_store.proxy.url = "ajax/org_list.php?edit_id=" + v_edit_id;
-	  if(v_edit_id == 0) {
-	    //cash_item_nmcl_store.load(function() {
-	      cash_item_prod_type_store.load(function() {
-		cash_item_currency_store.load(function() {
-		  cash_item_ctype_store.load(function() {
-		    //cash_item_org_store.load(function() {
-		      cash_list_add_load();
-		    //});
-		  });
-		});
-	      });
-	    //});
-	  } else {
-	    cash_item_nmcl_store.load(function() {
-	      cash_item_prod_type_store.load(function() {
-		cash_item_currency_store.load(function() {
-		  cash_item_ctype_store.load(function() {
-		    cash_item_org_store.load(function() {
-		      cash_list_add_load();
-		    });
-		  });
-		});
-	      });
-	    });
-	  }
-	}
-      }
+          cash_item_nmcl_store.proxy.url = "ajax/nmcl_list.php?edit_id=" + v_edit_id;
+          cash_item_org_store.proxy.url = "ajax/org_list.php?edit_id=" + v_edit_id;
+          if(v_edit_id == 0) {
+            //cash_item_nmcl_store.load(function() {
+              cash_item_prod_type_store.load(function() {
+                cash_item_currency_store.load(function() {
+                  cash_item_ctype_store.load(function() {
+                    //cash_item_org_store.load(function() {
+                      cash_list_add_load();
+                    //});
+                  });
+                });
+              });
+            //});
+          } else {
+            cash_item_nmcl_store.load(function() {
+              cash_item_prod_type_store.load(function() {
+                cash_item_currency_store.load(function() {
+                  cash_item_ctype_store.load(function() {
+                    cash_item_org_store.load(function() {
+                      cash_list_add_load();
+                    });
+                  });
+                });
+              });
+            });
+          }
+        }
+    }
 }); //cash_list_add

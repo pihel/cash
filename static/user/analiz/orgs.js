@@ -34,12 +34,57 @@ var cash_analiz_org_to_date =
     onChange: cash_analiz_org_refresh
 }; // cash_analiz_org_to_date
 
+//---- prod type list
+var cash_analiz_org_id_name_model = Ext.define('cash_analiz_org_id_name_model', {
+    extend: 'Ext.data.Model',
+    fields: [
+	{name: 'id',      type: 'INT'},
+	{name: 'name',    type: 'text'}
+    ],
+    idProperty: 'id'
+});
+
+var cash_analiz_org_prod_type_store = Ext.create('Ext.data.Store', {
+  model: 'cash_analiz_org_id_name_model',
+  autoDestroy: true,
+  proxy: {
+      // load using HTTP
+      type: 'ajax',
+      url: 'ajax/prod_type_list.php',
+      reader: {
+	  type: 'json'
+      }
+  }
+}); //cash_analiz_org_prod_type_store
+
+var cash_analiz_org_prod_type_cb = Ext.create('Ext.form.field.ComboBox', {
+    store: cash_analiz_org_prod_type_store,
+    id: "cash_analiz_org_prod_type_cb",
+    name: "cash_analiz_org_prod_type_cb",
+    fieldLabel: 'Группа',
+    labelWidth: 50,
+    displayField: 'name',
+    valueField: 'id',
+    queryMode: 'local',
+    allowBlank: true,
+    width: 450,
+	editable: false,
+    doQuery: function(queryString, forceAll) {
+        this.expand();
+        this.store.clearFilter(true);
+        this.store.filter(this.displayField, new RegExp(Ext.String.escapeRegex(queryString), 'i'));
+		Ext.getCmp('cash_analiz_org_prod_type_cb').focus(false, 1);
+    },
+	onChange: cash_analiz_org_refresh
+}); //cash_analiz_org_prod_type_cb
+
+
 
 var cash_analiz_org_date = {
       xtype: 'toolbar',
       dock: 'top',
       ui: 'footer',
-      items: [cash_analiz_org_from_date, " ", cash_analiz_org_to_date],
+      items: [cash_analiz_org_from_date, " ", cash_analiz_org_to_date, " ", cash_analiz_org_prod_type_cb],
       region: 'north',
       id: "cash_analiz_org_date",
 }; //cash_analiz_org_date
@@ -48,9 +93,11 @@ var cash_analiz_org_date = {
 function cash_analiz_org_refresh() {
   if(Ext.getCmp('cash_analiz_org_from_date').getValue() == null) return;
   if(Ext.getCmp('cash_analiz_org_to_date').getValue() == null) return;
+  if(Ext.getCmp('cash_analiz_org_prod_type_cb').getValue() == null) return;
 
   cash_analiz_org_store.proxy.url = "ajax/analiz/orgs.php?from=" + Ext.Date.format(Ext.getCmp('cash_analiz_org_from_date').getValue(),'Y-m-d') +
-				    "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_org_to_date').getValue(),'Y-m-d');
+				    "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_org_to_date').getValue(),'Y-m-d') +
+					"&gr=" + (0+Ext.getCmp('cash_analiz_org_prod_type_cb').getValue());
   cash_analiz_org_store.load();
   setAnkhor();
 } //cash_analiz_org_refresh
@@ -130,10 +177,18 @@ function cash_analiz_org_load(_cb) {
     var cd = new Date();
     Ext.getCmp('cash_analiz_org_from_date').setValue(new Date(cd.getFullYear(), cd.getMonth(), 1));
     Ext.getCmp('cash_analiz_org_to_date').setValue(cd);
+	cash_analiz_org_prod_type_store.load(function() {
+		cash_analiz_org_prod_type_store.insert(0,  Ext.data.Record({id:0,name:"Любая"}));
+        cash_analiz_org_prod_type_cb.setValue(0);
+        cash_analiz_org_refresh();
+        if(_cb != undefined) _cb();
+	});
   } else {
-    setAnalitAnkhorParam();
+	cash_analiz_org_prod_type_store.load(function() {
+		cash_analiz_org_prod_type_store.insert(0,  Ext.data.Record({id:0,name:"Любая"}));
+        setAnalitAnkhorParam();
+        cash_analiz_org_refresh();
+        if(_cb != undefined) _cb();
+	});	
   }
-  cash_analiz_org_refresh();
-
-  if(_cb != undefined) _cb();
 }

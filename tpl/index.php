@@ -9,7 +9,7 @@
     <link href="static/ext/ux/grid/css/RangeMenu.css" rel="stylesheet" type="text/css" />
     <script src="static/ext/ext-all.js" 	type="text/javascript"></script>
     <script src="static/ext/ext-lang-ru.js" 	type="text/javascript"></script>
-    <script src="static/user/script.js" 	type="text/javascript"></script>
+    <script src="static/user/script.js" charset="UTF-8"	type="text/javascript"></script>
 
 
     <link rel="shortcut icon" href="static/favicon.png" />

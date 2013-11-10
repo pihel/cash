@@ -245,7 +245,11 @@ function setAnalitAnkhorParam() {
     if(h[0] == "to") Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[2].setValue(h[1]);
     if(h[0] == "in") {
       Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[4].setDisabled(false);
-      Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[4].setValue(parseInt(h[1])==1);
+      if(Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[4].$className == "Ext.form.field.ComboBox") {
+        Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[4].setValue(parseInt(h[1]));
+      } else {
+        Ext.getCmp('cash_analit_tabs').getActiveTab().items.items[1].items.items[4].setValue(parseInt(h[1])==1);
+      }
     }
 
     //исключение для вкладки безопасности

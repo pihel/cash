@@ -89,7 +89,8 @@ function loadScript(path, _calb) {
     }
   }
 
-  path = path + "?v=0.968";//+Math.random();//debug
+  path = path + "?v=0.97";
+  //path = path + "?v=" + Math.random();//debug
 
   Ext.Loader.loadScript({url: path, scope: this,
     onLoad: function() {
@@ -164,24 +165,24 @@ function authOk(id) {
 	      url: "ajax/settings.php",
 	      method: "GET",
 	      success: function(data) {
-		settings = Ext.decode(data.responseText);
+			settings = Ext.decode(data.responseText);
 
-		loadScript("static/user/list.js", function() {
-		  loadScript("static/user/tabs.js", function() {
-		    Ext.getCmp('cash_sett').setDisabled(parseInt(rights.setting) == 0);
-		    Ext.getCmp('cash_analit').setDisabled(parseInt(rights.analiz) == 0);
-		    Ext.getCmp('cash_list_panel').setDisabled(parseInt(rights.read) == 0);
-		    Ext.getCmp('cash_plan').setDisabled(parseInt(rights.read) == 0);
+			loadScript("static/user/list.js", function() {
+			  loadScript("static/user/tabs.js", function() {
+				Ext.getCmp('cash_sett').setDisabled(parseInt(rights.setting) == 0);
+				Ext.getCmp('cash_analit').setDisabled(parseInt(rights.analiz) == 0);
+				Ext.getCmp('cash_list_panel').setDisabled(parseInt(rights.read) == 0);
+				Ext.getCmp('cash_plan').setDisabled(parseInt(rights.read) == 0);
 
-		    Ext.getCmp('cash_list_edit_btn_add').setDisabled(parseInt(rights.write) == 0);
-		    Ext.getCmp('cash_list_edit_col').setVisible(parseInt(rights.write) == 1);
+				Ext.getCmp('cash_list_edit_btn_add').setDisabled(parseInt(rights.write) == 0);
+				Ext.getCmp('cash_list_edit_col').setVisible(parseInt(rights.write) == 1);
 
-		    if(!restoreAnkhor()) {
-		      setDefaultListVal();
-		      //listRefresh();
-		    }
-		  });
-		});
+				if(!restoreAnkhor()) {
+				  setDefaultListVal();
+				  //listRefresh();
+				}
+			  });
+			});
 
 	      } //success
 	  }); //Ext.Ajax.request
@@ -205,7 +206,7 @@ Ext.onReady(function(){
 		loginWindow.show();
 	    });
 	  }
-      } //success
+    } //success
   }); //Ext.Ajax.request
 
 }); //Ext.onReady
