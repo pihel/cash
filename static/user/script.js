@@ -35,6 +35,7 @@ Ext.require([
 var uid = 0;
 var rights = [];
 var settings = [];
+var check_lt_id = undefined;
 
 /* RENDER function */
 function price(val, metaData, record) {
@@ -181,6 +182,9 @@ function authOk(id) {
 				  setDefaultListVal();
 				  //listRefresh();
 				}
+                
+                checkLifeTime();
+                check_lt_id = setInterval(checkLifeTime(), 60000);
 			  });
 			});
 
@@ -191,22 +195,50 @@ function authOk(id) {
   }
 } //authOk
 
-Ext.onReady(function(){
-  Ext.QuickTips.init();
+function checkLifeTime() {
+  if(uid == 0 && check_lt_id != undefined) {
+    clearInterval(check_lt_id);
+    return;
+  }
 
+  Ext.Ajax.request({
+    url: "ajax/session.php",
+    method: "GET",
+    success: function(data) {
+        if(parseInt(data.responseText) != 1) {
+            uid = 0;
+            window.location.reload();
+        }
+    } //success
+  }); //Ext.Ajax.request
+}
+
+function checkAuth() {
   Ext.Ajax.request({
       url: "ajax/get_usr.php",
       method: "GET",
       success: function(data) {
 	  if( parseInt(data.responseText) > 0 ) {
+        if(parseInt(uid) > 0 && Ext.getCmp('cash_list_panel') != undefined) {
+            return;
+        }
 	    uid = parseInt(data.responseText);
 	    authOk(uid);
 	  } else {
+        if(parseInt(uid) > 0) {
+            uid = 0;
+            window.location.reload();
+            return;
+        }
 	    loadScript("static/user/auth.js", function() {
-		loginWindow.show();
+            loginWindow.show();
 	    });
 	  }
     } //success
   }); //Ext.Ajax.request
+}
 
+Ext.onReady(function(){
+  Ext.QuickTips.init();
+  checkAuth();
 }); //Ext.onReady

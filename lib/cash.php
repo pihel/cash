@@ -162,6 +162,7 @@ class Cash {
     if(!$this->usr->canRead()) return array();
 
     //cn.id, cn.name,
+    $from = "-2 month";
     $sql =
     "SELECT
       c.`group` grp,
@@ -174,6 +175,15 @@ class Cash {
       c.nmcl_id = ?
       AND c.bd_id = ? AND c.visible = 1
       AND co.id = c.org_id
+      AND c.date > ( SELECT 
+                        DATETIME(MAX(c1.date), '".$from. "') 
+                     FROM 
+                        cashes c1 
+                     WHERE 
+                        c1.nmcl_id = c.nmcl_id
+                        AND c1.bd_id = c.bd_id
+                        AND c1.visible = c.visible
+                    )
     GROUP BY c.`group`, c.org_id
     ORDER BY
       COUNT(1) DESC
@@ -353,7 +363,7 @@ class Cash {
 	  `type` = ?,
 	  note = ?,
 	  cur_id = ?,
-	  date_edit = CURRENT_TIMESTAMP
+	  date_edit = datetime(CURRENT_TIMESTAMP, 'localtime')
      WHERE id = ? ";
 
     $this->db->exec($sql,
@@ -392,8 +402,8 @@ class Cash {
     if($refb['failure']) return $refb;
 
     $sql =
-    "INSERT INTO `cashes` (nmcl_id, `group`, price, cash_type_id, qnt, `date`, org_id, bd_id, uid, `file`, `type` ,note, cur_id)
-     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO `cashes` (nmcl_id, `group`, price, cash_type_id, qnt, `date`, org_id, bd_id, uid, `file`, `type` ,note, cur_id, date_edit)
+     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime(CURRENT_TIMESTAMP, 'localtime'))";
 
     $this->db->exec($sql,
 	$refb['cash_item_nmcl_cb'],

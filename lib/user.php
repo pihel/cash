@@ -18,6 +18,7 @@ class User {
   function auth($data = "") {
     if(empty($data)) {
       session_start();
+      $_SESSION['last_activity'] = time();
       $this->id = intval($_SESSION['id']);
       $this->db_id = intval( $_SESSION['db'] );
       $this->login = $_SESSION['login'];
@@ -36,11 +37,12 @@ class User {
       $_SESSION['id'] = $this->id;
       $_SESSION['db'] = $this->db_id;
       $_SESSION['login'] = $this->login;
+      $_SESSION['last_activity'] = time();
       session_write_close();
 
       //last auth
       $this->db->start_tran();
-      $this->db->exec("UPDATE `users` SET oper_date = CURRENT_TIMESTAMP WHERE bd_id = ? AND id = ? ", $this->db_id, $this->id);
+      $this->db->exec("UPDATE `users` SET oper_date = datetime(CURRENT_TIMESTAMP, 'localtime') WHERE bd_id = ? AND id = ? ", $this->db_id, $this->id);
       $this->db->commit();
     }
     if(intval( $this->id ) == 0) return array('success'=>false, 'msg'=> "Ошибка авторизации");
