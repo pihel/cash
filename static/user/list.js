@@ -3,26 +3,26 @@
 var cash_list_model = Ext.define('cash_list_model', {
     extend: 'Ext.data.Model',
     fields: [
-	{name: 'id', 		type: 'int'},
-	{name: 'nmcl_id', 	type: 'int'},
-	{name: 'nom', 		type: 'string'},
-	{name: 'group', 	type: 'int'},
-	{name: 'gname', 	type: 'string'},
-	{name: 'price', 	type: 'double'},
-	{name: 'qnt', 		type: 'double'},
-	{name: 'amount', 	type: 'double'},
-	{name: 'oper_date',	type: 'DATE', dateFormat : "Y-m-d"},
-	{name: 'date_edit', 	type: 'DATE', dateFormat: "Y-m-d H:i:s"},
-	{name: 'org_id', 	type: 'int'},
-	{name: 'oname', 	type: 'string'},
-	{name: 'type', 		type: 'int'},
-	{name: 'note',		type: 'string'},
-	{name: 'file', 		type: 'string'},
-	{name: 'uid', 		type: 'int'},
-	{name: 'rate', 		type: 'double'},
-	{name: 'sign', 		type: 'string'},
-	{name: 'cash_type_id', 	type: 'int'},
-	{name: 'cash_type', 	type: 'string'}
+      {name: 'id', 		type: 'int'},
+      {name: 'nmcl_id', 	type: 'int'},
+      {name: 'nom', 		type: 'string'},
+      {name: 'group', 	type: 'int'},
+      {name: 'gname', 	type: 'string'},
+      {name: 'price', 	type: 'double'},
+      {name: 'qnt', 		type: 'double'},
+      {name: 'amount', 	type: 'double'},
+      {name: 'oper_date',	type: 'DATE', dateFormat : "Y-m-d"},
+      {name: 'date_edit', 	type: 'DATE', dateFormat: "Y-m-d H:i:s"},
+      {name: 'org_id', 	type: 'int'},
+      {name: 'oname', 	type: 'string'},
+      {name: 'type', 		type: 'int'},
+      {name: 'note',		type: 'string'},
+      {name: 'file', 		type: 'string'},
+      {name: 'uid', 		type: 'int'},
+      {name: 'rate', 		type: 'double'},
+      {name: 'sign', 		type: 'string'},
+      {name: 'cash_type_id', 	type: 'int'},
+      {name: 'cash_type', 	type: 'string'}
     ],
     idProperty: 'id'
 });
@@ -31,69 +31,69 @@ var cash_list_store = Ext.create('Ext.data.Store', {
     model: 'cash_list_model',
     autoLoad: false,
     proxy: {
-	type: 'ajax',
-	url: 'ajax/list.php?'
+      type: 'ajax',
+      url: 'ajax/list.php?'
     }
 }); //cash_list_store
 
 var cash_list_grid = Ext.create('Ext.grid.Panel', {
     store: cash_list_store,
     columns: [
-	{text: "ID", 			dataIndex: 'id', 		hidden: true, 	tdCls: 'x-center-cell' },
-	{text: "ID товара", 		dataIndex: 'nmcl_id', 		hidden: true , 	tdCls: 'x-center-cell'},
-	{text: "Товар", 		dataIndex: 'nom', 		flex: 1, 	hideable: false},
-	{text: "ID группы", 		dataIndex: 'group', 		hidden: true , 	tdCls: 'x-center-cell'},
-	{text: "Группа", 		dataIndex: 'gname',		hideable: true },
-	{text: "Цена", 			dataIndex: 'price',		hideable: false, renderer: price, tdCls: 'x-price-cell' },
-	{text: "Кол-во", 		dataIndex: 'qnt',		hideable: false, summaryType: 'sum', tdCls: 'x-center-cell' },
-	{text: "Сумма", 		dataIndex: 'amount',		hideable: true,  renderer: price_r, summaryType: 'sum' , tdCls: 'x-amount-cell' , summaryRenderer: price },
-	{text: "Дата", 			dataIndex: 'oper_date',		hideable: true, renderer: dateRender, tdCls: 'x-center-cell'  },
-	{text: "Дата изменения", 	dataIndex: 'date_edit', 	hidden: true,   renderer: dateTimeRender, tdCls: 'x-center-cell' },
-	{text: "ID магазина", 		dataIndex: 'org_id', 		hidden: true, 	tdCls: 'x-center-cell' },
-	{text: "Магазин", 		dataIndex: 'oname',		hideable: true },
-	{text: "Тип", 			dataIndex: 'type', 		hidden: true , 	tdCls: 'x-center-cell'},
-	{text: "Примечание", 		dataIndex: 'note', 		width: 250 },
-	{text: "Файл", 			dataIndex: 'file',		hidden: true },
-	{text: "ID пользователя", 	dataIndex: 'uid', 		hidden: true, 	tdCls: 'x-center-cell' },
-	{text: "Курс", 			dataIndex: 'rate', 		hidden: true },
-	{text: "Знак валюты", 		dataIndex: 'sign',		hidden: true },
-	{text: "Тип валюты", 		dataIndex: 'cash_type_id', 	hidden: true, 	tdCls: 'x-center-cell' },
-	{text: "Кошелек", 		dataIndex: 'cash_type', 	hidden: true, 	tdCls: 'x-center-cell' },
-	{
-	      menuDisabled: true,
-	      sortable: false,
-	      hideable: false,
-	      xtype: 'actioncolumn',
-	      width: 50,
-	      id: "cash_list_edit_col",
-	      items: [{
-		  iconCls: 'edit-cash-col',
-		  tooltip: 'Редактировать запись',
-		  handler: function(grid, rowIndex, colIndex) {
-		      var rec = grid.getStore().getAt(rowIndex);
-		      editItem(rec.get('id'));
-		  }
-	      }, {
-		  iconCls: 'del-cash-col',
-		  tooltip: 'Удалить запись',
-		  handler: function(grid, rowIndex, colIndex) {
-		      var rec = grid.getStore().getAt(rowIndex);
-		      deleteItem(rec.get('id'));
-		  }
-	      }]
-	  }
+      {text: "ID", 			dataIndex: 'id', 		hidden: true, 	tdCls: 'x-center-cell' },
+      {text: "ID товара", 		dataIndex: 'nmcl_id', 		hidden: true , 	tdCls: 'x-center-cell'},
+      {text: "Товар", 		dataIndex: 'nom', 		flex: 1, 	hideable: false},
+      {text: "ID группы", 		dataIndex: 'group', 		hidden: true , 	tdCls: 'x-center-cell'},
+      {text: "Группа", 		dataIndex: 'gname',		hideable: true },
+      {text: "Цена", 			dataIndex: 'price',		hideable: false, renderer: price, tdCls: 'x-price-cell' },
+      {text: "Кол-во", 		dataIndex: 'qnt',		hideable: false, summaryType: 'sum', tdCls: 'x-center-cell' },
+      {text: "Сумма", 		dataIndex: 'amount',		hideable: true,  renderer: price_r, summaryType: 'sum' , tdCls: 'x-amount-cell' , summaryRenderer: price },
+      {text: "Дата", 			dataIndex: 'oper_date',		hideable: true, renderer: dateRender, tdCls: 'x-center-cell'  },
+      {text: "Дата изменения", 	dataIndex: 'date_edit', 	hidden: true,   renderer: dateTimeRender, tdCls: 'x-center-cell' },
+      {text: "ID магазина", 		dataIndex: 'org_id', 		hidden: true, 	tdCls: 'x-center-cell' },
+      {text: "Магазин", 		dataIndex: 'oname',		hideable: true },
+      {text: "Тип", 			dataIndex: 'type', 		hidden: true , 	tdCls: 'x-center-cell'},
+      {text: "Примечание", 		dataIndex: 'note', 		width: 250 },
+      {text: "Файл", 			dataIndex: 'file',		hidden: true },
+      {text: "ID пользователя", 	dataIndex: 'uid', 		hidden: true, 	tdCls: 'x-center-cell' },
+      {text: "Курс", 			dataIndex: 'rate', 		hidden: true },
+      {text: "Знак валюты", 		dataIndex: 'sign',		hidden: true },
+      {text: "Тип валюты", 		dataIndex: 'cash_type_id', 	hidden: true, 	tdCls: 'x-center-cell' },
+      {text: "Кошелек", 		dataIndex: 'cash_type', 	hidden: true, 	tdCls: 'x-center-cell' },
+      {
+            menuDisabled: true,
+            sortable: false,
+            hideable: false,
+            xtype: 'actioncolumn',
+            width: 50,
+            id: "cash_list_edit_col",
+            items: [{
+              iconCls: 'edit-cash-col',
+              tooltip: 'Редактировать запись',
+              handler: function(grid, rowIndex, colIndex) {
+                  var rec = grid.getStore().getAt(rowIndex);
+                  editItem(rec.get('id'));
+              }
+            }, {
+              iconCls: 'del-cash-col',
+              tooltip: 'Удалить запись',
+              handler: function(grid, rowIndex, colIndex) {
+                  var rec = grid.getStore().getAt(rowIndex);
+                  deleteItem(rec.get('id'));
+              }
+            }]
+        }
     ],
     listeners: {
       cellkeydown: function( obj, td, cellIndex, record, tr, rowIndex, e, eOpts ){
-	  var key = e.getKey();
-	  if(key == Ext.EventObject.ENTER) {
-	    editItem(record.get('id'));
-	  } else if(key == Ext.EventObject.DELETE) {
-	    deleteItem(record.get('id'));
-	  }
+        var key = e.getKey();
+        if(key == Ext.EventObject.ENTER) {
+          editItem(record.get('id'));
+        } else if(key == Ext.EventObject.DELETE) {
+          deleteItem(record.get('id'));
+        }
       },
       itemdblclick: function(dv, record, item, index, e) {
-	editItem(record.get('id'));
+        editItem(record.get('id'));
       }
     },
     features: [{
@@ -105,26 +105,26 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
       local: true,
       autoReload: false,
       filters: [
-	{dataIndex: 'id', 		type: 'int'},
-	{dataIndex: 'nmcl_id', 		type: 'int'},
-	{dataIndex: 'nom', 		type: 'string'},
-	{dataIndex: 'group', 		type: 'int'},
-	{dataIndex: 'gname', 		type: 'string'},
-	{dataIndex: 'price', 		type: 'numeric'},
-	{dataIndex: 'qnt', 		type: 'numeric'},
-	{dataIndex: 'amount', 		type: 'numeric'},
-	{dataIndex: 'oper_date'	},
-	{dataIndex: 'date_edit'	},
-	{dataIndex: 'org_id', 		type: 'int'},
-	{dataIndex: 'oname', 		type: 'string'},
-	{dataIndex: 'type', 		type: 'int'},
-	{dataIndex: 'note',		type: 'string'},
-	{dataIndex: 'file', 		type: 'string'},
-	{dataIndex: 'uid', 		type: 'int'},
-	{dataIndex: 'rate', 		type: 'numeric'},
-	{dataIndex: 'sign', 		type: 'string'},
-	{dataIndex: 'cash_type_id', 	type: 'int'},
-	{dataIndex: 'cash_type', 	type: 'string'}]
+        {dataIndex: 'id', 		type: 'int'},
+        {dataIndex: 'nmcl_id', 		type: 'int'},
+        {dataIndex: 'nom', 		type: 'string'},
+        {dataIndex: 'group', 		type: 'int'},
+        {dataIndex: 'gname', 		type: 'string'},
+        {dataIndex: 'price', 		type: 'numeric'},
+        {dataIndex: 'qnt', 		type: 'numeric'},
+        {dataIndex: 'amount', 		type: 'numeric'},
+        {dataIndex: 'oper_date'	},
+        {dataIndex: 'date_edit'	},
+        {dataIndex: 'org_id', 		type: 'int'},
+        {dataIndex: 'oname', 		type: 'string'},
+        {dataIndex: 'type', 		type: 'int'},
+        {dataIndex: 'note',		type: 'string'},
+        {dataIndex: 'file', 		type: 'string'},
+        {dataIndex: 'uid', 		type: 'int'},
+        {dataIndex: 'rate', 		type: 'numeric'},
+        {dataIndex: 'sign', 		type: 'string'},
+        {dataIndex: 'cash_type_id', 	type: 'int'},
+        {dataIndex: 'cash_type', 	type: 'string'}]
     }],
     region:'center'
 }); //cash_list_grid
@@ -149,29 +149,29 @@ function deleteItem(v_id) {
       icon: Ext.MessageBox.QUESTION,
       buttons: Ext.Msg.OKCANCEL,
       fn: function(buttonId) {
-	//if clicked ok
-	if(buttonId == "ok") {
-	    cash_list_grid.setLoading("Удаляю операцию...");
-	    Ext.Ajax.request({
-	      url: "ajax/delete.php",
-	      method: "GET",
-	      params: {
-		  id: v_id
-	      },
-	      success: function(data) {
-		  // if response is not empty - error msg
-		  if(data.responseText != "") {
-		    error(data.responseText, function() {
-		      cash_list_grid.setLoading(false);
-		      //listRefresh();
-		      return;
-		    });
-		  }
-		  cash_list_grid.setLoading(false);
-		  listRefresh();
-	      } //success
-	  }); //Ext.Ajax.request
-	} //buttonId == "ok"
+        //if clicked ok
+        if(buttonId == "ok") {
+            cash_list_grid.setLoading("Удаляю операцию...");
+            Ext.Ajax.request({
+              url: "ajax/delete.php",
+              method: "GET",
+              params: {
+            id: v_id
+              },
+              success: function(data) {
+            // if response is not empty - error msg
+            if(data.responseText != "") {
+              error(data.responseText, function() {
+                cash_list_grid.setLoading(false);
+                //listRefresh();
+                return;
+              });
+            }
+            cash_list_grid.setLoading(false);
+            listRefresh();
+              } //success
+          }); //Ext.Ajax.request
+        } //buttonId == "ok"
       } // fn - button click
   });//Ext.Msg.show
 }
@@ -230,6 +230,7 @@ function listRefresh(_cb) {
     cash_list_store.proxy.url += "&org_id_no=" + (0+Ext.getCmp('cash_item_org_fltr_cb_no').getValue());
     cash_list_store.proxy.url += "&note=" + Ext.getCmp('cash_item_note_fltr').getValue();
     cash_list_store.proxy.url += "&note_no=" + (0+Ext.getCmp('cash_item_note_fltr_no').getValue());
+    cash_list_store.proxy.url += "&uid=" + (0+parseInt(Ext.getCmp('cash_item_user_cb_fltr').getValue()));
     cash_list_store.proxy.url += "&file=" + (0+Ext.getCmp('cash_item_file_fltr').getValue());
     cash_list_store.proxy.url += "&del=" + (0+Ext.getCmp('cash_item_del_fltr').getValue());
   }
@@ -275,19 +276,19 @@ var cash_list_filter = {
       if(newVal && Ext.getCmp('cash_list_tb_filter').isVisible()) return;
       Ext.getCmp('cash_list_filter_loading').show();
       loadScript("static/user/add.js", function() {
-	loadScript("static/user/filter.js", function() {
-	  loadFilter(function() {
-	    if(newVal) {
-	      Ext.getCmp('cash_list_tb_filter').show();
-	    } else {
-	      Ext.getCmp('cash_list_tb_filter').hide();
-	    }
-	    listRefresh(function() {
-	      //Ext.getCmp('cash_list_filter_loading').hide();
-	    });
-	    Ext.getCmp('cash_list_filter_loading').hide();
-	  }); //loadFilter
-	}); //loadScript
+        loadScript("static/user/filter.js", function() {
+          loadFilter(function() {
+            if(newVal) {
+              Ext.getCmp('cash_list_tb_filter').show();
+            } else {
+              Ext.getCmp('cash_list_tb_filter').hide();
+            }
+            listRefresh(function() {
+              //Ext.getCmp('cash_list_filter_loading').hide();
+            });
+            Ext.getCmp('cash_list_filter_loading').hide();
+          }); //loadFilter
+        }); //loadScript
       }); //loadScript
     } //onChange
 }; //cash_list_filter
@@ -323,14 +324,14 @@ var cash_list_tb_filter = {
   ui: 'footer',
   columns: 2,
   items: [{
-            xtype: 'buttongroup',
-	    id: "cash_list_tb_filter_bgrp",
-	    name: "cash_list_tb_filter_bgrp",
-            //title: 'Расширенный фильтр',
-	    width: 590,
-            columns: 2,
-            items:[]
-        }],
+      xtype: 'buttongroup',
+      id: "cash_list_tb_filter_bgrp",
+      name: "cash_list_tb_filter_bgrp",
+      //title: 'Расширенный фильтр',
+      width: 590,
+      columns: 2,
+      items:[]
+  }],
   region: 'north'
 }; //cash_list_tb
 
@@ -366,6 +367,7 @@ function getListAnkhor() {
     hash += "&org_id_no=" + (0+Ext.getCmp('cash_item_org_fltr_cb_no').getValue());
     hash += "&note=" + Ext.getCmp('cash_item_note_fltr').getValue();
     hash += "&note_no=" + (0+Ext.getCmp('cash_item_note_fltr_no').getValue());
+    hash += "&uid=" + Ext.getCmp('cash_item_user_cb_fltr').getValue();
     hash += "&file=" + (0+Ext.getCmp('cash_item_file_fltr').getValue());
     hash += "&del=" + (0+Ext.getCmp('cash_item_del_fltr').getValue());
   }
@@ -391,6 +393,7 @@ function setListAnkhorEx(hash, _cb) {
     if(h[0] == "org_id_no") Ext.getCmp('cash_item_org_fltr_cb_no').setValue(h[1]==1);
     if(h[0] == "note") Ext.getCmp('cash_item_note_fltr').setValue(h[1]);
     if(h[0] == "note_no") Ext.getCmp('cash_item_note_fltr_no').setValue(h[1]==1);
+    if(h[0] == "uid") Ext.getCmp('cash_item_user_cb_fltr').setValue(h[1]);
     if(h[0] == "file") Ext.getCmp('cash_item_note_fltr_no').setValue(h[1]==1);
     if(h[0] == "del") Ext.getCmp('cash_item_del_fltr').setValue(h[1]==1);
 
@@ -413,25 +416,25 @@ function setListAnkhor() {
     if(h[0] == "to" && h[1] != undefined) Ext.getCmp('cash_list_to_date').setValue(h[1]);
     if(h[0] == "item")  {
       loadScript('static/user/add.js', function() {
-	v_edit_id = parseInt(h[1]);
-	if(v_edit_id == undefined || v_edit_id == -1) v_edit_id = 0;
-	cash_list_add.show();
+        v_edit_id = parseInt(h[1]);
+        if(v_edit_id == undefined || v_edit_id == -1) v_edit_id = 0;
+        cash_list_add.show();
       });
     }
 
     if(h[0] == "exfilter" && h[1] == "1") {
       Ext.getCmp('cash_list_filter_loading').show();
       loadScript("static/user/add.js", function() {
-	loadScript("static/user/filter.js", function() {
-	  loadFilter(function() {
-	    Ext.getCmp('cash_list_tb_filter').show();
-	    setListAnkhorEx(p, function() {
-	      Ext.getCmp('cash_list_filter').setValue(true);
-	      listRefresh();
-	      Ext.getCmp('cash_list_filter_loading').hide();
-	    }); //setListAnkhorEx
-	  }); //loadFilter
-	}); //loadScript
+        loadScript("static/user/filter.js", function() {
+          loadFilter(function() {
+            Ext.getCmp('cash_list_tb_filter').show();
+            setListAnkhorEx(p, function() {
+              Ext.getCmp('cash_list_filter').setValue(true);
+              listRefresh();
+              Ext.getCmp('cash_list_filter_loading').hide();
+            }); //setListAnkhorEx
+          }); //loadFilter
+        }); //loadScript
       }); //loadScript
     }
   }); //Ext.Array.each
@@ -457,14 +460,14 @@ var cash_list_panel = Ext.create('Ext.Panel', {
     header: true,
     items: [cash_list_tb,cash_list_tb_filter, cash_list_grid],
     listeners: {
-	render: function(){
-	  Ext.getCmp('cash_list_tb_filter').hide();
-	  Ext.getCmp('cash_list_filter_loading').hide();
-	},
-	activate: function(tab){
-	  //setAnkhor();
-	  listRefresh();
-	}
+      render: function(){
+        Ext.getCmp('cash_list_tb_filter').hide();
+        Ext.getCmp('cash_list_filter_loading').hide();
+      },
+      activate: function(tab){
+        //setAnkhor();
+        listRefresh();
+      }
     }
 
 });//cash_list_panel

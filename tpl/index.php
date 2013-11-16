@@ -14,7 +14,8 @@
 
     <link rel="shortcut icon" href="static/favicon.png" />
   </head>
-  <body id="main">
-    &nbsp;
+  <body>
+    <div id="logout"></div>
+    <div id="main"></div>
   </body>
 </html>

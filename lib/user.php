@@ -58,7 +58,7 @@ class User {
   }
 
   public function getRights() {
-     return $this->db->line("SELECT `read`, `write`, analiz, setting FROM `users` WHERE id = ? AND bd_id = ?", $this->id, $this->db_id);
+     return $this->db->line("SELECT `read`, `write`, analiz, setting, bd_id FROM `users` WHERE id = ? AND bd_id = ?", $this->id, $this->db_id);
   }
 
   public function canRead() {

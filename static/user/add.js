@@ -20,8 +20,8 @@ var cash_item_date =
 var cash_id_name_model = Ext.define('cash_id_name_model', {
     extend: 'Ext.data.Model',
     fields: [
-	{name: 'id',      type: 'INT'},
-	{name: 'name',    type: 'text'}
+      {name: 'id',      type: 'INT'},
+      {name: 'name',    type: 'text'}
     ],
     idProperty: 'id'
 });
@@ -40,7 +40,7 @@ var cash_item_nmcl_store = Ext.create('Ext.data.Store', {
   },
   listeners: {
       load: function( o, records, successful, eOpts ){
-	  Ext.getCmp('cash_item_nmcl_cb').focus(false, 1);
+        Ext.getCmp('cash_item_nmcl_cb').focus(false, 1);
       }
     }
 }); //cash_item_nmcl_store
@@ -123,7 +123,7 @@ var cash_item_prod_type_cb = Ext.create('Ext.form.field.ComboBox', {
         this.expand();
         this.store.clearFilter(true);
         this.store.filter(this.displayField, new RegExp(Ext.String.escapeRegex(queryString), 'i'));
-		Ext.getCmp('cash_item_prod_type_cb').focus(false, 1);
+        Ext.getCmp('cash_item_prod_type_cb').focus(false, 1);
     }
 }); //cash_item_prod_type_cb
 

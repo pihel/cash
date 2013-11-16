@@ -41,6 +41,10 @@ class Cash {
     if($f['oper_id'] === "1") $ret .= " AND c.type = 1";
     //$ret .= $this->makeFilter("c.type", "", $f['oper_id'], 1, 0 );
     $ret .= $this->makeFilter("c.org_id", "co.name", $f['org_id'], intval($f['org_id']), $f['org_id_no'] );
+    if( intval($f['uid']) > 0 ) {
+      $ret .= $this->makeFilter("c.uid", "", $f['uid'], intval($f['uid']), 0 );
+    }
+    
     $ret .= $this->makeFilter("", "c.note", $f['note'], 0, $f['note_no'] );
     if( intval($f['del']) == 1 ) {
       $ret .= " AND c.visible = 0 ";
@@ -131,19 +135,19 @@ class Cash {
 
     $sql =
     "SELECT
-	cn.id, cn.name
-      FROM
-	cashes c
-      INNER JOIN cashes_nom cn
-	ON(cn.id = c.nmcl_id)
-      WHERE
-	c.bd_id = ? AND c.visible = 1
-	" . $filter . "
-      GROUP BY
-	cn.id, cn.name
-      ORDER BY
-	COUNT(1) DESC, cn.id
-      LIMIT 50 ";
+    cn.id, cn.name
+        FROM
+    cashes c
+        INNER JOIN cashes_nom cn
+    ON(cn.id = c.nmcl_id)
+        WHERE
+    c.bd_id = ? AND c.visible = 1
+    " . $filter . "
+        GROUP BY
+    cn.id, cn.name
+        ORDER BY
+    COUNT(1) DESC, cn.id
+        LIMIT 50 ";
 
     return $this->db->select($sql, $this->usr->db_id);
   }
@@ -294,7 +298,7 @@ class Cash {
       $ext = pathinfo($files['cash_item_file']['name'], PATHINFO_EXTENSION);
       $fname = 'files/'.crc32(time().$files['cash_item_file']['name']).".".$ext;
       if(move_uploaded_file($files['cash_item_file']['tmp_name'], "../".$fname)) {
-	$ret['file'] = $fname;
+        $ret['file'] = $fname;
       }
     }
 
@@ -367,18 +371,18 @@ class Cash {
      WHERE id = ? ";
 
     $this->db->exec($sql,
-	$refb['cash_item_nmcl_cb'],
-	$refb['cash_item_prod_type_cb'],
-	$refb['cash_item_price'],
-	$refb['cash_item_ctype_cb'],
-	$refb['cash_item_qnt'],
-	$refb['cash_item_date'],
-	$refb['cash_item_org_cb'],
-	$refb['file'],
-	$refb['cash_item_toper_cb'],
-	$refb['cash_item_note'],
-	$refb['cash_item_currency_cb'],
-	intval($data['cash_item_edit_id'])
+      $refb['cash_item_nmcl_cb'],
+      $refb['cash_item_prod_type_cb'],
+      $refb['cash_item_price'],
+      $refb['cash_item_ctype_cb'],
+      $refb['cash_item_qnt'],
+      $refb['cash_item_date'],
+      $refb['cash_item_org_cb'],
+      $refb['file'],
+      $refb['cash_item_toper_cb'],
+      $refb['cash_item_note'],
+      $refb['cash_item_currency_cb'],
+      intval($data['cash_item_edit_id'])
     );
 
     $cnt = intval( $this->db->affect() );
@@ -406,19 +410,19 @@ class Cash {
      VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime(CURRENT_TIMESTAMP, 'localtime'))";
 
     $this->db->exec($sql,
-	$refb['cash_item_nmcl_cb'],
-	$refb['cash_item_prod_type_cb'],
-	$refb['cash_item_price'],
-	$refb['cash_item_ctype_cb'],
-	$refb['cash_item_qnt'],
-	$refb['cash_item_date'],
-	$refb['cash_item_org_cb'],
-	$this->usr->db_id,
-	$this->usr->id,
-	$refb['file'],
-	$refb['cash_item_toper_cb'],
-	$refb['cash_item_note'],
-	$refb['cash_item_currency_cb']
+      $refb['cash_item_nmcl_cb'],
+      $refb['cash_item_prod_type_cb'],
+      $refb['cash_item_price'],
+      $refb['cash_item_ctype_cb'],
+      $refb['cash_item_qnt'],
+      $refb['cash_item_date'],
+      $refb['cash_item_org_cb'],
+      $this->usr->db_id,
+      $this->usr->id,
+      $refb['file'],
+      $refb['cash_item_toper_cb'],
+      $refb['cash_item_note'],
+      $refb['cash_item_currency_cb']
     );
 
     $id = intval( $this->db->last_id() );

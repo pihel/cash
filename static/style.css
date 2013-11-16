@@ -133,3 +133,15 @@ img {
 .x-tip-form-invalid, .x-tip-body-form-invalid, .x-tip-body-form-invalid span {
     width: auto !important;
 }
+.x-tip, .x-tip * {
+  min-width: 70px !important;
+}
+#main {
+  margin-top: 10px;
+}
+#logout {
+  position: absolute;
+  top: 5px;
+  right: 25px;
+  z-index: 10;
+}
