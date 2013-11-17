@@ -156,8 +156,8 @@ class Cash {
     if(!$this->usr->canRead()) return array();
     $sql =
     "SELECT
-	cn.id, cn.name
-      FROM cashes_nom cn ";
+      cn.id, cn.name
+    FROM cashes_nom cn ";
 
     return $this->db->select($sql);
   }
@@ -437,15 +437,16 @@ class Cash {
     if(!$this->usr->canWrite()) return "Ошибка доступа";
 
 
-    $sql = "SELECT
-		MAX(cn.id) as max_id,
-		MIN(cn.id) as min_id,
-	    FROM
-		cashes_nom cn
-	    GROUP BY
-		UPPER_UTF8(cn.name)
-	    HAVING
-		COUNT(*) > 1";
+    $sql = 
+    "SELECT
+      MAX(cn.id) as max_id,
+      MIN(cn.id) as min_id,
+	  FROM
+      cashes_nom cn
+	  GROUP BY
+      UPPER_UTF8(cn.name)
+	  HAVING
+      COUNT(*) > 1";
     $dbls = $this->db->select($sql);
 
     $this->db->start_tran();

@@ -21,24 +21,24 @@ class Plan {
     $this->usr = $_usr;
   }
 
-  public function getList() {
+  public function getList($uid = 0) {
     if(!$this->usr->canRead()) return array();
 
     $sql =
     "SELECT
-	    cgp.id, ? as db_id, ? as usr_id, cg.id as grp_id, cg.name, cgp.plan
+	    cgp.id, cgp.db_id as db_id, cgp.usr_id as usr_id, cg.id as grp_id, cg.name, cgp.plan
     FROM
       cashes_group cg
     LEFT JOIN
       cashes_group_plan cgp
-	ON( cgp.grp_id = cg.id
-	    AND cgp.db_id = ?
-	    AND cgp.usr_id = ?)";
+    ON( cgp.grp_id = cg.id
+        AND cgp.db_id = ?
+        AND ( cgp.usr_id = ? OR ? = 0 ) )";
 
-    return $this->db->select($sql, $this->usr->db_id, $this->usr->id, $this->usr->db_id, $this->usr->id);
+    return $this->db->select($sql, $this->usr->db_id, $uid, $uid);
   }
 
-  public function getAvgAmount($from, $to) {
+  public function getAvgAmount($from, $to, $uid = 0) {
     if(!$this->usr->canRead()) return array();
 
     if( empty($from) ) $from = date("Y-m-01");
@@ -62,7 +62,7 @@ class Plan {
 		    c.type = 0
 		    AND c.visible = 1
 		    AND c.bd_id = ?
-		    AND c.uid = ?
+		    AND ( c.uid = ? OR ? = 0 )
 		    AND c.`date` BETWEEN ? AND ?
 	    GROUP BY
 		    c.`group`, cg.name, strftime('%Y-%m', c.date)
@@ -70,7 +70,7 @@ class Plan {
     GROUP BY
 	    v.`group`, v.name";
 
-    return $this->db->select($sql, $this->usr->db_id, $this->usr->id, $from, $to);
+    return $this->db->select($sql, $this->usr->db_id, $uid, $uid, $from, $to);
   }
 
   public function getAvgAmountPerPlan($from, $to) {
@@ -89,10 +89,10 @@ class Plan {
     foreach($plans as $plan) {
       $sum = 0;
       foreach($amounts as $amount) {
-	if($amount['group'] == $plan["grp_id"]) {
-	  $sum = $amount["avg_amount"];
-	  break;
-	}
+        if($amount['group'] == $plan["grp_id"]) {
+          $sum = $amount["avg_amount"];
+          break;
+        }
       }
 
       if(floatval($plan["plan"]) == 0 && $sum == 0) continue;

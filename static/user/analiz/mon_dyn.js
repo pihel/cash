@@ -41,7 +41,7 @@ var cash_analiz_mdyn_date = {
       ui: 'footer',
       items: [cash_analiz_mdyn_from_date, " ", cash_analiz_mdyn_to_date],
       region: 'north',
-      id: "cash_analiz_mdyn_date",
+      id: "cash_analiz_mdyn_date"
 }; //cash_analiz_mdyn_date
 
 

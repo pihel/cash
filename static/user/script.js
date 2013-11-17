@@ -68,13 +68,13 @@ function dateTimeRender(value) {
 
 function error(text, _cb) {
   Ext.Msg.show({
-	title:'Ошибка',
-	msg: text,
-	icon: Ext.MessageBox.ERROR,
-	buttons: Ext.Msg.OK,
-	fn: function() {
-	  if(_cb != undefined) _cb();
-	}
+    title:'Ошибка',
+    msg: text,
+    icon: Ext.MessageBox.ERROR,
+    buttons: Ext.Msg.OK,
+    fn: function() {
+      if(_cb != undefined) _cb();
+    }
   });
 }
 
@@ -91,12 +91,12 @@ function loadScript(path, _calb) {
     }
   }
 
-  //path = path + "?v=0.97";
+  //path = path + "?v=0.983";
   path = path + "?v=" + Math.random();//debug
 
   Ext.Loader.loadScript({url: path, scope: this,
     onLoad: function() {
-	if(_calb != undefined) _calb();
+      if(_calb != undefined) _calb();
     }
   });
 
@@ -253,9 +253,11 @@ function logout() {
   }); //Ext.Ajax.request
 }
 
-window.addEventListener('focus', function() {
-    checkLifeTime();
-});
+if(window.addEventListener) {
+  window.addEventListener('focus', function() {
+      checkLifeTime();
+  });
+}
 
 Ext.onReady(function(){
   Ext.QuickTips.init();

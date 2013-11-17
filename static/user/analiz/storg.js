@@ -29,7 +29,7 @@ var cash_analiz_storg = {
       ui: 'footer',
       items: [cash_analiz_storg_amount],
       region: 'north',
-      id: "cash_analiz_storg",
+      id: "cash_analiz_storg"
 }; //cash_analiz_storg
 
 
@@ -41,8 +41,8 @@ function cash_analiz_strg_refresh() {
 var cash_analiz_strg_model = Ext.define('cash_analiz_strg_model', {
     extend: 'Ext.data.Model',
     fields: [
-	{name: 'tname',		type: 'string'},
-	{name: 'out_amount',	type: 'double'}
+      {name: 'tname',		type: 'string'},
+      {name: 'out_amount',	type: 'double'}
     ]
 }); //cash_analiz_strg_model
 
@@ -50,8 +50,8 @@ var cash_analiz_strg_store = Ext.create('Ext.data.Store', {
     model: 'cash_analiz_strg_model',
     autoLoad: false,
     proxy: {
-	type: 'ajax',
-	url: 'ajax/analiz/storg.php?'
+      type: 'ajax',
+      url: 'ajax/analiz/storg.php?'
     }
 }); //cash_analiz_strg_store
 

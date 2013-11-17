@@ -13,7 +13,7 @@ class CashAnaliz {
     $this->def_cur = $this->db->element("SELECT c.sign FROM currency c WHERE id = ?", 1 );
   }
 
-  public function getCommon($from, $to) {
+  public function getCommon($from, $to, $uid = 0) {
     if(!$this->usr->canAnaliz()) return array();
 
     if(empty($from)) $from = date("Y-m-01");
@@ -21,23 +21,23 @@ class CashAnaliz {
 
     $sql =
     " SELECT
-	CASE WHEN c.type = 1 THEN 'Приход' ELSE 'Расход' END || ' ('||SUM(price*qnt*cr.rate)||'".$this->def_cur.")' as tname,
-	SUM(price*qnt*cr.rate) data
+        CASE WHEN c.type = 1 THEN 'Приход' ELSE 'Расход' END || ' ('||SUM(price*qnt*cr.rate)||'".$this->def_cur.")' as tname,
+        SUM(price*qnt*cr.rate) data
       FROM `cashes` c
-      INNER JOIN currency cr
-	ON ( c.cur_id = cr.id )
-      WHERE
-	c.visible = 1 AND c.bd_id = ?
-	AND c.date BETWEEN ? AND ?
-      GROUP BY
-	c.type
-      ORDER BY
-	c.type ";
+          INNER JOIN currency cr
+      ON ( c.cur_id = cr.id )
+          WHERE
+      c.visible = 1 AND c.bd_id = ?
+      AND c.date BETWEEN ? AND ?
+          GROUP BY
+      c.type
+          ORDER BY
+      c.type ";
 
      return $this->db->select($sql, $this->usr->db_id, $from, $to);
   }
 
-  public function getDynamic($from, $to) {
+  public function getDynamic($from, $to, $uid = 0) {
     if(!$this->usr->canAnaliz()) return array();
 
     //--нарастающий итог - жаль что нет аналитической функции
@@ -47,33 +47,33 @@ class CashAnaliz {
 
     $sql =
     "SELECT
-	c.date as tdate,
-	IFNULL(SUM(CASE WHEN type = 0 THEN -1*price*qnt*cr.rate END),0) as out_data,
-	IFNULL(SUM(CASE WHEN type = 1 THEN price*qnt*cr.rate END),0) as in_data,
-	IFNULL((
-	    SELECT
-		    SUM(CASE WHEN c1.type = 0 THEN -1 ELSE 1 END  * c1.price*c1.qnt*cr1.rate)
-	    FROM
-		    `cashes` c1, currency cr1
-	    WHERE
-		    c1.visible = c.visible AND c1.bd_id = c.bd_id
-		    AND cr1.id = c1.cur_id
-		    AND c1.date BETWEEN ? AND c.date
-	),0) as dif_data
-      FROM
-	`cashes` c
-      INNER JOIN currency cr
-	ON ( cr.id = c.cur_id )
-      WHERE
-	c.visible = 1 AND c.bd_id = ?
-	AND c.date BETWEEN ? AND ?
-      GROUP BY c.date
-      ORDER BY c.date";
+      c.date as tdate,
+      IFNULL(SUM(CASE WHEN type = 0 THEN -1*price*qnt*cr.rate END),0) as out_data,
+      IFNULL(SUM(CASE WHEN type = 1 THEN price*qnt*cr.rate END),0) as in_data,
+      IFNULL((
+          SELECT
+            SUM(CASE WHEN c1.type = 0 THEN -1 ELSE 1 END  * c1.price*c1.qnt*cr1.rate)
+          FROM
+            `cashes` c1, currency cr1
+          WHERE
+            c1.visible = c.visible AND c1.bd_id = c.bd_id
+            AND cr1.id = c1.cur_id
+            AND c1.date BETWEEN ? AND c.date
+      ),0) as dif_data
+    FROM
+      `cashes` c
+          INNER JOIN currency cr
+      ON ( cr.id = c.cur_id )
+    WHERE
+      c.visible = 1 AND c.bd_id = ?
+      AND c.date BETWEEN ? AND ?
+          GROUP BY c.date
+          ORDER BY c.date";
 
       return $this->db->select($sql, $from, $this->usr->db_id, $from, $to);
   }
 
-  public function getGroups($from, $to, $in = 0) {
+  public function getGroups($from, $to, $in = 0, $uid = 0) {
     if(!$this->usr->canAnaliz()) return array();
 
     if(empty($from)) $from = date("Y-m-01");
@@ -81,8 +81,8 @@ class CashAnaliz {
 
     $sql =
     "SELECT
-	g.name|| ' ('||SUM(c.price*c.qnt*cr.rate)||'".$this->def_cur.")' as tname,
-	SUM( c.price * c.qnt * cr.rate ) out_amount
+      g.name|| ' ('||SUM(c.price*c.qnt*cr.rate)||'".$this->def_cur.")' as tname,
+      SUM( c.price * c.qnt * cr.rate ) out_amount
     FROM
       `cashes` c
     INNER JOIN cashes_group g
@@ -100,22 +100,22 @@ class CashAnaliz {
     return $this->db->select($sql, $this->usr->db_id, intval($in), $from, $to);
   }
 
-  public function getOrgs($from, $to, $gr = 0) {
+  public function getOrgs($from, $to, $gr = 0, $uid = 0) {
     if(!$this->usr->canAnaliz()) return array();
 
     if(empty($from)) $from = date("Y-m-01");
     if(empty($to)) $to = date("Y-m-d");
-	$gr = intval($gr);
-	
-	$gr_filter = "";
-	if($gr > 0) {
-		$gr_filter = "AND c.`group` = ? ";
-	}
+    $gr = intval($gr);
+    
+    $gr_filter = "";
+    if($gr > 0) {
+      $gr_filter = "AND c.`group` = ? ";
+    }
 
     $sql =
     "SELECT
-	o.name|| ' ('||SUM(c.price*c.qnt*cr.rate)||'".$this->def_cur.")' as tname,
-	SUM( c.price * c.qnt * cr.rate ) out_amount
+      o.name|| ' ('||SUM(c.price*c.qnt*cr.rate)||'".$this->def_cur.")' as tname,
+      SUM( c.price * c.qnt * cr.rate ) out_amount
     FROM
       `cashes` c
     INNER JOIN cashes_org o
@@ -134,7 +134,7 @@ class CashAnaliz {
     return $this->db->select($sql, $this->usr->db_id, $from, $to, $gr);
   }
 
-  public function getPurs($from, $to, $in = 0) {
+  public function getPurs($from, $to, $in = 0, $uid = 0) {
     if(!$this->usr->canAnaliz()) return array();
 
     if(empty($from)) $from = date("Y-m-01");
@@ -161,7 +161,7 @@ class CashAnaliz {
     return $this->db->select($sql, $this->usr->db_id, intval($in), $from, $to);
   }
 
-  public function getStorage($amount) {
+  public function getStorage($amount, $uid = 0) {
     if(!$this->usr->canAnaliz()) return array();
 
     $sql =
@@ -185,7 +185,7 @@ class CashAnaliz {
     return $r;
   }
 
-  public function getMothDyn($from, $to) {
+  public function getMothDyn($from, $to, $uid = 0) {
     if(!$this->usr->canAnaliz()) return array();
 
     if(empty($from)) $from = date("Y-01-01");
@@ -211,7 +211,7 @@ class CashAnaliz {
     return $this->db->select($sql, $this->usr->db_id, $from, $to);
   }
 
-  public function getCurAmount($from, $to, $in = 0) {
+  public function getCurAmount($from, $to, $in = 0, $uid = 0) {
     if(!$this->usr->canAnaliz()) return array();
 
     if(empty($from)) $from = date("Y-m-01");
@@ -234,7 +234,7 @@ class CashAnaliz {
     return $this->db->select($sql, $this->usr->db_id, $in, $from, $to);
   }
 
-  public function getAvgInOut() {
+  public function getAvgInOut($uid = 0) {
     if(!$this->usr->canAnaliz()) return array();
 
     $sql =
@@ -270,7 +270,7 @@ class CashAnaliz {
     return $ret;
   }
 
-  public function getSecr($amnt, $in, $out, $pin, $pout) {
+  public function getSecr($amnt, $in, $out, $pin, $pout, $uid = 0) {
     if(!$this->usr->canAnaliz()) return array();
 
     $in = intval($in);

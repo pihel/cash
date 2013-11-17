@@ -41,7 +41,7 @@ var cash_analiz_com_date = {
       ui: 'footer',
       items: [cash_analiz_com_from_date, " ", cash_analiz_com_to_date],
       region: 'north',
-      id: "cash_analiz_com_date",
+      id: "cash_analiz_com_date"
 }; //cash_analiz_com_date
 
 

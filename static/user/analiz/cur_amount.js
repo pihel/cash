@@ -52,7 +52,7 @@ var cash_analiz_cur_date = {
       ui: 'footer',
       items: [cash_analiz_cur_from_date, " ", cash_analiz_cur_to_date, " ", cash_analiz_cur_in],
       region: 'north',
-      id: "cash_analiz_cur_date",
+      id: "cash_analiz_cur_date"
 }; //cash_analiz_cur_date
 
 

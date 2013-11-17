@@ -141,7 +141,7 @@ img {
 }
 #logout {
   position: absolute;
-  top: 5px;
+  top: 9px;
   right: 25px;
   z-index: 10;
 }

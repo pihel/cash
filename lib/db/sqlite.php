@@ -52,8 +52,15 @@ class SQLITE_DB extends DB {
 
     if(is_array($args[1])) $args = $args[1];
     foreach($args as $k=>$v) {
+      
+      $type = SQLITE3_TEXT;
+      if(is_float($v)) {
+        $type = SQLITE3_FLOAT;
+      } elseif(is_int($v)) {
+        $type = SQLITE3_INTEGER;
+      }
       //echo $k."=>".$v."<br>";
-      $this->_stmt->bindValue($k, $v);
+      $this->_stmt->bindValue($k, $v, $type);
     }
 
     $ret = array();
@@ -62,7 +69,7 @@ class SQLITE_DB extends DB {
 
     if($result && $result->numColumns() > 0) {
       while($res = $result->fetchArray(SQLITE3_ASSOC)){
-	$ret[] = $res;
+        $ret[] = $res;
       }
     }
 
@@ -75,11 +82,11 @@ class SQLITE_DB extends DB {
     $rsql = $sql;
     foreach($args as $k=>$v) {
       if(is_array($v)) {
-	foreach($v as $kk=>$vv) {
-	  $rsql = str_replace($kk, $vv, $rsql);
-	}
+        foreach($v as $kk=>$vv) {
+          $rsql = str_replace($kk, $vv, $rsql);
+        }
       } else {
-	$rsql = str_replace($k, $v, $rsql);
+        $rsql = str_replace($k, $v, $rsql);
       }
     }
 

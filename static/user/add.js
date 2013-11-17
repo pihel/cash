@@ -35,7 +35,7 @@ var cash_item_nmcl_store = Ext.create('Ext.data.Store', {
       type: 'ajax',
       url: 'ajax/nmcl_list.php',
       reader: {
-	  type: 'json'
+        type: 'json'
       }
   },
   listeners: {
@@ -427,7 +427,7 @@ function setDefault() {
   Ext.getCmp('cash_item_toper_cb').setValue(0);
   //Ext.getCmp('cash_item_file_value').setText("");
   document.getElementById('cash_item_file-inputEl').value = "";
-  document.getElementById('cash_item_file-inputEl').onclick = undefined;
+  document.getElementById('cash_item_file-inputEl').onclick = null;
   Ext.getCmp('cash_item_note').setValue("");
   Ext.getCmp('cash_item_edit_id').setValue(0);
   Ext.getCmp('cash_list_add').setTitle("Добавление операции");

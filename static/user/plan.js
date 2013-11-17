@@ -29,42 +29,42 @@ var cash_plan_grid = Ext.create('Ext.grid.Panel', {
     height: Ext.getBody().getHeight()/3,
     forceFit: true,
     columns: [
-	{text: "ID", 			dataIndex: 'id', 	hidden: true, 	tdCls: 'x-center-cell', width: 30 },
-	{text: "ID базы", 		dataIndex: 'db_id', 	hidden: true, 	tdCls: 'x-center-cell', width: 30 },
-	{text: "ID пользователя", 	dataIndex: 'usr_id',	hidden: true, 	tdCls: 'x-center-cell', width: 30 },
-	{text: "ID группы", 		dataIndex: 'grp_id',	width: 75	},
-	{text: "Группа", 		dataIndex: 'name', 	flex: true	},
-	{text: "План", 			dataIndex: 'plan'	,editor: {xtype: 'numberfield', allowBlank: true}},
-	{
-	    menuDisabled: true,
-	    sortable: false,
-	    hideable: false,
-	    xtype: 'actioncolumn',
-	    id: "cash_plan_edit_col",
-	    width: 30,
-	    items: [ {
-		icon: "static/ext/resources/themes/images/access/tree/drop-yes.gif",
-		tooltip: 'Сохранить запись',
-		handler: function(grid, rowIndex, colIndex) {
-		    if(parseInt(rights.write) == 0) return;
+      {text: "ID", 			dataIndex: 'id', 	hidden: true, 	tdCls: 'x-center-cell', width: 30 },
+      {text: "ID базы", 		dataIndex: 'db_id', 	hidden: true, 	tdCls: 'x-center-cell', width: 30 },
+      {text: "ID пользователя", 	dataIndex: 'usr_id',	hidden: true, 	tdCls: 'x-center-cell', width: 30 },
+      {text: "ID группы", 		dataIndex: 'grp_id',	width: 75	},
+      {text: "Группа", 		dataIndex: 'name', 	flex: true	},
+      {text: "План", 			dataIndex: 'plan'	,editor: {xtype: 'numberfield', allowBlank: true}},
+      {
+          menuDisabled: true,
+          sortable: false,
+          hideable: false,
+          xtype: 'actioncolumn',
+          id: "cash_plan_edit_col",
+          width: 30,
+          items: [ {
+        icon: "static/ext/resources/themes/images/access/tree/drop-yes.gif",
+        tooltip: 'Сохранить запись',
+        handler: function(grid, rowIndex, colIndex) {
+            if(parseInt(rights.write) == 0) return;
 
-		    var rec = grid.getStore().getAt(rowIndex);
+            var rec = grid.getStore().getAt(rowIndex);
 
-		    Ext.Ajax.request({
-			url: "ajax/save_plan.php",
-			method: "POST",
-			params: rec.data,
-			success: function(data) {
-			    if(parseInt(data.responseText) > 0) {
-			      cash_plan_store.load();
-			    } else {
-			      error(data.responseText);
-			    }
-			}//success
-		    }); //Ext.Ajax.request
-		}
-	    }]
-	}
+            Ext.Ajax.request({
+          url: "ajax/save_plan.php",
+          method: "POST",
+          params: rec.data,
+          success: function(data) {
+              if(parseInt(data.responseText) > 0) {
+                cash_plan_store.load();
+              } else {
+                error(data.responseText);
+              }
+          }//success
+            }); //Ext.Ajax.request
+        }
+          }]
+      }
     ],
     selType: 'cellmodel',
     plugins: [
@@ -115,7 +115,7 @@ var cash_plan_mnth_date = {
       ui: 'footer',
       items: [cash_plan_mnth_from_date, " ", cash_plan_mnth_to_date],
       region: 'north',
-      id: "cash_plan_mnth_date",
+      id: "cash_plan_mnth_date"
 }; //cash_plan_mnth_date
 
 
@@ -141,8 +141,8 @@ var cash_plan_mnth_store = Ext.create('Ext.data.Store', {
     model: 'cash_plan_mnth_model',
     autoLoad: false,
     proxy: {
-	type: 'ajax',
-	url: 'ajax/analiz/plan_amount.php?'
+      type: 'ajax',
+      url: 'ajax/analiz/plan_amount.php?'
     }
 }); //cash_plan_mnth_store
 
@@ -157,44 +157,44 @@ var cash_plan_mnth_chart = Ext.create('Ext.chart.Chart', {
       position: 'right'
     },
     axes: [{
-	type: 'Numeric',
-	position: 'left',
-	fields: ['plan', 'fact'],
-	label: {
-	    renderer: price_r
-	},
-	title: 'Сумма',
-	grid: true,
-	minimum: 0
+      type: 'Numeric',
+      position: 'left',
+      fields: ['plan', 'fact'],
+      label: {
+          renderer: price_r
+      },
+      title: 'Сумма',
+      grid: true,
+      minimum: 0
     }, {
-	type: 'Category',
-	position: 'bottom',
-	fields: ['tname'],
-	title: 'Группа'
+      type: 'Category',
+      position: 'bottom',
+      fields: ['tname'],
+      title: 'Группа'
     }],
     series: [{
-	type: 'column',
-	axis: 'left',
-	highlight: true,
-	tips: {
-	  trackMouse: true,
-	  width: 220,
-	  height: 28,
-	  renderer: function(storeItem, item) {
-	    this.setTitle(storeItem.get('tname') + ': ' + price_r(storeItem.get(item.yField)) );
-	  }
-	},
-	label: {
-	  display: 'insideEnd',
-	  'text-anchor': 'middle',
-	    field: ['plan', 'fact'],
-	    renderer: price_r,
-	    orientation: 'vertical',
-	    color: '#333'
-	},
-	xField: 'tname',
-	yField: ['plan', 'fact'],
-	title: ['План', 'Факт']
+      type: 'column',
+      axis: 'left',
+      highlight: true,
+      tips: {
+        trackMouse: true,
+        width: 220,
+        height: 28,
+        renderer: function(storeItem, item) {
+          this.setTitle(storeItem.get('tname') + ': ' + price_r(storeItem.get(item.yField)) );
+        }
+      },
+      label: {
+        display: 'insideEnd',
+        'text-anchor': 'middle',
+          field: ['plan', 'fact'],
+          renderer: price_r,
+          orientation: 'vertical',
+          color: '#333'
+      },
+      xField: 'tname',
+      yField: ['plan', 'fact'],
+      title: ['План', 'Факт']
     }]
 });
 
@@ -204,13 +204,13 @@ var cash_plan_panel = Ext.create('Ext.Panel', {
     border: false,
     items: [cash_plan_grid, cash_plan_mnth_date, cash_plan_mnth_chart],
     listeners: {
-	afterrender: function(){
-	  Ext.getCmp('cash_plan_edit_col').setVisible(parseInt(rights.write) == 1);
-	  cash_plan_store.load();
-	  var cd = new Date();
-	  Ext.getCmp('cash_plan_mnth_from_date').setValue(new Date(cd.getFullYear(), cd.getMonth(), 1));
-	  Ext.getCmp('cash_plan_mnth_to_date').setValue(cd);
-	}
+      afterrender: function(){
+        Ext.getCmp('cash_plan_edit_col').setVisible(parseInt(rights.write) == 1);
+        cash_plan_store.load();
+        var cd = new Date();
+        Ext.getCmp('cash_plan_mnth_from_date').setValue(new Date(cd.getFullYear(), cd.getMonth(), 1));
+        Ext.getCmp('cash_plan_mnth_to_date').setValue(cd);
+      }
     }
 
 });//cash_plan_panel

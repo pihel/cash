@@ -42,7 +42,7 @@ var cash_analiz_dyn_date = {
       cls: "cash_analiz_date",
       items: [cash_analiz_dyn_from_date, " ", cash_analiz_dyn_to_date],
       region: 'north',
-      id: "cash_analiz_dyn_date",
+      id: "cash_analiz_dyn_date"
 }; //cash_analiz_dyn_date
 
 
@@ -84,119 +84,119 @@ var cash_analiz_dyn_chart = Ext.create('Ext.chart.Chart', {
     shadow: true,
     theme: 'Base',
     legend: {
-	position: 'right'
+      position: 'right'
     },
     axes: [{
-	type: 'Numeric',
-	position: 'left',
-	fields: ['in_data', 'out_data', 'dif_data'],
-	title: 'Сумма',
-	minorTickSteps: 1,
-	grid: {
-	    odd: {
-		opacity: 1,
-		fill: '#ddd',
-		stroke: '#bbb',
-		'stroke-width': 0.5
-	    }
-	}
+      type: 'Numeric',
+      position: 'left',
+      fields: ['in_data', 'out_data', 'dif_data'],
+      title: 'Сумма',
+      minorTickSteps: 1,
+      grid: {
+          odd: {
+        opacity: 1,
+        fill: '#ddd',
+        stroke: '#bbb',
+        'stroke-width': 0.5
+          }
+      }
     }, {
-	type: 'Category',
-	position: 'bottom',
-	fields: ['tdate'],
-	title: 'Дата'
+      type: 'Category',
+      position: 'bottom',
+      fields: ['tdate'],
+      title: 'Дата'
     }],
     series: [{
-	type: 'line',
-	highlight: {
-	    size: 7,
-	    radius: 7
-	},
-	tips: {
-	  trackMouse: true,
-	  width: 290,
-	  height: 28,
-	  renderer: function(storeItem, item) {
-	    this.setTitle("Приход от " + storeItem.get('tdate') + ": " + price_r(storeItem.get('in_data')));
-	  }
-	},
-	axis: 'left',
-	smooth: true,
-	xField: 'tdate',
-	yField: 'in_data',
-	title: 'Приход',
-	style: {
-	    stroke: '#94ae0a',
-	},
-	markerConfig: {
-	    type: 'circle',
-	    fill: '#94ae0a',
-	    stroke: '#94ae0a',
-	    size: 4,
-	    radius: 4,
-	    'stroke-width': 0
-	}
+      type: 'line',
+      highlight: {
+          size: 7,
+          radius: 7
+      },
+      tips: {
+        trackMouse: true,
+        width: 290,
+        height: 28,
+        renderer: function(storeItem, item) {
+          this.setTitle("Приход от " + storeItem.get('tdate') + ": " + price_r(storeItem.get('in_data')));
+        }
+      },
+      axis: 'left',
+      smooth: true,
+      xField: 'tdate',
+      yField: 'in_data',
+      title: 'Приход',
+      style: {
+          stroke: '#94ae0a'
+      },
+      markerConfig: {
+          type: 'circle',
+          fill: '#94ae0a',
+          stroke: '#94ae0a',
+          size: 4,
+          radius: 4,
+          'stroke-width': 0
+      }
     }, {
-	type: 'line',
-	highlight: {
-	    size: 7,
-	    radius: 7
-	},
-	tips: {
-	  trackMouse: true,
-	  width: 290,
-	  height: 28,
-	  renderer: function(storeItem, item) {
-	    this.setTitle("Расход от " + storeItem.get('tdate') + ": " + price_r(storeItem.get('out_data')));
-	  }
-	},
-	axis: 'left',
-	smooth: true,
-	xField: 'tdate',
-	yField: 'out_data',
-	title: 'Расход',
-	style: {
-	    stroke: '#a61120',
-	},
-	markerConfig: {
-	    type: 'circle',
-	    size: 4,
-	    radius: 4,
-	    fill: '#a61120',
-	    stroke: '#a61120',
-	    'stroke-width': 0
-	}
+      type: 'line',
+      highlight: {
+          size: 7,
+          radius: 7
+      },
+      tips: {
+        trackMouse: true,
+        width: 290,
+        height: 28,
+        renderer: function(storeItem, item) {
+          this.setTitle("Расход от " + storeItem.get('tdate') + ": " + price_r(storeItem.get('out_data')));
+        }
+      },
+      axis: 'left',
+      smooth: true,
+      xField: 'tdate',
+      yField: 'out_data',
+      title: 'Расход',
+      style: {
+          stroke: '#a61120'
+      },
+      markerConfig: {
+          type: 'circle',
+          size: 4,
+          radius: 4,
+          fill: '#a61120',
+          stroke: '#a61120',
+          'stroke-width': 0
+      }
     }, {
-	type: 'line',
-	highlight: {
-	    size: 7,
-	    radius: 7
-	},
-	tips: {
-	  trackMouse: true,
-	  width: 290,
-	  height: 28,
-	  renderer: function(storeItem, item) {
-	    this.setTitle("Баланс от " + storeItem.get('tdate') + ": " + price_r(storeItem.get('dif_data')));
-	  }
-	},
-	title: 'Баланс',
-	axis: 'left',
-	smooth: true,
-	//fill: true,
-	xField: 'tdate',
-	yField: 'dif_data',
-	style: {
-	    stroke: '#115fa6',
-	},
-	markerConfig: {
-	    type: 'circle',
-	    size: 4,
-	    fill: '#115fa6',
-	    stroke: '#115fa6',
-	    radius: 4,
-	    'stroke-width': 0
-	}
+      type: 'line',
+      highlight: {
+          size: 7,
+          radius: 7
+      },
+      tips: {
+        trackMouse: true,
+        width: 290,
+        height: 28,
+        renderer: function(storeItem, item) {
+          this.setTitle("Баланс от " + storeItem.get('tdate') + ": " + price_r(storeItem.get('dif_data')));
+        }
+      },
+      title: 'Баланс',
+      axis: 'left',
+      smooth: true,
+      //fill: true,
+      xField: 'tdate',
+      yField: 'dif_data',
+      style: {
+          stroke: '#115fa6'
+      },
+      markerConfig: {
+          type: 'circle',
+          size: 4,
+          fill: '#115fa6',
+          stroke: '#115fa6',
+          radius: 4,
+          'stroke-width': 0
+      }
     }]
 });
 

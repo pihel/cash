@@ -52,7 +52,7 @@ var cash_analiz_purs_date = {
       ui: 'footer',
       items: [cash_analiz_purs_from_date, " ", cash_analiz_purs_to_date, " ", cash_analiz_purs_in],
       region: 'north',
-      id: "cash_analiz_purs_date",
+      id: "cash_analiz_purs_date"
 }; //cash_analiz_purs_date
 
 

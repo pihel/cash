@@ -313,7 +313,7 @@ var cash_list_tb = {
       ui: 'footer',
       items: [cash_list_from_date, " ", cash_list_to_date, " ", cash_list_filter, cash_list_filter_loading, '->', cash_list_edit_btn_add],
       region: 'north',
-      id: "cash_list_tb",
+      id: "cash_list_tb"
 }; //cash_list_tb
 
 var cash_list_tb_filter = {

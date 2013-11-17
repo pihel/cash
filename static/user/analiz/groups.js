@@ -52,7 +52,7 @@ var cash_analiz_grp_date = {
       ui: 'footer',
       items: [cash_analiz_grp_from_date, " ", cash_analiz_grp_to_date, " ", cash_analiz_grp_in],
       region: 'north',
-      id: "cash_analiz_grp_date",
+      id: "cash_analiz_grp_date"
 }; //cash_analiz_grp_date
 
 

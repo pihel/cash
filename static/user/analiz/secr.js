@@ -41,9 +41,9 @@ var cash_analiz_secr_in_proc = Ext.create('Ext.slider.Single', {
     minValue: 0,
     maxValue: 100,
     listeners: {
-	changecomplete: function(slider, newValue, thumb, eOpts) {
-	    cash_analiz_secr_refresh();
-	}
+      changecomplete: function(slider, newValue, thumb, eOpts) {
+          cash_analiz_secr_refresh();
+      }
     }
 });
 
@@ -119,7 +119,7 @@ var cash_analiz_secr_amount = {
       width: w-100,
       items: [cash_analiz_secr_inout_frm],
       region: 'north',
-      id: "cash_analiz_secr_amount",
+      id: "cash_analiz_secr_amount"
 }; //cash_analiz_secr_date
 
 

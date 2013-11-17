@@ -86,7 +86,7 @@ var cash_analiz_org_date = {
       ui: 'footer',
       items: [cash_analiz_org_from_date, " ", cash_analiz_org_to_date, " ", cash_analiz_org_prod_type_cb],
       region: 'north',
-      id: "cash_analiz_org_date",
+      id: "cash_analiz_org_date"
 }; //cash_analiz_org_date
 
 
