@@ -39,6 +39,7 @@ var login_db_name_list_cb = Ext.create('Ext.form.field.ComboBox', {
         login_usr_name_list.proxy.url = 'ajax/usr_list_name.php?DB_ID=' + db_id;
           
         login_usr_name_list.load();
+        login_usr_name_list_cb.clearValue();
         Ext.getCmp('password').focus(false, 100);
       }
     }
@@ -141,7 +142,18 @@ var loginWindow = new Ext.Window({
   listeners: {
     show: function(){
       login_db_name_list.load(function() {
+        
+        var db_id = Ext.util.Cookies.get("DB_ID");
+        if( db_id != undefined && parseInt(db_id) > 0 ) {
+          login_db_name_list_cb.setValue(parseInt(db_id));
+          login_usr_name_list.proxy.url = 'ajax/usr_list_name.php?DB_ID=' + db_id;
+        }
+        
         login_usr_name_list.load(function() {
+          var uid = Ext.util.Cookies.get("USR_ID");
+          if( uid != undefined && parseInt(uid) > 0 ) {
+            login_usr_name_list_cb.setValue(parseInt(uid));
+          }
           Ext.getCmp('password').focus(false, 100);
         });
       });

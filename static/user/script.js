@@ -91,7 +91,7 @@ function loadScript(path, _calb) {
     }
   }
 
-  path = path + "?v=0.983";
+  path = path + "?v=0.985";
   //path = path + "?v=" + Math.random();//debug
 
   Ext.Loader.loadScript({url: path, scope: this,
@@ -182,6 +182,10 @@ function authOk(id) {
       success: function(data) {
         rights = Ext.decode(data.responseText);
         db_id = parseInt(rights.bd_id);
+        
+        var dt = Ext.Date.add(new Date(), Ext.Date.YEAR, 1);
+        Ext.util.Cookies.set("DB_ID", db_id, dt );
+        Ext.util.Cookies.set("USR_ID", uid, dt );
 
         Ext.Ajax.request({
           url: "ajax/settings.php",
