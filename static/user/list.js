@@ -84,12 +84,14 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
         }
     ],
     listeners: {
-      cellkeydown: function( obj, td, cellIndex, record, tr, rowIndex, e, eOpts ){
+      cellkeydown: function( obj, td, cellIndex, record, tr, rowIndex, e, eOpts ) {
         var key = e.getKey();
         if(key == Ext.EventObject.ENTER) {
           editItem(record.get('id'));
         } else if(key == Ext.EventObject.DELETE) {
           deleteItem(record.get('id'));
+        } else if (key == Ext.EventObject.INSERT) {
+          addItem();
         }
       },
       itemdblclick: function(dv, record, item, index, e) {
@@ -237,6 +239,9 @@ function listRefresh(_cb) {
 
 
   cash_list_store.load(function(e) {
+    cash_list_grid.getView().focus();
+    cash_list_grid.getSelectionModel().select(cash_list_store.last());
+        
     if(typeof _cb == "function") _cb(e);
   });
 
@@ -300,12 +305,17 @@ var cash_list_edit_btn_add =
 	id: "cash_list_edit_btn_add",
 	icon: "static/ext/resources/themes/images/default/dd/drop-add.gif",
 	handler : function (){
-		loadScript('static/user/add.js', function() {
-		  v_edit_id = 0;
-		  cash_list_add.show();
-		});
+    addItem();
 	}
 };
+
+function addItem() {
+  if(parseInt(rights.write) == 0) return;
+  loadScript('static/user/add.js', function() {
+    v_edit_id = 0;
+    cash_list_add.show();
+  });
+}
 
 var cash_list_tb = {
       xtype: 'toolbar',
