@@ -90,8 +90,6 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
           editItem(record.get('id'));
         } else if(key == Ext.EventObject.DELETE) {
           deleteItem(record.get('id'));
-        } else if (key == Ext.EventObject.INSERT) {
-          addItem();
         }
       },
       itemdblclick: function(dv, record, item, index, e) {
@@ -473,6 +471,16 @@ var cash_list_panel = Ext.create('Ext.Panel', {
       render: function(){
         Ext.getCmp('cash_list_tb_filter').hide();
         Ext.getCmp('cash_list_filter_loading').hide();
+        
+        var map = new Ext.util.KeyMap(document, {
+              key: [Ext.EventObject.INSERT], // this works,
+              fn: function() { 
+                if( Ext.getCmp('cash_list_tabs').getActiveTab().id == "cash_list_panel" ) {
+                  addItem();
+                }
+              }
+          }
+        );
       },
       activate: function(tab){
         //setAnkhor();
