@@ -62,7 +62,10 @@ img {
 #cash_analiz_mdyn_to_date-inputCell .x-form-text,
 #cash_analiz_cur_from_date-inputCell .x-form-text,
 #cash_analiz_cur_to_date-inputCell .x-form-text,
-#cash_analiz_org_prod_type_cb-inputCell .x-form-text{
+#cash_analiz_org_prod_type_cb-inputCell .x-form-text,
+#cash_analiz_grp_dyn_from_date-inputCell .x-form-text,
+#cash_analiz_grp_dyn_to_date-inputCell .x-form-text
+{
   height: 19px !important;
 }
 #cash_list_tb {

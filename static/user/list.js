@@ -156,7 +156,7 @@ function deleteItem(v_id) {
               url: "ajax/delete.php",
               method: "GET",
               params: {
-            id: v_id
+                id: v_id
               },
               success: function(data) {
             // if response is not empty - error msg

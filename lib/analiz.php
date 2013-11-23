@@ -99,6 +99,76 @@ class CashAnaliz {
 
     return $this->db->select($sql, $this->usr->db_id, intval($in), $from, $to);
   }
+  
+  public function getGroupsDyn($from, $to, $gr = 0, $uid = 0) {
+    if(!$this->usr->canAnaliz()) return array();
+
+    if(empty($from)) $from = date("Y-01-01");
+    if(empty($to)) $to = date("Y-m-d");
+    
+    $sql =
+      "SELECT
+        replace(g.name, '.', '&#46;') name
+      FROM
+        `cashes_group` g
+      WHERE
+        EXISTS( SELECT 
+                  1 
+                FROM 
+                  `cashes` c 
+                WHERE 
+                  g.id = c.`group`
+                  AND c.visible = 1 AND c.bd_id = ? AND c.type = 0
+                  AND c.date BETWEEN ? AND ? ) ";
+    $grps = $this->db->select($sql, $this->usr->db_id, $from, $to);
+    
+    $grps_key = $grps;
+    if($gr == 1) {
+      return $grps;
+    } else {
+      $grps_key = array();
+      foreach($grps as $g) {
+        $grps_key[$g['name']] = 0;
+      }
+    }
+
+    $sql =
+    "SELECT
+      replace(g.name, '.', '&#46;') as tname,
+      strftime('%Y-%m', c.date) as mname,
+      SUM( c.price * c.qnt * cr.rate ) out_amount
+    FROM
+      `cashes_group` g
+    LEFT JOIN `cashes` c
+      ON( g.id = c.`group` )
+    LEFT JOIN currency cr
+      ON( c.cur_id = cr.id )
+    WHERE
+      c.visible = 1 AND c.bd_id = ? AND c.type = 0
+      AND c.date BETWEEN ? AND ?
+    GROUP BY
+      strftime('%Y-%m', c.date), g.name
+    ORDER BY
+      mname, g.name";
+
+    $ret = array();
+    $m = '';
+    $i = -1;
+    $data = $this->db->select($sql, $this->usr->db_id, $from, $to);
+    foreach($data as $d) {
+      if(empty($d['mname'])) continue;
+      if($m <> $d['mname']) {
+        $m = $d['mname'];
+        $i++;
+        $ret[$i] = $grps_key; //чтобы были все группы, даже если там 0
+        $ret[$i]['name'] = $m;
+        
+      }
+      $ret[$i][$d['tname']] = $d['out_amount'];
+    } //foreach
+    
+    return $ret;
+  }
 
   public function getOrgs($from, $to, $gr = 0, $uid = 0) {
     if(!$this->usr->canAnaliz()) return array();
