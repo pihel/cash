@@ -65,7 +65,7 @@ var cash_analiz_group = Ext.create('Ext.Panel', {
 
 });//cash_analiz_group
 
-var cash_analiz_group = Ext.create('Ext.Panel', {
+var cash_analiz_group_dyn = Ext.create('Ext.Panel', {
     frame: true,
     id: "cash_analiz_group_dyn",
     height: h,
@@ -84,7 +84,7 @@ var cash_analiz_group = Ext.create('Ext.Panel', {
       }
     }
 
-});//cash_analiz_group
+});//cash_analiz_group_dyn
 
 var cash_analiz_org = Ext.create('Ext.Panel', {
     frame: true,
@@ -319,6 +319,6 @@ var cash_analit_tabs = Ext.widget('tabpanel', {
 	bodyPadding: 5
     },
     border: false,
-    items: [cash_analiz_com, cash_analiz_dyn, cash_analiz_mondyn, cash_analiz_group,
+    items: [cash_analiz_com, cash_analiz_dyn, cash_analiz_mondyn, cash_analiz_group, cash_analiz_group_dyn,
 	    cash_analiz_org, cash_analiz_cash_type, cash_analiz_curr, cash_analiz_secr, cash_analiz_rest]
 }); //cash_analit_tabs
