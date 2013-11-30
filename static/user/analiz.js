@@ -316,7 +316,7 @@ function isDefaultAnaliz() {
 var cash_analit_tabs = Ext.widget('tabpanel', {
     id: "cash_analit_tabs",
     defaults :{
-	bodyPadding: 5
+      bodyPadding: 5
     },
     border: false,
     items: [cash_analiz_com, cash_analiz_dyn, cash_analiz_mondyn, cash_analiz_group, cash_analiz_group_dyn,

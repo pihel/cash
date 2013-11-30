@@ -91,8 +91,8 @@ function loadScript(path, _calb) {
     }
   }
 
-  path = path + "?v=0.99";
-  //path = path + "?v=" + Math.random();//debug
+  //path = path + "?v=0.99";
+  path = path + "?v=" + Math.random();//debug
 
   Ext.Loader.loadScript({url: path, scope: this,
     onLoad: function() {
@@ -127,22 +127,22 @@ function setAnkhor() {
   var hash = "#";
 
   //first tab --- title->id
-  var tab = Ext.getCmp('cash_list_tabs').getActiveTab().title;
+  var tab = Ext.getCmp('cash_list_tabs').getActiveTab().id;
 
-  if(tab == "Операции") {
+  if(tab == "cash_list_panel") {
     if(typeof getListAnkhor != "undefined") {
       hash += getListAnkhor();
     }
   }
-  else if(tab == "Аналитика") {
+  else if(tab == "cash_plan") {
     if(typeof getAnalitAnkhor != "undefined") {
       hash += getAnalitAnkhor();
     }
   }
-  else if(tab == "Планирование") {
+  else if(tab == "cash_analit") {
     hash += "act=plan";
   }
-  else if(tab == "Настройки") {
+  else if(tab == "cash_sett") {
     hash += "act=set";
   }
 

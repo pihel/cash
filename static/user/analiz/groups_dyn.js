@@ -1,4 +1,4 @@
-var gr_names = [];
+var cash_analiz_grp_dyn_chart = {};
 
 var cash_analiz_grp_dyn_lbl = {
     id: "cash_analiz_grp_dyn_lbl",
@@ -45,25 +45,9 @@ var cash_analiz_grp_dyn_date = {
       id: "cash_analiz_grp_dyn_date"
 }; //cash_analiz_grp_dyn_date
 
-
-function cash_analiz_grp_dyn_refresh() {
-  if(Ext.getCmp('cash_analiz_grp_dyn_from_date').getValue() == null) return;
-  if(Ext.getCmp('cash_analiz_grp_dyn_to_date').getValue() == null) return;
-
-  cash_analiz_grp_dyn_store.proxy.url = "ajax/analiz/groups_dyn.php" + 
-				    "?from=" + Ext.Date.format(Ext.getCmp('cash_analiz_grp_dyn_from_date').getValue(),'Y-m-d') +
-				    "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_grp_dyn_to_date').getValue(),'Y-m-d');
-  cash_analiz_grp_dyn_store.load(function() {
-    //setAnalitAnkhorParam();
-  });
-  setAnkhor();
-} //cash_analiz_grp_dyn_refresh
-
 var cash_analiz_grp_dyn_model = Ext.define('cash_analiz_grp_dyn_model', {
     extend: 'Ext.data.Model',
-    fields: [
-      {name: 'name',	type: 'string'}
-    ]
+    fields: []
 }); //cash_analiz_grp_dyn_model
 
 var cash_analiz_grp_dyn_store = Ext.create('Ext.data.Store', {
@@ -75,7 +59,8 @@ var cash_analiz_grp_dyn_store = Ext.create('Ext.data.Store', {
     }
 }); //cash_analiz_grp_dyn_store
 
-var cash_analiz_grp_dyn_chart = Ext.create('Ext.chart.Chart', {
+var cash_analiz_grp_dyn_chart_prm =
+{
   id: "cash_analiz_grp_dyn_chart",
   width: w - 100,
   height: h - 100,
@@ -88,7 +73,7 @@ var cash_analiz_grp_dyn_chart = Ext.create('Ext.chart.Chart', {
   axes: [{
       type: 'Numeric',
       position: 'left',
-      fields: gr_names,
+      fields: [],
       title: 'Группы',
       grid: {
           odd: {
@@ -117,7 +102,7 @@ var cash_analiz_grp_dyn_chart = Ext.create('Ext.chart.Chart', {
       highlight: true,
       axis: 'left',
       xField: 'name',
-      yField: gr_names,
+      yField: [],
       style: {
           opacity: 0.93
       },
@@ -130,13 +115,65 @@ var cash_analiz_grp_dyn_chart = Ext.create('Ext.chart.Chart', {
         }
       }
   }]
-});
+};
 
-function cash_analiz_grp_dyn_sub_load() {
+function cash_analiz_grp_dyn_refresh() {
+  if(Ext.getCmp('cash_analiz_grp_dyn_from_date').getValue() == null) return;
+  if(Ext.getCmp('cash_analiz_grp_dyn_to_date').getValue() == null) return;
+  
+  var url = "ajax/analiz/groups_dyn.php" + 
+            "?from=" + Ext.Date.format(Ext.getCmp('cash_analiz_grp_dyn_from_date').getValue(),'Y-m-d') +
+            "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_grp_dyn_to_date').getValue(),'Y-m-d');
+  
+  if( cash_analiz_grp_dyn_store.proxy.url != url ) {
+    reloadParam(function() {
+      cash_analiz_grp_dyn_store.proxy.url = url;
+      cash_analiz_grp_dyn_store.load(function() {
+        //setAnalitAnkhorParam();
+      });
+      setAnkhor();
+    });
+  }
+} //cash_analiz_grp_dyn_refresh
+
+function reloadParam(_cb) {
+  Ext.Ajax.request({
+      url: "ajax/analiz/groups_dyn.php?gr=1" +
+              "&from=" + Ext.Date.format(Ext.getCmp('cash_analiz_grp_dyn_from_date').getValue(),'Y-m-d') +
+              "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_grp_dyn_to_date').getValue(),'Y-m-d'),
+      method: "GET",
+      success: function(data) {
+        var gr = Ext.decode(data.responseText);
+        var gr_names = [];
+        cash_analiz_grp_dyn_model.prototype.fields.clear();
+        cash_analiz_grp_dyn_model.prototype.fields.add(Ext.create('Ext.data.Field', {name: 'name',	type: 'string'}));
+        for(var i = 0; i < gr.length; ++i) {
+          gr_names.push(gr[i].name);
+          cash_analiz_grp_dyn_model.prototype.fields.add(Ext.create('Ext.data.Field', {name: gr[i].name, type: 'double'}));
+        }
+        
+        if(Ext.getCmp('cash_analiz_grp_dyn_chart') != undefined) {
+          Ext.getCmp('cash_analiz_grp_dyn_chart').destroy();
+          cash_analiz_grp_dyn_chart = {};
+        }
+        cash_analiz_grp_dyn_chart_prm.axes[0].fields = gr_names;
+        cash_analiz_grp_dyn_chart_prm.series[0].yField = gr_names;
+        cash_analiz_grp_dyn_chart = Ext.create('Ext.chart.Chart', cash_analiz_grp_dyn_chart_prm);
+        Ext.getCmp('cash_analiz_group_dyn').add(cash_analiz_grp_dyn_chart);
+        
+        if(_cb != undefined) _cb();
+    } //success
+  }); //Ext.Ajax.request
+}
+
+function cash_analiz_grp_dyn_load(_cb) {
+  if(Ext.getCmp('cash_analiz_group_dyn').items.length > 0) {
+    if(_cb != undefined) _cb();
+    return;
+  }
   Ext.getCmp('cash_analiz_group_dyn').add(cash_analiz_grp_dyn_lbl);
   Ext.getCmp('cash_analiz_group_dyn').add(cash_analiz_grp_dyn_date);
-  Ext.getCmp('cash_analiz_group_dyn').add(cash_analiz_grp_dyn_chart); 
-
+  
   if(isDefaultAnaliz()) {
     var cd = new Date();
     Ext.getCmp('cash_analiz_grp_dyn_from_date').setValue(new Date(cd.getFullYear(), 0, 1));
@@ -146,27 +183,6 @@ function cash_analiz_grp_dyn_sub_load() {
     setAnalitAnkhorParam();
     cash_analiz_grp_dyn_refresh();
   }
-}
-
-function cash_analiz_grp_dyn_load(_cb) {
-  if(Ext.getCmp('cash_analiz_group_dyn').items.length > 0) {
-    if(_cb != undefined) _cb();
-    return;
-  }
   
-  Ext.Ajax.request({
-      url: "ajax/analiz/groups_dyn.php?gr=1",
-      method: "GET",
-      success: function(data) {
-        var gr = Ext.decode(data.responseText);
-        for(var i = 0; i < gr.length; ++i) {
-          gr_names.push(gr[i].name);
-          cash_analiz_grp_dyn_model.prototype.fields.add(Ext.create('Ext.data.Field', {name: gr[i].name, type: 'double'}));
-        }
-        
-        cash_analiz_grp_dyn_sub_load();
-        
-        if(_cb != undefined) _cb();
-    } //success
-  }); //Ext.Ajax.request
+  if(_cb != undefined) _cb();
 }

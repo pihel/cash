@@ -292,6 +292,7 @@ var cash_item_save = Ext.create('Ext.button.Button', {
 	text: 'Сохранить',
 	formBind: true,
 	id: "cash_item_save",
+  tooltip: "Сохранить и закрыть (Enter)",
 	icon: "static/ext/resources/themes/images/default/tree/drop-yes.gif",
 	disabled: true,
 	handler : function() {
@@ -302,6 +303,7 @@ var cash_item_save = Ext.create('Ext.button.Button', {
 var cash_item_add = Ext.create('Ext.button.Button', {
 	text: 'Добавить',
 	formBind: true,
+  tooltip: "Добавить и продолжить (Ctrl-Enter)",
 	id: "cash_item_add",
 	icon: "static/ext/resources/themes/images/default/tree/drop-yes.gif",
 	disabled: true,
@@ -312,17 +314,17 @@ var cash_item_add = Ext.create('Ext.button.Button', {
 
 	  var form = this.up('form').getForm();
 	    form.submit({
-		success: function(form, action) {
-		    cash_list_add.setLoading(false);
-		    //cash_list_add.hide();
-		    setDefault();
-		    listRefresh();
-		},
-		failure: function(form, action) {
-		    error(action.result.msg, function() {
-		      cash_list_add.setLoading(false);
-		    });
-		}
+        success: function(form, action) {
+            cash_list_add.setLoading(false);
+            //cash_list_add.hide();
+            setDefault();
+            listRefresh();
+        },
+        failure: function(form, action) {
+            error(action.result.msg, function() {
+              cash_list_add.setLoading(false);
+            });
+        }
 	    });
 	}
 });
@@ -331,6 +333,7 @@ var cash_item_add = Ext.create('Ext.button.Button', {
 var cash_item_cancel = Ext.create('Ext.button.Button',
 {
 	text: 'Отмена',
+  tooltip: "Закрыть без сохранения (Escape)",
 	handler : function() {
 	  cash_list_add.hide();
 	}

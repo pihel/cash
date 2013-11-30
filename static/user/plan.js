@@ -1,12 +1,12 @@
 var cash_plan_model = Ext.define('cash_plan_model', {
     extend: 'Ext.data.Model',
     fields: [
-	{name: 'id', 		type: 'int'},
-	{name: 'db_id',		type: 'int'},
-	{name: 'usr_id', 	type: 'int'},
-	{name: 'grp_id',	type: 'int'},
-	{name: 'name',	type: 'string'},
-	{name: 'plan', 		type: 'double'}
+      {name: 'id', 		type: 'int'},
+      {name: 'db_id',		type: 'int'},
+      {name: 'usr_id', 	type: 'int'},
+      {name: 'grp_id',	type: 'int'},
+      {name: 'name',	type: 'string'},
+      {name: 'plan', 		type: 'double'}
     ],
     idProperty: 'id'
 });
@@ -15,8 +15,8 @@ var cash_plan_store = Ext.create('Ext.data.Store', {
     model: 'cash_plan_model',
     autoLoad: false,
     proxy: {
-	type: 'ajax',
-	url: 'ajax/plan.php'
+      type: 'ajax',
+      url: 'ajax/plan.php'
     }
 }); //cash_plan_store
 
@@ -43,26 +43,26 @@ var cash_plan_grid = Ext.create('Ext.grid.Panel', {
           id: "cash_plan_edit_col",
           width: 30,
           items: [ {
-        icon: "static/ext/resources/themes/images/access/tree/drop-yes.gif",
-        tooltip: 'Сохранить запись',
-        handler: function(grid, rowIndex, colIndex) {
-            if(parseInt(rights.write) == 0) return;
+            icon: "static/ext/resources/themes/images/access/tree/drop-yes.gif",
+            tooltip: 'Сохранить запись',
+            handler: function(grid, rowIndex, colIndex) {
+                if(parseInt(rights.write) == 0) return;
 
-            var rec = grid.getStore().getAt(rowIndex);
+                var rec = grid.getStore().getAt(rowIndex);
 
-            Ext.Ajax.request({
-          url: "ajax/save_plan.php",
-          method: "POST",
-          params: rec.data,
-          success: function(data) {
-              if(parseInt(data.responseText) > 0) {
-                cash_plan_store.load();
-              } else {
-                error(data.responseText);
-              }
-          }//success
-            }); //Ext.Ajax.request
-        }
+                Ext.Ajax.request({
+              url: "ajax/save_plan.php",
+              method: "POST",
+              params: rec.data,
+              success: function(data) {
+                  if(parseInt(data.responseText) > 0) {
+                    cash_plan_store.load();
+                  } else {
+                    error(data.responseText);
+                  }
+              }//success
+                }); //Ext.Ajax.request
+            }
           }]
       }
     ],
@@ -131,9 +131,9 @@ function cash_plan_mnth_refresh() {
 var cash_plan_mnth_model = Ext.define('cash_plan_mnth_model', {
     extend: 'Ext.data.Model',
     fields: [
-	{name: 'tname',	type: 'string'},
-	{name: 'plan', 	type: 'double'},
-	{name: 'fact', 	type: 'double'}
+      {name: 'tname',	type: 'string'},
+      {name: 'plan', 	type: 'double'},
+      {name: 'fact', 	type: 'double'}
     ]
 }); //cash_plan_mnth_model
 
@@ -202,6 +202,8 @@ var cash_plan_mnth_chart = Ext.create('Ext.chart.Chart', {
 var cash_plan_panel = Ext.create('Ext.Panel', {
     id: "cash_plan_panel",
     border: false,
+    title: 'План',
+    frame: true,
     items: [cash_plan_grid, cash_plan_mnth_date, cash_plan_mnth_chart],
     listeners: {
       afterrender: function(){
@@ -214,3 +216,22 @@ var cash_plan_panel = Ext.create('Ext.Panel', {
     }
 
 });//cash_plan_panel
+
+var cash_plan_goal_panel = Ext.create('Ext.Panel', {
+    id: "cash_plan_goal_panel",
+    border: false,
+    frame: true,
+    disabled: true,
+    title: 'Цели',
+    items: [],
+    listeners: {
+      //TODO
+    }
+
+});//cash_plan_panel
+
+var cash_plan_tabs = Ext.widget('tabpanel', {
+    id: "cash_plan_tabs",
+    border: false,
+    items: [cash_plan_panel, cash_plan_goal_panel]
+});

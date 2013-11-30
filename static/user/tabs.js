@@ -3,21 +3,24 @@ var cash_analit = Ext.create('Ext.Panel', {
     id: "cash_analit",
     layout: 'border',
     collapsible: false,
-    title: 'Аналитика',
+    tabConfig: {
+      title: 'Аналитика',
+      tooltip: 'Аналитика (Ctrl-3)'
+    },
     height: Ext.getBody().getHeight() - 50,
     header: true,
     items: [],
     listeners: {
-	activate: function(tab){
-	  Ext.getCmp('cash_analit').setLoading("Загрузка аналитики...");
-	  var p = window.location.hash.split("&");
-	  loadScript("static/user/analiz.js", function() {
-	    Ext.getCmp('cash_analit').add(Ext.getCmp('cash_analit_tabs'));
-	    setAnkhor();
-	    Ext.getCmp('cash_analit').setLoading(false);
-	    setAnalitAnkhor(p);
-	  });
-	}
+      activate: function(tab){
+        Ext.getCmp('cash_analit').setLoading("Загрузка аналитики...");
+        var p = window.location.hash.split("&");
+        loadScript("static/user/analiz.js", function() {
+          Ext.getCmp('cash_analit').add(Ext.getCmp('cash_analit_tabs'));
+          setAnkhor();
+          Ext.getCmp('cash_analit').setLoading(false);
+          setAnalitAnkhor(p);
+        });
+      }
     }
 
 });//cash_analit
@@ -28,7 +31,10 @@ var cash_plan = Ext.create('Ext.Panel', {
     id: "cash_plan",
     layout: 'border',
     collapsible: false,
-    title: 'Планирование',
+    tabConfig: {
+      title: 'Планирование',
+      tooltip: 'Планирование (Ctrl-2)'
+    },
     height: Ext.getBody().getHeight() - 50,
     header: true,
     items: [],
@@ -37,7 +43,7 @@ var cash_plan = Ext.create('Ext.Panel', {
         Ext.getCmp('cash_analit').setLoading("Загрузка планов...");
         var p = window.location.hash.split("&");
         loadScript("static/user/plan.js", function() {
-          Ext.getCmp('cash_plan').add(Ext.getCmp('cash_plan_panel'));
+          Ext.getCmp('cash_plan').add(Ext.getCmp('cash_plan_tabs'));
           setAnkhor();
           Ext.getCmp('cash_plan').setLoading(false);
         });
@@ -51,7 +57,10 @@ var cash_sett = Ext.create('Ext.Panel', {
     id: "cash_sett",
     layout: 'vbox',
     collapsible: false,
-    title: 'Настройки',
+    tabConfig: {
+      title: 'Настройки',
+      tooltip: 'Настройки (Ctrl-4)'
+    },
     height: Ext.getBody().getHeight() - 50,
     header: true,
     items: [],
@@ -84,6 +93,20 @@ var cash_list_tabs = Ext.widget('tabpanel', {
     id: "cash_list_tabs",
     defaults :{
       bodyPadding: 5
+    },
+    listeners: {
+      afterrender: function() {
+        var map = new Ext.util.KeyMap(document, {
+              key: ["1","2","3","4", "5", "6", "7", "8", "9"],
+              ctrl: true,
+              fn: function(keyCode) { 
+                var tb = Ext.getCmp('cash_list_tabs').items.items[ parseInt(String.fromCharCode(keyCode)) - 1 ];
+                if(tb != undefined) {
+                  Ext.getCmp('cash_list_tabs').setActiveTab(tb.id);
+                }
+              }
+        });
+      },
     },
     border: false,
     items: [cash_list_panel, cash_plan, cash_analit, cash_sett]

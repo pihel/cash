@@ -68,14 +68,14 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
             id: "cash_list_edit_col",
             items: [{
               iconCls: 'edit-cash-col',
-              tooltip: 'Редактировать запись',
+              tooltip: 'Редактировать запись (Enter, Dbl click)',
               handler: function(grid, rowIndex, colIndex) {
                   var rec = grid.getStore().getAt(rowIndex);
                   editItem(rec.get('id'));
               }
             }, {
               iconCls: 'del-cash-col',
-              tooltip: 'Удалить запись',
+              tooltip: 'Удалить запись (Del)',
               handler: function(grid, rowIndex, colIndex) {
                   var rec = grid.getStore().getAt(rowIndex);
                   deleteItem(rec.get('id'));
@@ -300,6 +300,7 @@ var cash_list_edit_btn_add =
 {
 	xtype: 'button',
 	text: 'Добавить',
+  tooltip: "Добавить операцию (Insert)",
 	id: "cash_list_edit_btn_add",
 	icon: "static/ext/resources/themes/images/default/dd/drop-add.gif",
 	handler : function (){
@@ -463,7 +464,10 @@ var cash_list_panel = Ext.create('Ext.Panel', {
     layout: 'border',
     collapsible: false,
     id: "cash_list_panel",
-    title: 'Операции',
+    tabConfig: {
+      title: 'Операции',
+      tooltip: 'Операции (Ctrl-1)'
+    },
     height: Ext.getBody().getHeight() - 50,
     header: true,
     items: [cash_list_tb,cash_list_tb_filter, cash_list_grid],
