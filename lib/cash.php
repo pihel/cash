@@ -136,18 +136,17 @@ class Cash {
     $sql =
     "SELECT
     cn.id, cn.name
-        FROM
-    cashes c
-        INNER JOIN cashes_nom cn
-    ON(cn.id = c.nmcl_id)
-        WHERE
-    c.bd_id = ? AND c.visible = 1
-    " . $filter . "
-        GROUP BY
-    cn.id, cn.name
-        ORDER BY
-    COUNT(1) DESC, cn.id
-        LIMIT 50 ";
+    FROM cashes c
+    INNER JOIN cashes_nom cn
+      ON(cn.id = c.nmcl_id)
+    WHERE
+      c.bd_id = ? AND c.visible = 1
+      " . $filter . "
+    GROUP BY
+      cn.id, cn.name
+    ORDER BY
+      COUNT(1) DESC, cn.id
+    LIMIT 50 ";
 
     return $this->db->select($sql, $this->usr->db_id);
   }
@@ -357,17 +356,17 @@ class Cash {
     $sql =
     "UPDATE `cashes`
       SET nmcl_id = ?,
-	  `group` = ?,
-	  price = ?,
-	  cash_type_id = ?,
-	  qnt = ?,
-	  `date` = ?,
-	  org_id = ?,
-	  `file` = ?,
-	  `type` = ?,
-	  note = ?,
-	  cur_id = ?,
-	  date_edit = datetime(CURRENT_TIMESTAMP, 'localtime')
+          `group` = ?,
+          price = ?,
+          cash_type_id = ?,
+          qnt = ?,
+          `date` = ?,
+          org_id = ?,
+          `file` = ?,
+          `type` = ?,
+          note = ?,
+          cur_id = ?,
+          date_edit = datetime(CURRENT_TIMESTAMP, 'localtime')
      WHERE id = ? ";
 
     $this->db->exec($sql,

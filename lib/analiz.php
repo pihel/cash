@@ -24,15 +24,15 @@ class CashAnaliz {
         CASE WHEN c.type = 1 THEN 'Приход' ELSE 'Расход' END || ' ('||SUM(price*qnt*cr.rate)||'".$this->def_cur.")' as tname,
         SUM(price*qnt*cr.rate) data
       FROM `cashes` c
-          INNER JOIN currency cr
-      ON ( c.cur_id = cr.id )
-          WHERE
-      c.visible = 1 AND c.bd_id = ?
-      AND c.date BETWEEN ? AND ?
-          GROUP BY
-      c.type
-          ORDER BY
-      c.type ";
+      INNER JOIN currency cr
+        ON ( c.cur_id = cr.id )
+      WHERE
+        c.visible = 1 AND c.bd_id = ?
+        AND c.date BETWEEN ? AND ?
+      GROUP BY
+        c.type
+      ORDER BY
+        c.type ";
 
      return $this->db->select($sql, $this->usr->db_id, $from, $to);
   }
@@ -62,13 +62,13 @@ class CashAnaliz {
       ),0) as dif_data
     FROM
       `cashes` c
-          INNER JOIN currency cr
+    INNER JOIN currency cr
       ON ( cr.id = c.cur_id )
     WHERE
       c.visible = 1 AND c.bd_id = ?
       AND c.date BETWEEN ? AND ?
-          GROUP BY c.date
-          ORDER BY c.date";
+    GROUP BY c.date
+    ORDER BY c.date";
 
       return $this->db->select($sql, $from, $this->usr->db_id, $from, $to);
   }

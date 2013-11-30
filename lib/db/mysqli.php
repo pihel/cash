@@ -45,9 +45,9 @@ class MySQLi_DB extends FileCacheDB {
     $refs = array();
     array_unshift($params, str_repeat('s', count($args)));
     if (strnatcmp(phpversion(),'5.3') >= 0) {
-	foreach($params as $key => $value) {
-	    $refs[$key] = &$params[$key];
-	}
+      foreach($params as $key => $value) {
+          $refs[$key] = &$params[$key];
+      }
     } else {
       $refs = $params;
     }
@@ -65,17 +65,17 @@ class MySQLi_DB extends FileCacheDB {
       $fields = $meta->fetch_fields();
       $cnt_fields = count($fields);
       foreach($fields as $field) {
-	$cols[] = &$this->_con->results[$field->name];
+        $cols[] = &$this->_con->results[$field->name];
       }
       call_user_func_array(array($this->_stmt, 'bind_result'), $cols);
       $key = 0;
       while($this->_stmt->fetch() != NULL) {
-	$num_col = 0;
-	foreach ($this->_con->results as $result) {
-	    $ret[$key][$fields[$num_col]->name] = $result;
-	    $num_col++;
-	}
-	$key++;
+        $num_col = 0;
+        foreach ($this->_con->results as $result) {
+            $ret[$key][$fields[$num_col]->name] = $result;
+            $num_col++;
+        }
+        $key++;
       }
     }
 

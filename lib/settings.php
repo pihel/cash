@@ -73,15 +73,15 @@ class CashSett {
     } else {
       //update
       if( intval($data['s_setting'] == "true") == 0 && $id == 1) {
-	return "Нельзя отбирать права настроек у главного администратора";
+        return "Нельзя отбирать права настроек у главного администратора";
       }
       if($data['pasw'] != "***") {
-	$this->db->exec("UPDATE `users`
+        $this->db->exec("UPDATE `users`
 		      SET login = ?, pasw = ?, `read` = ?, `write` = ?, analiz = ?, setting = ?, oper_date = CURRENT_TIMESTAMP
 		      WHERE id = ? ",
 		      $data['login'], $this->usr->hash_pasw($data['pasw']), intval($data['s_read'] == "true"), intval($data['s_write'] == "true"), intval($data['s_analiz'] == "true"), intval($data['s_setting'] == "true"), $id);
       } else {
-	$this->db->exec("UPDATE `users`
+        $this->db->exec("UPDATE `users`
 		      SET login = ?, `read` = ?, `write` = ?, analiz = ?, setting = ?, oper_date = CURRENT_TIMESTAMP
 		      WHERE id = ? ",
 		      $data['login'], intval($data['s_read'] == "true"), intval($data['s_write'] == "true"), intval($data['s_analiz'] == "true"), intval($data['s_setting'] == "true"), $id);
