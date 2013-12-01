@@ -202,7 +202,7 @@ var cash_plan_mnth_chart = Ext.create('Ext.chart.Chart', {
 var cash_plan_panel = Ext.create('Ext.Panel', {
     id: "cash_plan_panel",
     border: false,
-    title: 'План',
+    title: 'Месяц',
     frame: true,
     items: [cash_plan_grid, cash_plan_mnth_date, cash_plan_mnth_chart],
     listeners: {

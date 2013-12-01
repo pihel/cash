@@ -91,7 +91,7 @@ function loadScript(path, _calb) {
     }
   }
 
-  path = path + "?a=1.001";
+  path = path + "?a=1.005";
   //path = path + "?v=" + Math.random();//debug
 
   Ext.Loader.loadScript({url: path, scope: this,
@@ -134,12 +134,12 @@ function setAnkhor() {
       hash += getListAnkhor();
     }
   }
-  else if(tab == "cash_plan") {
+  else if(tab == "cash_analit") {
     if(typeof getAnalitAnkhor != "undefined") {
       hash += getAnalitAnkhor();
     }
   }
-  else if(tab == "cash_analit") {
+  else if(tab == "cash_plan") {
     hash += "act=plan";
   }
   else if(tab == "cash_sett") {

@@ -309,23 +309,7 @@ var cash_item_add = Ext.create('Ext.button.Button', {
 	disabled: true,
 	tabIndex: -1,
 	handler : function() {
-	  if(v_edit_id > 0) return;
-	  cash_list_add.setLoading("Добавление операции...");
-
-	  var form = this.up('form').getForm();
-	    form.submit({
-        success: function(form, action) {
-            cash_list_add.setLoading(false);
-            //cash_list_add.hide();
-            setDefault();
-            listRefresh();
-        },
-        failure: function(form, action) {
-            error(action.result.msg, function() {
-              cash_list_add.setLoading(false);
-            });
-        }
-	    });
+	  submt_add(true);
 	}
 });
 
@@ -361,14 +345,24 @@ var cash_item_edit_id_label = {
   text: '0'
 }
 
-function submt_add() {
+function submt_add(_add) {
   if(Ext.getCmp('cash_item_save').isDisabled()) return;
-  cash_list_add.setLoading("Сохранение операции...");
+  
+  if(_add) {
+    if(v_edit_id > 0) return;
+	  cash_list_add.setLoading("Добавление операции...");
+  } else {
+    cash_list_add.setLoading("Сохранение операции...");
+  }
   var form = Ext.getCmp('cash_item_form_add').getForm();
   form.submit({
       success: function(form, action) {
           cash_list_add.setLoading(false);
-          cash_list_add.hide();
+          if(_add) {
+            setDefault();
+          } else {
+            cash_list_add.hide();
+          }
           listRefresh();
       },
       failure: function(form, action) {
@@ -398,18 +392,27 @@ var cash_item_form_add = new Ext.FormPanel({
 	  cash_item_edit_id
  	 ],
   listeners: {
-    afterRender: function(thisForm, options){
-        this.keyNav = Ext.create('Ext.util.KeyNav', this.el, {
-            enter: function(e) {
-                if( e.target.name == "cash_item_note" ) {
+    afterRender: function(thisForm, options) {
+        var map = new Ext.util.KeyMap({
+          target: "cash_list_add",
+          binding: [{
+              key: Ext.EventObject.ENTER,
+              fn: function(keyCode, e) { 
+                if( e.ctrlKey || e.target.name == "cash_item_note" ) {
                     //e.preventDefault();
                     return true;
                 }
                 submt_add();
-            },
-            //ignoreInputFields: true,
-            scope: this
-        });
+                return true;
+              }
+            }, {
+              key: Ext.EventObject.ENTER,
+              ctrl: true,
+              fn: function(keyCode, e) {
+                submt_add(true);
+                return true;
+              }
+        }]});
     }
   },
   buttons: [cash_item_edit_id_label, "->", cash_item_add, cash_item_save, " ", cash_item_cancel]
@@ -455,36 +458,36 @@ function cash_list_add_load() {
       url: "ajax/edit_item.php",
       method: "GET",
       params: {
-	  nmcl_id: v_edit_id
+        nmcl_id: v_edit_id
       },
       success: function(data) {
-	  var obj = Ext.decode(data.responseText);
-	  Ext.getCmp('cash_item_nmcl_cb').focus(false, 200);
+        var obj = Ext.decode(data.responseText);
+        Ext.getCmp('cash_item_nmcl_cb').focus(false, 200);
 
-	  Ext.getCmp('cash_item_date').setValue(obj.oper_date);
-	  Ext.getCmp('cash_item_nmcl_cb').setValue(obj.nmcl_id);
-	  Ext.getCmp('cash_item_prod_type_cb').setValue(obj.group);
-	  Ext.getCmp('cash_item_price').setValue(obj.price);
-	  Ext.getCmp('cash_item_currency_cb').setValue(obj.cur_id);
-	  Ext.getCmp('cash_item_ctype_cb').setValue(obj.cash_type_id);
-	  Ext.getCmp('cash_item_qnt').setValue(obj.qnt);
-	  Ext.getCmp('cash_item_org_cb').setValue(obj.org_id);
-	  Ext.getCmp('cash_item_toper_cb').setValue(obj.type);
-	  //Ext.getCmp('cash_item_file_value').setText(obj.file);
-	  if(obj.file) {
-	    document.getElementById('cash_item_file-inputEl').value = "get.php?id=" + v_edit_id;
-	    document.getElementById('cash_item_file-inputEl').onclick = function() {
-	      window.open("get.php?id=" + v_edit_id, "_blank");
-	      return false;
-	    }
-	  }
-	  Ext.getCmp('cash_item_note').setValue(obj.note);
-	  Ext.getCmp('cash_list_add').setTitle("Редактирование операции");
+        Ext.getCmp('cash_item_date').setValue(obj.oper_date);
+        Ext.getCmp('cash_item_nmcl_cb').setValue(obj.nmcl_id);
+        Ext.getCmp('cash_item_prod_type_cb').setValue(obj.group);
+        Ext.getCmp('cash_item_price').setValue(obj.price);
+        Ext.getCmp('cash_item_currency_cb').setValue(obj.cur_id);
+        Ext.getCmp('cash_item_ctype_cb').setValue(obj.cash_type_id);
+        Ext.getCmp('cash_item_qnt').setValue(obj.qnt);
+        Ext.getCmp('cash_item_org_cb').setValue(obj.org_id);
+        Ext.getCmp('cash_item_toper_cb').setValue(obj.type);
+        //Ext.getCmp('cash_item_file_value').setText(obj.file);
+        if(obj.file) {
+          document.getElementById('cash_item_file-inputEl').value = "get.php?id=" + v_edit_id;
+          document.getElementById('cash_item_file-inputEl').onclick = function() {
+            window.open("get.php?id=" + v_edit_id, "_blank");
+            return false;
+          }
+        }
+        Ext.getCmp('cash_item_note').setValue(obj.note);
+        Ext.getCmp('cash_list_add').setTitle("Редактирование операции");
 
-	  Ext.getCmp('cash_item_add').setVisible(false);
-	  setAnkhor();
+        Ext.getCmp('cash_item_add').setVisible(false);
+        setAnkhor();
 
-	  cash_list_add.setLoading(false);
+        cash_list_add.setLoading(false);
       }//success
   }); //Ext.Ajax.request
 }

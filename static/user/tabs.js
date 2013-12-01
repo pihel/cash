@@ -106,7 +106,7 @@ var cash_list_tabs = Ext.widget('tabpanel', {
                 }
               }
         });
-      },
+      }
     },
     border: false,
     items: [cash_list_panel, cash_plan, cash_analit, cash_sett]
