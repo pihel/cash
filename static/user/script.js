@@ -91,7 +91,7 @@ function loadScript(path, _calb) {
     }
   }
 
-  path = path + "?a=1.005";
+  path = path + "?a=1.006";
   //path = path + "?v=" + Math.random();//debug
 
   Ext.Loader.loadScript({url: path, scope: this,
@@ -266,4 +266,5 @@ if(window.addEventListener) {
 Ext.onReady(function(){
   Ext.QuickTips.init();
   checkAuth();
+  Ext.getBody().setHeight(Ext.getBody().getHeight()-10);
 }); //Ext.onReady

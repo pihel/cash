@@ -84,44 +84,44 @@ var cash_analiz_mdyn_chart = Ext.create('Ext.chart.Chart', {
       position: 'right'
     },
     axes: [{
-	type: 'Numeric',
-	position: 'left',
-	fields: ['in_amount', 'out_amount'],
-	label: {
-	    renderer: price_r
-	},
-	title: 'Сумма',
-	grid: true,
-	minimum: 0
+      type: 'Numeric',
+      position: 'left',
+      fields: ['in_amount', 'out_amount'],
+      label: {
+          renderer: price_r
+      },
+      title: 'Сумма',
+      grid: true,
+      minimum: 0
     }, {
-	type: 'Category',
-	position: 'bottom',
-	fields: ['tname'],
-	title: 'Месяц'
+      type: 'Category',
+      position: 'bottom',
+      fields: ['tname'],
+      title: 'Месяц'
     }],
     series: [{
-	type: 'column',
-	axis: 'left',
-	highlight: true,
-	tips: {
-	  trackMouse: true,
-	  width: 220,
-	  height: 28,
-	  renderer: function(storeItem, item) {
-	    this.setTitle(storeItem.get('tname') + ': ' + price_r(storeItem.get(item.yField)) );
-	  }
-	},
-	label: {
-	  display: 'insideEnd',
-	  'text-anchor': 'middle',
-	    field: ['in_amount', 'out_amount'],
-	    renderer: price_r,
-	    orientation: 'vertical',
-	    color: '#333'
-	},
-	xField: 'tname',
-	yField: ['in_amount', 'out_amount'],
-	title: ['Приход', 'Расход']
+      type: 'column',
+      axis: 'left',
+      highlight: true,
+      tips: {
+        trackMouse: true,
+        width: 220,
+        height: 28,
+        renderer: function(storeItem, item) {
+          this.setTitle(storeItem.get('tname') + ': ' + price_r(storeItem.get(item.yField)) );
+        }
+      },
+      label: {
+        display: 'insideEnd',
+        'text-anchor': 'middle',
+          field: ['in_amount', 'out_amount'],
+          renderer: price_r,
+          orientation: 'vertical',
+          color: '#333'
+      },
+      xField: 'tname',
+      yField: ['in_amount', 'out_amount'],
+      title: ['Приход', 'Расход']
     }]
 });
 
@@ -138,7 +138,7 @@ function cash_analiz_mdyn_load(_cb) {
 
   if(isDefaultAnaliz()) {
     var cd = new Date();
-    Ext.getCmp('cash_analiz_mdyn_from_date').setValue(new Date(cd.getFullYear(), 0, 1));
+    Ext.getCmp('cash_analiz_mdyn_from_date').setValue(new Date(cd.getFullYear() - 1, cd.getMonth(), 1));
     Ext.getCmp('cash_analiz_mdyn_to_date').setValue(cd);
   } else {
     setAnalitAnkhorParam();

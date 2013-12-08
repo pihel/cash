@@ -176,7 +176,7 @@ function cash_analiz_grp_dyn_load(_cb) {
   
   if(isDefaultAnaliz()) {
     var cd = new Date();
-    Ext.getCmp('cash_analiz_grp_dyn_from_date').setValue(new Date(cd.getFullYear(), 0, 1));
+    Ext.getCmp('cash_analiz_grp_dyn_from_date').setValue(new Date(cd.getFullYear() - 1, cd.getMonth(), 1));
     Ext.getCmp('cash_analiz_grp_dyn_to_date').setValue(cd);
     cash_analiz_grp_dyn_refresh();
   } else {
