@@ -3,7 +3,7 @@ Ext.Loader.setConfig({
     disableCaching: false
 });
 
-Ext.Loader.setPath('Ext.ux', 'static/ext/ux');
+Ext.Loader.setPath('Ext.ux', 'ext/ux');
 
 /***************************
  * included modules
@@ -91,8 +91,8 @@ function loadScript(path, _calb) {
     }
   }
 
-  path = path + "?a=1.006";
-  //path = path + "?v=" + Math.random();//debug
+  //path = path + "?a=1.006";
+  path = path + "?v=" + Math.random();//debug
 
   Ext.Loader.loadScript({url: path, scope: this,
     onLoad: function() {

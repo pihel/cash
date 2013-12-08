@@ -8,7 +8,7 @@ body, html {
   height: 100%;
 }
 body {
-  background: #DFE9F6 url("ext/resources/themes/images/default/shared/blue-loading.gif") 50% 50% no-repeat;	
+  background: #DFE9F6 url("../ext/resources/themes/images/default/shared/blue-loading.gif") 50% 50% no-repeat;	
 }
 img {
   border: 0px;

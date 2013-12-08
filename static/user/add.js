@@ -293,7 +293,7 @@ var cash_item_save = Ext.create('Ext.button.Button', {
 	formBind: true,
 	id: "cash_item_save",
   tooltip: "Сохранить и закрыть (Enter)",
-	icon: "static/ext/resources/themes/images/default/tree/drop-yes.gif",
+	icon: "ext/resources/themes/images/default/tree/drop-yes.gif",
 	disabled: true,
 	handler : function() {
 	  submt_add();
@@ -305,7 +305,7 @@ var cash_item_add = Ext.create('Ext.button.Button', {
 	formBind: true,
   tooltip: "Добавить и продолжить (Ctrl-Enter)",
 	id: "cash_item_add",
-	icon: "static/ext/resources/themes/images/default/tree/drop-yes.gif",
+	icon: "ext/resources/themes/images/default/tree/drop-yes.gif",
 	disabled: true,
 	tabIndex: -1,
 	handler : function() {

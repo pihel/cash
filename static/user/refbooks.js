@@ -3,11 +3,11 @@ var h = Ext.getCmp('cash_sett').getHeight()*2/3-50;
 var cash_refb_cur_model = Ext.define('cash_refb_cur_model', {
     extend: 'Ext.data.Model',
     fields: [
-	{name: 'id', 		type: 'int'},
-	{name: 'name', 		type: 'string'},
-	{name: 'rate', 		type: 'double'},
-	{name: 'sign', 		type: 'string'},
-	{name: 'short_name',	type: 'string'}
+      {name: 'id', 		type: 'int'},
+      {name: 'name', 		type: 'string'},
+      {name: 'rate', 		type: 'double'},
+      {name: 'sign', 		type: 'string'},
+      {name: 'short_name',	type: 'string'}
     ],
     idProperty: 'id'
 });

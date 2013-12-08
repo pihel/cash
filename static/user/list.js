@@ -159,16 +159,16 @@ function deleteItem(v_id) {
                 id: v_id
               },
               success: function(data) {
-            // if response is not empty - error msg
-            if(data.responseText != "") {
-              error(data.responseText, function() {
+                // if response is not empty - error msg
+                if(data.responseText != "") {
+                  error(data.responseText, function() {
+                    cash_list_grid.setLoading(false);
+                    //listRefresh();
+                    return;
+                  });
+                }
                 cash_list_grid.setLoading(false);
-                //listRefresh();
-                return;
-              });
-            }
-            cash_list_grid.setLoading(false);
-            listRefresh();
+                listRefresh();
               } //success
           }); //Ext.Ajax.request
         } //buttonId == "ok"
@@ -250,7 +250,7 @@ function listRefresh(_cb) {
 {
 	xtype: 'button',
 	text: 'Обновить',
-	icon: "static/ext/resources/themes/images/default/grid/refresh.gif",
+	icon: "ext/resources/themes/images/default/grid/refresh.gif",
 	tooltip: 'Перегрузить список с новыми параметрами',
 	border: true,
       	cls: "x-btn-default-small",
@@ -258,7 +258,7 @@ function listRefresh(_cb) {
 }*/
 
 var cash_list_filter_loading = Ext.create('Ext.Img', {
-    src: 'static/ext/resources/themes/images/default/tree/loading.gif',
+    src: 'ext/resources/themes/images/default/tree/loading.gif',
     id: 'cash_list_filter_loading',
     name: "cash_list_filter_loading",
     mode: 'element',
@@ -302,7 +302,7 @@ var cash_list_edit_btn_add =
 	text: 'Добавить',
   tooltip: "Добавить операцию (Insert)",
 	id: "cash_list_edit_btn_add",
-	icon: "static/ext/resources/themes/images/default/dd/drop-add.gif",
+	icon: "ext/resources/themes/images/default/dd/drop-add.gif",
 	handler : function (){
     addItem();
 	}
