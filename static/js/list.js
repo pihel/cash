@@ -1,28 +1,26 @@
-/* grid list */
-
 var cash_list_model = Ext.define('cash_list_model', {
     extend: 'Ext.data.Model',
     fields: [
-      {name: 'id', 		type: 'int'},
-      {name: 'nmcl_id', 	type: 'int'},
-      {name: 'nom', 		type: 'string'},
-      {name: 'group', 	type: 'int'},
-      {name: 'gname', 	type: 'string'},
-      {name: 'price', 	type: 'double'},
-      {name: 'qnt', 		type: 'double'},
-      {name: 'amount', 	type: 'double'},
-      {name: 'oper_date',	type: 'DATE', dateFormat : "Y-m-d"},
-      {name: 'date_edit', 	type: 'DATE', dateFormat: "Y-m-d H:i:s"},
-      {name: 'org_id', 	type: 'int'},
-      {name: 'oname', 	type: 'string'},
-      {name: 'type', 		type: 'int'},
-      {name: 'note',		type: 'string'},
-      {name: 'file', 		type: 'string'},
-      {name: 'uid', 		type: 'int'},
-      {name: 'rate', 		type: 'double'},
-      {name: 'sign', 		type: 'string'},
+      {name: 'id', 		        type: 'int'},
+      {name: 'nmcl_id', 	    type: 'int'},
+      {name: 'nom', 		      type: 'string'},
+      {name: 'group', 	      type: 'int'},
+      {name: 'gname', 	      type: 'string'},
+      {name: 'price', 	      type: 'double'},
+      {name: 'qnt', 		      type: 'double'},
+      {name: 'amount', 	      type: 'double'},
+      {name: 'oper_date',	    type: 'DATE', dateFormat : "Y-m-d"},
+      {name: 'date_edit',     type: 'DATE', dateFormat: "Y-m-d H:i:s"},
+      {name: 'org_id', 	      type: 'int'},
+      {name: 'oname', 	      type: 'string'},
+      {name: 'type', 		      type: 'int'},
+      {name: 'note',		      type: 'string'},
+      {name: 'file', 		      type: 'string'},
+      {name: 'uid', 		      type: 'int'},
+      {name: 'rate', 		      type: 'double'},
+      {name: 'sign', 		      type: 'string'},
       {name: 'cash_type_id', 	type: 'int'},
-      {name: 'cash_type', 	type: 'string'}
+      {name: 'cash_type', 	  type: 'string'}
     ],
     idProperty: 'id'
 });
@@ -39,26 +37,26 @@ var cash_list_store = Ext.create('Ext.data.Store', {
 var cash_list_grid = Ext.create('Ext.grid.Panel', {
     store: cash_list_store,
     columns: [
-      {text: "ID", 			dataIndex: 'id', 		hidden: true, 	tdCls: 'x-center-cell' },
-      {text: "ID товара", 		dataIndex: 'nmcl_id', 		hidden: true , 	tdCls: 'x-center-cell'},
-      {text: "Товар", 		dataIndex: 'nom', 		flex: 1, 	hideable: false},
-      {text: "ID группы", 		dataIndex: 'group', 		hidden: true , 	tdCls: 'x-center-cell'},
-      {text: "Группа", 		dataIndex: 'gname',		hideable: true },
-      {text: "Цена", 			dataIndex: 'price',		hideable: false, renderer: price, tdCls: 'x-price-cell' },
-      {text: "Кол-во", 		dataIndex: 'qnt',		hideable: false, summaryType: 'sum', tdCls: 'x-center-cell' },
-      {text: "Сумма", 		dataIndex: 'amount',		hideable: true,  renderer: price_r, summaryType: 'sum' , tdCls: 'x-amount-cell' , summaryRenderer: price },
-      {text: "Дата", 			dataIndex: 'oper_date',		hideable: true, renderer: dateRender, tdCls: 'x-center-cell'  },
+      {text: "ID", 			        dataIndex: 'id', 		      hidden: true, 	tdCls: 'x-center-cell' },
+      {text: "ID товара", 		  dataIndex: 'nmcl_id', 		hidden: true , 	tdCls: 'x-center-cell'},
+      {text: "Товар", 		      dataIndex: 'nom', 		    flex: 1, 	hideable: false},
+      {text: "ID группы", 		  dataIndex: 'group', 		  hidden: true , 	tdCls: 'x-center-cell'},
+      {text: "Группа", 		      dataIndex: 'gname',		    hideable: true },
+      {text: "Цена", 			      dataIndex: 'price',		    hideable: false, renderer: price, tdCls: 'x-price-cell' },
+      {text: "Кол-во", 		      dataIndex: 'qnt',		      hideable: false, summaryType: 'sum', tdCls: 'x-center-cell' },
+      {text: "Сумма", 		      dataIndex: 'amount',		  hideable: true,  renderer: price_r, summaryType: 'sum' , tdCls: 'x-amount-cell' , summaryRenderer: price },
+      {text: "Дата", 			      dataIndex: 'oper_date',		hideable: true, renderer: dateRender, tdCls: 'x-center-cell'  },
       {text: "Дата изменения", 	dataIndex: 'date_edit', 	hidden: true,   renderer: dateTimeRender, tdCls: 'x-center-cell' },
-      {text: "ID магазина", 		dataIndex: 'org_id', 		hidden: true, 	tdCls: 'x-center-cell' },
-      {text: "Магазин", 		dataIndex: 'oname',		hideable: true },
-      {text: "Тип", 			dataIndex: 'type', 		hidden: true , 	tdCls: 'x-center-cell'},
-      {text: "Примечание", 		dataIndex: 'note', 		width: 250 },
-      {text: "Файл", 			dataIndex: 'file',		hidden: true },
-      {text: "ID пользователя", 	dataIndex: 'uid', 		hidden: true, 	tdCls: 'x-center-cell' },
-      {text: "Курс", 			dataIndex: 'rate', 		hidden: true },
-      {text: "Знак валюты", 		dataIndex: 'sign',		hidden: true },
-      {text: "Тип валюты", 		dataIndex: 'cash_type_id', 	hidden: true, 	tdCls: 'x-center-cell' },
-      {text: "Кошелек", 		dataIndex: 'cash_type', 	hidden: true, 	tdCls: 'x-center-cell' },
+      {text: "ID магазина", 		dataIndex: 'org_id', 		  hidden: true, 	tdCls: 'x-center-cell' },
+      {text: "Магазин", 		    dataIndex: 'oname',		    hideable: true },
+      {text: "Тип", 			      dataIndex: 'type', 		    hidden: true , 	tdCls: 'x-center-cell'},
+      {text: "Примечание", 		  dataIndex: 'note', 		    width: 250 },
+      {text: "Файл", 			      dataIndex: 'file',		    hidden: true },
+      {text: "ID пользователя", dataIndex: 'uid', 		    hidden: true, 	tdCls: 'x-center-cell' },
+      {text: "Курс", 			      dataIndex: 'rate', 		    hidden: true },
+      {text: "Знак валюты", 		dataIndex: 'sign',		    hidden: true },
+      {text: "Тип валюты", 		  dataIndex: 'cash_type_id', 	hidden: true, 	tdCls: 'x-center-cell' },
+      {text: "Кошелек", 		    dataIndex: 'cash_type', 	hidden: true, 	tdCls: 'x-center-cell' },
       {
             menuDisabled: true,
             sortable: false,
@@ -104,25 +102,26 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
       encode: true,
       local: true,
       autoReload: false,
+      menuFilterText: "Фильтр",
       filters: [
-        {dataIndex: 'id', 		type: 'int'},
+        {dataIndex: 'id', 		    type: 'int'},
         {dataIndex: 'nmcl_id', 		type: 'int'},
-        {dataIndex: 'nom', 		type: 'string'},
-        {dataIndex: 'group', 		type: 'int'},
-        {dataIndex: 'gname', 		type: 'string'},
-        {dataIndex: 'price', 		type: 'numeric'},
-        {dataIndex: 'qnt', 		type: 'numeric'},
+        {dataIndex: 'nom', 		    type: 'string'},
+        {dataIndex: 'group', 		  type: 'int'},
+        {dataIndex: 'gname', 		  type: 'string'},
+        {dataIndex: 'price', 		  type: 'numeric'},
+        {dataIndex: 'qnt', 		    type: 'numeric'},
         {dataIndex: 'amount', 		type: 'numeric'},
         {dataIndex: 'oper_date'	},
         {dataIndex: 'date_edit'	},
         {dataIndex: 'org_id', 		type: 'int'},
-        {dataIndex: 'oname', 		type: 'string'},
-        {dataIndex: 'type', 		type: 'int'},
-        {dataIndex: 'note',		type: 'string'},
-        {dataIndex: 'file', 		type: 'string'},
-        {dataIndex: 'uid', 		type: 'int'},
-        {dataIndex: 'rate', 		type: 'numeric'},
-        {dataIndex: 'sign', 		type: 'string'},
+        {dataIndex: 'oname', 		  type: 'string'},
+        {dataIndex: 'type', 		  type: 'int'},
+        {dataIndex: 'note',		    type: 'string'},
+        {dataIndex: 'file', 		  type: 'string'},
+        {dataIndex: 'uid', 		    type: 'int'},
+        {dataIndex: 'rate', 		  type: 'numeric'},
+        {dataIndex: 'sign', 		  type: 'string'},
         {dataIndex: 'cash_type_id', 	type: 'int'},
         {dataIndex: 'cash_type', 	type: 'string'}]
     }],
@@ -134,7 +133,7 @@ var loadMask_cash_list_grid = new Ext.LoadMask(cash_list_grid, {msg:'Загру�
 
 function editItem(v_id) {
   if(parseInt(rights.write) == 0) return;
-  loadScript('static/user/add.js', function() {
+  loadScript('static/js/add.js', function() {
     v_edit_id = v_id;
     cash_list_add.show();
   });
@@ -258,14 +257,14 @@ function listRefresh(_cb) {
 }*/
 
 var cash_list_filter_loading = Ext.create('Ext.Img', {
-    src: 'ext/resources/themes/images/default/tree/loading.gif',
+    src: 'static/loading_small.gif',
     id: 'cash_list_filter_loading',
     name: "cash_list_filter_loading",
     mode: 'element',
     title: "Загрузка фильтра",
     style: {
-	//display: "none",
-	margin: "1px 0px 0px 5px"
+      //display: "none",
+      margin: "1px 0px 0px 5px"
     }
 });//w_img
 
@@ -278,8 +277,8 @@ var cash_list_filter = {
     onChange: function(newVal, oldVal) {
       if(newVal && Ext.getCmp('cash_list_tb_filter').isVisible()) return;
       Ext.getCmp('cash_list_filter_loading').show();
-      loadScript("static/user/add.js", function() {
-        loadScript("static/user/filter.js", function() {
+      loadScript(static_dir + "/js/add.js", function() {
+        loadScript(static_dir + "/js/filter.js", function() {
           loadFilter(function() {
             if(newVal) {
               Ext.getCmp('cash_list_tb_filter').show();
@@ -302,7 +301,7 @@ var cash_list_edit_btn_add =
 	text: 'Добавить',
   tooltip: "Добавить операцию (Insert)",
 	id: "cash_list_edit_btn_add",
-	icon: "ext/resources/themes/images/default/dd/drop-add.gif",
+	icon: static_dir + "/add.gif",
 	handler : function (){
     addItem();
 	}
@@ -310,7 +309,7 @@ var cash_list_edit_btn_add =
 
 function addItem() {
   if(parseInt(rights.write) == 0) return;
-  loadScript('static/user/add.js', function() {
+  loadScript('static/js/add.js', function() {
     v_edit_id = 0;
     cash_list_add.show();
   });
@@ -424,7 +423,7 @@ function setListAnkhor() {
     if(h[0] == "from" && h[1] != undefined) Ext.getCmp('cash_list_from_date').setValue(h[1]);
     if(h[0] == "to" && h[1] != undefined) Ext.getCmp('cash_list_to_date').setValue(h[1]);
     if(h[0] == "item")  {
-      loadScript('static/user/add.js', function() {
+      loadScript('static/js/add.js', function() {
         v_edit_id = parseInt(h[1]);
         if(v_edit_id == undefined || v_edit_id == -1) v_edit_id = 0;
         cash_list_add.show();
@@ -433,8 +432,8 @@ function setListAnkhor() {
 
     if(h[0] == "exfilter" && h[1] == "1") {
       Ext.getCmp('cash_list_filter_loading').show();
-      loadScript("static/user/add.js", function() {
-        loadScript("static/user/filter.js", function() {
+      loadScript(static_dir + "/js/add.js", function() {
+        loadScript(static_dir + "/js/filter.js", function() {
           loadFilter(function() {
             Ext.getCmp('cash_list_tb_filter').show();
             setListAnkhorEx(p, function() {

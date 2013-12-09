@@ -1,11 +1,11 @@
 var cash_plan_model = Ext.define('cash_plan_model', {
     extend: 'Ext.data.Model',
     fields: [
-      {name: 'id', 		type: 'int'},
+      {name: 'id', 		  type: 'int'},
       {name: 'db_id',		type: 'int'},
       {name: 'usr_id', 	type: 'int'},
       {name: 'grp_id',	type: 'int'},
-      {name: 'name',	type: 'string'},
+      {name: 'name',	  type: 'string'},
       {name: 'plan', 		type: 'double'}
     ],
     idProperty: 'id'
@@ -29,12 +29,12 @@ var cash_plan_grid = Ext.create('Ext.grid.Panel', {
     height: Ext.getBody().getHeight()/3,
     forceFit: true,
     columns: [
-      {text: "ID", 			dataIndex: 'id', 	hidden: true, 	tdCls: 'x-center-cell', width: 30 },
-      {text: "ID базы", 		dataIndex: 'db_id', 	hidden: true, 	tdCls: 'x-center-cell', width: 30 },
+      {text: "ID", 			          dataIndex: 'id', 	    hidden: true, 	tdCls: 'x-center-cell', width: 30 },
+      {text: "ID базы", 		      dataIndex: 'db_id', 	hidden: true, 	tdCls: 'x-center-cell', width: 30 },
       {text: "ID пользователя", 	dataIndex: 'usr_id',	hidden: true, 	tdCls: 'x-center-cell', width: 30 },
-      {text: "ID группы", 		dataIndex: 'grp_id',	width: 75	},
-      {text: "Группа", 		dataIndex: 'name', 	flex: true	},
-      {text: "План", 			dataIndex: 'plan'	,editor: {xtype: 'numberfield', allowBlank: true}},
+      {text: "ID группы", 		    dataIndex: 'grp_id',	width: 75	},
+      {text: "Группа", 		        dataIndex: 'name', 	  flex: true	},
+      {text: "План", 			        dataIndex: 'plan'	,   editor: {xtype: 'numberfield', allowBlank: true}},
       {
           menuDisabled: true,
           sortable: false,
@@ -43,7 +43,7 @@ var cash_plan_grid = Ext.create('Ext.grid.Panel', {
           id: "cash_plan_edit_col",
           width: 30,
           items: [ {
-            icon: "ext/resources/themes/images/access/tree/drop-yes.gif",
+            icon: static_dir + "/yes.gif",
             tooltip: 'Сохранить запись',
             handler: function(grid, rowIndex, colIndex) {
                 if(parseInt(rights.write) == 0) return;
@@ -51,16 +51,16 @@ var cash_plan_grid = Ext.create('Ext.grid.Panel', {
                 var rec = grid.getStore().getAt(rowIndex);
 
                 Ext.Ajax.request({
-              url: "ajax/save_plan.php",
-              method: "POST",
-              params: rec.data,
-              success: function(data) {
-                  if(parseInt(data.responseText) > 0) {
-                    cash_plan_store.load();
-                  } else {
-                    error(data.responseText);
-                  }
-              }//success
+                  url: "ajax/save_plan.php",
+                  method: "POST",
+                  params: rec.data,
+                  success: function(data) {
+                      if(parseInt(data.responseText) > 0) {
+                        cash_plan_store.load();
+                      } else {
+                        error(data.responseText);
+                      }
+                  }//success
                 }); //Ext.Ajax.request
             }
           }]

@@ -14,7 +14,7 @@ var cash_analit = Ext.create('Ext.Panel', {
       activate: function(tab){
         Ext.getCmp('cash_analit').setLoading("Загрузка аналитики...");
         var p = window.location.hash.split("&");
-        loadScript("static/user/analiz.js", function() {
+        loadScript(static_dir + "/js/analiz.js", function() {
           Ext.getCmp('cash_analit').add(Ext.getCmp('cash_analit_tabs'));
           setAnkhor();
           Ext.getCmp('cash_analit').setLoading(false);
@@ -42,7 +42,7 @@ var cash_plan = Ext.create('Ext.Panel', {
       activate: function(tab){
         Ext.getCmp('cash_analit').setLoading("Загрузка планов...");
         var p = window.location.hash.split("&");
-        loadScript("static/user/plan.js", function() {
+        loadScript(static_dir + "/js/plan.js", function() {
           Ext.getCmp('cash_plan').add(Ext.getCmp('cash_plan_tabs'));
           setAnkhor();
           Ext.getCmp('cash_plan').setLoading(false);
@@ -67,8 +67,8 @@ var cash_sett = Ext.create('Ext.Panel', {
     listeners: {
       activate: function(tab){
         Ext.getCmp('cash_sett').setLoading("Загрузка настроек...");
-        loadScript("static/user/settings.js", function() {
-          loadScript("static/user/refbooks.js", function() {
+        loadScript(static_dir + "/js/settings.js", function() {
+          loadScript(static_dir + "/js/refbooks.js", function() {
             Ext.getCmp('cash_sett').add(cash_set_panel);
             Ext.getCmp('cash_sett').add(cash_refb_tabs);
             setAnkhor();
@@ -83,7 +83,7 @@ var cash_logout = Ext.create('Ext.button.Button', {
 	text: '',
   tooltip: 'Выйти',
 	id: "cash_logout",
-	icon: "static/logout.png",
+	icon: static_dir + "/logout.png",
 	handler : logout,
   renderTo: 'logout'
 });

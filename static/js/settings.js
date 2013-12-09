@@ -18,7 +18,7 @@ var cash_set_db_store = Ext.create('Ext.data.Store', {
 
 var cash_set_db_add = Ext.create('Ext.button.Button', {
   text: 'Добавить',
-  icon: "ext/resources/themes/images/access/tree/drop-add.gif",
+  icon: static_dir + "/add.gif",
   handler : function () {
     var res = "";
     Ext.MessageBox.prompt('Имя БД', 'Введи имя базы данных', function(id, txt) {
@@ -52,7 +52,7 @@ var cash_set_db_grid = Ext.create('Ext.grid.Panel', {
           items: [cash_set_db_add]
     }],
     columns: [
-      {text: "ID", 	dataIndex: 'id', 	hidden: true, 	tdCls: 'x-center-cell' },
+      {text: "ID", 	  dataIndex: 'id', 	hidden: true, 	tdCls: 'x-center-cell' },
       {text: "База", 	dataIndex: 'name', 	flex: 1, 	hideable: false},
       {
         menuDisabled: true,
@@ -115,14 +115,14 @@ var loadMask_cash_set_db_grid = new Ext.LoadMask(cash_set_db_grid, {msg:'Заг�
 var cash_set_usr_model = Ext.define('cash_set_usr_model', {
     extend: 'Ext.data.Model',
     fields: [
-      {name: 'id', 		type: 'int'},
-      {name: 'bd_id',		type: 'int'},
-      {name: 'login', 	type: 'string'},
-      {name: 'pasw',	 	type: 'string'},
-      {name: 's_read',	type: 'bool'},
+      {name: 'id', 		    type: 'int'},
+      {name: 'bd_id',		  type: 'int'},
+      {name: 'login', 	  type: 'string'},
+      {name: 'pasw',	 	  type: 'string'},
+      {name: 's_read',	  type: 'bool'},
       {name: 's_write', 	type: 'bool'},
       {name: 's_analiz', 	type: 'bool'},
-      {name: 's_setting', 	type: 'bool'},
+      {name: 's_setting', type: 'bool'},
       {name: 'oper_date',	type: 'DATE', dateFormat : "Y-m-d H:i:s"}
     ],
     idProperty: 'id'
@@ -141,7 +141,7 @@ var cash_set_usr_store = Ext.create('Ext.data.Store', {
 var cash_set_usr_add = Ext.create('Ext.button.Button', {
   text: 'Добавить',
   disabled: true,
-  icon: "ext/resources/themes/images/access/tree/drop-add.gif",
+  icon: static_dir + "/add.gif",
   handler : function () {
     cash_set_usr_store.add({id:0,
 			    bd_id: cash_set_db_grid.getView().getSelectionModel().getSelection()[0].data.id,
@@ -159,14 +159,14 @@ var cash_set_usr_grid = Ext.create('Ext.grid.Panel', {
     forceFit: true,
     tbar: [cash_set_usr_add],
         columns: [
-          {text: "ID", 		dataIndex: 'id', 	tdCls: 'x-center-cell', width: 20 },
-          {text: "ID базы", 	dataIndex: 'bd_id', 	hidden: true, 	tdCls: 'x-center-cell' },
-          {text: "Пользователь", 	dataIndex: 'login'	,editor: {xtype: 'textfield', allowBlank: false} },
-          {text: "Пароль", 	dataIndex: 'pasw'	,editor: {xtype: 'textfield', allowBlank: false} },
-          {text: "Чтение", 	dataIndex: 's_read'	,xtype: 'checkcolumn'},
-          {text: "Запись", 	dataIndex: 's_write'	,xtype: 'checkcolumn'},
-          {text: "Аналитика", 	dataIndex: 's_analiz'	,xtype: 'checkcolumn'},
-          {text: "Настройки", 	dataIndex: 's_setting'	,xtype: 'checkcolumn'},
+          {text: "ID", 		        dataIndex: 'id', 	      tdCls: 'x-center-cell', width: 20 },
+          {text: "ID базы", 	    dataIndex: 'bd_id', 	  hidden: true, 	tdCls: 'x-center-cell' },
+          {text: "Пользователь", 	dataIndex: 'login'	,   editor: {xtype: 'textfield', allowBlank: false} },
+          {text: "Пароль", 	      dataIndex: 'pasw'	,     editor: {xtype: 'textfield', allowBlank: false} },
+          {text: "Чтение", 	      dataIndex: 's_read'	,   xtype: 'checkcolumn'},
+          {text: "Запись", 	      dataIndex: 's_write'	, xtype: 'checkcolumn'},
+          {text: "Аналитика", 	  dataIndex: 's_analiz'	, xtype: 'checkcolumn'},
+          {text: "Настройки", 	  dataIndex: 's_setting'	,xtype: 'checkcolumn'},
           {text: "Последний вход",dataIndex: 'oper_date', renderer: dateTimeRender },
           {
               menuDisabled: true,
@@ -200,21 +200,21 @@ var cash_set_usr_grid = Ext.create('Ext.grid.Panel', {
                     }
                 }
               }, " ", {
-                icon: "ext/resources/themes/images/access/tree/drop-yes.gif",
+                icon: static_dir + "/yes.gif",
                 tooltip: 'Сохранить запись',
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
                     Ext.Ajax.request({
-                  url: "ajax/save_usr.php",
-                  method: "POST",
-                  params: rec.data,
-                  success: function(data) {
-                      if(parseInt(data.responseText) > 0) {
-                        cash_set_usr_store.load();
-                      } else {
-                        error(data.responseText);
-                      }
-                  }//success
+                      url: "ajax/save_usr.php",
+                      method: "POST",
+                      params: rec.data,
+                      success: function(data) {
+                          if(parseInt(data.responseText) > 0) {
+                            cash_set_usr_store.load();
+                          } else {
+                            error(data.responseText);
+                          }
+                      }//success
                     }); //Ext.Ajax.request
                 }
               }]

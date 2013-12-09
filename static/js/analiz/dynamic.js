@@ -59,10 +59,10 @@ function cash_analiz_dyn_refresh() {
 var cash_analiz_dyn_model = Ext.define('cash_analiz_com_model', {
     extend: 'Ext.data.Model',
     fields: [
-	{name: 'tdate',		type: 'string'},
-	{name: 'in_data',	type: 'double'},
-	{name: 'out_data',	type: 'double'},
-	{name: 'dif_data',	type: 'double'}
+      {name: 'tdate',		type: 'string'},
+      {name: 'in_data',	type: 'double'},
+      {name: 'out_data',	type: 'double'},
+      {name: 'dif_data',	type: 'double'}
     ]
 }); //cash_analiz_com_model
 
@@ -94,10 +94,10 @@ var cash_analiz_dyn_chart = Ext.create('Ext.chart.Chart', {
       minorTickSteps: 1,
       grid: {
           odd: {
-        opacity: 1,
-        fill: '#ddd',
-        stroke: '#bbb',
-        'stroke-width': 0.5
+            opacity: 1,
+            fill: '#ddd',
+            stroke: '#bbb',
+            'stroke-width': 0.5
           }
       }
     }, {

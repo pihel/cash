@@ -78,9 +78,9 @@ var cash_analiz_secr_out_proc = Ext.create('Ext.slider.Single', {
     minValue: 0,
     maxValue: 100,
     listeners: {
-	changecomplete: function(slider, newValue, thumb, eOpts) {
-	    cash_analiz_secr_refresh();
-	}
+      changecomplete: function(slider, newValue, thumb, eOpts) {
+          cash_analiz_secr_refresh();
+      }
     }
 });
 
@@ -152,8 +152,8 @@ var cash_analiz_secr_store = Ext.create('Ext.data.Store', {
     model: 'cash_analiz_secr_model',
     autoLoad: false,
     proxy: {
-	type: 'ajax',
-	url: 'ajax/analiz/secr.php?'
+      type: 'ajax',
+      url: 'ajax/analiz/secr.php?'
     }
 }); //cash_analiz_secr_store
 //
@@ -169,44 +169,44 @@ var cash_analiz_secr_chart = Ext.create('Ext.chart.Chart', {
       position: 'right'
     },
     axes: [{
-	type: 'Numeric',
-	position: 'left',
-	fields: ['amount'],
-	label: {
-	    renderer: price_r
-	},
-	title: 'Сумма',
-	grid: true/*,
-	minimum: -10000*/
+      type: 'Numeric',
+      position: 'left',
+      fields: ['amount'],
+      label: {
+          renderer: price_r
+      },
+      title: 'Сумма',
+      grid: true/*,
+      minimum: -10000*/
     }, {
-	type: 'Category',
-	position: 'bottom',
-	fields: ['tname'],
-	title: 'Месяц'
+      type: 'Category',
+      position: 'bottom',
+      fields: ['tname'],
+      title: 'Месяц'
     }],
     series: [{
-	type: 'column',
-	axis: 'left',
-	highlight: true,
-	tips: {
-	  trackMouse: true,
-	  width: 220,
-	  height: 28,
-	  renderer: function(storeItem, item) {
-	    this.setTitle(storeItem.get('tname') + ': ' + price_r(storeItem.get(item.yField)) );
-	  }
-	},
-	label: {
-	  display: 'insideEnd',
-	  'text-anchor': 'middle',
-	    field: 'amount',
-	    renderer: price_r,
-	    orientation: 'vertical',
-	    color: '#fff'
-	},
-	xField: 'tname',
-	yField: ['amount'],
-	title: ['Баланс']
+      type: 'column',
+      axis: 'left',
+      highlight: true,
+      tips: {
+        trackMouse: true,
+        width: 220,
+        height: 28,
+        renderer: function(storeItem, item) {
+          this.setTitle(storeItem.get('tname') + ': ' + price_r(storeItem.get(item.yField)) );
+        }
+      },
+      label: {
+        display: 'insideEnd',
+        'text-anchor': 'middle',
+          field: 'amount',
+          renderer: price_r,
+          orientation: 'vertical',
+          color: '#fff'
+      },
+      xField: 'tname',
+      yField: ['amount'],
+      title: ['Баланс']
     }]
 });
 

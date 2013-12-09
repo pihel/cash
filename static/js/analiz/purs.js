@@ -71,8 +71,8 @@ function cash_analiz_purs_refresh() {
 var cash_analiz_purs_model = Ext.define('cash_analiz_purs_model', {
     extend: 'Ext.data.Model',
     fields: [
-	{name: 'tname',		type: 'string'},
-	{name: 'out_amount',	type: 'double'}
+      {name: 'tname',		type: 'string'},
+      {name: 'out_amount',	type: 'double'}
     ]
 }); //cash_analiz_purs_model
 
@@ -80,8 +80,8 @@ var cash_analiz_purs_store = Ext.create('Ext.data.Store', {
     model: 'cash_analiz_purs_model',
     autoLoad: false,
     proxy: {
-	type: 'ajax',
-	url: 'ajax/analiz/purs.php?'
+      type: 'ajax',
+      url: 'ajax/analiz/purs.php?'
     }
 }); //cash_analiz_purs_store
 
@@ -93,38 +93,38 @@ var cash_analiz_purs_chart = Ext.create('Ext.chart.Chart', {
     store: cash_analiz_purs_store,
     shadow: true,
     legend: {
-	position: 'right'
+      position: 'right'
     },
     insetPadding: 60,
     theme: 'Base:gradients',
     series: [{
-	type: 'pie',
-	field: 'out_amount',
-	showInLegend: true,
-	donut: false,
-	tips: {
-	  trackMouse: true,
-	  width: 250,
-	  height: 28,
-	  renderer: function(storeItem, item) {
-	    var total = 0;
-	    cash_analiz_purs_store.each(function(rec) {
-		total += rec.get('out_amount');
-	    });
-	    this.setTitle(storeItem.get('tname') + ': ' + Math.round(storeItem.get('out_amount') / total * 100) + '%');
-	  }
-	},
-	highlight: {
-	  segment: {
-	    margin: 20
-	  }
-	},
-	label: {
-	    field: 'tname',
-	    display: 'rotate',
-	    contrast: true,
-	    font: '18px Arial'
-	}
+      type: 'pie',
+      field: 'out_amount',
+      showInLegend: true,
+      donut: false,
+      tips: {
+        trackMouse: true,
+        width: 250,
+        height: 28,
+        renderer: function(storeItem, item) {
+          var total = 0;
+          cash_analiz_purs_store.each(function(rec) {
+        total += rec.get('out_amount');
+          });
+          this.setTitle(storeItem.get('tname') + ': ' + Math.round(storeItem.get('out_amount') / total * 100) + '%');
+        }
+      },
+      highlight: {
+        segment: {
+          margin: 20
+        }
+      },
+      label: {
+          field: 'tname',
+          display: 'rotate',
+          contrast: true,
+          font: '18px Arial'
+      }
     }]
 });
 

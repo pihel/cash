@@ -3,7 +3,7 @@ Ext.Loader.setConfig({
     disableCaching: false
 });
 
-Ext.Loader.setPath('Ext.ux', 'ext/ux');
+Ext.Loader.setPath('Ext.ux', ux_dir);
 
 /***************************
  * included modules
@@ -91,8 +91,8 @@ function loadScript(path, _calb) {
     }
   }
 
-  //path = path + "?a=1.006";
-  path = path + "?v=" + Math.random();//debug
+  path = path + "?a=1.007";
+  //path = path + "?v=" + Math.random();//debug
 
   Ext.Loader.loadScript({url: path, scope: this,
     onLoad: function() {
@@ -193,8 +193,8 @@ function authOk(id) {
           success: function(data) {
             settings = Ext.decode(data.responseText);
 
-            loadScript("static/user/list.js", function() {
-              loadScript("static/user/tabs.js", function() {
+            loadScript(static_dir + "/js/list.js", function() {
+              loadScript(static_dir + "/js/tabs.js", function() {
                 Ext.getCmp('cash_sett').setDisabled(parseInt(rights.setting) == 0);
                 Ext.getCmp('cash_analit').setDisabled(parseInt(rights.analiz) == 0);
                 Ext.getCmp('cash_list_panel').setDisabled(parseInt(rights.read) == 0);
@@ -238,7 +238,7 @@ function checkAuth() {
               window.location.reload();
               return;
           }
-          loadScript("static/user/auth.js", function() {
+          loadScript(static_dir + "/js/auth.js", function() {
                 loginWindow.show();
           });
         }

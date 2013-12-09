@@ -8,7 +8,7 @@ body, html {
   height: 100%;
 }
 body {
-  background: #DFE9F6 url("../ext/resources/themes/images/default/shared/blue-loading.gif") 50% 50% no-repeat;	
+  background: #DFE9F6 url("loading.gif") 50% 50% no-repeat;	
 }
 img {
   border: 0px;
@@ -44,30 +44,6 @@ img {
   border-top: 0px !important;
   border-radius: 0 0 4px 4px;
 }
-#cash_list_from_date-inputCell .x-form-text,
-#cash_list_to_date-inputCell .x-form-text,
-#cash_analiz_com_from_date-inputCell .x-form-text,
-#cash_analiz_com_to_date-inputCell .x-form-text,
-#cash_analiz_dyn_from_date-inputCell .x-form-text,
-#cash_analiz_dyn_to_date-inputCell .x-form-text,
-#cash_analiz_grp_from_date-inputCell .x-form-text,
-#cash_analiz_grp_to_date-inputCell .x-form-text,
-#cash_analiz_org_from_date-inputCell .x-form-text,
-#cash_analiz_org_to_date-inputCell .x-form-text,
-#cash_analiz_ingrp_from_date-inputCell .x-form-text,
-#cash_analiz_ingrp_to_date-inputCell .x-form-text,
-#cash_analiz_purs_from_date-inputCell .x-form-text,
-#cash_analiz_purs_to_date-inputCell .x-form-text,
-#cash_analiz_mdyn_from_date-inputCell .x-form-text,
-#cash_analiz_mdyn_to_date-inputCell .x-form-text,
-#cash_analiz_cur_from_date-inputCell .x-form-text,
-#cash_analiz_cur_to_date-inputCell .x-form-text,
-#cash_analiz_org_prod_type_cb-inputCell .x-form-text,
-#cash_analiz_grp_dyn_from_date-inputCell .x-form-text,
-#cash_analiz_grp_dyn_to_date-inputCell .x-form-text
-{
-  height: 19px !important;
-}
 #cash_list_tb {
   top: 5px !important;
 }
@@ -89,9 +65,6 @@ img {
 }
 #cash_list_tb_filter .x-form-item {
   margin-left: 10px;
-}
-#cash_list_tb_filter .x-form-field, #cash_plan_mnth_from_date-inputEl, #cash_plan_mnth_to_date-inputEl {
-  max-height: 19px !important;
 }
 .x-grid-row-summary {
   /*position: absolute;*/
@@ -147,4 +120,11 @@ img {
   top: 9px;
   right: 25px;
   z-index: 10;
+}
+#main .x-tab-bar-body {
+  position: relative;
+  top: 1px;
+}
+#main #cash_list_tb_filter textarea {
+  height: 40px;
 }

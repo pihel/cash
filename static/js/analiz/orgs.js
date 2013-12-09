@@ -38,8 +38,8 @@ var cash_analiz_org_to_date =
 var cash_analiz_org_id_name_model = Ext.define('cash_analiz_org_id_name_model', {
     extend: 'Ext.data.Model',
     fields: [
-	{name: 'id',      type: 'INT'},
-	{name: 'name',    type: 'text'}
+      {name: 'id',      type: 'INT'},
+      {name: 'name',    type: 'text'}
     ],
     idProperty: 'id'
 });
@@ -52,7 +52,7 @@ var cash_analiz_org_prod_type_store = Ext.create('Ext.data.Store', {
       type: 'ajax',
       url: 'ajax/prod_type_list.php',
       reader: {
-	  type: 'json'
+        type: 'json'
       }
   }
 }); //cash_analiz_org_prod_type_store
@@ -68,12 +68,12 @@ var cash_analiz_org_prod_type_cb = Ext.create('Ext.form.field.ComboBox', {
     queryMode: 'local',
     allowBlank: true,
     width: 450,
-	editable: false,
+    editable: false,
     doQuery: function(queryString, forceAll) {
         this.expand();
         this.store.clearFilter(true);
         this.store.filter(this.displayField, new RegExp(Ext.String.escapeRegex(queryString), 'i'));
-		Ext.getCmp('cash_analiz_org_prod_type_cb').focus(false, 1);
+        Ext.getCmp('cash_analiz_org_prod_type_cb').focus(false, 1);
     },
 	onChange: cash_analiz_org_refresh
 }); //cash_analiz_org_prod_type_cb
@@ -105,8 +105,8 @@ function cash_analiz_org_refresh() {
 var cash_analiz_org_model = Ext.define('cash_analiz_org_model', {
     extend: 'Ext.data.Model',
     fields: [
-	{name: 'tname',		type: 'string'},
-	{name: 'out_amount',	type: 'double'}
+      {name: 'tname',		type: 'string'},
+      {name: 'out_amount',	type: 'double'}
     ]
 }); //cash_analiz_org_model
 
@@ -114,8 +114,8 @@ var cash_analiz_org_store = Ext.create('Ext.data.Store', {
     model: 'cash_analiz_org_model',
     autoLoad: false,
     proxy: {
-	type: 'ajax',
-	url: 'ajax/analiz/orgs.php?'
+      type: 'ajax',
+      url: 'ajax/analiz/orgs.php?'
     }
 }); //cash_analiz_org_store
 
@@ -127,38 +127,38 @@ var cash_analiz_org_chart = Ext.create('Ext.chart.Chart', {
     store: cash_analiz_org_store,
     shadow: true,
     legend: {
-	position: 'right'
+      position: 'right'
     },
     insetPadding: 60,
     theme: 'Base:gradients',
     series: [{
-	type: 'pie',
-	field: 'out_amount',
-	showInLegend: true,
-	donut: false,
-	tips: {
-	  trackMouse: true,
-	  width: 220,
-	  height: 28,
-	  renderer: function(storeItem, item) {
-	    var total = 0;
-	    cash_analiz_org_store.each(function(rec) {
-		total += rec.get('out_amount');
-	    });
-	    this.setTitle(storeItem.get('tname') + ': ' + Math.round(storeItem.get('out_amount') / total * 100) + '%');
-	  }
-	},
-	highlight: {
-	  segment: {
-	    margin: 20
-	  }
-	},
-	label: {
-	    field: 'tname',
-	    display: 'rotate',
-	    contrast: true,
-	    font: '18px Arial'
-	}
+      type: 'pie',
+      field: 'out_amount',
+      showInLegend: true,
+      donut: false,
+      tips: {
+        trackMouse: true,
+        width: 220,
+        height: 28,
+        renderer: function(storeItem, item) {
+          var total = 0;
+          cash_analiz_org_store.each(function(rec) {
+        total += rec.get('out_amount');
+          });
+          this.setTitle(storeItem.get('tname') + ': ' + Math.round(storeItem.get('out_amount') / total * 100) + '%');
+        }
+      },
+      highlight: {
+        segment: {
+          margin: 20
+        }
+      },
+      label: {
+          field: 'tname',
+          display: 'rotate',
+          contrast: true,
+          font: '18px Arial'
+      }
     }]
 });
 
@@ -177,12 +177,12 @@ function cash_analiz_org_load(_cb) {
     var cd = new Date();
     Ext.getCmp('cash_analiz_org_from_date').setValue(new Date(cd.getFullYear(), cd.getMonth(), 1));
     Ext.getCmp('cash_analiz_org_to_date').setValue(cd);
-	cash_analiz_org_prod_type_store.load(function() {
-		cash_analiz_org_prod_type_store.insert(0,  Ext.data.Record({id:0,name:"Любая"}));
-        cash_analiz_org_prod_type_cb.setValue(0);
-        cash_analiz_org_refresh();
-        if(_cb != undefined) _cb();
-	});
+    cash_analiz_org_prod_type_store.load(function() {
+      cash_analiz_org_prod_type_store.insert(0,  Ext.data.Record({id:0,name:"Любая"}));
+          cash_analiz_org_prod_type_cb.setValue(0);
+          cash_analiz_org_refresh();
+          if(_cb != undefined) _cb();
+    });
   } else {
 	cash_analiz_org_prod_type_store.load(function() {
 		cash_analiz_org_prod_type_store.insert(0,  Ext.data.Record({id:0,name:"Любая"}));

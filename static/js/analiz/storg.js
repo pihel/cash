@@ -17,8 +17,8 @@ var cash_analiz_storg_amount = {
     value: 1000000,
     listeners: {
       change: function( o, newValue, oldValue, eOpts ) {
-	  cash_analiz_strg_store.proxy.url = 'ajax/analiz/storg.php?amount=' + newValue
-	  cash_analiz_strg_refresh();
+        cash_analiz_strg_store.proxy.url = 'ajax/analiz/storg.php?amount=' + newValue
+        cash_analiz_strg_refresh();
       }
     }
 };//cash_analiz_storg_amount
@@ -68,34 +68,34 @@ var cash_analiz_strg_chart = Ext.create('Ext.chart.Chart', {
     insetPadding: 60,
     theme: 'Base:gradients',
     series: [{
-	type: 'pie',
-	field: 'out_amount',
-	showInLegend: true,
-	donut: false,
-	colorSet: ['#94ae0a', '#a61120'],
-	tips: {
-	  trackMouse: true,
-	  width: 250,
-	  height: 28,
-	  renderer: function(storeItem, item) {
-	    var total = 0;
-	    cash_analiz_strg_store.each(function(rec) {
-		total += rec.get('out_amount');
-	    });
-	    this.setTitle(storeItem.get('tname') + ': ' + Math.round(storeItem.get('out_amount') / total * 100) + '%');
-	  }
-	},
-	highlight: {
-	  segment: {
-	    margin: 20
-	  }
-	},
-	label: {
-	    field: 'tname',
-	    display: 'rotate',
-	    contrast: true,
-	    font: '18px Arial'
-	}
+      type: 'pie',
+      field: 'out_amount',
+      showInLegend: true,
+      donut: false,
+      colorSet: ['#94ae0a', '#a61120'],
+      tips: {
+        trackMouse: true,
+        width: 250,
+        height: 28,
+        renderer: function(storeItem, item) {
+          var total = 0;
+          cash_analiz_strg_store.each(function(rec) {
+            total += rec.get('out_amount');
+          });
+          this.setTitle(storeItem.get('tname') + ': ' + Math.round(storeItem.get('out_amount') / total * 100) + '%');
+        }
+      },
+      highlight: {
+        segment: {
+          margin: 20
+        }
+      },
+      label: {
+          field: 'tname',
+          display: 'rotate',
+          contrast: true,
+          font: '18px Arial'
+      }
     }]
 });
 

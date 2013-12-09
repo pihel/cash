@@ -230,7 +230,7 @@ var cash_list_fltr_refresh =
 {
 	xtype: 'button',
 	text: 'Обновить',
-	icon: "ext/resources/themes/images/default/grid/refresh.gif",
+	icon: static_dir + "/refresh.gif",
 	tooltip: 'Перегрузить список с новыми параметрами',
 	border: true,
   cls: "x-btn-default-small",

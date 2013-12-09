@@ -103,7 +103,7 @@ var cash_item_prod_type_store = Ext.create('Ext.data.Store', {
       type: 'ajax',
       url: 'ajax/prod_type_list.php',
       reader: {
-	  type: 'json'
+        type: 'json'
       }
   }
 }); //cash_item_prod_type_store
@@ -293,7 +293,7 @@ var cash_item_save = Ext.create('Ext.button.Button', {
 	formBind: true,
 	id: "cash_item_save",
   tooltip: "Сохранить и закрыть (Enter)",
-	icon: "ext/resources/themes/images/default/tree/drop-yes.gif",
+	icon: static_dir + "/yes.gif",
 	disabled: true,
 	handler : function() {
 	  submt_add();
@@ -305,7 +305,7 @@ var cash_item_add = Ext.create('Ext.button.Button', {
 	formBind: true,
   tooltip: "Добавить и продолжить (Ctrl-Enter)",
 	id: "cash_item_add",
-	icon: "ext/resources/themes/images/default/tree/drop-yes.gif",
+	icon: static_dir + "/yes.gif",
 	disabled: true,
 	tabIndex: -1,
 	handler : function() {
@@ -329,7 +329,7 @@ var cash_item_price_tb = {
       id: "cash_item_price_tb",
       items: [cash_item_price,
 	      cash_item_currency_cb,
-	      cash_item_ctype_cb,]
+	      cash_item_ctype_cb]
 }; //cash_item_price_tb
 
 var cash_item_edit_id = Ext.create('Ext.form.field.Hidden', {

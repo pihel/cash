@@ -58,9 +58,9 @@ function cash_analiz_mdyn_refresh() {
 var cash_analiz_mdyn_model = Ext.define('cash_analiz_mdyn_model', {
     extend: 'Ext.data.Model',
     fields: [
-	{name: 'tname',		type: 'string'},
-	{name: 'in_amount', 	type: 'double'},
-	{name: 'out_amount', 	type: 'double'}
+      {name: 'tname',		type: 'string'},
+      {name: 'in_amount', 	type: 'double'},
+      {name: 'out_amount', 	type: 'double'}
     ]
 }); //cash_analiz_mdyn_model
 
@@ -68,8 +68,8 @@ var cash_analiz_mdyn_store = Ext.create('Ext.data.Store', {
     model: 'cash_analiz_mdyn_model',
     autoLoad: false,
     proxy: {
-	type: 'ajax',
-	url: 'ajax/analiz/mon_dyn.php?'
+      type: 'ajax',
+      url: 'ajax/analiz/mon_dyn.php?'
     }
 }); //cash_analiz_mdyn_store
 

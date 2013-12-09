@@ -12,7 +12,7 @@ var cash_analiz_com = Ext.create('Ext.Panel', {
     listeners: {
       activate: function(tab){
         Ext.getCmp('cash_analiz_com').setLoading("Загрузка общей статистики...");
-        loadScript("static/user/analiz/common.js", function() {
+        loadScript(static_dir + "/js/analiz/common.js", function() {
           cash_analiz_com_load(function() {
             Ext.getCmp('cash_analiz_com').setLoading(false);
             setAnkhor();
@@ -33,7 +33,7 @@ var cash_analiz_dyn = Ext.create('Ext.Panel', {
     listeners: {
       activate: function(tab){
         Ext.getCmp('cash_analiz_dyn').setLoading("Загрузка баланса...");
-        loadScript("static/user/analiz/dynamic.js", function() {
+        loadScript(static_dir + "/js/analiz/dynamic.js", function() {
           cash_analiz_dyn_load(function() {
             Ext.getCmp('cash_analiz_dyn').setLoading(false);
             setAnkhor();
@@ -54,7 +54,7 @@ var cash_analiz_group = Ext.create('Ext.Panel', {
     listeners: {
       activate: function(tab){
         Ext.getCmp('cash_analiz_group').setLoading("Загрузка статистики по группам...");
-        loadScript("static/user/analiz/groups.js", function() {
+        loadScript(static_dir + "/js/analiz/groups.js", function() {
           cash_analiz_grp_load(function() {
             Ext.getCmp('cash_analiz_group').setLoading(false);
             setAnkhor();
@@ -75,7 +75,7 @@ var cash_analiz_group_dyn = Ext.create('Ext.Panel', {
     listeners: {
       activate: function(tab){
         Ext.getCmp('cash_analiz_group_dyn').setLoading("Загрузка статистики по динамике групп...");
-        loadScript("static/user/analiz/groups_dyn.js", function() {
+        loadScript(static_dir + "/js/analiz/groups_dyn.js", function() {
           cash_analiz_grp_dyn_load(function() {
             Ext.getCmp('cash_analiz_group_dyn').setLoading(false);
             setAnkhor();
@@ -96,7 +96,7 @@ var cash_analiz_org = Ext.create('Ext.Panel', {
     listeners: {
       activate: function(tab){
         Ext.getCmp('cash_analiz_org').setLoading("Загрузка статистики по организациям...");
-        loadScript("static/user/analiz/orgs.js", function() {
+        loadScript(static_dir + "/js/analiz/orgs.js", function() {
           cash_analiz_org_load(function() {
             Ext.getCmp('cash_analiz_org').setLoading(false);
             setAnkhor();
@@ -117,7 +117,7 @@ var cash_analiz_mondyn = Ext.create('Ext.Panel', {
     listeners: {
       activate: function(tab){
         Ext.getCmp('cash_analiz_mondyn').setLoading("Загрузка динамики по месяцам...");
-        loadScript("static/user/analiz/mon_dyn.js", function() {
+        loadScript(static_dir + "/js/analiz/mon_dyn.js", function() {
           cash_analiz_mdyn_load(function() {
             Ext.getCmp('cash_analiz_mondyn').setLoading(false);
             setAnkhor();
@@ -138,7 +138,7 @@ var cash_analiz_cash_type = Ext.create('Ext.Panel', {
     listeners: {
       activate: function(tab){
         Ext.getCmp('cash_analiz_cash_type').setLoading("Загрузка статистики по кошелькам...");
-        loadScript("static/user/analiz/purs.js", function() {
+        loadScript(static_dir + "/js/analiz/purs.js", function() {
           cash_analiz_purs_load(function() {
             Ext.getCmp('cash_analiz_cash_type').setLoading(false);
             setAnkhor();
@@ -159,7 +159,7 @@ var cash_analiz_rest = Ext.create('Ext.Panel', {
     listeners: {
       activate: function(tab){
         Ext.getCmp('cash_analiz_rest').setLoading("Загрузка накоплений...");
-        loadScript("static/user/analiz/storg.js", function() {
+        loadScript(static_dir + "/js/analiz/storg.js", function() {
           cash_analiz_strg_load(function() {
             Ext.getCmp('cash_analiz_rest').setLoading(false);
             setAnkhor();
@@ -180,7 +180,7 @@ var cash_analiz_curr = Ext.create('Ext.Panel', {
     listeners: {
       activate: function(tab){
         Ext.getCmp('cash_analiz_curr').setLoading("Загрузка статистики по валютам...");
-        loadScript("static/user/analiz/cur_amount.js", function() {
+        loadScript(static_dir + "/js/analiz/cur_amount.js", function() {
           cash_analiz_cur_load(function() {
             Ext.getCmp('cash_analiz_curr').setLoading(false);
             setAnkhor();
@@ -201,7 +201,7 @@ var cash_analiz_secr = Ext.create('Ext.Panel', {
     listeners: {
       activate: function(tab){
         Ext.getCmp('cash_analiz_secr').setLoading("Загрузка статистики по финансовой безопасности...");
-        loadScript("static/user/analiz/secr.js", function() {
+        loadScript(static_dir + "/js/analiz/secr.js", function() {
           cash_analiz_secr_load(function() {
             Ext.getCmp('cash_analiz_secr').setLoading(false);
             setAnkhor();

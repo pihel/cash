@@ -80,8 +80,8 @@ var cash_analiz_cur_store = Ext.create('Ext.data.Store', {
     model: 'cash_analiz_cur_model',
     autoLoad: false,
     proxy: {
-	type: 'ajax',
-	url: 'ajax/analiz/cur_amount.php?'
+      type: 'ajax',
+      url: 'ajax/analiz/cur_amount.php?'
     }
 }); //cash_analiz_cur_store
 
@@ -98,33 +98,33 @@ var cash_analiz_cur_chart = Ext.create('Ext.chart.Chart', {
     insetPadding: 60,
     theme: 'Base:gradients',
     series: [{
-	type: 'pie',
-	field: 'amount',
-	showInLegend: true,
-	donut: false,
-	tips: {
-	  trackMouse: true,
-	  width: 220,
-	  height: 28,
-	  renderer: function(storeItem, item) {
-	    var total = 0;
-	    cash_analiz_cur_store.each(function(rec) {
-		total += rec.get('amount');
-	    });
-	    this.setTitle(storeItem.get('tname') + ': ' + Math.round(storeItem.get('amount') / total * 100) + '%');
-	  }
-	},
-	highlight: {
-	  segment: {
-	    margin: 20
-	  }
-	},
-	label: {
-	    field: 'tname',
-	    display: 'rotate',
-	    contrast: true,
-	    font: '18px Arial'
-	}
+      type: 'pie',
+      field: 'amount',
+      showInLegend: true,
+      donut: false,
+      tips: {
+        trackMouse: true,
+        width: 220,
+        height: 28,
+        renderer: function(storeItem, item) {
+          var total = 0;
+          cash_analiz_cur_store.each(function(rec) {
+        total += rec.get('amount');
+          });
+          this.setTitle(storeItem.get('tname') + ': ' + Math.round(storeItem.get('amount') / total * 100) + '%');
+        }
+      },
+      highlight: {
+        segment: {
+          margin: 20
+        }
+      },
+      label: {
+          field: 'tname',
+          display: 'rotate',
+          contrast: true,
+          font: '18px Arial'
+      }
     }]
 });
 
