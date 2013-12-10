@@ -16,7 +16,7 @@ requirements will be met: http://www.gnu.org/copyleft/gpl.html.
 If you are unsure which license is appropriate for your use, please contact the sales department
 at http://www.sencha.com/contact.
 
-Build date: 2013-03-11 22:33:40 (aed16176e68b5e8aa1433452b12805c0ad913836)
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
 */
 /**
  * Russian translation
@@ -24,12 +24,6 @@ Build date: 2013-03-11 22:33:40 (aed16176e68b5e8aa1433452b12805c0ad913836)
  * 6 November 2007
  */
 Ext.onReady(function() {
-    var cm = Ext.ClassManager,
-        exists = Ext.Function.bind(cm.get, cm);
-
-    if (Ext.Updater) {
-        Ext.Updater.defaults.indicatorText = '<div class="loading-indicator">Идет загрузка...</div>';
-    }
 
     if (Ext.Date) {
         Ext.Date.monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
@@ -65,31 +59,14 @@ Ext.onReady(function() {
             return Ext.Date.dayNames[day].substring(0, 3);
         };
     }
-    if (Ext.MessageBox) {
-        Ext.MessageBox.buttonText = {
-            ok: "OK",
-            cancel: "Отмена",
-            yes: "Да",
-            no: "Нет"
-        };
-    }
 
-    if (exists('Ext.util.Format')) {
+    if (Ext.util && Ext.util.Format) {
         Ext.apply(Ext.util.Format, {
             thousandSeparator: '.',
             decimalSeparator: ',',
             currencySign: '\u0440\u0443\u0431',
             // Russian Ruble
             dateFormat: 'd.m.Y'
-        });
-    }
-
-    if (exists('Ext.form.field.VTypes')) {
-        Ext.apply(Ext.form.field.VTypes, {
-            emailText: 'Это поле должно содержать адрес электронной почты в формате "user@example.com"',
-            urlText: 'Это поле должно содержать URL в формате "http:/' + '/www.example.com"',
-            alphaText: 'Это поле должно содержать только латинские буквы и символ подчеркивания "_"',
-            alphanumText: 'Это поле должно содержать только латинские буквы, цифры и символ подчеркивания "_"'
         });
     }
 });
@@ -104,8 +81,8 @@ Ext.define("Ext.locale.ru.grid.plugin.DragDrop", {
     dragText: "{0} выбранных строк"
 });
 
-Ext.define("Ext.locale.ru.TabPanelItem", {
-    override: "Ext.TabPanelItem",
+Ext.define("Ext.locale.ru.tab.Tab", {
+    override: "Ext.tab.Tab",
     closeText: "Закрыть эту вкладку"
 });
 
@@ -117,7 +94,7 @@ Ext.define("Ext.locale.ru.form.field.Base", {
 // changing the msg text below will affect the LoadMask
 Ext.define("Ext.locale.ru.view.AbstractView", {
     override: "Ext.view.AbstractView",
-    msg: "Загрузка..."
+    loadingText: "Загрузка..."
 });
 
 Ext.define("Ext.locale.ru.picker.Date", {
@@ -125,10 +102,8 @@ Ext.define("Ext.locale.ru.picker.Date", {
     todayText: "Сегодня",
     minText: "Эта дата раньше минимальной даты",
     maxText: "Эта дата позже максимальной даты",
-    disabledDaysText: "",
-    disabledDatesText: "",
-    monthNames: Ext.Date.monthNames,
-    dayNames: Ext.Date.dayNames,
+    disabledDaysText: "Недоступно",
+    disabledDatesText: "Недоступно",
     nextText: 'Следующий месяц (Control+Вправо)',
     prevText: 'Предыдущий месяц (Control+Влево)',
     monthYearText: 'Выбор месяца (Control+Вверх/Вниз для выбора года)',
@@ -175,9 +150,9 @@ Ext.define("Ext.locale.ru.form.field.Number", {
 
 Ext.define("Ext.locale.ru.form.field.Date", {
     override: "Ext.form.field.Date",
-    disabledDaysText: "Не доступно",
-    disabledDatesText: "Не доступно",
-    minText: "Дата в этом поле должна быть позде {0}",
+    disabledDaysText: "Недоступно",
+    disabledDatesText: "Недоступно",
+    minText: "Дата в этом поле должна быть позже {0}",
     maxText: "Дата в этом поле должна быть раньше {0}",
     invalidText: "{0} не является правильной датой - дата должна быть указана в формате {1}",
     format: "d.m.y",
@@ -193,9 +168,17 @@ Ext.define("Ext.locale.ru.form.field.ComboBox", {
     });
 });
 
+Ext.define("Ext.locale.ru.form.field.VTypes", {
+    override: "Ext.form.field.VTypes",
+    emailText: 'Это поле должно содержать адрес электронной почты в формате "user@example.com"',
+    urlText: 'Это поле должно содержать URL в формате "http:/' + '/www.example.com"',
+    alphaText: 'Это поле должно содержать только латинские буквы и символ подчеркивания "_"',
+    alphanumText: 'Это поле должно содержать только латинские буквы, цифры и символ подчеркивания "_"'
+});
+
 Ext.define("Ext.locale.ru.form.field.HtmlEditor", {
     override: "Ext.form.field.HtmlEditor",
-    createLinkText: 'Пожалуйста введите адрес:'
+    createLinkText: 'Пожалуйста, введите адрес:'
 }, function() {
     Ext.apply(Ext.form.field.HtmlEditor.prototype, {
         buttonTips: {
@@ -236,17 +219,17 @@ Ext.define("Ext.locale.ru.form.field.HtmlEditor", {
             },
             justifyleft: {
                 title: 'Выровнять текст по левому краю',
-                text: 'Выровнивание текста по левому краю.',
+                text: 'Вырaвнивание текста по левому краю.',
                 cls: Ext.baseCSSPrefix + 'html-editor-tip'
             },
             justifycenter: {
                 title: 'По центру',
-                text: 'Выровнивание текста по центру.',
+                text: 'Вырaвнивание текста по центру.',
                 cls: Ext.baseCSSPrefix + 'html-editor-tip'
             },
             justifyright: {
                 title: 'Выровнять текст по правому краю',
-                text: 'Выровнивание текста по правому краю.',
+                text: 'Вырaвнивание текста по правому краю.',
                 cls: Ext.baseCSSPrefix + 'html-editor-tip'
             },
             insertunorderedlist: {
@@ -275,7 +258,7 @@ Ext.define("Ext.locale.ru.form.field.HtmlEditor", {
 
 Ext.define("Ext.locale.ru.form.Basic", {
     override: "Ext.form.Basic",
-    waitTitle: "Пожалуйста подождите..."
+    waitTitle: "Пожалуйста, подождите..."
 });
 
 Ext.define("Ext.locale.ru.grid.header.Container", {
@@ -301,10 +284,14 @@ Ext.define("Ext.locale.ru.grid.PropertyColumnModel", {
     dateFormat: "d.m.Y"
 });
 
-Ext.define("Ext.locale.ru.SplitLayoutRegion", {
-    override: "Ext.SplitLayoutRegion",
-    splitTip: "Тяните для изменения размера.",
-    collapsibleSplitTip: "Тяните для изменения размера. Двойной щелчок спрячет панель."
+Ext.define("Ext.locale.ru.window.MessageBox", {
+    override: "Ext.window.MessageBox",
+    buttonText: {
+        ok: "OK",
+        cancel: "Отмена",
+        yes: "Да",
+        no: "Нет"
+    }    
 });
 
 // This is needed until we can refactor all of the locales into individual files

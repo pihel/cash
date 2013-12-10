@@ -7,7 +7,7 @@
 5. финансовые цели в планировании
 6. сделать API
 7. распознавание чеков
-обновить extjs
+8. мультиязычность
 */
 require_once('lib/init.php');
 ?>
@@ -26,7 +26,7 @@ require_once('lib/init.php');
       var static_dir = '<?=$static;?>';
     </script>
     <script src="<?=$static;?>/js/script.js" charset="UTF-8"	type="text/javascript"></script>
-    <script src="<?=$extjs;?>/locale/ext-lang-ru.js" charset="UTF-8" 	type="text/javascript"></script>
+    <script src="<?=$extjs;?>/locale/ext-lang-<?=$lang;?>.js" charset="UTF-8" 	type="text/javascript"></script>
 
     <link rel="shortcut icon" href="<?=$static;?>/favicon.png" />
   </head>

@@ -9,7 +9,7 @@
  *             // required configs
  *             type: 'date',
  *             dataIndex: 'dateAdded',
- *
+ *      
  *             // optional configs
  *             dateFormat: 'm/d/Y',  // default
  *             beforeText: 'Before', // default
@@ -18,7 +18,7 @@
  *             pickerOpts: {
  *                 // any DatePicker configs
  *             },
- *
+ *      
  *             active: true // default is false
  *         }]
  *     });
@@ -32,12 +32,12 @@ Ext.define('Ext.ux.grid.filter.DateFilter', {
      * @cfg {String} afterText
      * Defaults to 'After'.
      */
-    afterText : 'После',
+    afterText : 'After',
     /**
      * @cfg {String} beforeText
      * Defaults to 'Before'.
      */
-    beforeText : 'До',
+    beforeText : 'Before',
     /**
      * @cfg {Object} compareMap
      * Map for assigning the comparison values used in serialization.
@@ -86,7 +86,7 @@ Ext.define('Ext.ux.grid.filter.DateFilter', {
      * @cfg {String} onText
      * Defaults to 'On'.
      */
-    onText : 'В',
+    onText : 'On',
 
     /**
      * @cfg {Object} pickerOpts

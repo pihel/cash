@@ -201,8 +201,8 @@ var cash_analiz_secr_chart = Ext.create('Ext.chart.Chart', {
         'text-anchor': 'middle',
           field: 'amount',
           renderer: price_r,
-          orientation: 'vertical',
-          color: '#fff'
+          orientation: 'vertical'
+          //color: '#fff'
       },
       xField: 'tname',
       yField: ['amount'],

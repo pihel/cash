@@ -10,11 +10,9 @@ Ext.Loader.setPath('Ext.ux', ux_dir);
 ***************************/
 Ext.require([
     'Ext.data.*',
-    //'Ext.tip.*',
     'Ext.grid.*',
     'Ext.util.*',
     'Ext.state.*',
-    //'Ext.tip.QuickTipManager',
     'Ext.menu.*',
     'Ext.form.field.ComboBox',
     'Ext.layout.container.Table',
@@ -24,7 +22,6 @@ Ext.require([
     'Ext.ux.grid.FiltersFeature',
     'Ext.tab.*',
     'Ext.chart.*',
-    'Ext.ux.CheckColumn',
     'Ext.selection.CellModel'
 ]);
 
@@ -91,7 +88,7 @@ function loadScript(path, _calb) {
     }
   }
 
-  path = path + "?a=1.007";
+  path = path + "?a=1.008";
   //path = path + "?v=" + Math.random();//debug
 
   Ext.Loader.loadScript({url: path, scope: this,

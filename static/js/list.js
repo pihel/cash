@@ -62,7 +62,7 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
             sortable: false,
             hideable: false,
             xtype: 'actioncolumn',
-            width: 50,
+            width: 55,
             id: "cash_list_edit_col",
             items: [{
               iconCls: 'edit-cash-col',
