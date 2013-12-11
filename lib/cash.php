@@ -112,7 +112,12 @@ class Cash {
      return $this->db->line($sql, $id, $this->usr->db_id);
   }
 
-  public function getSettings() {
+  public function getSettings() {    
+    /*$this->db->exec('CREATE TABLE cashes_setting (
+        "name" VARCHAR(50) PRIMARY KEY NOT NULL,
+        "descr" VARCHAR(250),
+        "value" VARCHAR(250))');
+    $this->db->exec('CREATE UNIQUE INDEX "XPK_CASHES_SETTING" on cashes_setting (name ASC)');*/
     if(!$this->usr->canRead()) return array();
 
     $sql = "SELECT c.sign FROM currency c WHERE id = ?";

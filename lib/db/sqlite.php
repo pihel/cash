@@ -49,6 +49,8 @@ class SQLITE_DB extends DB {
 
   protected function _exec($sql, $args) {
     $this->_stmt = $this->_con->prepare($sql);
+    
+    if(!$this->_stmt) $this->raiseError();
 
     if(is_array($args[1])) $args = $args[1];
     foreach($args as $k=>$v) {
@@ -66,6 +68,11 @@ class SQLITE_DB extends DB {
     $ret = array();
 
     $result = $this->_stmt->execute();
+    
+    if(!$result) {
+      $this->_stmt->close();
+      $this->raiseError();
+    }
 
     if($result && $result->numColumns() > 0) {
       while($res = $result->fetchArray(SQLITE3_ASSOC)){

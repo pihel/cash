@@ -1,6 +1,6 @@
 <?
 /* Путь до файла базы данных */
-$sqlite_path = __DIR__."/../data/cash.sqlite";
+$sqlite_path = __DIR__."/../data/cash.db3";
 
 /* Заголовок окна */
 $site_name = 'Домашняя бухгалтерия';
