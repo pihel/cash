@@ -71,8 +71,8 @@ function cash_analiz_cur_refresh() {
 var cash_analiz_cur_model = Ext.define('cash_analiz_cur_model', {
     extend: 'Ext.data.Model',
     fields: [
-	{name: 'tname',		type: 'string'},
-	{name: 'amount',	type: 'double'}
+      {name: 'tname',		type: 'string'},
+      {name: 'amount',	type: 'double'}
     ]
 }); //cash_analiz_cur_model
 
@@ -93,7 +93,7 @@ var cash_analiz_cur_chart = Ext.create('Ext.chart.Chart', {
     store: cash_analiz_cur_store,
     shadow: true,
     legend: {
-	position: 'right'
+      position: 'right'
     },
     insetPadding: 60,
     theme: 'Base:gradients',
@@ -109,7 +109,7 @@ var cash_analiz_cur_chart = Ext.create('Ext.chart.Chart', {
         renderer: function(storeItem, item) {
           var total = 0;
           cash_analiz_cur_store.each(function(rec) {
-        total += rec.get('amount');
+            total += rec.get('amount');
           });
           this.setTitle(storeItem.get('tname') + ': ' + Math.round(storeItem.get('amount') / total * 100) + '%');
         }

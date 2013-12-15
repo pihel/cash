@@ -98,7 +98,7 @@ var cash_analiz_com_chart = Ext.create('Ext.chart.Chart', {
         renderer: function(storeItem, item) {
           var total = 0;
           cash_analiz_com_store.each(function(rec) {
-        total += rec.get('data');
+            total += rec.get('data');
           });
           this.setTitle(storeItem.get('tname') + ': ' + Math.round(storeItem.get('data') / total * 100) + '%');
         }

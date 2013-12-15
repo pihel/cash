@@ -4,13 +4,16 @@ class CashAnaliz {
   private $usr;
 
   private $def_cur = "р.";
+  private $round_dec = 2;
 
   public function __construct($_db, $_usr) {
     $this->db = $_db;
     $this->usr = $_usr;
-
-    //ID=1 - default currency, rate - count money per 1 default
-    $this->def_cur = $this->db->element("SELECT c.sign FROM currency c WHERE id = ?", 1 );
+    global $settings;
+    $this->def_cur = $settings['sign'];
+    if($settings['round'] == 1) {
+      $this->round_dec = 0;
+    }
   }
 
   public function getCommon($from, $to, $uid = 0) {
@@ -243,8 +246,8 @@ class CashAnaliz {
 
     $sql =
     "SELECT
-      'Достигнуто ' || SUM( CASE WHEN c.type = 1 THEN 1 ELSE -1 END * c.price * c.qnt * cr.rate ) ||'".$this->def_cur."' as tname,
-      SUM( CASE WHEN c.type = 1 THEN 1 ELSE -1 END * c.price * c.qnt * cr.rate ) out_amount
+      'Достигнуто ' || ROUND(SUM( CASE WHEN c.type = 1 THEN 1 ELSE -1 END * c.price * c.qnt * cr.rate ),".$this->round_dec.") ||'".$this->def_cur."' as tname,
+      ROUND(SUM( CASE WHEN c.type = 1 THEN 1 ELSE -1 END * c.price * c.qnt * cr.rate ),".$this->round_dec.") out_amount
     FROM
       `cashes` c
     INNER JOIN currency cr

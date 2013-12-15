@@ -36,18 +36,30 @@ var settings = [];
 var check_lt_id = undefined;
 
 /* RENDER function */
+
 function price(val, metaData, record) {
   var v_def_currency = record.get('sign');
 
   if(v_def_currency == undefined || v_def_currency == "") v_def_currency = settings.sign;
-  var val = Ext.util.Format.number(val, "0,0.00");
-  val = val.replace(".", " ");
+  
+  Ext.util.Format.thousandSeparator = " ";
+  if(settings.round == 1) {
+    val = Ext.util.Format.round(val, 0);
+    val = Ext.util.Format.number(val, "0,0");
+  } else {      
+    val = Ext.util.Format.number(val, "0,0.00");
+  }  
   return val + v_def_currency;
 }
 
 function price_r (val) {
-  var val = Ext.util.Format.number(val, "0,0.00");
-  val = val.replace(".", " ");
+  Ext.util.Format.thousandSeparator = " ";
+  if(settings.round == 1) {
+    val = Ext.util.Format.round(val, 0);
+    val = Ext.util.Format.number(val, "0,0");
+  } else {
+    val = Ext.util.Format.number(val, "0,0.00");
+  }
   return val + settings.sign;
 }
 
@@ -98,7 +110,7 @@ function loadScript(path, _calb) {
     }
   }
 
-  path = path + "?a=1.010";
+  path = path + "?a=1.011";
   //path = path + "?v=" + Math.random();//debug
 
   Ext.Loader.loadScript({url: path, scope: this,

@@ -63,7 +63,7 @@ var cash_analiz_strg_chart = Ext.create('Ext.chart.Chart', {
     store: cash_analiz_strg_store,
     shadow: true,
     legend: {
-	position: 'right'
+      position: 'right'
     },
     insetPadding: 60,
     theme: 'Base:gradients',
