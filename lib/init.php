@@ -1,13 +1,19 @@
 <?
 error_reporting(0);
 
-$debug = $_GET['debug'] == 'Y' || strpos($_SERVER['HTTP_REFERER'], "debug=Y") !== false;
+/* режим отладки */
+$debug = false;
+
+/* Путь до файла базы данных */
+$sqlite_path = __DIR__."/../data/cash.db3";
+
+/* Допустимое время бездействия */
+$life_time = ini_get("session.gc_maxlifetime");
 
 if($debug) {
   error_reporting(~E_NOTICE);
 }
 
-require_once('config.php');
 require_once('error.php');
 require_once('db/db.php');
 require_once('db/sqlite.php');
@@ -18,7 +24,6 @@ $db->connect();
 if((bool)$short) return;
 
 require_once('user.php');
-require_once('template.php');
 require_once('cash.php');
 
 if($debug) {
@@ -30,3 +35,4 @@ $usr->auth();
 
 
 $ch = new Cash($db, $usr);
+$settings = $ch->getSettings();

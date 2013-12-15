@@ -2,7 +2,7 @@
 abstract class DB {
   protected $_srv, $_drvr, $_usr, $_pwd, $_db;
 
-  //try select from cashe
+  //кэшировать (на один запрос)
   public $try_cache = false;
 
   //статистика запроса: время в микро секундах, признак взятия из кеша
@@ -13,10 +13,17 @@ abstract class DB {
 
   protected $_con, $_stmt;
 
+  //режим отладки
   public $debug = false;
 
-  public $encode = 'utf8';
+  //кодировка бд
+  public $encode = 'UTF8';
+  
+  //автокоммит
   public $autocommit = false;
+  
+  //экранировать результат запроса (на один запрос)
+  public $escape_res = false;
 
   protected $start_time;
   protected $stop_time;
@@ -107,10 +114,18 @@ abstract class DB {
   public function getRealSql($sql, $args) {
     //virtual
   }
+  
+  public function escape_result(&$value) {
+    if(is_string($value)) {
+      $value = htmlspecialchars($value, ENT_QUOTES);
+    }
+  }
 
   protected function _select($sql, $args, $type) {
     //сам sql запрос не параметр
     unset($args[0]);
+    
+    $rows = array();
 
     if($this->try_cache) {
       $start_time = microtime(true);
@@ -130,6 +145,12 @@ abstract class DB {
 
     //запрос
     $rows = $this->_exec($sql, $args);
+    
+    //экранируем
+    if($this->escape_res) {
+      array_walk_recursive($rows, array($this, "escape_result") );
+      $this->escape_res = false;
+    }
 
     //формируем массив данных
     if($type == 2) {

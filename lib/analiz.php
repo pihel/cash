@@ -33,7 +33,8 @@ class CashAnaliz {
         c.type
       ORDER BY
         c.type ";
-
+        
+     $this->db->escape_res = true;
      return $this->db->select($sql, $this->usr->db_id, $from, $to);
   }
 
@@ -70,7 +71,8 @@ class CashAnaliz {
     GROUP BY c.date
     ORDER BY c.date";
 
-      return $this->db->select($sql, $from, $this->usr->db_id, $from, $to);
+    $this->db->escape_res = true;
+    return $this->db->select($sql, $from, $this->usr->db_id, $from, $to);
   }
 
   public function getGroups($from, $to, $in = 0, $uid = 0) {
@@ -97,6 +99,7 @@ class CashAnaliz {
     ORDER BY
       out_amount DESC";
 
+    $this->db->escape_res = true;
     return $this->db->select($sql, $this->usr->db_id, intval($in), $from, $to);
   }
   
@@ -120,6 +123,7 @@ class CashAnaliz {
                   g.id = c.`group`
                   AND c.visible = 1 AND c.bd_id = ? AND c.type = 0
                   AND c.date BETWEEN ? AND ? ) ";
+    $this->db->escape_res = true;
     $grps = $this->db->select($sql, $this->usr->db_id, $from, $to);
     
     $grps_key = $grps;
@@ -154,6 +158,7 @@ class CashAnaliz {
     $ret = array();
     $m = '';
     $i = -1;
+    $this->db->escape_res = true;
     $data = $this->db->select($sql, $this->usr->db_id, $from, $to);
     foreach($data as $d) {
       if(empty($d['mname'])) continue;
@@ -201,6 +206,7 @@ class CashAnaliz {
     ORDER BY
       out_amount DESC";
 
+    $this->db->escape_res = true;
     return $this->db->select($sql, $this->usr->db_id, $from, $to, $gr);
   }
 
@@ -228,6 +234,7 @@ class CashAnaliz {
     ORDER BY
       out_amount";
 
+    $this->db->escape_res = true;
     return $this->db->select($sql, $this->usr->db_id, intval($in), $from, $to);
   }
 
@@ -244,6 +251,7 @@ class CashAnaliz {
       ON( c.cur_id = cr.id )
     WHERE
     c.visible =1 AND c.bd_id = ? ";
+    $this->db->escape_res = true;
     $r = $this->db->select($sql, $this->usr->db_id);
 
     $amount = intval($amount);
@@ -278,6 +286,7 @@ class CashAnaliz {
     ORDER BY
       tname";
 
+    $this->db->escape_res = true;
     return $this->db->select($sql, $this->usr->db_id, $from, $to);
   }
 
@@ -301,6 +310,7 @@ class CashAnaliz {
     GROUP BY
       cr.name";
 
+    $this->db->escape_res = true;
     return $this->db->select($sql, $this->usr->db_id, $in, $from, $to);
   }
 
@@ -332,6 +342,7 @@ class CashAnaliz {
     $amnt = round($amnt[0]['out_amount']);
     if($amnt < 0) $amnt = 0;
 
+    $this->db->escape_res = true;
     $ret = array(
 	    $amnt,
 	    $this->db->select($sql, $this->usr->db_id)

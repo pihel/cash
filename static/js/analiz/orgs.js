@@ -69,6 +69,7 @@ var cash_analiz_org_prod_type_cb = Ext.create('Ext.form.field.ComboBox', {
     allowBlank: true,
     width: 450,
     editable: false,
+    tpl: '<tpl for="."><div class="x-boundlist-item">{name:htmlEncode}</div></tpl>',
     doQuery: function(queryString, forceAll) {
         this.expand();
         this.store.clearFilter(true);

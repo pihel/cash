@@ -59,6 +59,7 @@ var cash_item_nmcl_cb = Ext.create('Ext.form.field.ComboBox', {
     //pageSize: true,
     width: 474,
     allowBlank: false,
+    tpl: '<tpl for="."><div class="x-boundlist-item">{name:htmlEncode}</div></tpl>',
     listeners: {
         select: function( combo, records, e) {
           if(records != undefined && records[0].get('id') != 0) {
@@ -119,6 +120,7 @@ var cash_item_prod_type_cb = Ext.create('Ext.form.field.ComboBox', {
     queryMode: 'local',
     allowBlank: false,
     width: 474,
+    tpl: '<tpl for="."><div class="x-boundlist-item">{name:htmlEncode}</div></tpl>',
     doQuery: function(queryString, forceAll) {
         this.expand();
         this.store.clearFilter(true);
@@ -163,6 +165,7 @@ var cash_item_currency_cb = Ext.create('Ext.form.field.ComboBox', {
     valueField: 'id',
     queryMode: 'local',
     allowBlank: false,
+    tpl: '<tpl for="."><div class="x-boundlist-item">{name:htmlEncode}</div></tpl>',
     width: 100,
     value: 1
 }); //cash_item_currency_cb
@@ -188,6 +191,7 @@ var cash_item_ctype_cb = Ext.create('Ext.form.field.ComboBox', {
     displayField: 'name',
     valueField: 'id',
     queryMode: 'local',
+    tpl: '<tpl for="."><div class="x-boundlist-item">{name:htmlEncode}</div></tpl>',
     width: 170,
     value: 1
 }); //cash_item_ctype_cb
@@ -230,6 +234,7 @@ var cash_item_org_cb = Ext.create('Ext.form.field.ComboBox', {
     width: 474,
     fieldLabel: 'Получатель',
     allowBlank: false,
+    tpl: '<tpl for="."><div class="x-boundlist-item">{name:htmlEncode}</div></tpl>',
     labelWidth: 100/*,
     doQuery: function(queryString, forceAll) {
         this.expand();
@@ -261,6 +266,7 @@ var cash_item_toper_cb = Ext.create('Ext.form.field.ComboBox', {
     allowBlank: false,
     labelWidth: 100,
     value: 0,
+    tpl: '<tpl for="."><div class="x-boundlist-item">{name:htmlEncode}</div></tpl>',
     editable: false
 }); //cash_item_currency_cb
 
@@ -443,7 +449,6 @@ function cash_list_add_load() {
   Ext.getCmp('cash_item_edit_id').setValue(v_edit_id);
   Ext.getCmp('cash_item_edit_id_label').setText(v_edit_id);
 
-
   if(v_edit_id == 0) {
     setDefault();
     Ext.getCmp('cash_item_add').setVisible(true);
@@ -485,6 +490,7 @@ function cash_list_add_load() {
         Ext.getCmp('cash_list_add').setTitle("Редактирование операции");
 
         Ext.getCmp('cash_item_add').setVisible(false);
+        
         setAnkhor();
 
         cash_list_add.setLoading(false);

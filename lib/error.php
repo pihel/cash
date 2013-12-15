@@ -1,6 +1,4 @@
 <?
-require_once("config.php");
-
 class Error extends Exception {
   public $message;
 
@@ -10,8 +8,8 @@ class Error extends Exception {
   }
 
   private function sendMail($str) {
-    global $mail;
-    if(!empty($mail)) {
+    global $settings;
+    if(!empty($settings['mail'])) {
       $str = htmlspecialchars($str, ENT_QUOTES);
       mail($mail, "Ошибка на сайте ".$_SERVER['SERVER_NAME'], $str);
     }

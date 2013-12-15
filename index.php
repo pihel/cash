@@ -7,9 +7,10 @@
 5. финансовые цели в планировании
 6. сделать API
 7. распознавание чеков
-8. Добавить возможность скачать бд
 9. мультиязычность
-10. настройки в бд
+10 экспорт/импорт к xlsx, pdf
+11. загрузка данных из инет банков
+12. ежемесячные повторяющией расходы (доходы)
 */
 require_once('lib/init.php');
 ?>
@@ -17,24 +18,23 @@ require_once('lib/init.php');
 <html>
   <head>
     <meta charset=utf-8>
-    <title><?=$site_name;?></title>
-    <link href="<?=$static;?>/style.css" media="all" rel="stylesheet" type="text/css" />
-    <link href="<?=$extjs;?>/resources/css/ext-all.css" media="all" rel="stylesheet" type="text/css" />
-    <link href="<?=$extjs;?>/examples/ux/grid/css/GridFilters.css" rel="stylesheet" type="text/css" />
-    <link href="<?=$extjs;?>/examples/ux/grid/css/RangeMenu.css" rel="stylesheet" type="text/css" />
-    <script src="<?=$extjs;?>/ext-all.js" 	type="text/javascript"></script>
+    <title><?=$settings['site_name'];?></title>
+    <link rel="shortcut icon" href="<?=$settings['static'];?>/favicon.png" />
+    <link href="<?=$settings['static'];?>/style.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="<?=$settings['extjs'];?>/resources/css/ext-all.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="<?=$settings['extjs']?>/examples/ux/grid/css/GridFilters.css" rel="stylesheet" type="text/css" />
+    <link href="<?=$settings['extjs']?>/examples/ux/grid/css/RangeMenu.css" rel="stylesheet" type="text/css" />
+    <script src="<?=$settings['extjs'];?>/ext-all.js" 	type="text/javascript"></script>
     <script language="javascript">
-      var ux_dir = '<?=$extjs;?>/examples/ux';
-      var static_dir = '<?=$static;?>';
+      var ux_dir = '<?=$settings['extjs'];?>/examples/ux';
+      var static_dir = '<?=$settings['static'];?>';
     </script>
-    <script src="<?=$static;?>/js/script.js" charset="UTF-8"	type="text/javascript"></script>
-    <script src="<?=$extjs;?>/locale/ext-lang-<?=$lang;?>.js" charset="UTF-8" 	type="text/javascript"></script>
-
-    <link rel="shortcut icon" href="<?=$static;?>/favicon.png" />
+    <script src="<?=$settings['static'];?>/js/script.js" charset="UTF-8" type="text/javascript"></script>
+    <script src="<?=$settings['extjs'];?>/locale/ext-lang-<?=$settings['lang'];?>.js" charset="UTF-8" type="text/javascript"></script>
   </head>
   <body>
     <div id="logout"></div>
     <div id="main"></div>
-    <?=$add;?>
+    <?=$settings['add'];?>
   </body>
 </html>

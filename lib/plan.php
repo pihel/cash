@@ -35,6 +35,7 @@ class Plan {
         AND cgp.db_id = ?
         AND ( cgp.usr_id = ? OR ? = 0 ) )";
 
+    $this->db->escape_res = true;
     return $this->db->select($sql, $this->usr->db_id, $uid, $uid);
   }
 
@@ -70,6 +71,7 @@ class Plan {
     GROUP BY
 	    v.`group`, v.name";
 
+    $this->db->escape_res = true;
     return $this->db->select($sql, $this->usr->db_id, $uid, $uid, $from, $to);
   }
 

@@ -63,6 +63,16 @@ function dateTimeRender(value) {
   return val;
 }
 
+function htmlRenderer(text) {
+  return Ext.String.htmlEncode(text);
+  /*return text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");*/
+}
+
 function error(text, _cb) {
   Ext.Msg.show({
     title:'Ошибка',
@@ -88,7 +98,7 @@ function loadScript(path, _calb) {
     }
   }
 
-  path = path + "?a=1.008";
+  path = path + "?a=1.010";
   //path = path + "?v=" + Math.random();//debug
 
   Ext.Loader.loadScript({url: path, scope: this,

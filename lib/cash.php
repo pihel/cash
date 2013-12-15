@@ -70,7 +70,7 @@ class Cash {
     $filter = $this->getExFilter($exfltr);
     if(empty($filter)) $filter = " AND c.visible = 1 ";
 
-    //INDEXED BY XIF_CASHES_DBV
+    $this->db->escape_res = true;
     $sql =
     " SELECT
       c.id, c.nmcl_id, cn.name as nom, c.`group`, cg.name gname, c.price, c.qnt, c.date as oper_date, datetime(c.date_edit, 'localtime') date_edit,
@@ -111,18 +111,35 @@ class Cash {
 
      return $this->db->line($sql, $id, $this->usr->db_id);
   }
+  
+  public function getSettings_flat() {
+    if(!$this->usr->canRead()) return array();
+    $sql = "SELECT name, descr, value FROM cashes_setting";
+    //$this->db->escape_res = true;
+    return $this->db->select($sql);
+  }
 
-  public function getSettings() {    
+  public function getSettings() {
+    //if(!$this->usr->canRead()) return array();
+    
     /*$this->db->exec('CREATE TABLE cashes_setting (
         "name" VARCHAR(50) PRIMARY KEY NOT NULL,
         "descr" VARCHAR(250),
         "value" VARCHAR(250))');
+        
     $this->db->exec('CREATE UNIQUE INDEX "XPK_CASHES_SETTING" on cashes_setting (name ASC)');*/
-    if(!$this->usr->canRead()) return array();
+    
+    $sql = "SELECT name, value FROM cashes_setting
+            UNION 
+            SELECT 'sign', c.sign FROM currency c WHERE id = (SELECT value FROM cashes_setting WHERE name = 'currency')";
+    $set = $this->db->select($sql);
+    
+    $sk = array();
+    foreach($set as $s) {
+      $sk[$s['name']] = $s['value'];
+    }
 
-    $sql = "SELECT c.sign FROM currency c WHERE id = ?";
-
-    return $this->db->line($sql, 1);
+    return $sk;
   }
 
   public function nmcl_list($query, $id) {
@@ -152,7 +169,7 @@ class Cash {
     ORDER BY
       COUNT(1) DESC, cn.id
     LIMIT 50 ";
-
+    
     return $this->db->select($sql, $this->usr->db_id);
   }
 
@@ -162,7 +179,7 @@ class Cash {
     "SELECT
       cn.id, cn.name
     FROM cashes_nom cn ";
-
+    
     return $this->db->select($sql);
   }
 
@@ -307,40 +324,46 @@ class Cash {
     }
 
     $ret['cash_item_date'] = $data['cash_item_date'];
-    if(empty($ret['cash_item_date'])) 		{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните дату'); }
+    if(empty($ret['cash_item_date'])) 		        { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните дату'); }
 
-    $ret['cash_item_nmcl_cb'] = $this->add_refbook($data["cash_item_nmcl_cb"], "cashes_nom");
-    if( $ret['cash_item_nmcl_cb'] == 0) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления товара'); }
+    $ret['cash_item_nmcl_cb']                     = $this->add_refbook($data["cash_item_nmcl_cb"], "cashes_nom");
+    if( $ret['cash_item_nmcl_cb'] == 0) 	        { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления товара'); }
 
-    $ret['cash_item_prod_type_cb'] = $this->add_refbook($data["cash_item_prod_type_cb"], "cashes_group");
-    if($ret['cash_item_prod_type_cb'] == 0) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления группы товара'); }
+    $ret['cash_item_prod_type_cb']                = $this->add_refbook($data["cash_item_prod_type_cb"], "cashes_group");
+    if($ret['cash_item_prod_type_cb'] == 0) 	    { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления группы товара'); }
 
-    $ret['cash_item_price'] = $data['cash_item_price'];
-    if(empty($ret['cash_item_price'])) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните цену'); }
+    $ret['cash_item_price']                       = $data['cash_item_price'];
+    if(empty($ret['cash_item_price'])) 	          { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните цену'); }
 
-    $ret['cash_item_currency_cb'] = $this->add_refbook($data["cash_item_currency_cb"], "currency");
-    if($ret['cash_item_currency_cb'] == 0) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления валюты'); }
+    $ret['cash_item_currency_cb']                 = $this->add_refbook($data["cash_item_currency_cb"], "currency");
+    if($ret['cash_item_currency_cb'] == 0) 	      { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления валюты'); }
 
-    $ret['cash_item_ctype_cb'] = $this->add_refbook($data["cash_item_ctype_cb"], "cashes_type");
-    if($ret['cash_item_ctype_cb'] == 0) 	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления кошелька'); }
+    $ret['cash_item_ctype_cb']                    = $this->add_refbook($data["cash_item_ctype_cb"], "cashes_type");
+    if($ret['cash_item_ctype_cb'] == 0) 	        { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления кошелька'); }
 
-    $ret['cash_item_qnt'] = $data['cash_item_qnt'];
-    if(empty($ret['cash_item_qnt'])) 		{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните количество'); }
+    $ret['cash_item_qnt']                         = $data['cash_item_qnt'];
+    if(empty($ret['cash_item_qnt'])) 		          { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните количество'); }
 
-    $ret['cash_item_org_cb'] = $this->add_refbook($data["cash_item_org_cb"], "cashes_org");
-    if($ret['cash_item_org_cb'] == 0) 		{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления организации'); }
+    $ret['cash_item_org_cb']                      = $this->add_refbook($data["cash_item_org_cb"], "cashes_org");
+    if($ret['cash_item_org_cb'] == 0) 		        { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления организации'); }
 
-    $ret['cash_item_toper_cb'] = intval($data['cash_item_toper_cb']);
+    $ret['cash_item_toper_cb']                    = intval($data['cash_item_toper_cb']);
     if( !in_array($ret['cash_item_toper_cb'], array(0,1)) )	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Неверный тип операции'); }
 
-    $ret['cash_item_note'] = $data['cash_item_note'];
+    $ret['cash_item_note']                        = $data['cash_item_note'];
 
     return $ret;
   }
 
   public function getFile($id) {
+    if($id == -1) {      
+      if(!$this->usr->canSetting()) return "";
+      global $sqlite_path;
+      return $sqlite_path;
+    }
     if(!$this->usr->canRead()) return "";
-    return $this->db->element("SELECT `file` FROM `cashes` WHERE id = ? AND bd_id = ?", $id, $this->usr->db_id);
+    $file = $this->db->element("SELECT `file` FROM `cashes` WHERE id = ? AND bd_id = ?", $id, $this->usr->db_id);
+    return __DIR__."/../".$file;
   }
 
   public function edit($data, $files) {
