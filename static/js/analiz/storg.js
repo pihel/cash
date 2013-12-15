@@ -82,7 +82,7 @@ var cash_analiz_strg_chart = Ext.create('Ext.chart.Chart', {
           cash_analiz_strg_store.each(function(rec) {
             total += rec.get('out_amount');
           });
-          this.setTitle(storeItem.get('tname') + ': ' + Math.round(storeItem.get('out_amount') / total * 100) + '%');
+          this.setTitle(storeItem.get('tname') + ' ('+price_r(storeItem.get('out_amount'))+'): ' + Math.round(storeItem.get('out_amount') / total * 100) + '%');
         }
       },
       highlight: {
@@ -94,7 +94,8 @@ var cash_analiz_strg_chart = Ext.create('Ext.chart.Chart', {
           field: 'tname',
           display: 'rotate',
           contrast: true,
-          font: '18px Arial'
+          font: '18px Arial',
+          renderer: function (value, label, storeItem) { return value + ' ('+price_r(storeItem.get('out_amount'))+')'; }
       }
     }]
 });
