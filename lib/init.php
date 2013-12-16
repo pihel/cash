@@ -10,6 +10,13 @@ $sqlite_path = __DIR__."/../data/cash.db3";
 /* Допустимое время бездействия */
 $life_time = ini_get("session.gc_maxlifetime");
 
+/* Демонстрационный стенд (запрет изменения настроек, смены прав, загрузка файлов)*/
+$demo = 0;
+
+/*Версия*/
+//$version = rand(); //для отладки
+$version = "a=1.013";
+
 if($debug) {
   error_reporting(~E_NOTICE);
 }
@@ -36,3 +43,5 @@ $usr->auth();
 
 $ch = new Cash($db, $usr);
 $settings = $ch->getSettings();
+$settings['version'] = $version;
+$settings['demo'] = $demo;

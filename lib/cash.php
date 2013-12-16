@@ -316,6 +316,12 @@ class Cash {
 
     $ret['file'] = '';
     if(is_array($files['cash_item_file'])) {
+      global $settings;
+      if($settings['demo'] == 1 && !empty($files['cash_item_file']['name'])) { 
+        $this->db->rollback();
+        return array('failure'=>true, 'msg'=> 'Добавление файлов в режиме демостенда отключено');
+      }
+      
       $ext = pathinfo($files['cash_item_file']['name'], PATHINFO_EXTENSION);
       $fname = 'files/'.crc32(time().$files['cash_item_file']['name']).".".$ext;
       if(move_uploaded_file($files['cash_item_file']['tmp_name'], "../".$fname)) {

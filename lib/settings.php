@@ -57,7 +57,7 @@ class CashSett {
     return intval($id);
   }
 
-  public function saveUsr($data) {
+  public function saveUsr($data) {    
     if(!$this->usr->canSetting()) return "Ошибка доступа";
     if(intval($data['bd_id']) < 1) return "Укажите БД";
     if(empty($data['login'])) return "Укажите Логин";
@@ -75,6 +75,9 @@ class CashSett {
       $id = $this->db->last_id();
     } else {
       //update
+      global $settings;
+      if($settings['demo'] == 1 && ($id == 1 || $id == 2)) return "Редактирование системных записей в режиме демостенда отключено";
+      
       if( intval($data['s_setting'] == "true") == 0 && $id == 1) {
         return "Нельзя отбирать права настроек у главного администратора";
       }
@@ -97,6 +100,9 @@ class CashSett {
   }
 
   public function delUsr($id) {
+    global $settings;
+    if($settings['demo'] == 1 && ($id == 1 || $id == 2)) return "Удаление системных записей в режиме демостенда отключено";
+    
     if(!$this->usr->canSetting()) return "Ошибка доступа";
     if( intval($id) == 1 ) return "Нельзя удалять главного администратора";
     $cnt = $this->db->element("SELECT COUNT(id) cnt from cashes WHERE uid = ? AND visible = 1", $id);
@@ -112,6 +118,8 @@ class CashSett {
   }
   
   public function setSetting($refb, $indx, $data) {
+    global $settings;
+    if($settings['demo'] == 1) return "Редактирование отключено в режиме демостенда";
     if(!$this->usr->canSetting()) return "Ошибка доступа";
     $refbs = array("cashes_group", "cashes_nom", "cashes_org", "cashes_setting", "cashes_type", "currency");
     if(!in_array($refb, $refbs)) return "Несуществующий справочник!";

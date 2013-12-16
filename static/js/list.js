@@ -34,6 +34,10 @@ var cash_list_store = Ext.create('Ext.data.Store', {
     }
 }); //cash_list_store
 
+Ext.state.Manager.setProvider(new Ext.state.CookieProvider({
+    expires: new Date(new Date().getTime()+10006060247) //7 days from now
+}));
+
 var cash_list_grid = Ext.create('Ext.grid.Panel', {
     store: cash_list_store,
     columns: [
@@ -81,6 +85,8 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
             }]
         }
     ],
+    stateful: true,
+    stateId: 'cash_list_grid_state',
     listeners: {
       cellkeydown: function( obj, td, cellIndex, record, tr, rowIndex, e, eOpts ) {
         var key = e.getKey();

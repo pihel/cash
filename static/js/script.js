@@ -110,8 +110,7 @@ function loadScript(path, _calb) {
     }
   }
 
-  path = path + "?a=1.011";
-  //path = path + "?v=" + Math.random();//debug
+  path = path + "?" + version;
 
   Ext.Loader.loadScript({url: path, scope: this,
     onLoad: function() {

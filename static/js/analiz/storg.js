@@ -17,6 +17,7 @@ var cash_analiz_storg_amount = {
     value: 1000000,
     listeners: {
       change: function( o, newValue, oldValue, eOpts ) {
+        Ext.util.Cookies.set("cash_analiz_storg_amount", newValue);
         cash_analiz_strg_store.proxy.url = 'ajax/analiz/storg.php?amount=' + newValue
         cash_analiz_strg_refresh();
       }
@@ -106,11 +107,17 @@ function cash_analiz_strg_load(_cb) {
     if(_cb != undefined) _cb();
     return;
   }
+  
+  var amount = parseInt( Ext.util.Cookies.get("cash_analiz_storg_amount") );
 
   Ext.getCmp('cash_analiz_rest').add(cash_analiz_strg_lbl);
   Ext.getCmp('cash_analiz_rest').add(cash_analiz_storg);
   Ext.getCmp('cash_analiz_rest').add(cash_analiz_strg_chart);
   cash_analiz_strg_refresh();
+  
+  if(amount > 0) {
+    Ext.getCmp('cash_analiz_storg_amount').setValue(amount);
+  }
 
   if(_cb != undefined) _cb();
 }

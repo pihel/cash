@@ -20,6 +20,13 @@ var cash_plan_store = Ext.create('Ext.data.Store', {
     }
 }); //cash_plan_store
 
+function getPluginPlanSave() {
+  if(parseInt(rights.write) != 1) return [];
+  return [Ext.create('Ext.grid.plugin.CellEditing', {
+            clicksToEdit:  1
+        })];
+}
+
 var cash_plan_grid = Ext.create('Ext.grid.Panel', {
     store: cash_plan_store,
     id: "cash_plan_grid",
@@ -67,11 +74,7 @@ var cash_plan_grid = Ext.create('Ext.grid.Panel', {
       }
     ],
     selType: 'cellmodel',
-    plugins: [
-        Ext.create('Ext.grid.plugin.CellEditing', {
-            clicksToEdit: 1
-        })
-    ]
+    plugins: getPluginPlanSave()
 }); //cash_plan_grid
 
 var loadMask_cash_plan_grid = new Ext.LoadMask(cash_plan_grid, {msg:'Загрузка планов...', store: cash_plan_store});

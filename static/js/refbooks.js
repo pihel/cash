@@ -51,8 +51,16 @@ var colSave = {
 };
 
 function getColSave(refb) {
+  if(settings.demo == 1) return {hidden: true, sortable: false, hideable: false, xtype: 'actioncolumn'};
   colSave.refbook = refb;
   return colSave;
+}
+
+function getPluginSave() {
+  if(settings.demo == 1) return [];
+  return [Ext.create('Ext.grid.plugin.CellEditing', {
+            clicksToEdit:  1
+        })];
 }
 
 var cash_refb_set_grid = Ext.create('Ext.grid.Panel', {
@@ -73,11 +81,7 @@ var cash_refb_set_grid = Ext.create('Ext.grid.Panel', {
     },
     autoEncode: true,
     selType: 'cellmodel',
-    plugins: [
-        Ext.create('Ext.grid.plugin.CellEditing', {
-            clicksToEdit: 1
-        })
-    ]
+    plugins: getPluginSave()
 }); //cash_refb_set_grid
 var cash_refb_set_grid_load_mask = new Ext.LoadMask(cash_refb_set_grid, {msg:'Загрузка списка настроек...', store: cash_refb_settings});
 
@@ -116,11 +120,7 @@ var cash_refb_cur_grid = Ext.create('Ext.grid.Panel', {
       ,getColSave("currency")
     ],
     selType: 'cellmodel',
-    plugins: [
-        Ext.create('Ext.grid.plugin.CellEditing', {
-            clicksToEdit: 1
-        })
-    ]
+    plugins: getPluginSave()
 }); //cash_refb_cur_grid
 var cash_refb_cur_load_mask = new Ext.LoadMask(cash_refb_cur_grid, {msg:'Загрузка списка валют...', store: cash_refb_cur_store});
 
@@ -157,11 +157,7 @@ var cash_refb_ptype_grid = Ext.create('Ext.grid.Panel', {
       ,getColSave("cashes_group")
     ],
     selType: 'cellmodel',
-    plugins: [
-        Ext.create('Ext.grid.plugin.CellEditing', {
-            clicksToEdit: 1
-        })
-    ]
+    plugins: getPluginSave()
 }); //cash_refb_ptype_grid
 var cash_refb_ptype_mask = new Ext.LoadMask(cash_refb_ptype_grid, {msg:'Загрузка списка групп...', store: cash_refb_ptype_store});
 
@@ -200,11 +196,7 @@ var cash_refb_org_grid = Ext.create('Ext.grid.Panel', {
       ,getColSave("cashes_org")
     ],
     selType: 'cellmodel',
-    plugins: [
-        Ext.create('Ext.grid.plugin.CellEditing', {
-            clicksToEdit: 1
-        })
-    ]
+    plugins: getPluginSave()
 }); //cash_refb_org_grid
 var cash_refb_org_mask = new Ext.LoadMask(cash_refb_org_grid, {msg:'Загрузка списка организаций...', store: cash_refb_org_store});
 
@@ -242,11 +234,7 @@ var cash_refb_type_grid = Ext.create('Ext.grid.Panel', {
       ,getColSave("cashes_type")
     ],
     selType: 'cellmodel',
-    plugins: [
-        Ext.create('Ext.grid.plugin.CellEditing', {
-            clicksToEdit: 1
-        })
-    ]
+    plugins: getPluginSave()
 }); //cash_refb_type_grid
 var cash_refb_type_mask = new Ext.LoadMask(cash_refb_type_grid, {msg:'Загрузка списка кошельков...', store: cash_refb_type_store});
 
@@ -282,11 +270,7 @@ var cash_refb_nmcl_grid = Ext.create('Ext.grid.Panel', {
       ,getColSave("cashes_nom")
     ],
     selType: 'cellmodel',
-    plugins: [
-        Ext.create('Ext.grid.plugin.CellEditing', {
-            clicksToEdit: 1
-        })
-    ]
+    plugins: getPluginSave()
 }); //cash_refb_nmcl_grid
 var cash_refb_nmcl_mask = new Ext.LoadMask(cash_refb_nmcl_grid, {msg:'Загрузка списка номенклатур...', store: cash_refb_nmcl_store});
 

@@ -20,7 +20,7 @@ require_once('lib/init.php');
     <meta charset=utf-8>
     <title><?=$settings['site_name'];?></title>
     <link rel="shortcut icon" href="<?=$settings['static'];?>/favicon.png" />
-    <link href="<?=$settings['static'];?>/style.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="<?=$settings['static'];?>/style.css?<?=$settings['version'];?>" media="all" rel="stylesheet" type="text/css" />
     <link href="<?=$settings['extjs'];?>/resources/css/ext-all.css" media="all" rel="stylesheet" type="text/css" />
     <link href="<?=$settings['extjs']?>/examples/ux/grid/css/GridFilters.css" rel="stylesheet" type="text/css" />
     <link href="<?=$settings['extjs']?>/examples/ux/grid/css/RangeMenu.css" rel="stylesheet" type="text/css" />
@@ -28,8 +28,9 @@ require_once('lib/init.php');
     <script language="javascript">
       var ux_dir = '<?=$settings['extjs'];?>/examples/ux';
       var static_dir = '<?=$settings['static'];?>';
+      var version = '<?=$settings['version'];?>';
     </script>
-    <script src="<?=$settings['static'];?>/js/script.js" charset="UTF-8" type="text/javascript"></script>
+    <script src="<?=$settings['static'];?>/js/script.js?<?=$settings['version'];?>" charset="UTF-8" type="text/javascript"></script>
     <script src="<?=$settings['extjs'];?>/locale/ext-lang-<?=$settings['lang'];?>.js" charset="UTF-8" type="text/javascript"></script>
   </head>
   <body>
