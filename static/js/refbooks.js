@@ -51,13 +51,13 @@ var colSave = {
 };
 
 function getColSave(refb) {
-  if(settings.demo == 1) return {hidden: true, sortable: false, hideable: false, xtype: 'actioncolumn'};
+  //if(settings.demo == 1) return {hidden: true, sortable: false, hideable: false, xtype: 'actioncolumn'};
   colSave.refbook = refb;
   return colSave;
 }
 
 function getPluginSave() {
-  if(settings.demo == 1) return [];
+  //if(settings.demo == 1) return [];
   return [Ext.create('Ext.grid.plugin.CellEditing', {
             clicksToEdit:  1
         })];

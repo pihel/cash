@@ -64,6 +64,7 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
       {
             menuDisabled: true,
             sortable: false,
+            draggable: false,
             hideable: false,
             xtype: 'actioncolumn',
             width: 55,
@@ -85,8 +86,8 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
             }]
         }
     ],
-    stateful: true,
-    stateId: 'cash_list_grid_state',
+    //stateful: true, //bug
+    //stateId: 'cash_list_grid_state',
     listeners: {
       cellkeydown: function( obj, td, cellIndex, record, tr, rowIndex, e, eOpts ) {
         var key = e.getKey();
