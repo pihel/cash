@@ -366,11 +366,13 @@ function submt_add(_add) {
           cash_list_add.setLoading(false);
           if(_add) {
             setDefault();
-            Ext.getCmp('cash_item_nmcl_cb').focus(false, 1);
+            listRefresh(function() {
+              Ext.getCmp('cash_item_nmcl_cb').focus(false, 100);
+            });
           } else {
             cash_list_add.hide();
+            listRefresh();
           }
-          listRefresh();
       },
       failure: function(form, action) {
           error(action.result.msg, function() {

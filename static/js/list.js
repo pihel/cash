@@ -242,11 +242,13 @@ function listRefresh(_cb) {
   }
 
 
-  cash_list_store.load(function(e) {
-    cash_list_grid.getView().focus();
-    cash_list_grid.getSelectionModel().select(cash_list_store.last());
-        
-    if(typeof _cb == "function") _cb(e);
+  cash_list_store.load(function(e) {  
+    if(typeof _cb == "function") {
+      _cb(e);
+    } else {
+      cash_list_grid.getView().focus();
+      cash_list_grid.getSelectionModel().select(cash_list_store.last());
+    }
   });
 
   setAnkhor();

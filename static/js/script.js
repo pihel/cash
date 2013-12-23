@@ -44,7 +44,11 @@ function price(val, metaData, record) {
   
   Ext.util.Format.thousandSeparator = " ";
   if(settings.round == 1) {
-    val = Ext.util.Format.round(val, 0);
+    if(val > 0) {
+      val = Ext.util.Format.round(val, 0);
+    } else {
+      val = -1*Ext.util.Format.round(Math.abs(val), 0);
+    }
     val = Ext.util.Format.number(val, "0,0");
   } else {      
     val = Ext.util.Format.number(val, "0,0.00");
@@ -55,7 +59,11 @@ function price(val, metaData, record) {
 function price_r (val) {
   Ext.util.Format.thousandSeparator = " ";
   if(settings.round == 1) {
-    val = Ext.util.Format.round(val, 0);
+    if(val > 0) {
+      val = Ext.util.Format.round(val, 0);
+    } else {
+      val = -1*Ext.util.Format.round(Math.abs(val), 0);
+    }
     val = Ext.util.Format.number(val, "0,0");
   } else {
     val = Ext.util.Format.number(val, "0,0.00");
