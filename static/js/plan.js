@@ -50,7 +50,7 @@ var cash_plan_grid = Ext.create('Ext.grid.Panel', {
           id: "cash_plan_edit_col",
           width: 30,
           items: [ {
-            icon: static_dir + "/yes.gif",
+            icon: settings.static + "/yes.gif",
             tooltip: 'Сохранить запись',
             handler: function(grid, rowIndex, colIndex) {
                 if(parseInt(rights.write) == 0) return;

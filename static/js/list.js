@@ -286,8 +286,8 @@ var cash_list_filter = {
     onChange: function(newVal, oldVal) {
       if(newVal && Ext.getCmp('cash_list_tb_filter').isVisible()) return;
       Ext.getCmp('cash_list_filter_loading').show();
-      loadScript(static_dir + "/js/add.js", function() {
-        loadScript(static_dir + "/js/filter.js", function() {
+      loadScript(settings.static + "/js/add.js", function() {
+        loadScript(settings.static + "/js/filter.js", function() {
           loadFilter(function() {
             if(newVal) {
               Ext.getCmp('cash_list_tb_filter').show();
@@ -310,7 +310,7 @@ var cash_list_edit_btn_add =
 	text: 'Добавить',
   tooltip: "Добавить операцию (Insert)",
 	id: "cash_list_edit_btn_add",
-	icon: static_dir + "/add.gif",
+	icon: settings.static + "/add.gif",
 	handler : function (){
     addItem();
 	}
@@ -441,8 +441,8 @@ function setListAnkhor() {
 
     if(h[0] == "exfilter" && h[1] == "1") {
       Ext.getCmp('cash_list_filter_loading').show();
-      loadScript(static_dir + "/js/add.js", function() {
-        loadScript(static_dir + "/js/filter.js", function() {
+      loadScript(settings.static + "/js/add.js", function() {
+        loadScript(settings.static + "/js/filter.js", function() {
           loadFilter(function() {
             Ext.getCmp('cash_list_tb_filter').show();
             setListAnkhorEx(p, function() {

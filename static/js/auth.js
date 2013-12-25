@@ -138,6 +138,7 @@ var loginWindow = new Ext.Window({
   title:'Вход в бухгалтерию',
   width:330,
   closable: false,
+  resizable: false,
   items: loginForm,
   listeners: {
     show: function(){
@@ -155,6 +156,10 @@ var loginWindow = new Ext.Window({
             login_usr_name_list_cb.setValue(parseInt(uid));
           }
           Ext.getCmp('password').focus(false, 100);
+          Ext.getCmp('password').setValue("");
+          if(db_id == 1 && uid == 1 && 1 == settings.demo) { //demo
+            Ext.getCmp('password').setValue("admin");
+          }
         });
       });
     }

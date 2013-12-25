@@ -3,7 +3,7 @@ Ext.Loader.setConfig({
     disableCaching: false
 });
 
-Ext.Loader.setPath('Ext.ux', ux_dir);
+Ext.Loader.setPath('Ext.ux', settings.extjs + '/examples/ux');
 
 /***************************
  * included modules
@@ -32,7 +32,6 @@ Ext.require([
 var uid = 0;
 var db_id = 0;
 var rights = [];
-var settings = [];
 var check_lt_id = undefined;
 
 /* RENDER function */
@@ -118,7 +117,7 @@ function loadScript(path, _calb) {
     }
   }
 
-  path = path + "?" + version;
+  path = path + "?" + settings.version;
 
   Ext.Loader.loadScript({url: path, scope: this,
     onLoad: function() {
@@ -213,35 +212,26 @@ function authOk(id) {
         Ext.util.Cookies.set("DB_ID", db_id, dt );
         Ext.util.Cookies.set("USR_ID", uid, dt );
 
-        Ext.Ajax.request({
-          url: "ajax/settings.php",
-          method: "GET",
-          success: function(data) {
-            settings = Ext.decode(data.responseText);
+        loadScript(settings.static + "/js/list.js", function() {
+          loadScript(settings.static + "/js/tabs.js", function() {
+            Ext.getCmp('cash_sett').setDisabled(parseInt(rights.setting) == 0);
+            Ext.getCmp('cash_analit').setDisabled(parseInt(rights.analiz) == 0);
+            Ext.getCmp('cash_list_panel').setDisabled(parseInt(rights.read) == 0);
+            Ext.getCmp('cash_plan').setDisabled(parseInt(rights.read) == 0);
 
-            loadScript(static_dir + "/js/list.js", function() {
-              loadScript(static_dir + "/js/tabs.js", function() {
-                Ext.getCmp('cash_sett').setDisabled(parseInt(rights.setting) == 0);
-                Ext.getCmp('cash_analit').setDisabled(parseInt(rights.analiz) == 0);
-                Ext.getCmp('cash_list_panel').setDisabled(parseInt(rights.read) == 0);
-                Ext.getCmp('cash_plan').setDisabled(parseInt(rights.read) == 0);
+            Ext.getCmp('cash_list_edit_btn_add').setDisabled(parseInt(rights.write) == 0);
+            Ext.getCmp('cash_list_edit_col').setVisible(parseInt(rights.write) == 1);
 
-                Ext.getCmp('cash_list_edit_btn_add').setDisabled(parseInt(rights.write) == 0);
-                Ext.getCmp('cash_list_edit_col').setVisible(parseInt(rights.write) == 1);
-
-                if(!restoreAnkhor()) {
-                  setDefaultListVal();
-                  //listRefresh();
-                }
-                
-                check_lt_id = window.setInterval(function() {
-                  checkLifeTime();
-                }, 60000);
-              });
-            });
-
-          } //success
-        }); //Ext.Ajax.request
+            if(!restoreAnkhor()) {
+              setDefaultListVal();
+              //listRefresh();
+            }
+            
+            check_lt_id = window.setInterval(function() {
+              checkLifeTime();
+            }, 60000);
+          });
+        });
       } //success
     }); //Ext.Ajax.request
   }
@@ -264,7 +254,7 @@ function checkAuth() {
               window.location.reload();
               return;
           }
-          loadScript(static_dir + "/js/auth.js", function() {
+          loadScript(settings.static + "/js/auth.js", function() {
                 loginWindow.show();
           });
         }

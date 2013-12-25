@@ -27,7 +27,7 @@ var colSave = {
     width: 30,
     refbook: "",
     items: [ {
-      icon: static_dir + "/yes.gif",
+      icon: settings.static + "/yes.gif",
       tooltip: 'Сохранить запись',
       handler: function(grid, rowIndex, colIndex) {
         if(parseInt(rights.write) == 0) return;
@@ -282,7 +282,7 @@ var cash_refb_dwnl_btn = {
   text: 'Скачать базу данных',
   tooltip: 'В формета Sqlite 3',
   border: true,
-  icon: static_dir + "/files.gif",
+  icon: settings.static + "/files.gif",
   handler : function(){
     window.open("get.php?id=-1");
     return false;

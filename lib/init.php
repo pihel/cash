@@ -15,7 +15,7 @@ $demo = 0;
 
 /*Версия*/
 //$version = rand(); //для отладки
-$version = "a=1.015";
+$version = "a=1.016";
 
 if($debug) {
   error_reporting(~E_NOTICE);

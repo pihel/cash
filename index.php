@@ -32,9 +32,11 @@ require_once('lib/init.php');
     <link href="<?=$settings['extjs']?>/examples/ux/grid/css/RangeMenu.css" rel="stylesheet" type="text/css" />
     <script src="<?=$settings['extjs'];?>/ext-all.js" 	type="text/javascript"></script>
     <script language="javascript">
-      var ux_dir = '<?=$settings['extjs'];?>/examples/ux';
-      var static_dir = '<?=$settings['static'];?>';
-      var version = '<?=$settings['version'];?>';
+      var settings = <?
+        $s = $settings;
+        unset($s['add']);
+        echo json_encode($s);
+      ?>;
     </script>
     <script src="<?=$settings['static'];?>/js/script.js?<?=$settings['version'];?>" charset="UTF-8" type="text/javascript"></script>
     <script src="<?=$settings['extjs'];?>/locale/ext-lang-<?=$settings['lang'];?>.js" charset="UTF-8" type="text/javascript"></script>

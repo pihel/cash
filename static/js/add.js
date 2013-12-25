@@ -299,7 +299,7 @@ var cash_item_save = Ext.create('Ext.button.Button', {
 	formBind: true,
 	id: "cash_item_save",
   tooltip: "Сохранить и закрыть (Enter)",
-	icon: static_dir + "/yes.gif",
+	icon: settings.static + "/yes.gif",
 	disabled: true,
 	handler : function() {
 	  submt_add();
@@ -311,7 +311,7 @@ var cash_item_add = Ext.create('Ext.button.Button', {
 	formBind: true,
   tooltip: "Добавить и продолжить (Ctrl-Enter)",
 	id: "cash_item_add",
-	icon: static_dir + "/yes.gif",
+	icon: settings.static + "/yes.gif",
 	disabled: true,
 	tabIndex: -1,
 	handler : function() {

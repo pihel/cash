@@ -18,7 +18,7 @@ var cash_set_db_store = Ext.create('Ext.data.Store', {
 
 var cash_set_db_add = Ext.create('Ext.button.Button', {
   text: 'Добавить',
-  icon: static_dir + "/add.gif",
+  icon: settings.static + "/add.gif",
   handler : function () {
     var res = "";
     Ext.MessageBox.prompt('Имя БД', 'Введи имя базы данных', function(id, txt) {
@@ -141,7 +141,7 @@ var cash_set_usr_store = Ext.create('Ext.data.Store', {
 var cash_set_usr_add = Ext.create('Ext.button.Button', {
   text: 'Добавить',
   disabled: true,
-  icon: static_dir + "/add.gif",
+  icon: settings.static + "/add.gif",
   handler : function () {
     cash_set_usr_store.add({id:0,
 			    bd_id: cash_set_db_grid.getView().getSelectionModel().getSelection()[0].data.id,
@@ -200,7 +200,7 @@ var cash_set_usr_grid = Ext.create('Ext.grid.Panel', {
                     }
                 }
               }, " ", {
-                icon: static_dir + "/yes.gif",
+                icon: settings.static + "/yes.gif",
                 tooltip: 'Сохранить запись',
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
