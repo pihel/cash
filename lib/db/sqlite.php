@@ -5,12 +5,12 @@ class SQLITE_DB extends DB {
     return new SQLite3($srv);
   }
 
-  public static function upper_ru($s) {
+  public static function upper_utf($s) {
     return mb_strtoupper($s, 'UTF-8');
   }
 
   public function after_connect() {
-    $this->_con->createFunction('UPPER_UTF8', array('SQLITE_DB', 'upper_ru'), 1);
+    $this->_con->createFunction('UPPER_UTF8', array('SQLITE_DB', 'upper_utf'), 1);
   }
 
   public function raiseError() {

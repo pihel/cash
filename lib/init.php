@@ -14,8 +14,8 @@ $life_time = ini_get("session.gc_maxlifetime");
 $demo = 0;
 
 /*Версия*/
+$version = "a=1.017";
 //$version = rand(); //для отладки
-$version = "a=1.016";
 
 if($debug) {
   error_reporting(~E_NOTICE);

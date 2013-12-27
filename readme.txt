@@ -1,10 +1,5 @@
 Домашняя бухгалтерия на ExtJS 4, PHP 5, SQLite 3.
-Демо - http://cash.skahin.ru
-Пароль и логин: demo
+Демо - http://demo.skahin.ru
+Пароль и логин: admin
 
-=============================================
-chown -R www-data ./
-
-git add *
-git commit -a -m ''
-git push -u origin master
+Описание возможностей: http://buh.skahin.ru
