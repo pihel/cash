@@ -18,8 +18,7 @@ var cash_analiz_storg_amount = {
     listeners: {
       change: function( o, newValue, oldValue, eOpts ) {
         Ext.util.Cookies.set("cash_analiz_storg_amount", newValue);
-        cash_analiz_strg_store.proxy.url = 'ajax/analiz/storg.php?amount=' + newValue
-        cash_analiz_strg_refresh();
+        cash_analiz_rest_refresh();
       }
     }
 };//cash_analiz_storg_amount
@@ -34,10 +33,12 @@ var cash_analiz_storg = {
 }; //cash_analiz_storg
 
 
-function cash_analiz_strg_refresh() {
+function cash_analiz_rest_refresh() {
+  var amount = Ext.getCmp('cash_analiz_storg_amount').getValue();
+  cash_analiz_strg_store.proxy.url = 'ajax/analiz/storg.php?amount=' + amount + getUsrFltr()
   cash_analiz_strg_store.load();
   setAnkhor();
-} //cash_analiz_strg_refresh
+} //cash_analiz_rest_refresh
 
 var cash_analiz_strg_model = Ext.define('cash_analiz_strg_model', {
     extend: 'Ext.data.Model',
@@ -113,7 +114,7 @@ function cash_analiz_strg_load(_cb) {
   Ext.getCmp('cash_analiz_rest').add(cash_analiz_strg_lbl);
   Ext.getCmp('cash_analiz_rest').add(cash_analiz_storg);
   Ext.getCmp('cash_analiz_rest').add(cash_analiz_strg_chart);
-  cash_analiz_strg_refresh();
+  cash_analiz_rest_refresh();
   
   if(amount > 0) {
     Ext.getCmp('cash_analiz_storg_amount').setValue(amount);

@@ -50,7 +50,7 @@ function cash_analiz_com_refresh() {
   if(Ext.getCmp('cash_analiz_com_to_date').getValue() == null) return;
 
   cash_analiz_com_store.proxy.url = "ajax/analiz/common.php?from=" + Ext.Date.format(Ext.getCmp('cash_analiz_com_from_date').getValue(),'Y-m-d') +
-				    "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_com_to_date').getValue(),'Y-m-d');
+				    "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_com_to_date').getValue(),'Y-m-d') + getUsrFltr();
   cash_analiz_com_store.load();
 
   setAnkhor();

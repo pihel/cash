@@ -428,11 +428,51 @@ class Cash {
 
     return array('success'=>true, 'msg'=> $cnt );
   }
+  
+  public function add_check($data) {
+    if(!$this->usr->canWrite()) return "Ошибка доступа";
+    
+    $this->db->start_tran();
+    $cnt = 0;
+    
+    $lines = array();
+    if(is_array($data['cash_check_grid_hdn'])) {
+      $lines = $data['cash_check_grid_hdn'];
+    } else {
+      $lines = json_decode( $data['cash_check_grid_hdn'] );
+    }
+    foreach($lines as $line) {
+      $line = (array)$line;
+      $item = array(
+          'cash_item_date'          => $data['cash_check_date'],
+          'cash_item_nmcl_cb'       => $line['name'],
+          'cash_item_prod_type_cb'  => $line['gr_name'],
+          'cash_item_price'         => $line['price'],
+          'cash_item_currency_cb'   => $data['cash_check_currency_cb'],
+          'cash_item_ctype_cb'      => $data['cash_check_ctype_cb'],
+          'cash_item_qnt'           => $line['qnt'],
+          'cash_item_org_cb'        => $data['cash_check_org_cb'],
+          'cash_item_toper_cb'      => 0,
+          'cash_item_note'          => ''
+      );
+      $ret = $this->add($item, NULL, false);
+      if($ret['failure'] === true ) {
+        $this->db->rollback();
+        $this->db->escape_result($line['name']);
+        return array('failure'=>true, 'msg'=> "Ошибка в строке: '".$line['name']."': ".$ret['msg']);
+      }
+      $cnt++;
+    }
+    $this->db->commit();
+    return array('success'=>true, 'msg'=> $cnt );
+  } //add_check
 
-  public function add($data, $files) {
+  public function add($data, $files, $trans = true) {
     if(!$this->usr->canWrite()) return "Ошибка доступа";
 
-    $this->db->start_tran();
+    if($trans) {
+      $this->db->start_tran();
+    }
 
     $refb = $this->refbook_check($data, $files);
 
@@ -461,7 +501,9 @@ class Cash {
     $id = intval( $this->db->last_id() );
     if($id == 0) { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления операции'); }
 
-    $this->db->commit();
+    if($trans) {
+      $this->db->commit();
+    }
 
     return array('success'=>true, 'msg'=> $id );
   } //add
@@ -473,7 +515,7 @@ class Cash {
     $sql = 
     "SELECT
       MAX(cn.id) as max_id,
-      MIN(cn.id) as min_id,
+      MIN(cn.id) as min_id
 	  FROM
       cashes_nom cn
 	  GROUP BY
@@ -484,7 +526,7 @@ class Cash {
 
     $this->db->start_tran();
     foreach($dbls as $dbl) {
-      $this->db->exec("UPDATE cashes c WHERE c.nmcl_id = ? WHERE c.nmcl_id = ?", $dbl['min_id'], $dbl['max_id']);
+      $this->db->exec("UPDATE cashes SET nmcl_id = ? WHERE nmcl_id = ?", $dbl['min_id'], $dbl['max_id']);
     }
     $this->db->exec("DELETE FROM cashes_nom WHERE NOT EXISTS(SELECT 1 FROM cashes c WHERE c.nmcl_id = cashes_nom.id)");
     $this->db->commit();
@@ -504,3 +546,4 @@ class Cash {
   }
 }
 ?>
+        

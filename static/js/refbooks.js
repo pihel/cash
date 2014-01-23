@@ -280,7 +280,7 @@ var cash_refb_nmcl_mask = new Ext.LoadMask(cash_refb_nmcl_grid, {msg:'Загру
 var cash_refb_dwnl_btn = {
   xtype: 'button',
   text: 'Скачать базу данных',
-  tooltip: 'В формета Sqlite 3',
+  tooltip: 'В формате Sqlite 3',
   border: true,
   icon: settings.static + "/files.gif",
   handler : function(){

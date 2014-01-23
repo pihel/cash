@@ -14,9 +14,11 @@ class CashAnaliz {
 
   public function getCommon($from, $to, $uid = 0) {
     if(!$this->usr->canAnaliz()) return array();
+    
 
     if(empty($from)) $from = date("Y-m-01");
     if(empty($to)) $to = date("Y-m-d");
+    $uid = intval($uid);
 
     $sql =
     " SELECT
@@ -28,13 +30,14 @@ class CashAnaliz {
       WHERE
         c.visible = 1 AND c.bd_id = ?
         AND c.date BETWEEN ? AND ?
+        AND ( c.uid = ? OR 0 = ? )
       GROUP BY
         c.type
       ORDER BY
         c.type ";
         
      $this->db->escape_res = true;
-     return $this->db->select($sql, $this->usr->db_id, $from, $to);
+     return $this->db->select($sql, $this->usr->db_id, $from, $to, $uid, $uid);
   }
 
   public function getDynamic($from, $to, $uid = 0) {
@@ -44,6 +47,7 @@ class CashAnaliz {
 
     if(empty($from)) $from = date("Y-m-01");
     if(empty($to)) $to = date("Y-m-d");
+    $uid = intval($uid);
 
     $sql =
     "SELECT
@@ -67,11 +71,12 @@ class CashAnaliz {
     WHERE
       c.visible = 1 AND c.bd_id = ?
       AND c.date BETWEEN ? AND ?
+      AND ( c.uid = ? OR 0 = ? )
     GROUP BY c.date
     ORDER BY c.date";
 
     $this->db->escape_res = true;
-    return $this->db->select($sql, $from, $this->usr->db_id, $from, $to);
+    return $this->db->select($sql, $from, $this->usr->db_id, $from, $to, $uid, $uid);
   }
 
   public function getGroups($from, $to, $in = 0, $uid = 0) {
@@ -79,6 +84,7 @@ class CashAnaliz {
 
     if(empty($from)) $from = date("Y-m-01");
     if(empty($to)) $to = date("Y-m-d");
+    $uid = intval($uid);
 
     $sql =
     "SELECT
@@ -93,13 +99,14 @@ class CashAnaliz {
     WHERE
       c.visible = 1 AND c.bd_id = ? AND c.type = ?
       AND c.date BETWEEN ? AND ?
+      AND ( c.uid = ? OR 0 = ? )
     GROUP BY
       g.name
     ORDER BY
       out_amount DESC";
 
     $this->db->escape_res = true;
-    return $this->db->select($sql, $this->usr->db_id, intval($in), $from, $to);
+    return $this->db->select($sql, $this->usr->db_id, intval($in), $from, $to, $uid, $uid);
   }
   
   public function getGroupsDyn($from, $to, $gr = 0, $uid = 0) {
@@ -107,6 +114,7 @@ class CashAnaliz {
 
     if(empty($from)) $from = date("Y-01-01");
     if(empty($to)) $to = date("Y-m-d");
+    $uid = intval($uid);
     
     $sql =
       "SELECT
@@ -121,9 +129,11 @@ class CashAnaliz {
                 WHERE 
                   g.id = c.`group`
                   AND c.visible = 1 AND c.bd_id = ? AND c.type = 0
-                  AND c.date BETWEEN ? AND ? ) ";
+                  AND c.date BETWEEN ? AND ?
+                  AND ( c.uid = ? OR 0 = ? )  
+              ) ";
     $this->db->escape_res = true;
-    $grps = $this->db->select($sql, $this->usr->db_id, $from, $to);
+    $grps = $this->db->select($sql, $this->usr->db_id, $from, $to, $uid, $uid);
     
     $grps_key = $grps;
     if($gr == 1) {
@@ -149,6 +159,7 @@ class CashAnaliz {
     WHERE
       c.visible = 1 AND c.bd_id = ? AND c.type = 0
       AND c.date BETWEEN ? AND ?
+      AND ( c.uid = ? OR 0 = ? )
     GROUP BY
       strftime('%Y-%m', c.date), g.name
     ORDER BY
@@ -158,7 +169,7 @@ class CashAnaliz {
     $m = '';
     $i = -1;
     $this->db->escape_res = true;
-    $data = $this->db->select($sql, $this->usr->db_id, $from, $to);
+    $data = $this->db->select($sql, $this->usr->db_id, $from, $to, $uid, $uid);
     foreach($data as $d) {
       if(empty($d['mname'])) continue;
       if($m <> $d['mname']) {
@@ -180,6 +191,7 @@ class CashAnaliz {
     if(empty($from)) $from = date("Y-m-01");
     if(empty($to)) $to = date("Y-m-d");
     $gr = intval($gr);
+    $uid = intval($uid);
     
     $gr_filter = "";
     if($gr > 0) {
@@ -199,6 +211,7 @@ class CashAnaliz {
     WHERE
       c.visible = 1 AND c.bd_id = ? AND c.type = 0
       AND c.date BETWEEN ? AND ?
+      AND ( c.uid = ? OR 0 = ? )
 	  ". $gr_filter ."
     GROUP BY
       o.name
@@ -206,7 +219,7 @@ class CashAnaliz {
       out_amount DESC";
 
     $this->db->escape_res = true;
-    return $this->db->select($sql, $this->usr->db_id, $from, $to, $gr);
+    return $this->db->select($sql, $this->usr->db_id, $from, $to, $uid, $uid, $gr);
   }
 
   public function getPurs($from, $to, $in = 0, $uid = 0) {
@@ -214,6 +227,7 @@ class CashAnaliz {
 
     if(empty($from)) $from = date("Y-m-01");
     if(empty($to)) $to = date("Y-m-d");
+    $uid = intval($uid);
 
     $sql =
     "SELECT
@@ -228,17 +242,19 @@ class CashAnaliz {
     WHERE
       c.visible = 1 AND c.bd_id = ? AND c.type = ?
       AND c.date BETWEEN ? AND ?
+      AND ( c.uid = ? OR 0 = ? )
     GROUP BY
       t.name
     ORDER BY
       out_amount";
 
     $this->db->escape_res = true;
-    return $this->db->select($sql, $this->usr->db_id, intval($in), $from, $to);
+    return $this->db->select($sql, $this->usr->db_id, intval($in), $from, $to, $uid, $uid);
   }
 
   public function getStorage($amount, $uid = 0) {
     if(!$this->usr->canAnaliz()) return array();
+    $uid = intval($uid);
 
     $sql =
     "SELECT
@@ -249,9 +265,10 @@ class CashAnaliz {
     INNER JOIN currency cr
       ON( c.cur_id = cr.id )
     WHERE
-    c.visible =1 AND c.bd_id = ? ";
+    c.visible = 1 AND c.bd_id = ? 
+    AND ( c.uid = ? OR 0 = ? ) ";
     $this->db->escape_res = true;
-    $r = $this->db->select($sql, $this->usr->db_id);
+    $r = $this->db->select($sql, $this->usr->db_id, $uid, $uid);
 
     $amount = intval($amount);
     if($amount == 0) $amount = 1000000;
@@ -267,6 +284,7 @@ class CashAnaliz {
 
     if(empty($from)) $from = date("Y-01-01");
     if(empty($to)) $to = date("Y-m-d");
+    $uid = intval($uid);
 
     $sql =
     "SELECT
@@ -280,13 +298,14 @@ class CashAnaliz {
     WHERE
       c.visible = 1 AND c.bd_id = ?
       AND c.date BETWEEN ? AND  ?
+      AND ( c.uid = ? OR 0 = ? )
     GROUP BY
       strftime('%Y-%m', c.date)
     ORDER BY
       tname";
 
     $this->db->escape_res = true;
-    return $this->db->select($sql, $this->usr->db_id, $from, $to);
+    return $this->db->select($sql, $this->usr->db_id, $from, $to, $uid, $uid);
   }
 
   public function getCurAmount($from, $to, $in = 0, $uid = 0) {
@@ -294,6 +313,7 @@ class CashAnaliz {
 
     if(empty($from)) $from = date("Y-m-01");
     if(empty($to)) $to = date("Y-m-d");
+    $uid = intval($uid);
 
     $sql =
     "SELECT
@@ -306,15 +326,17 @@ class CashAnaliz {
     WHERE
       c.visible = 1 AND c.bd_id = ? AND c.type = ?
       AND c.date BETWEEN ? AND ?
+      AND ( c.uid = ? OR 0 = ? )
     GROUP BY
       cr.name";
 
     $this->db->escape_res = true;
-    return $this->db->select($sql, $this->usr->db_id, $in, $from, $to);
+    return $this->db->select($sql, $this->usr->db_id, $in, $from, $to, $uid, $uid);
   }
 
   public function getAvgInOut($uid = 0) {
     if(!$this->usr->canAnaliz()) return array();
+    $uid = intval($uid);
 
     $sql =
     "SELECT
@@ -330,6 +352,7 @@ class CashAnaliz {
 		    c.`date` >= DATETIME('now', '-11 month', 'start of month')
 		    AND c.bd_id = ?
 		    AND c.visible = 1
+        AND ( c.uid = ? OR 0 = ? )
 	    GROUP BY
 		    c.type,
 		    strftime('%Y-%m', c.date)
@@ -344,7 +367,7 @@ class CashAnaliz {
     $this->db->escape_res = true;
     $ret = array(
 	    $amnt,
-	    $this->db->select($sql, $this->usr->db_id)
+	    $this->db->select($sql, $this->usr->db_id, $uid, $uid)
 	  );
 
     return $ret;
@@ -358,6 +381,7 @@ class CashAnaliz {
     $amnt = intval($amnt);
     $pin = floatval($pin)/12;
     $pout = floatval($pout)/12;
+    $uid = intval($uid);
 
     $secr = array();
     $cnt = 0;

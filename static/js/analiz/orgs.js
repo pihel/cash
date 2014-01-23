@@ -98,7 +98,7 @@ function cash_analiz_org_refresh() {
 
   cash_analiz_org_store.proxy.url = "ajax/analiz/orgs.php?from=" + Ext.Date.format(Ext.getCmp('cash_analiz_org_from_date').getValue(),'Y-m-d') +
 				    "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_org_to_date').getValue(),'Y-m-d') +
-					"&gr=" + (0+Ext.getCmp('cash_analiz_org_prod_type_cb').getValue());
+            "&gr=" + (0+Ext.getCmp('cash_analiz_org_prod_type_cb').getValue()) + getUsrFltr();
   cash_analiz_org_store.load();
   setAnkhor();
 } //cash_analiz_org_refresh
@@ -186,11 +186,11 @@ function cash_analiz_org_load(_cb) {
           if(_cb != undefined) _cb();
     });
   } else {
-	cash_analiz_org_prod_type_store.load(function() {
-		cash_analiz_org_prod_type_store.insert(0,  Ext.data.Record({id:0,name:"Любая"}));
-        setAnalitAnkhorParam();
-        cash_analiz_org_refresh();
-        if(_cb != undefined) _cb();
-	});	
+    cash_analiz_org_prod_type_store.load(function() {
+      cash_analiz_org_prod_type_store.insert(0,  Ext.data.Record({id:0,name:"Любая"}));
+          setAnalitAnkhorParam();
+          cash_analiz_org_refresh();
+          if(_cb != undefined) _cb();
+    });	
   }
 }

@@ -17,7 +17,7 @@ var cash_analiz_grp_from_date =
     format: "Y-m-d",
     maxValue: new Date(),
     width: 160,
-    onChange: cash_analiz_grp_refresh
+    onChange: cash_analiz_group_refresh
 }; // cash_analiz_grp_from_date
 
 
@@ -31,7 +31,7 @@ var cash_analiz_grp_to_date =
     labelWidth: 20,
     format: "Y-m-d",
     width: 120,
-    onChange: cash_analiz_grp_refresh
+    onChange: cash_analiz_group_refresh
 }; // cash_analiz_grp_to_date
 
 var cash_analiz_grp_in = {
@@ -41,7 +41,7 @@ var cash_analiz_grp_in = {
     id        : 'cash_analiz_grp_in',
     disabled  : true,
     onChange: function(newVal, oldVal) {
-      cash_analiz_grp_refresh();
+      cash_analiz_group_refresh();
     } //onChange
 }; //cash_analiz_grp_in
 
@@ -56,19 +56,19 @@ var cash_analiz_grp_date = {
 }; //cash_analiz_grp_date
 
 
-function cash_analiz_grp_refresh() {
+function cash_analiz_group_refresh() {
   if(Ext.getCmp('cash_analiz_grp_from_date').getValue() == null) return;
   if(Ext.getCmp('cash_analiz_grp_to_date').getValue() == null) return;
   if(Ext.getCmp('cash_analiz_grp_in').disabled) return;
 
   cash_analiz_grp_store.proxy.url = "ajax/analiz/groups.php?in=" + (0+Ext.getCmp('cash_analiz_grp_in').getValue()) +
 				    "&from=" + Ext.Date.format(Ext.getCmp('cash_analiz_grp_from_date').getValue(),'Y-m-d') +
-				    "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_grp_to_date').getValue(),'Y-m-d');
+				    "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_grp_to_date').getValue(),'Y-m-d') + getUsrFltr();
   cash_analiz_grp_store.load(function() {
     //setAnalitAnkhorParam();
   });
   setAnkhor();
-} //cash_analiz_grp_refresh
+} //cash_analiz_group_refresh
 
 var cash_analiz_grp_model = Ext.define('cash_analiz_grp_model', {
     extend: 'Ext.data.Model',
@@ -149,10 +149,10 @@ function cash_analiz_grp_load(_cb) {
     Ext.getCmp('cash_analiz_grp_in').setDisabled(false);
     Ext.getCmp('cash_analiz_grp_in').setValue(false);
     Ext.getCmp('cash_analiz_grp_to_date').setValue(cd);
-    cash_analiz_grp_refresh();
+    cash_analiz_group_refresh();
   } else {
     setAnalitAnkhorParam();
-    cash_analiz_grp_refresh();
+    cash_analiz_group_refresh();
   }
 
   if(_cb != undefined) _cb();

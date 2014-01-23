@@ -17,7 +17,7 @@ var cash_analiz_purs_from_date =
     format: "Y-m-d",
     maxValue: new Date(),
     width: 160,
-    onChange: cash_analiz_purs_refresh
+    onChange: cash_analiz_cash_type_refresh
 }; // cash_analiz_purs_from_date
 
 
@@ -31,7 +31,7 @@ var cash_analiz_purs_to_date =
     labelWidth: 20,
     format: "Y-m-d",
     width: 120,
-    onChange: cash_analiz_purs_refresh
+    onChange: cash_analiz_cash_type_refresh
 }; // cash_analiz_purs_to_date
 
 var cash_analiz_purs_in = {
@@ -41,7 +41,7 @@ var cash_analiz_purs_in = {
     disabled  : true,
     id        : 'cash_analiz_purs_in',
     onChange: function(newVal, oldVal) {
-      cash_analiz_purs_refresh();
+      cash_analiz_cash_type_refresh();
     } //onChange
 }; //cash_analiz_purs_in
 
@@ -56,17 +56,17 @@ var cash_analiz_purs_date = {
 }; //cash_analiz_purs_date
 
 
-function cash_analiz_purs_refresh() {
+function cash_analiz_cash_type_refresh() {
   if(Ext.getCmp('cash_analiz_purs_from_date').getValue() == null) return;
   if(Ext.getCmp('cash_analiz_purs_to_date').getValue() == null) return;
   if(Ext.getCmp('cash_analiz_purs_in').disabled) return;
 
   cash_analiz_purs_store.proxy.url = "ajax/analiz/purs.php?in=" + (0+Ext.getCmp('cash_analiz_purs_in').getValue()) +
 				     "&from=" + Ext.Date.format(Ext.getCmp('cash_analiz_purs_from_date').getValue(),'Y-m-d') +
-				     "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_purs_to_date').getValue(),'Y-m-d');
+				     "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_purs_to_date').getValue(),'Y-m-d') + getUsrFltr();
   cash_analiz_purs_store.load();
   setAnkhor();
-} //cash_analiz_purs_refresh
+} //cash_analiz_cash_type_refresh
 
 var cash_analiz_purs_model = Ext.define('cash_analiz_purs_model', {
     extend: 'Ext.data.Model',
@@ -150,7 +150,7 @@ function cash_analiz_purs_load(_cb) {
   } else {
     setAnalitAnkhorParam();
   }
-  cash_analiz_purs_refresh();
+  cash_analiz_cash_type_refresh();
 
   if(_cb != undefined) _cb();
 }

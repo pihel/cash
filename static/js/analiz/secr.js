@@ -135,7 +135,7 @@ function cash_analiz_secr_refresh() {
 				     "&in=" + Ext.getCmp('cash_analiz_secr_in').getValue() +
 				     "&out=" + Ext.getCmp('cash_analiz_secr_out').getValue() +
 				     "&proc_in=" + Ext.getCmp('cash_analiz_secr_in_proc').getValue() +
-				     "&proc_out=" + Ext.getCmp('cash_analiz_secr_out_proc').getValue();
+				     "&proc_out=" + Ext.getCmp('cash_analiz_secr_out_proc').getValue() + getUsrFltr();
   cash_analiz_secr_store.load();
   setAnkhor();
 } //cash_analiz_secr_refresh
@@ -223,22 +223,22 @@ function cash_analiz_secr_load(_cb) {
 
   if(isDefaultAnaliz()) {
     Ext.Ajax.request({
-	url: "ajax/analiz/avg_inout.php",
-	method: "GET",
-	success: function(data) {
-	    var obj = Ext.decode(data.responseText);
-	    Ext.getCmp('cash_analiz_secr_amnt').setValue(obj[0]);
-	    if(typeof obj[1][0] != "undefined") {
-	      Ext.getCmp('cash_analiz_secr_out').setValue(obj[1][0].avg_amount);
-	    } else {
-	      Ext.getCmp('cash_analiz_secr_out').setValue(0);
-	    }
-	    if(typeof obj[1][1] != "undefined") {
-	      Ext.getCmp('cash_analiz_secr_in').setValue(obj[1][1].avg_amount);
-	    } else {
-	      Ext.getCmp('cash_analiz_secr_in').setValue(0);
-	    }
-	}//success
+      url: "ajax/analiz/avg_inout.php?1" + getUsrFltr(),
+      method: "GET",
+      success: function(data) {
+          var obj = Ext.decode(data.responseText);
+          Ext.getCmp('cash_analiz_secr_amnt').setValue(obj[0]);
+          if(typeof obj[1][0] != "undefined") {
+            Ext.getCmp('cash_analiz_secr_out').setValue(obj[1][0].avg_amount);
+          } else {
+            Ext.getCmp('cash_analiz_secr_out').setValue(0);
+          }
+          if(typeof obj[1][1] != "undefined") {
+            Ext.getCmp('cash_analiz_secr_in').setValue(obj[1][1].avg_amount);
+          } else {
+            Ext.getCmp('cash_analiz_secr_in').setValue(0);
+          }
+      }//success
     }); //Ext.Ajax.request
 
   } else {

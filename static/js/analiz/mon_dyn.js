@@ -17,7 +17,7 @@ var cash_analiz_mdyn_from_date =
     format: "Y-m-d",
     maxValue: new Date(),
     width: 160,
-    onChange: cash_analiz_mdyn_refresh
+    onChange: cash_analiz_mondyn_refresh
 }; // cash_analiz_mdyn_from_date
 
 
@@ -31,7 +31,7 @@ var cash_analiz_mdyn_to_date =
     labelWidth: 20,
     format: "Y-m-d",
     width: 120,
-    onChange: cash_analiz_mdyn_refresh
+    onChange: cash_analiz_mondyn_refresh
 }; // cash_analiz_mdyn_to_date
 
 
@@ -45,15 +45,15 @@ var cash_analiz_mdyn_date = {
 }; //cash_analiz_mdyn_date
 
 
-function cash_analiz_mdyn_refresh() {
+function cash_analiz_mondyn_refresh() {
   if(Ext.getCmp('cash_analiz_mdyn_from_date').getValue() == null) return;
   if(Ext.getCmp('cash_analiz_mdyn_to_date').getValue() == null) return;
 
   cash_analiz_mdyn_store.proxy.url = "ajax/analiz/mon_dyn.php?from=" + Ext.Date.format(Ext.getCmp('cash_analiz_mdyn_from_date').getValue(),'Y-m-d') +
-				    "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_mdyn_to_date').getValue(),'Y-m-d');
+				    "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_mdyn_to_date').getValue(),'Y-m-d') + getUsrFltr();
   cash_analiz_mdyn_store.load();
   setAnkhor();
-} //cash_analiz_mdyn_refresh
+} //cash_analiz_mondyn_refresh
 
 var cash_analiz_mdyn_model = Ext.define('cash_analiz_mdyn_model', {
     extend: 'Ext.data.Model',
@@ -143,7 +143,7 @@ function cash_analiz_mdyn_load(_cb) {
   } else {
     setAnalitAnkhorParam();
   }
-  cash_analiz_mdyn_refresh();
+  cash_analiz_mondyn_refresh();
 
   if(_cb != undefined) _cb();
 }

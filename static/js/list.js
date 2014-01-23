@@ -304,6 +304,42 @@ var cash_list_filter = {
     } //onChange
 }; //cash_list_filter
 
+var cash_list_edit_btn_add_check =
+{
+	xtype: 'filefield',
+	buttonText: 'Распознать чек',
+  tooltip: "Распознать чек",
+	id: "cash_list_edit_btn_add_check",
+  buttonOnly: true,
+  buttonConfig: {
+      text: 'Распознать чек',
+      iconCls: 'cash_list_edit_btn_add_check_ico'
+  },
+  listeners: {
+    change: function( o, value, eOpts ){
+      cash_list_edit_btn_ocr_check.submit({
+          waitTitle: 'Пожалуйста подождите...',
+          waitMsg: 'Выполняется распознание чека',
+          success: function(form, action) {
+            addCheck(action.result.msg);
+          },
+          failure: function(form, action) {
+            error(action.result.msg);
+          }
+      }); //cash_list_edit_btn_ocr_check
+    }
+  }
+};
+
+var cash_list_edit_btn_ocr_check = new Ext.FormPanel({
+  url:'ajax/ocr_check.php',
+  bodyPadding: 0,
+  id: "cash_list_edit_btn_ocr_check",
+  frame: false,
+  border: false,
+  items: [cash_list_edit_btn_add_check ]
+}); //cash_list_edit_btn_ocr_check
+
 var cash_list_edit_btn_add =
 {
 	xtype: 'button',
@@ -315,6 +351,15 @@ var cash_list_edit_btn_add =
     addItem();
 	}
 };
+
+function addCheck(hash) {
+  if(parseInt(rights.write) == 0) return;
+  loadScript('static/js/check.js', function() {
+    v_edit_id = 0;
+    v_hash = hash;
+    cash_list_check.show();
+  });
+}
 
 function addItem() {
   if(parseInt(rights.write) == 0) return;
@@ -328,7 +373,7 @@ var cash_list_tb = {
       xtype: 'toolbar',
       dock: 'top',
       ui: 'footer',
-      items: [cash_list_from_date, " ", cash_list_to_date, " ", cash_list_filter, cash_list_filter_loading, '->', cash_list_edit_btn_add],
+      items: [cash_list_from_date, " ", cash_list_to_date, " ", cash_list_filter, cash_list_filter_loading, '->', cash_list_edit_btn_ocr_check, " ",cash_list_edit_btn_add],
       region: 'north',
       id: "cash_list_tb"
 }; //cash_list_tb

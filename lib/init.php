@@ -14,7 +14,7 @@ $life_time = ini_get("session.gc_maxlifetime");
 $demo = 0;
 
 /*Версия*/
-$version = "b=1.001";
+$version = "b=1.010";
 //$version = rand(); //для отладки
 
 if($debug) {
@@ -25,7 +25,7 @@ require_once('error.php');
 require_once('db/db.php');
 require_once('db/sqlite.php');
 
-$db = new SQLITE_DB("SQLITE", $sqlite_path, NULL, NULL, NULL);
+$db = new SQLITE_DB($sqlite_path);
 $db->connect();
 
 if((bool)$short) return;

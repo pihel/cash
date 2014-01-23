@@ -1,7 +1,7 @@
 var cash_analit = Ext.create('Ext.Panel', {
     frame: true,
     id: "cash_analit",
-    layout: 'border',
+    //layout: 'border',
     collapsible: false,
     tabConfig: {
       title: 'Аналитика',
@@ -15,10 +15,13 @@ var cash_analit = Ext.create('Ext.Panel', {
         Ext.getCmp('cash_analit').setLoading("Загрузка аналитики...");
         var p = window.location.hash.split("&");
         loadScript(settings.static + "/js/analiz.js", function() {
-          Ext.getCmp('cash_analit').add(Ext.getCmp('cash_analit_tabs'));
-          setAnkhor();
-          Ext.getCmp('cash_analit').setLoading(false);
-          setAnalitAnkhor(p);
+          cash_usr_name_list.load(function() {
+            Ext.getCmp('cash_analit').add(Ext.getCmp('cash_usr_name_list_cb'));
+            Ext.getCmp('cash_analit').add(Ext.getCmp('cash_analit_tabs'));
+            setAnkhor();
+            Ext.getCmp('cash_analit').setLoading(false);
+            setAnalitAnkhor(p);
+          });
         });
       }
     }

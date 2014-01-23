@@ -1,6 +1,60 @@
 var glob_hash = [];
 var w = Ext.getCmp('cash_analit').getWidth() - 20;
-var h = Ext.getCmp('cash_analit').getHeight() - 45;
+var h = Ext.getCmp('cash_analit').getHeight() - 70;
+
+//---user
+
+var cash_id_name_model = Ext.define('cash_id_name_model', {
+    extend: 'Ext.data.Model',
+    fields: [
+        {name: 'id',      type: 'INT'},
+        {name: 'name',    type: 'text'}
+    ],
+    idProperty: 'id'
+});
+
+var cash_usr_name_list = Ext.create('Ext.data.Store', {
+  model: 'cash_id_name_model',
+  autoDestroy: true,
+  proxy: {
+      // load using HTTP
+      type: 'ajax',
+      url: 'ajax/analiz/usr_list_analiz.php',
+      reader: {
+        type: 'json'
+      }
+  }
+}); //cash_usr_name_list
+
+var cash_usr_name_list_cb = Ext.create('Ext.form.field.ComboBox', {
+    store: cash_usr_name_list,
+    id: "cash_usr_name_list_cb",
+    name: "cash_usr_name_list_cb",
+    fieldLabel: 'Пользователь',
+    labelWidth: 100,
+    editable: false,
+    displayField: 'name',
+    valueField: 'id',
+    queryMode: 'local',
+    allowBlank: false,
+    value: -1,
+    listeners: {
+      select: function( combo, records, e) {
+        var tab_id = Ext.getCmp('cash_analit_tabs').getActiveTab().id;
+        window[tab_id+'_refresh'](); //tab refresh
+      }
+    }
+}); //cash_usr_name_list_cb
+
+function getUsrFltr() {
+  var u = Ext.getCmp('cash_usr_name_list_cb').getValue();
+  if(parseInt(u) > 0) {
+    return "&usr=" + parseInt(u);
+  }
+  return "";
+} //getUsrFltr
+
+//---user
 
 var cash_analiz_com = Ext.create('Ext.Panel', {
     frame: true,

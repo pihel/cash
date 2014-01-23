@@ -65,20 +65,20 @@ var cash_item_nmcl_cb = Ext.create('Ext.form.field.ComboBox', {
           if(records != undefined && records[0].get('id') != 0) {
             cash_list_add.setLoading("Загрузка параметров номенклатуры...");
             Ext.Ajax.request({
-            url: "ajax/nmcl_param.php",
-            method: "GET",
-            params: {
-                nmcl_id: records[0].get('id')
-            },
-            success: function(data) {
-                cash_list_add.setLoading(false);
-                var obj = Ext.decode(data.responseText);
+              url: "ajax/nmcl_param.php",
+              method: "GET",
+              params: {
+                  nmcl_id: records[0].get('id')
+              },
+              success: function(data) {
+                  cash_list_add.setLoading(false);
+                  var obj = Ext.decode(data.responseText);
 
-                Ext.getCmp('cash_item_prod_type_cb').setValue(obj.grp);
-                Ext.getCmp('cash_item_org_cb').setValue(obj.org_name);
-                //Ext.getCmp('cash_item_org_cb').setValue(obj.org_id);
-                Ext.getCmp('cash_item_price').focus(false, 200);
-            }//success
+                  Ext.getCmp('cash_item_prod_type_cb').setValue(obj.grp);
+                  Ext.getCmp('cash_item_org_cb').setValue(obj.org_name);
+                  //Ext.getCmp('cash_item_org_cb').setValue(obj.org_id);
+                  Ext.getCmp('cash_item_price').focus(false, 200);
+              }//success
             }); //Ext.Ajax.request
           }
         }
@@ -152,7 +152,7 @@ var cash_item_currency_store = Ext.create('Ext.data.Store', {
       type: 'ajax',
       url: 'ajax/currency_list.php',
       reader: {
-	  type: 'json'
+        type: 'json'
       }
   }
 }); //cash_item_currency_store

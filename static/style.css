@@ -128,3 +128,13 @@ img {
 #main #cash_list_tb_filter textarea {
   height: 40px;
 }
+#cash_check_form_add {
+  border: 0px;
+}
+.cash_list_edit_btn_add_check_ico {
+  background: transparent url("check.png") 50% 50% no-repeat;
+}
+#cash_list_edit_btn_ocr_check {
+  top: 4px !important;
+  height: 22px !important;
+}

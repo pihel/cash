@@ -51,7 +51,7 @@ function cash_analiz_dyn_refresh() {
   if(Ext.getCmp('cash_analiz_dyn_to_date').getValue() == null) return;
 
   cash_analiz_dyn_store.proxy.url = "ajax/analiz/dynamic.php?from=" + Ext.Date.format(Ext.getCmp('cash_analiz_dyn_from_date').getValue(),'Y-m-d') +
-				    "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_dyn_to_date').getValue(),'Y-m-d');
+				    "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_dyn_to_date').getValue(),'Y-m-d') + getUsrFltr();
   cash_analiz_dyn_store.load();
   setAnkhor();
 } //cash_analiz_com_refresh

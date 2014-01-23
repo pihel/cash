@@ -17,7 +17,7 @@ var cash_analiz_cur_from_date =
     format: "Y-m-d",
     maxValue: new Date(),
     width: 160,
-    onChange: cash_analiz_cur_refresh
+    onChange: cash_analiz_curr_refresh
 }; // cash_analiz_cur_from_date
 
 
@@ -31,7 +31,7 @@ var cash_analiz_cur_to_date =
     labelWidth: 20,
     format: "Y-m-d",
     width: 120,
-    onChange: cash_analiz_cur_refresh
+    onChange: cash_analiz_curr_refresh
 }; // cash_analiz_cur_to_date
 
 var cash_analiz_cur_in = {
@@ -41,7 +41,7 @@ var cash_analiz_cur_in = {
     disabled  : true,
     id        : 'cash_analiz_cur_in',
     onChange: function(newVal, oldVal) {
-      cash_analiz_cur_refresh();
+      cash_analiz_curr_refresh();
     } //onChange
 }; //cash_analiz_cur_in
 
@@ -56,17 +56,17 @@ var cash_analiz_cur_date = {
 }; //cash_analiz_cur_date
 
 
-function cash_analiz_cur_refresh() {
+function cash_analiz_curr_refresh() {
   if(Ext.getCmp('cash_analiz_cur_from_date').getValue() == null) return;
   if(Ext.getCmp('cash_analiz_cur_to_date').getValue() == null) return;
   if(Ext.getCmp('cash_analiz_cur_in').disabled) return;
 
   cash_analiz_cur_store.proxy.url = "ajax/analiz/cur_amount.php?in=" + (0+Ext.getCmp('cash_analiz_cur_in').getValue()) +
 				    "&from=" + Ext.Date.format(Ext.getCmp('cash_analiz_cur_from_date').getValue(),'Y-m-d') +
-				    "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_cur_to_date').getValue(),'Y-m-d');
+				    "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_cur_to_date').getValue(),'Y-m-d') + getUsrFltr();
   cash_analiz_cur_store.load();
   setAnkhor();
-} //cash_analiz_cur_refresh
+} //cash_analiz_curr_refresh
 
 var cash_analiz_cur_model = Ext.define('cash_analiz_cur_model', {
     extend: 'Ext.data.Model',
@@ -150,7 +150,7 @@ function cash_analiz_cur_load(_cb) {
     setAnalitAnkhorParam();
   }
 
-  cash_analiz_cur_refresh();
+  cash_analiz_curr_refresh();
 
   if(_cb != undefined) _cb();
 }

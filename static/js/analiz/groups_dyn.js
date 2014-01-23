@@ -19,7 +19,7 @@ var cash_analiz_grp_dyn_from_date =
     format: "Y-m-d",
     maxValue: new Date(),
     width: 160,
-    onChange: cash_analiz_grp_dyn_refresh
+    onChange: cash_analiz_group_dyn_refresh
 }; // cash_analiz_grp_dyn_from_date
 
 
@@ -33,7 +33,7 @@ var cash_analiz_grp_dyn_to_date =
     labelWidth: 20,
     format: "Y-m-d",
     width: 120,
-    onChange: cash_analiz_grp_dyn_refresh
+    onChange: cash_analiz_group_dyn_refresh
 }; // cash_analiz_grp_dyn_to_date
 
 var cash_analiz_grp_dyn_date = {
@@ -117,13 +117,13 @@ var cash_analiz_grp_dyn_chart_prm =
   }]
 };
 
-function cash_analiz_grp_dyn_refresh() {
+function cash_analiz_group_dyn_refresh() {
   if(Ext.getCmp('cash_analiz_grp_dyn_from_date').getValue() == null) return;
   if(Ext.getCmp('cash_analiz_grp_dyn_to_date').getValue() == null) return;
   
   var url = "ajax/analiz/groups_dyn.php" + 
             "?from=" + Ext.Date.format(Ext.getCmp('cash_analiz_grp_dyn_from_date').getValue(),'Y-m-d') +
-            "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_grp_dyn_to_date').getValue(),'Y-m-d');
+            "&to=" + Ext.Date.format(Ext.getCmp('cash_analiz_grp_dyn_to_date').getValue(),'Y-m-d') + getUsrFltr();
   
   if( cash_analiz_grp_dyn_store.proxy.url != url ) {
     reloadParam(function() {
@@ -134,7 +134,7 @@ function cash_analiz_grp_dyn_refresh() {
       setAnkhor();
     });
   }
-} //cash_analiz_grp_dyn_refresh
+} //cash_analiz_group_dyn_refresh
 
 function reloadParam(_cb) {
   Ext.Ajax.request({
@@ -178,10 +178,10 @@ function cash_analiz_grp_dyn_load(_cb) {
     var cd = new Date();
     Ext.getCmp('cash_analiz_grp_dyn_from_date').setValue(new Date(cd.getFullYear() - 1, cd.getMonth(), 1));
     Ext.getCmp('cash_analiz_grp_dyn_to_date').setValue(cd);
-    cash_analiz_grp_dyn_refresh();
+    cash_analiz_group_dyn_refresh();
   } else {
     setAnalitAnkhorParam();
-    cash_analiz_grp_dyn_refresh();
+    cash_analiz_group_dyn_refresh();
   }
   
   if(_cb != undefined) _cb();

@@ -1,6 +1,10 @@
 <?
 class SQLITE_DB extends DB {
 
+  function __construct($srv) {
+    parent::__construct("SQLITE", $srv, NULL, NULL, NULL);
+  }
+
   public function try_connect($srv, $login, $pasw, $db) {
     return new SQLite3($srv);
   }
@@ -51,7 +55,7 @@ class SQLITE_DB extends DB {
     $this->_stmt = $this->_con->prepare($sql);
     
     if(!$this->_stmt) $this->raiseError();
-    if(is_array($args[1])) $args = $args[1];
+    if(is_array(@$args[1])) $args = $args[1];
     
     foreach($args as $k=>$v) {      
       $type = SQLITE3_TEXT;
