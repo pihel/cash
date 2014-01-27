@@ -74,7 +74,7 @@ class Cash {
     $sql =
     " SELECT
       c.id, c.nmcl_id, cn.name as nom, c.`group`, cg.name gname, c.price, c.qnt, c.date as oper_date, datetime(c.date_edit, 'localtime') date_edit,
-      c.org_id, co.name as oname, c.type, c.note, c.file, c.uid, cr.rate, cr.sign, c.cash_type_id, ct.name as cash_type,
+      c.org_id, co.name as oname, c.type, c.note, c.file, c.uid, u.login, cr.rate, cr.sign, c.cash_type_id, ct.name as cash_type,
       CASE WHEN c.type = 0 THEN -1 ELSE 1 END * c.price * c.qnt * cr.rate as amount
      FROM cashes c
      INNER JOIN currency cr
@@ -87,6 +87,8 @@ class Cash {
       ON(c.cash_type_id = ct.id)
      INNER JOIN cashes_group cg
       ON(cg.id = c.`group`)
+     INNER JOIN users u
+      ON(u.id = c.`uid`)
      WHERE
       c.date BETWEEN ? AND ?
       AND c.bd_id = ?
@@ -289,7 +291,9 @@ class Cash {
       @unlink(__DIR__."/".$fl);
     }
     $this->db->exec("UPDATE cashes SET visible = 0 WHERE id = ? AND bd_id = ?", $id, $this->usr->db_id );
+    $cnt = intval( $this->db->affect() );
     $this->db->commit();
+    return $cnt;
   }
 
   protected function add_refbook($name, $ref) {

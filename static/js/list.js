@@ -17,6 +17,7 @@ var cash_list_model = Ext.define('cash_list_model', {
       {name: 'note',		      type: 'string'},
       {name: 'file', 		      type: 'string'},
       {name: 'uid', 		      type: 'int'},
+      {name: 'login', 	      type: 'string'},
       {name: 'rate', 		      type: 'double'},
       {name: 'sign', 		      type: 'string'},
       {name: 'cash_type_id', 	type: 'int'},
@@ -54,13 +55,14 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
       {text: "ID магазина", 		dataIndex: 'org_id', 		  hidden: true, 	tdCls: 'x-center-cell' },
       {text: "Магазин", 		    dataIndex: 'oname',		    hideable: true },
       {text: "Тип", 			      dataIndex: 'type', 		    hidden: true , 	tdCls: 'x-center-cell'},
-      {text: "Примечание", 		  dataIndex: 'note', 		    width: 250 },
       {text: "Файл", 			      dataIndex: 'file',		    hidden: true },
       {text: "ID пользователя", dataIndex: 'uid', 		    hidden: true, 	tdCls: 'x-center-cell' },
+      {text: "Пользователь",    dataIndex: 'login', 	    hidden: false },
       {text: "Курс", 			      dataIndex: 'rate', 		    hidden: true },
       {text: "Знак валюты", 		dataIndex: 'sign',		    hidden: true },
       {text: "Тип валюты", 		  dataIndex: 'cash_type_id', 	hidden: true, 	tdCls: 'x-center-cell' },
       {text: "Кошелек", 		    dataIndex: 'cash_type', 	hidden: true, 	tdCls: 'x-center-cell' },
+      {text: "Примечание", 		  dataIndex: 'note', 		    flex: 1 },
       {
             menuDisabled: true,
             sortable: false,
@@ -127,6 +129,7 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
         {dataIndex: 'note',		    type: 'string'},
         {dataIndex: 'file', 		  type: 'string'},
         {dataIndex: 'uid', 		    type: 'int'},
+        {dataIndex: 'login', 		  type: 'string'},
         {dataIndex: 'rate', 		  type: 'numeric'},
         {dataIndex: 'sign', 		  type: 'string'},
         {dataIndex: 'cash_type_id', 	type: 'int'},
@@ -166,7 +169,7 @@ function deleteItem(v_id) {
               },
               success: function(data) {
                 // if response is not empty - error msg
-                if(data.responseText != "") {
+                if(parseInt(data.responseText) != 1) {
                   error(data.responseText, function() {
                     cash_list_grid.setLoading(false);
                     //listRefresh();
@@ -266,7 +269,7 @@ function listRefresh(_cb) {
 }*/
 
 var cash_list_filter_loading = Ext.create('Ext.Img', {
-    src: 'static/loading_small.gif',
+    src: settings.static + '/loading_small.gif',
     id: 'cash_list_filter_loading',
     name: "cash_list_filter_loading",
     mode: 'element',

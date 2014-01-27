@@ -13,6 +13,11 @@ class OCR_Helper {
   }
   
   function recognize($file) {
+    global $usr;
+    if(!$usr->canWrite())  {
+      return array('failure'=>true, 'msg'=> 'Ошибка доступа!');
+    }
+    
     $ext = pathinfo($file['cash_list_edit_btn_add_check-inputEl']['name'], PATHINFO_EXTENSION);
     if(!in_array($ext, $this->ext_type)) {
       return array('failure'=>true, 'msg'=> 'Разрешены чеки в форматах: '.implode(", ", $this->ext_type));
@@ -40,13 +45,18 @@ class OCR_Helper {
     catch(Exception $e) {
       return array('failure'=>true, 'msg'=> 'Ошибка распознания чека: '.$e->getMessage());
     }  
-    file_put_contents($this->dir.'/'.$hash.".ocr");
-    //copy($this->dir."/ok.txt", $this->dir.'/'.$hash.".ocr"); //debug
+    file_put_contents($this->dir.'/'.$hash.".ocr", $text);
+    //copy($this->dir."/diksi.txt", $this->dir.'/'.$hash.".ocr"); //debug
     
     return array('success'=>true, 'msg'=> $hash );
   } //recognize
 
   function parse($hash, $type) {
+    global $usr;
+    if(!$usr->canWrite())  {
+      return array('failure'=>true, 'msg'=> 'Ошибка доступа!');
+    }
+    
     $hash = intval($hash);
     $text = file_get_contents($this->dir."/".$hash.".ocr");
     $prs = new Parser($text);
@@ -80,7 +90,7 @@ class CashLine {
     public $gr_name;
     
     public function __construct($name, $qnt, $price, $gr_id) {
-        $this->name = $name;
+        $this->name = str_replace("\t", " ", $name);
         $this->qnt = $qnt;
         $this->price = $price;
         $this->gr_id = $gr_id;
@@ -191,6 +201,7 @@ class Parser {
   
   protected function parseTDate($tdate) {
     $tdate = str_replace(array("-"," ", "/"), ".", $tdate);
+    $tdate = preg_replace("/[^0-9.]/", "", $tdate);
     if(empty($tdate)) $tdate = date("d.m.Y");
     $adate = explode(".", $tdate);
     if(strlen($adate[2]) == 2) $tdate = $adate[0].'.'.$adate[1].'.20'.$adate[2];
@@ -292,13 +303,16 @@ class Parser {
   } //ashan
   
   //парсинг чека из ОКЕИ
-  protected function okey() { //фотография неудволетворительного качества - переделать!!
-    $tlines = $this->strip_arr($this->text, array('Док'), array('СУММА ПО ЧЕКУ'), 0, 0);
+  protected function okey() {
+    $tlines = $this->strip_arr($this->text, array('Док', 'Jvf'), array('СУММА ПО ЧЕКУ'), 0, 0);
     $lines = explode("\n", $tlines);
     if(count($lines) == 0) return;
     
     //date
     $td_end = stripos($this->text, "\r\nДок");
+    if($td_end === false) {
+      $td_end = stripos($this->text, "\r\nНоме");
+    }
     $tdate = substr($this->text, 0, $td_end);
     $td_end = strripos($tdate, " ");
     $tdate = substr($tdate, 0, $td_end);
@@ -324,6 +338,40 @@ class Parser {
     }
   } //okey
   
+  //дикси
+  protected function diksi() {
+    $tlines = $this->strip_arr($this->text, array('Наименование'), array('ЦЕНЫ'), 0, 0);
+    $lines = explode("\n", $tlines);
+    if(count($lines) == 0) return;
+    
+    $tdate = $this->parseDate($this->text, array("Кассир: "), array(" "), 0, 0);
+    
+    $this->cd = new CashDoc('Дикси', $tdate);
+    
+    $names = array();
+    $prices = array();
+    foreach($lines as $line) {
+      if(preg_match('/[А-Яа-яЁё]/u', $line)) {
+        //if(!empty(trim($line))) {
+          //continue;
+        //}
+        $line = explode(".", $line);
+        if(count($line) == 2) {
+          $names[] = $line[1];
+        } else {
+          $names[] = $line;
+        }
+      } else {
+        $line = str_replace(" ", "\t", $line);
+        $prices[] = explode("\t", $line);
+      }
+    }
+    foreach($names as $k=>$name) {
+      $qp = $prices[$k];
+      $this->cd->addLine($name, $qp[2], $qp[1], 1);
+    }
+  }
+  
   public function parse() {
     if( stripos( $this->text, 'МАКДОНАЛДС' ) !== false ) {
       $this->macdonalds();
@@ -333,8 +381,11 @@ class Parser {
       $this->shell();
     } elseif( stripos( $this->text, 'АШАН' ) !== false ) {
       $this->ashan();
-    } elseif( stripos( $this->text, 'ОКЕИ') !== false || stripos( $this->text, 'ОКЕЙ' ) !== false  || stripos( $this->text, "Док\r\n1.U") !== false ) {
+    } elseif( stripos( $this->text, 'ОКЕИ') !== false || stripos( $this->text, 'ОКЕЙ' ) !== false || 
+              stripos( $this->text, 'О\'КЕЙ' ) !== false || stripos( $this->text, "Док\r\n1.U") !== false ) {
       $this->okey();
+    } elseif(stripos( $this->text, 'ДИКСИ') !== false) {
+      $this->diksi();
     } else {
       $this->okey();
     }
