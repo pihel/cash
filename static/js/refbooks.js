@@ -278,6 +278,7 @@ var cash_refb_nmcl_mask = new Ext.LoadMask(cash_refb_nmcl_grid, {msg:'Загру
 //------------------------
 
 var cash_refb_dwnl_btn = {
+  id: "cash_refb_dwnl_btn",
   xtype: 'button',
   text: 'Скачать базу данных',
   tooltip: 'В формате Sqlite 3',
@@ -289,10 +290,32 @@ var cash_refb_dwnl_btn = {
   }
 }
 
+var cash_refb_analize_btn = {
+  xtype: 'button',
+  text: 'Оптимизировать БД',
+  tooltip: 'Удалить дубли записей в справочниках, пересобрать статистику индексов, дефрагментировать сегменты.',
+  border: true,
+  icon: settings.static + "/yes.gif",
+  handler : function(){
+    Ext.Ajax.request({
+      url: "ajax/analize.php",
+      method: "GET",
+      success: function(data) {
+          if(parseInt(data.responseText) > 0) {
+            Ext.MessageBox.alert('Статус', 'Обработка прошла успешно!');
+          } else {
+            error(data.responseText);
+          }
+      }//success
+    }); //Ext.Ajax.request
+    return false;
+  }
+}
+
 var cash_refb_dwnl = Ext.create('Ext.Panel', {
     frame: true,
     collapsible: false,
-    items: [cash_refb_dwnl_btn]
+    items: [cash_refb_dwnl_btn, cash_refb_analize_btn]
 
 });//cash_refb_set
 

@@ -527,12 +527,28 @@ class Cash {
 	  HAVING
       COUNT(*) > 1";
     $dbls = $this->db->select($sql);
+    
+    $sql = 
+    "SELECT
+      MAX(cn.id) as max_id,
+      MIN(cn.id) as min_id
+	  FROM
+      cashes_org cn
+	  GROUP BY
+      UPPER_UTF8(cn.name)
+	  HAVING
+      COUNT(*) > 1";
+    $orgs = $this->db->select($sql);
 
     $this->db->start_tran();
     foreach($dbls as $dbl) {
       $this->db->exec("UPDATE cashes SET nmcl_id = ? WHERE nmcl_id = ?", $dbl['min_id'], $dbl['max_id']);
     }
+    foreach($orgs as $org) {
+      $this->db->exec("UPDATE cashes SET org_id = ? WHERE nmcl_id = ?", $org['min_id'], $org['max_id']);
+    }
     $this->db->exec("DELETE FROM cashes_nom WHERE NOT EXISTS(SELECT 1 FROM cashes c WHERE c.nmcl_id = cashes_nom.id)");
+    $this->db->exec("DELETE FROM cashes_org WHERE NOT EXISTS(SELECT 1 FROM cashes c WHERE c.org_id = cashes_org.id)");
     $this->db->commit();
 
     $this->db->exec("analyze cashes;");
@@ -550,4 +566,3 @@ class Cash {
   }
 }
 ?>
-        
