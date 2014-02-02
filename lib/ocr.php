@@ -37,7 +37,7 @@ class OCR_Helper {
     }
     
     //OCR
-    /*$text = '';
+    $text = '';
     try  {
       $ocr = new ABBYY($fname, $this->login, $this->passw);
       $text = $ocr->recognize();
@@ -45,8 +45,8 @@ class OCR_Helper {
     catch(Exception $e) {
       return array('failure'=>true, 'msg'=> 'Ошибка распознания чека: '.$e->getMessage());
     }  
-    file_put_contents($this->dir.'/'.$hash.".ocr", $text);*/
-    copy($this->dir."/ok.txt", $this->dir.'/'.$hash.".ocr"); //debug
+    file_put_contents($this->dir.'/'.$hash.".ocr", $text);
+    //copy($this->dir."/ok.txt", $this->dir.'/'.$hash.".ocr"); //debug
     
     return array('success'=>true, 'msg'=> $hash );
   } //recognize
