@@ -122,7 +122,8 @@ var cash_check_model = Ext.define('cash_check_model', {
       {name: 'gr_id', 	      type: 'int'},
       {name: 'gr_name',       type: 'string'},
       {name: 'price', 	      type: 'double'},
-      {name: 'qnt', 		      type: 'double'}
+      {name: 'qnt', 		      type: 'double'},
+      {name: 'amnt', 		      type: 'double'}
     ],
     idProperty: 'name'
 });
@@ -142,9 +143,21 @@ var cash_check_grid = Ext.create('Ext.grid.Panel', {
     columns: [
       {text: "Товар", 		      dataIndex: 'name', 		    flex: 1, 	hideable: false, editor: {xtype: 'textfield', allowBlank: false} },
       {text: "ID группы", 		  dataIndex: 'gr_id', 		  hidden: true , 	tdCls: 'x-center-cell'},
-      {text: "Группа", 		      dataIndex: 'gr_name',		    hideable: false, editor: {xtype: 'textfield', allowBlank: false} },
+      {text: "Группа", 		      dataIndex: 'gr_name',		  hideable: false, editor: {xtype: 'textfield', allowBlank: false} },
       {text: "Цена", 			      dataIndex: 'price',		    hideable: false, renderer: price, tdCls: 'x-price-cell', editor: {xtype: 'textfield', allowBlank: false} },
       {text: "Кол-во", 		      dataIndex: 'qnt',		      hideable: false, tdCls: 'x-center-cell', editor: {xtype: 'textfield', allowBlank: false} },
+      {text: "Сумма", 		      dataIndex: 'amnt',		    hideable: false, summaryType: 'sum' , tdCls: 'x-amount-cell' 
+            , summaryRenderer: function(value) {
+              var total = 0;
+              cash_check_store.each(function(rec) {
+                total += rec.get('qnt') * rec.get('price')
+              });
+              return price_r(total);
+            }
+            ,renderer : function(value, metaData, record, rowIdx, colIdx, store, view) {
+              return price_r( record.get('qnt') * record.get('price') );
+            } 
+      },
       {
             menuDisabled: true,
             sortable: false,
@@ -171,6 +184,9 @@ var cash_check_grid = Ext.create('Ext.grid.Panel', {
         }
       }
     },
+    features: [{
+        ftype: 'summary'
+    }],
     selType: 'cellmodel',
     plugins: [
         Ext.create('Ext.grid.plugin.CellEditing', {

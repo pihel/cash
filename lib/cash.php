@@ -2,6 +2,8 @@
 class Cash {
   private $db;
   private $usr;
+  
+  private $from = "-2 month";
 
   public function __construct($_db, $_usr) {
     $this->db = $_db;
@@ -159,7 +161,7 @@ class Cash {
 
     $sql =
     "SELECT
-    cn.id, cn.name
+      DISTINCT cn.id, cn.name
     FROM cashes c
     INNER JOIN cashes_nom cn
       ON(cn.id = c.nmcl_id)
@@ -169,10 +171,11 @@ class Cash {
     GROUP BY
       cn.id, cn.name
     ORDER BY
-      COUNT(1) DESC, cn.id
+      SUM(CASE WHEN c.uid = ? THEN 100 ELSE 1 END) DESC, COUNT(1) DESC, cn.id
     LIMIT 50 ";
+    //1 к 100 кол-во чужих записей
     
-    return $this->db->select($sql, $this->usr->db_id);
+    return $this->db->select($sql, $this->usr->db_id, $this->usr->id);
   }
 
   public function nmcl_list_flat() {
@@ -189,7 +192,6 @@ class Cash {
     if(!$this->usr->canRead()) return array();
 
     //cn.id, cn.name,
-    $from = "-2 month";
     $sql =
     "SELECT
       c.`group` grp,
@@ -203,7 +205,7 @@ class Cash {
       AND c.bd_id = ? AND c.visible = 1
       AND co.id = c.org_id
       AND c.date > ( SELECT 
-                        DATETIME(MAX(c1.date), '".$from. "') 
+                        DATETIME(MAX(c1.date), '".$this->from. "') 
                      FROM 
                         cashes c1 
                      WHERE 
@@ -213,9 +215,9 @@ class Cash {
                     )
     GROUP BY c.`group`, c.org_id
     ORDER BY
-      COUNT(1) DESC
+      SUM(CASE WHEN c.uid = ? THEN 100 ELSE 1 END) DESC, COUNT(1) DESC
     LIMIT 1  ";
-    return $this->db->line($sql, $nmcl_id, $this->usr->db_id);
+    return $this->db->line($sql, $nmcl_id, $this->usr->db_id, $this->usr->id);
   }
 
   public function prod_type_list() {
@@ -277,9 +279,9 @@ class Cash {
     GROUP BY
       co.id, co.name
     ORDER BY
-      COUNT( 1 )  DESC, co.id
+      SUM(CASE WHEN c.uid = ? THEN 100 ELSE 1 END) DESC, COUNT( 1 )  DESC, co.id
     LIMIT 50 ";
-    return $this->db->select($sql, $this->usr->db_id);
+    return $this->db->select($sql, $this->usr->db_id, $this->usr->id);
   }
 
   public function del($id) {

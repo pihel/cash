@@ -37,7 +37,7 @@ class OCR_Helper {
     }
     
     //OCR
-    $text = '';
+    /*$text = '';
     try  {
       $ocr = new ABBYY($fname, $this->login, $this->passw);
       $text = $ocr->recognize();
@@ -45,8 +45,8 @@ class OCR_Helper {
     catch(Exception $e) {
       return array('failure'=>true, 'msg'=> 'Ошибка распознания чека: '.$e->getMessage());
     }  
-    file_put_contents($this->dir.'/'.$hash.".ocr", $text);
-    //copy($this->dir."/diksi.txt", $this->dir.'/'.$hash.".ocr"); //debug
+    file_put_contents($this->dir.'/'.$hash.".ocr", $text);*/
+    copy($this->dir."/ok.txt", $this->dir.'/'.$hash.".ocr"); //debug
     
     return array('success'=>true, 'msg'=> $hash );
   } //recognize
@@ -91,8 +91,8 @@ class CashLine {
     
     public function __construct($name, $qnt, $price, $gr_id) {
         $this->name = str_replace("\t", " ", $name);
-        $this->qnt = $qnt;
-        $this->price = $price;
+        $this->qnt = round($qnt,3);
+        $this->price = round($price,2);
         $this->gr_id = $gr_id;
         
         global $db;

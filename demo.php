@@ -1,5 +1,5 @@
 <?
-exit; //закомментить, чтобы запустить
+//exit; //закомментить, чтобы запустить
 require_once("lib/init.php");
 
 $db->start_tran();
@@ -7,6 +7,7 @@ $db->start_tran();
 //удалим лишнее
 $db->exec("DELETE FROM cashes WHERE id IN(3272, 3322)");
 $db->exec("UPDATE cashes SET uid = 2 WHERE uid = 3");
+$db->exec("UPDATE cashes SET note = ''");
 $db->exec("DELETE FROM users WHERE id = 3");
 
 //скинем пароль
