@@ -60,8 +60,8 @@ class Cash {
     //echo $ret;
     return $ret;
   }
-
-  public function getList($from, $to, $exfltr) {
+  
+  public function getList($from, $to, $exfltr, $short = false) {
     if(!$this->usr->canRead()) return array();
 
     $filter = "";
@@ -73,11 +73,17 @@ class Cash {
     if(empty($filter)) $filter = " AND c.visible = 1 ";
 
     $this->db->escape_res = true;
+    $select = 
+      "c.id, c.nmcl_id, cn.name as nom, c.`group`, cg.name gname, c.price, c.qnt, c.date as oper_date, datetime(c.date_edit, 'localtime') date_edit,
+        c.org_id, co.name as oname, c.type, c.note, c.file, c.uid, u.login, cr.rate, cr.sign, c.cash_type_id, ct.name as cash_type,
+        CASE WHEN c.type = 0 THEN -1 ELSE 1 END * c.price * c.qnt * cr.rate as amount";
+    if($short) {
+      $select = "c.id, cn.name as nom, c.date as dt, co.name as oname, u.login, cr.sign, 
+            CASE WHEN c.type = 0 THEN -1 ELSE 1 END * c.price * c.qnt * cr.rate as amount ";
+    }
     $sql =
     " SELECT
-      c.id, c.nmcl_id, cn.name as nom, c.`group`, cg.name gname, c.price, c.qnt, c.date as oper_date, datetime(c.date_edit, 'localtime') date_edit,
-      c.org_id, co.name as oname, c.type, c.note, c.file, c.uid, u.login, cr.rate, cr.sign, c.cash_type_id, ct.name as cash_type,
-      CASE WHEN c.type = 0 THEN -1 ELSE 1 END * c.price * c.qnt * cr.rate as amount
+      ".$select."
      FROM cashes c
      INNER JOIN currency cr
       ON(c.cur_id = cr.id)
