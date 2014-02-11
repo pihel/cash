@@ -14,6 +14,9 @@ if(!empty($_POST['login_usr_name_list_cb'])) {
     <meta charset=utf-8>
     <title><?=$settings['site_name'];?> &mdash; Мобильная версия</title>
     <link rel="shortcut icon" href="<?=$settings['static'];?>/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
     <style type="text/css">
     * {
         font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -41,15 +44,29 @@ if(!empty($_POST['login_usr_name_list_cb'])) {
     }
     #filter input {
       border: 1px solid #A6C9F4;
-      width: 150px;
-      height: 30px;
+      width: 100px;
+      height: 25px;
       font-size: 15px;
+    }
+    input::-webkit-outer-spin-button, /* Removes arrows */
+    input::-webkit-inner-spin-button, /* Removes arrows */
+    input::-webkit-clear-button { /* Removes blue cross */
+      -webkit-appearance: none;
+      margin: 0;
     }
     h2 {
       margin: 0px;
       padding: 0px 0px 5px 0px;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: bold;
+    }
+    #list #no_lines, ul {
+      min-height: 150px;
+      width: 100%;
+      background-color: #DFE9F6;
+    }
+    #list #no_lines {
+      text-align: center;
     }
     ul {
       padding: 0px;
@@ -57,13 +74,12 @@ if(!empty($_POST['login_usr_name_list_cb'])) {
       margin-top: 10px;
       border: 1px solid #A6C9F4;
       background: transparent url("<?=$settings['static'];?>/loading.gif") 50% 50% no-repeat;	
-      min-height: 150px;
-      width: 100%;
     }
     ul li {
       list-style: none outside none;
       vertical-align: top;
       padding: 10px 5px 10px 5px;
+      background-color: #DFE9F6;
     }
     #list li:nth-child(odd) {
        background-color: #A6C9F4;
@@ -100,10 +116,24 @@ if(!empty($_POST['login_usr_name_list_cb'])) {
       right: 15px;
       margin-top: 2px;
     }
+    #login_form {
+      border: 1px solid #A6C9F4;
+      width: 300px;
+      padding: 5px;
+    }
+    #login_form div {
+      margin-bottom: 5px;
+    }
+    #login_form input {
+      width: 150px;
+      margin: 0px auto;
+    }
+    #login_form label {
+      min-width: 140px;
+      display: inline-block;
+    }
     </style>
-    <script language="javascript">
-      var settings = <?=json_encode($settings);?>;
-      
+    <script language="javascript">      
       function id(p_id) {
         return document.getElementById(p_id);
       } //id
@@ -147,7 +177,7 @@ if(!empty($_POST['login_usr_name_list_cb'])) {
             id("list").innerHTML += getLineTpl(item);
           });
           if(data.length == 0) {
-            id("list").innerHTML = 'Нет записей';
+            id("list").innerHTML = '<div id="no_lines">Нет записей<div>';
           }
           id("itog_sum").innerHTML = price(sm);
         });
@@ -158,29 +188,35 @@ if(!empty($_POST['login_usr_name_list_cb'])) {
         return Number(p).toLocaleString();
       } //price
     </script>
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
   <body onload="return refresh_list();">
     <?if(!empty($auth)) {?>
       <h3><?=$auth['msg'];?></h3>
     <?}?>
     <?if($usr->rghts['read'] != 1) {?>
-      <form method="post">
-        <input type="text" name="login_db_name_list_cb" value="1">
-        <input type="text" name="login_usr_name_list_cb" value="1">
-        <input type="password" name="password">
-        <input type="submit" value="Войти">
+      <form id="login_form" method="post">
+        <div><label for="db">База: </label><input type="text" id="db" name="login_db_name_list_cb" value="1"></div>
+        <div><label for="login">Пользователь: </label><input type="text" id="login" name="login_usr_name_list_cb" value="1"></div>
+        <div><label for="pwd">Пароль: </label><input type="password" id="pwd" name="password"></div>
+        <div><input type="submit" value="Войти"></div>
       <form>
     <?} else {?>
     <div id="add">
       <input type="button" value="Добавить ↓">
     </div>
     <div id="filter">
-      <input id="date_from" type="date" value="<?=date('Y-m-d', time()-3600*24);?>" onchange="return refresh_list();">&nbsp;...&nbsp;
-      <input id="date_to" type="date" value="<?=date('Y-m-d');?>" onchange="return refresh_list();">
+      <input id="date_from" type="date" value="<?=date('Y-m-d', time()-3600*24);?>" onchange="return refresh_list();" required> &mdash;
+      <input id="date_to" type="date" value="<?=date('Y-m-d');?>" onchange="return refresh_list();" required>
     </div>
     <ul id="list"></ul>
     <div id="itog">=<span id="itog_sum">0</span><?=$settings['sign'];?></div>
     <?}?>
-    <?$settings['add'];?>
+    <?=$settings['add'];?>
   </body>
 </html>

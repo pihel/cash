@@ -73,6 +73,7 @@ class Cash {
     if(empty($filter)) $filter = " AND c.visible = 1 ";
 
     $this->db->escape_res = true;
+    $desc = "ASC";
     $select = 
       "c.id, c.nmcl_id, cn.name as nom, c.`group`, cg.name gname, c.price, c.qnt, c.date as oper_date, datetime(c.date_edit, 'localtime') date_edit,
         c.org_id, co.name as oname, c.type, c.note, c.file, c.uid, u.login, cr.rate, cr.sign, c.cash_type_id, ct.name as cash_type,
@@ -80,6 +81,7 @@ class Cash {
     if($short) {
       $select = "c.id, cn.name as nom, c.date as dt, co.name as oname, u.login, cr.sign, 
             CASE WHEN c.type = 0 THEN -1 ELSE 1 END * c.price * c.qnt * cr.rate as amount ";
+      $desc = "DESC";
     }
     $sql =
     " SELECT
@@ -102,7 +104,7 @@ class Cash {
       AND c.bd_id = ?
       ". $filter ."
      ORDER BY
-      c.date, c.date_edit";
+      c.date ".$desc.", c.date_edit";
 
      return $this->db->select($sql, $from, $to, $this->usr->db_id);
   }
