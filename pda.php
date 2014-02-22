@@ -5,6 +5,14 @@ if(!empty($_POST['login_usr_name_list_cb'])) {
   $auth = $usr->auth($_POST);
   if($auth['success'] == 1) {
     header("Location: pda.php");
+    exit;
+  }
+}
+if(!empty($_POST['cash_item_save'])) {
+  $add_ret = $ch->add($_POST, $_FILES);
+  if($add_ret['success'] == 1) {
+    header("Location: pda.php");
+    exit;
   }
 }
 ?>
@@ -33,7 +41,7 @@ if(!empty($_POST['login_usr_name_list_cb'])) {
     #add {
       margin-bottom: 10px;
     }
-    #add input {
+    #add input[type=button],#add input[type=submit] {
       width: 100%;
       height: 35px;
       cursor: pointer;
@@ -42,11 +50,13 @@ if(!empty($_POST['login_usr_name_list_cb'])) {
       margin: 0px auto;
       text-align: center;
     }
-    #filter input {
-      border: 1px solid #A6C9F4;
-      width: 100px;
+    input {
       height: 25px;
       font-size: 15px;
+    }
+    #filter input, #cash_item_date {      
+      width: 110px;   
+      border: 1px solid #A6C9F4;      
     }
     input::-webkit-outer-spin-button, /* Removes arrows */
     input::-webkit-inner-spin-button, /* Removes arrows */
@@ -116,6 +126,10 @@ if(!empty($_POST['login_usr_name_list_cb'])) {
       right: 15px;
       margin-top: 2px;
     }
+    #list .del img {
+      width: 16px;
+      height: 16px;
+    }
     #login_form {
       border: 1px solid #A6C9F4;
       width: 300px;
@@ -124,13 +138,45 @@ if(!empty($_POST['login_usr_name_list_cb'])) {
     #login_form div {
       margin-bottom: 5px;
     }
-    #login_form input {
+    #login_form input, #login_form select {
       width: 150px;
       margin: 0px auto;
+      border: 1px solid #A6C9F4;
+      font-size: 15px;
+    }
+    #login_form #pwd {
+      position: relative;
+      right: -3px;
+    }
+    #login_form input[type=submit] {
+      cursor: pointer;
     }
     #login_form label {
       min-width: 140px;
       display: inline-block;
+    }
+    #add_frm {
+      display: none;
+      border: 1px solid #A6C9F4;
+      border-radius: 0px 0px 5px 5px;
+      padding: 10px;
+    }
+    #add_frm label {
+      min-width: 50px;
+      padding-right: 5px;
+      display: inline-block;
+    }
+    #add_frm label[for=cash_item_qnt] {
+      min-width: 1px;
+    }
+    #add_frm div {
+      margin-bottom: 5px;
+    }
+    #cash_item_price {
+      width: 60px;
+    }
+    #cash_item_qnt {
+      width: 40px;
     }
     </style>
     <script language="javascript">      
@@ -138,17 +184,27 @@ if(!empty($_POST['login_usr_name_list_cb'])) {
         return document.getElementById(p_id);
       } //id
       
-      function ajax(url, _cb) {
+      function ajax(url, _cb, np, post) {
         request = new XMLHttpRequest;
-        request.open('GET', url, true);
+        if(post != undefined) {
+          request.open('POST', url, true);
+          request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          request.setRequestHeader("Content-Length", post.length);
+        } else {
+          request.open('GET', url, true);
+        }
 
         request.onload = function() {
           if (request.status >= 200 && request.status < 400){
-            _cb(JSON.parse(request.responseText));            
+            if(np) {
+              _cb(request.responseText);
+            } else {
+              _cb(JSON.parse(request.responseText));
+            }
           } 
         }
 
-        request.send();
+        request.send(post);
       } //ajax
       
       function getLineTpl(o) {
@@ -161,25 +217,31 @@ if(!empty($_POST['login_usr_name_list_cb'])) {
           <span class="amount ' + class_name + '">' + price(o.amount) + o.sign + '</span>\
           <h2 class="name">' + o.nom + '</h2>\
           <span class="org">' + o.oname + '</span>\
-          <span class="del"><a title="Удалить" href="#"><img src="<?=$settings['static'];?>/delete.gif"></a></span>\
+          <span class="del"><a title="Удалить" href="#" onclick="return del('+o.id+');"><img src="<?=$settings['static'];?>/delete.gif"></a></span>\
         </li>';       
       } //getLineTpl
 	  
       function refresh_list() {
         if(id("list") == undefined) return;
+        //var start = (new Date()).getTime();
         
         id("list").innerHTML = '';
         id("itog_sum").innerHTML = '0';
         ajax("ajax/list.php?from=" + id("date_from").value + "&to=" + id("date_to").value + "&short=1", function(data) {
           var sm = 0;
+          var html = "";
           data.forEach(function(item, i) {
             sm += item.amount;
-            id("list").innerHTML += getLineTpl(item);
+            html += getLineTpl(item);
           });
+          //html = data.map(getLineTpl).join('');
           if(data.length == 0) {
             id("list").innerHTML = '<div id="no_lines">Нет записей<div>';
+          } else {
+            id("list").innerHTML += html;
           }
           id("itog_sum").innerHTML = price(sm);
+          //console.log( ( (new Date()).getTime() - start ) /1000 );
         });
         return false;
       } //refresh_list
@@ -187,6 +249,56 @@ if(!empty($_POST['login_usr_name_list_cb'])) {
       function price(p) {
         return Number(p).toLocaleString();
       } //price
+      
+      function del(id) {
+        if(confirm("Удалить?")) {
+          ajax("ajax/delete.php?id=" + id, function(data) {
+            if(parseInt(data) > 0) {
+              refresh_list();
+            } else {
+              alert(data);
+            }
+          }, true);
+        }
+        return false;
+      }//del
+      
+      function add_frm() {
+        id("add_frm").style.display = 'block';
+        id("add_btn").style.display = 'none';
+        id("cash_item_nmcl_cb").focus();
+        return false;
+      } //add_frm
+      
+      function add(o) {
+        var send = "";
+        for(var i = 0; i < id("add_frm").elements.length; i++) {
+          if(i > 0) send += "&";
+          send += id("add_frm").elements[i].name + "=" + encodeURIComponent( id("add_frm").elements[i].value );
+        }
+        ajax("ajax/add.php", function(data) {
+          if(data.success) {
+            //clear
+            id("cash_item_nmcl_cb").value = "";
+            id("cash_item_prod_type_cb").value = "";
+            id("cash_item_org_cb").value = "";
+            id("cash_item_price").value = "";
+            id("cash_item_qnt").value = 1;
+            //refresh
+            refresh_list();
+          } else {
+            alert(data.msg);
+          }
+          id("cash_item_nmcl_cb").focus();
+        }, 0, send);
+        return false;
+      }//add
+      
+      function nomChange(o) {
+        ajax("ajax/nmcl_param.php", function(data) {
+          console.log(data);
+        }, 0, "nmcl_name=" + encodeURIComponent( o.value) );
+      }
     </script>
     
     <meta http-equiv="x-ua-compatible" content="IE=edge">
@@ -199,16 +311,53 @@ if(!empty($_POST['login_usr_name_list_cb'])) {
     <?if(!empty($auth)) {?>
       <h3><?=$auth['msg'];?></h3>
     <?}?>
-    <?if($usr->rghts['read'] != 1) {?>
+    <?if($usr->rghts['read'] != 1) {
+      require_once("lib/settings.php");
+      $set = new CashSett($db, $usr);
+    ?>
       <form id="login_form" method="post">
-        <div><label for="db">База: </label><input type="text" id="db" name="login_db_name_list_cb" value="1"></div>
-        <div><label for="login">Пользователь: </label><input type="text" id="login" name="login_usr_name_list_cb" value="1"></div>
+        <div><label for="db">База: </label>
+        <select id="db" name="login_db_name_list_cb">
+          <?
+          $dbs = $set->getDbs();
+          foreach($dbs as $db) {
+          ?>
+          <option value="<?=$db['id'];?>"<?if($db['id']==$_COOKIE['DB_ID']){?> selected<?}?>><?=$db['name'];?></option>
+          <?}?>
+        </select> </div>
+        <div><label for="login">Пользователь: </label>
+        <select id="login" name="login_usr_name_list_cb">
+          <?
+          $usrs = $set->getUsrNames();
+          foreach($usrs as $u) {
+          ?>
+          <option value="<?=$u['id'];?>"<?if($u['id']==$_COOKIE['USR_ID']){?> selected<?}?>><?=$u['name'];?></option>
+          <?}?>
+        </select></div>
         <div><label for="pwd">Пароль: </label><input type="password" id="pwd" name="password"></div>
         <div><input type="submit" value="Войти"></div>
       <form>
     <?} else {?>
     <div id="add">
-      <input type="button" value="Добавить ↓">
+      <input type="button" id="add_btn" value="Добавить ↓" onclick="return add_frm();">
+      <?if(!empty($add_ret['msg'])) {?>
+        <h3>Ошибка добавления: <?=$add_ret['msg'];?></h3>
+      <?}?>
+      <form method="post" id="add_frm" onsubmit="return add(this);">
+        <input type="hidden" id="cash_item_currency_cb" name="cash_item_currency_cb" value="<?=$settings['currency'];?>">
+        <input type="hidden" id="cash_item_ctype_cb" name="cash_item_ctype_cb" value="1">
+        <input type="hidden" id="cash_item_toper_cb" name="cash_item_toper_cb" value="0">
+        <input type="hidden" id="cash_item_note" name="cash_item_note" value="">
+        <div><label for="cash_item_date">Дата</label><input type="date" name="cash_item_date" id="cash_item_date" value="<?=date('Y-m-d');?>"></div>
+        <div><label for="cash_item_nmcl_cb">Товар</label><input type="text" name="cash_item_nmcl_cb" id="cash_item_nmcl_cb" onchange="return nomChange(this);"></div>
+        <div><label for="cash_item_prod_type_cb">Группа</label><input type="text" name="cash_item_prod_type_cb" id="cash_item_prod_type_cb"></div>
+        <div><label for="cash_item_org_cb">Орг.</label><input type="text" name="cash_item_org_cb" id="cash_item_org_cb"></div>
+        <div>
+          <label for="cash_item_price">Цена</label><input type="number" name="cash_item_price" id="cash_item_price"> 
+          <label for="cash_item_qnt">Кол-во</label><input type="number" name="cash_item_qnt" id="cash_item_qnt" value="1">
+        </div>
+        <input name="cash_item_save" id="cash_item_save" type="submit" value="Сохранить">        
+      </form>
     </div>
     <div id="filter">
       <input id="date_from" type="date" value="<?=date('Y-m-d', time()-3600*24);?>" onchange="return refresh_list();" required> &mdash;
@@ -217,6 +366,6 @@ if(!empty($_POST['login_usr_name_list_cb'])) {
     <ul id="list"></ul>
     <div id="itog">=<span id="itog_sum">0</span><?=$settings['sign'];?></div>
     <?}?>
-    <?=$settings['add'];?>
+    <?$settings['add'];?>
   </body>
 </html>

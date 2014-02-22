@@ -79,8 +79,10 @@ class Cash {
         c.org_id, co.name as oname, c.type, c.note, c.file, c.uid, u.login, cr.rate, cr.sign, c.cash_type_id, ct.name as cash_type,
         CASE WHEN c.type = 0 THEN -1 ELSE 1 END * c.price * c.qnt * cr.rate as amount";
     if($short) {
+      global $settings;
+      if( $settings['round'] ) $round = "ROUND";
       $select = "c.id, cn.name as nom, c.date as dt, co.name as oname, u.login, cr.sign, 
-            CASE WHEN c.type = 0 THEN -1 ELSE 1 END * c.price * c.qnt * cr.rate as amount ";
+            CASE WHEN c.type = 0 THEN -1 ELSE 1 END * ".$round."(c.price * c.qnt * cr.rate) as amount ";
       $desc = "DESC";
     }
     $sql =
@@ -104,7 +106,7 @@ class Cash {
       AND c.bd_id = ?
       ". $filter ."
      ORDER BY
-      c.date ".$desc.", c.date_edit";
+      c.date ".$desc.", c.date_edit ".$desc;
 
      return $this->db->select($sql, $from, $to, $this->usr->db_id);
   }
@@ -196,7 +198,7 @@ class Cash {
     return $this->db->select($sql);
   }
 
-  public function nmcl_param($nmcl_id) {
+  public function nmcl_param($nmcl_id, $nmcl_name) {
     if(!$this->usr->canRead()) return array();
 
     //cn.id, cn.name,
@@ -209,7 +211,9 @@ class Cash {
       cashes c
     INNER JOIN cashes_org co
     WHERE
-      c.nmcl_id = ?
+      ( c.nmcl_id = ? OR c.id IN(SELECT n.id FROM cashes_nom n 
+                                 WHERE UPPER_UTF8(n.name) like UPPER_UTF8('%". $this->db->escape($nmcl_name)."%') ) 
+      )
       AND c.bd_id = ? AND c.visible = 1
       AND co.id = c.org_id
       AND c.date > ( SELECT 
@@ -310,6 +314,8 @@ class Cash {
     if(!$this->usr->canWrite()) return NULL;
 
     if(intval($name) > 0) return $name;
+    $name = trim($name);
+    if(empty($name)) return 0;
 
     $ref_id = 0;
     $ref_id = $this->db->element("SELECT MAX(id) id from ".$ref." WHERE UPPER_UTF8(name) = UPPER_UTF8(?)", $name );
@@ -352,8 +358,8 @@ class Cash {
     $ret['cash_item_prod_type_cb']                = $this->add_refbook($data["cash_item_prod_type_cb"], "cashes_group");
     if($ret['cash_item_prod_type_cb'] == 0) 	    { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления группы товара'); }
 
-    $ret['cash_item_price']                       = $data['cash_item_price'];
-    if(empty($ret['cash_item_price'])) 	          { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните цену'); }
+    $ret['cash_item_price']                       = floatval( $data['cash_item_price'] );
+    if($ret['cash_item_price'] == 0)   	          { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните цену'); }
 
     $ret['cash_item_currency_cb']                 = $this->add_refbook($data["cash_item_currency_cb"], "currency");
     if($ret['cash_item_currency_cb'] == 0) 	      { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления валюты'); }
@@ -361,8 +367,8 @@ class Cash {
     $ret['cash_item_ctype_cb']                    = $this->add_refbook($data["cash_item_ctype_cb"], "cashes_type");
     if($ret['cash_item_ctype_cb'] == 0) 	        { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления кошелька'); }
 
-    $ret['cash_item_qnt']                         = $data['cash_item_qnt'];
-    if(empty($ret['cash_item_qnt'])) 		          { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните количество'); }
+    $ret['cash_item_qnt']                         = floatval( $data['cash_item_qnt'] );
+    if($ret['cash_item_qnt'] == 0)   		          { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Заполните количество'); }
 
     $ret['cash_item_org_cb']                      = $this->add_refbook($data["cash_item_org_cb"], "cashes_org");
     if($ret['cash_item_org_cb'] == 0) 		        { $this->db->rollback(); return array('failure'=>true, 'msg'=> 'Ошибка добавления организации'); }

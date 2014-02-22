@@ -2,7 +2,7 @@
 error_reporting(0);
 
 /* режим отладки */
-$debug = false;
+$debug = 0;
 
 /* Путь до файла базы данных */
 $sqlite_path = __DIR__."/../data/cash.db3";
@@ -14,7 +14,7 @@ $life_time = ini_get("session.gc_maxlifetime");
 $demo = 0;
 
 /*Версия*/
-$version = "b=1.013";
+$version = "b=1.014";
 //$version = rand(); //для отладки
 
 if($debug) {

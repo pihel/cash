@@ -23,8 +23,8 @@ class CashSett {
 
   public function getUsrNames($db_id = 0 ) {
     $this->db->escape_res = true;
-    $sql = "SELECT id, login as name FROM users WHERE bd_id = ?";
-    return $this->db->select($sql, intval($db_id) );
+    $sql = "SELECT id, login as name FROM users WHERE ( bd_id = ? OR 0 = ? )";
+    return $this->db->select($sql, intval($db_id), intval($db_id) );
   }
 
   public function addDB($name) {
