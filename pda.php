@@ -54,10 +54,6 @@ if(!empty($_POST['cash_item_save'])) {
       height: 25px;
       font-size: 15px;
     }
-    #filter input, #cash_item_date {      
-      width: 110px;   
-      border: 1px solid #A6C9F4;      
-    }
     input::-webkit-outer-spin-button, /* Removes arrows */
     input::-webkit-inner-spin-button, /* Removes arrows */
     input::-webkit-clear-button { /* Removes blue cross */
@@ -166,20 +162,27 @@ if(!empty($_POST['cash_item_save'])) {
       padding-right: 5px;
       display: inline-block;
     }
+    #add_frm input {
+      width: 165px;
+    }
     #add_frm label[for=cash_item_qnt] {
       min-width: 1px;
     }
     #add_frm div {
       margin-bottom: 5px;
     }
-    #cash_item_price {
+    #add_frm #cash_item_price {
       width: 60px;
     }
-    #cash_item_qnt {
+    #add_frm #cash_item_qnt {
       width: 40px;
     }
+    #filter input, #add_frm #cash_item_date {      
+      width: 110px;   
+      border: 1px solid #A6C9F4;      
+    }
     </style>
-    <script language="javascript">      
+    <script language="javascript">
       function id(p_id) {
         return document.getElementById(p_id);
       } //id
@@ -295,9 +298,12 @@ if(!empty($_POST['cash_item_save'])) {
       }//add
       
       function nomChange(o) {
-        ajax("ajax/nmcl_param.php", function(data) {
+        ajax("ajax/nmcl_param.php?nmcl_name=" + encodeURIComponent( o.value ), function(data) {
+          id("cash_item_prod_type_cb").value = data.gr_name;
+          id("cash_item_org_cb").value = data.org_name;
+          id("cash_item_price").focus();
           console.log(data);
-        }, 0, "nmcl_name=" + encodeURIComponent( o.value) );
+        } );
       }
     </script>
     

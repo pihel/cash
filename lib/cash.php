@@ -206,16 +206,19 @@ class Cash {
     "SELECT
       c.`group` grp,
       c.org_id,
-      co.name as org_name
+      co.name as org_name,
+      cg.name as gr_name
     FROM
       cashes c
     INNER JOIN cashes_org co
+      ON(co.id = c.org_id)
+    INNER JOIN cashes_group cg
+      ON(cg.id = c.`group`)
     WHERE
-      ( c.nmcl_id = ? OR c.id IN(SELECT n.id FROM cashes_nom n 
-                                 WHERE UPPER_UTF8(n.name) like UPPER_UTF8('%". $this->db->escape($nmcl_name)."%') ) 
+      ( c.nmcl_id = ? OR (c.nmcl_id IN(SELECT n.id FROM cashes_nom n 
+                                 WHERE UPPER_UTF8(n.name) like UPPER_UTF8('%". $this->db->escape($nmcl_name)."%')) AND ? = 0) 
       )
       AND c.bd_id = ? AND c.visible = 1
-      AND co.id = c.org_id
       AND c.date > ( SELECT 
                         DATETIME(MAX(c1.date), '".$this->from. "') 
                      FROM 
@@ -229,7 +232,7 @@ class Cash {
     ORDER BY
       SUM(CASE WHEN c.uid = ? THEN 100 ELSE 1 END) DESC, COUNT(1) DESC
     LIMIT 1  ";
-    return $this->db->line($sql, $nmcl_id, $this->usr->db_id, $this->usr->id);
+    return $this->db->line($sql, $nmcl_id, $nmcl_id, $this->usr->db_id, $this->usr->id);
   }
 
   public function prod_type_list() {
