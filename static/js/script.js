@@ -94,7 +94,7 @@ function htmlRenderer(text) {
 
 function error(text, _cb) {
   Ext.Msg.show({
-    title:'Ошибка',
+    title: lang[15],
     msg: text,
     icon: Ext.MessageBox.ERROR,
     buttons: Ext.Msg.OK,

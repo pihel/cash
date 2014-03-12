@@ -372,6 +372,6 @@ if(!empty($_POST['cash_item_save'])) {
     <ul id="list"></ul>
     <div id="itog">=<span id="itog_sum">0</span><?=$settings['sign'];?></div>
     <?}?>
-    <?$settings['add'];?>
+    <?=$settings['add'];?>
   </body>
 </html>

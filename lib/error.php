@@ -11,7 +11,7 @@ class Error extends Exception {
     global $settings;
     if(!empty($settings['mail'])) {
       $str = htmlspecialchars($str, ENT_QUOTES);
-      mail($mail, "Ошибка на сайте ".$_SERVER['SERVER_NAME'], $str);
+      mail($mail, "Error on ".$_SERVER['SERVER_NAME'], $str);
     }
   }
 

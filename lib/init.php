@@ -1,11 +1,12 @@
 <?
 error_reporting(0);
+$data_path = __DIR__."/../data";
 
 /* режим отладки */
 $debug = 0;
 
 /* Путь до файла базы данных */
-$sqlite_path = __DIR__."/../data/cash.db3";
+$sqlite_path = $data_path."/cash.db3";
 
 /* Допустимое время бездействия */
 $life_time = ini_get("session.gc_maxlifetime");
@@ -14,8 +15,8 @@ $life_time = ini_get("session.gc_maxlifetime");
 $demo = 0;
 
 /*Версия*/
-$version = "b=1.015";
-//$version = rand(); //для отладки
+$version = "b=1.016";
+$version = rand(); //для отладки
 
 if($debug) {
   error_reporting(~E_NOTICE);
@@ -30,6 +31,7 @@ $db->connect();
 
 if((bool)$short) return;
 
+require_once($data_path."/lang/ru.php");
 require_once('user.php');
 require_once('cash.php');
 

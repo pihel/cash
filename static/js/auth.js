@@ -24,7 +24,7 @@ var login_db_name_list_cb = Ext.create('Ext.form.field.ComboBox', {
   store: login_db_name_list,
   id: "login_db_name_list_cb",
   name: "login_db_name_list_cb",
-  fieldLabel: 'База',
+  fieldLabel: lang[7],
   labelWidth: 100,
   displayField: 'name',
   valueField: 'id',
@@ -64,7 +64,7 @@ var login_usr_name_list_cb = Ext.create('Ext.form.field.ComboBox', {
     store: login_usr_name_list,
     id: "login_usr_name_list_cb",
     name: "login_usr_name_list_cb",
-    fieldLabel: 'Имя',
+    fieldLabel: lang[6],
     labelWidth: 100,
     editable: false,
     displayField: 'name',
@@ -84,8 +84,8 @@ function submt() {
   if(Ext.getCmp('password').getValue() == "") return;
   var form = Ext.getCmp('loginForm').getForm();
   form.submit({
-      waitTitle: 'Пожалуйста подождите...',
-      waitMsg: 'Вход в систему выполняется',
+      waitTitle: lang[4],
+      waitMsg: lang[5],
       success: function(form, action) {
         authOk(action.result.msg);
       },
@@ -104,7 +104,7 @@ var loginForm = new Ext.FormPanel({
   items: [login_db_name_list_cb, login_usr_name_list_cb,
       {
         xtype: 'textfield',
-        fieldLabel:'Пароль',
+        fieldLabel:lang[3],
         name:'password',
         id: "password",
         inputType:'password',
@@ -122,7 +122,7 @@ var loginForm = new Ext.FormPanel({
   },
   buttons: [
       {
-        text: 'Войти',
+        text: lang[2],
         formBind: true,
         disabled: true,
         handler: function() {
@@ -135,7 +135,7 @@ var loginForm = new Ext.FormPanel({
 var loginWindow = new Ext.Window({
   frame:true,
   border: false,
-  title:'Вход в бухгалтерию',
+  title: lang[1],
   width:330,
   closable: false,
   resizable: false,
