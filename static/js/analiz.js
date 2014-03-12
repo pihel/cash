@@ -30,7 +30,7 @@ var cash_usr_name_list_cb = Ext.create('Ext.form.field.ComboBox', {
     store: cash_usr_name_list,
     id: "cash_usr_name_list_cb",
     name: "cash_usr_name_list_cb",
-    fieldLabel: 'Пользователь',
+    fieldLabel: lang[30],
     labelWidth: 100,
     editable: false,
     displayField: 'name',
@@ -59,13 +59,13 @@ function getUsrFltr() {
 var cash_analiz_com = Ext.create('Ext.Panel', {
     frame: true,
     id: "cash_analiz_com",
-    title: 'Общий',
+    title: lang[85],
     height: h,
     width: w,
     items: [],
     listeners: {
       activate: function(tab){
-        Ext.getCmp('cash_analiz_com').setLoading("Загрузка общей статистики...");
+        Ext.getCmp('cash_analiz_com').setLoading(lang[86]);
         loadScript(settings.static + "/js/analiz/common.js", function() {
           cash_analiz_com_load(function() {
             Ext.getCmp('cash_analiz_com').setLoading(false);
@@ -82,11 +82,11 @@ var cash_analiz_dyn = Ext.create('Ext.Panel', {
     id: "cash_analiz_dyn",
     height: h,
     width: w,
-    title: 'Баланс',
+    title: lang[87],
     items: [],
     listeners: {
       activate: function(tab){
-        Ext.getCmp('cash_analiz_dyn').setLoading("Загрузка баланса...");
+        Ext.getCmp('cash_analiz_dyn').setLoading(lang[88]);
         loadScript(settings.static + "/js/analiz/dynamic.js", function() {
           cash_analiz_dyn_load(function() {
             Ext.getCmp('cash_analiz_dyn').setLoading(false);
@@ -103,11 +103,11 @@ var cash_analiz_group = Ext.create('Ext.Panel', {
     id: "cash_analiz_group",
     height: h,
     width: w,
-    title: 'Группы',
+    title: lang[89],
     items: [],
     listeners: {
       activate: function(tab){
-        Ext.getCmp('cash_analiz_group').setLoading("Загрузка статистики по группам...");
+        Ext.getCmp('cash_analiz_group').setLoading(lang[90]);
         loadScript(settings.static + "/js/analiz/groups.js", function() {
           cash_analiz_grp_load(function() {
             Ext.getCmp('cash_analiz_group').setLoading(false);
@@ -124,11 +124,11 @@ var cash_analiz_group_dyn = Ext.create('Ext.Panel', {
     id: "cash_analiz_group_dyn",
     height: h,
     width: w,
-    title: 'Динамика групп',
+    title: lang[91],
     items: [],
     listeners: {
       activate: function(tab){
-        Ext.getCmp('cash_analiz_group_dyn').setLoading("Загрузка статистики по динамике групп...");
+        Ext.getCmp('cash_analiz_group_dyn').setLoading(lang[92]);
         loadScript(settings.static + "/js/analiz/groups_dyn.js", function() {
           cash_analiz_grp_dyn_load(function() {
             Ext.getCmp('cash_analiz_group_dyn').setLoading(false);
@@ -145,11 +145,11 @@ var cash_analiz_org = Ext.create('Ext.Panel', {
     id: "cash_analiz_org",
     height: h,
     width: w,
-    title: 'Организации',
+    title: lang[93],
     items: [],
     listeners: {
       activate: function(tab){
-        Ext.getCmp('cash_analiz_org').setLoading("Загрузка статистики по организациям...");
+        Ext.getCmp('cash_analiz_org').setLoading(lang[94]);
         loadScript(settings.static + "/js/analiz/orgs.js", function() {
           cash_analiz_org_load(function() {
             Ext.getCmp('cash_analiz_org').setLoading(false);
@@ -166,11 +166,11 @@ var cash_analiz_mondyn = Ext.create('Ext.Panel', {
     id: "cash_analiz_mondyn",
     height: h,
     width: w,
-    title: 'Динамика',
+    title: lang[95],
     items: [],
     listeners: {
       activate: function(tab){
-        Ext.getCmp('cash_analiz_mondyn').setLoading("Загрузка динамики по месяцам...");
+        Ext.getCmp('cash_analiz_mondyn').setLoading(lang[96]);
         loadScript(settings.static + "/js/analiz/mon_dyn.js", function() {
           cash_analiz_mdyn_load(function() {
             Ext.getCmp('cash_analiz_mondyn').setLoading(false);
@@ -187,11 +187,11 @@ var cash_analiz_cash_type = Ext.create('Ext.Panel', {
     id: "cash_analiz_cash_type",
     height: h,
     width: w,
-    title: 'Кошельки',
+    title: lang[97],
     items: [],
     listeners: {
       activate: function(tab){
-        Ext.getCmp('cash_analiz_cash_type').setLoading("Загрузка статистики по кошелькам...");
+        Ext.getCmp('cash_analiz_cash_type').setLoading(lang[98]);
         loadScript(settings.static + "/js/analiz/purs.js", function() {
           cash_analiz_purs_load(function() {
             Ext.getCmp('cash_analiz_cash_type').setLoading(false);
@@ -208,11 +208,11 @@ var cash_analiz_rest = Ext.create('Ext.Panel', {
     id: "cash_analiz_rest",
     height: h,
     width: w,
-    title: 'Накопления',
+    title: lang[99],
     items: [],
     listeners: {
       activate: function(tab){
-        Ext.getCmp('cash_analiz_rest').setLoading("Загрузка накоплений...");
+        Ext.getCmp('cash_analiz_rest').setLoading(lang[100]);
         loadScript(settings.static + "/js/analiz/storg.js", function() {
           cash_analiz_strg_load(function() {
             Ext.getCmp('cash_analiz_rest').setLoading(false);
@@ -229,11 +229,11 @@ var cash_analiz_curr = Ext.create('Ext.Panel', {
     id: "cash_analiz_curr",
     height: h,
     width: w,
-    title: 'Валюты',
+    title: lang[101],
     items: [],
     listeners: {
       activate: function(tab){
-        Ext.getCmp('cash_analiz_curr').setLoading("Загрузка статистики по валютам...");
+        Ext.getCmp('cash_analiz_curr').setLoading(lang[102]);
         loadScript(settings.static + "/js/analiz/cur_amount.js", function() {
           cash_analiz_cur_load(function() {
             Ext.getCmp('cash_analiz_curr').setLoading(false);
@@ -250,11 +250,11 @@ var cash_analiz_secr = Ext.create('Ext.Panel', {
     id: "cash_analiz_secr",
     height: h,
     width: w,
-    title: 'Безопасность',
+    title: lang[103],
     items: [],
     listeners: {
       activate: function(tab){
-        Ext.getCmp('cash_analiz_secr').setLoading("Загрузка статистики по финансовой безопасности...");
+        Ext.getCmp('cash_analiz_secr').setLoading(lang[104]);
         loadScript(settings.static + "/js/analiz/secr.js", function() {
           cash_analiz_secr_load(function() {
             Ext.getCmp('cash_analiz_secr').setLoading(false);
