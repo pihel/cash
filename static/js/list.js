@@ -43,26 +43,26 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
     store: cash_list_store,
     columns: [
       {text: "ID", 		 dataIndex: 'id', 		      hidden: true, 	tdCls: 'x-center-cell' },
-      {text: lang[16], dataIndex: 'nmcl_id', 		  hidden: true , 	tdCls: 'x-center-cell'},
-      {text: lang[17], dataIndex: 'nom', 		      flex: 1, 	hideable: false},
-      {text: lang[18], dataIndex: 'group', 		    hidden: true , 	tdCls: 'x-center-cell'},
-      {text: lang[19], dataIndex: 'gname',		    hideable: true },
-      {text: lang[20], dataIndex: 'price',		    hideable: false, renderer: price, tdCls: 'x-price-cell' },
-      {text: lang[21], dataIndex: 'qnt',		      hideable: false, summaryType: 'sum', tdCls: 'x-center-cell' },
-      {text: lang[22], dataIndex: 'amount',		    hideable: true,  renderer: price_r, summaryType: 'sum' , tdCls: 'x-amount-cell' , summaryRenderer: price },
-      {text: lang[23], dataIndex: 'oper_date',	  hideable: true, renderer: dateRender, tdCls: 'x-center-cell'  },
-      {text: lang[24], dataIndex: 'date_edit', 	  hidden: true,   renderer: dateTimeRender, tdCls: 'x-center-cell' },
-      {text: lang[25], dataIndex: 'org_id', 		  hidden: true, 	tdCls: 'x-center-cell' },
-      {text: lang[26], dataIndex: 'oname',		    hideable: true },
-      {text: lang[27], dataIndex: 'type', 		    hidden: true , 	tdCls: 'x-center-cell'},
-      {text: lang[28], dataIndex: 'file',		      hidden: true },
-      {text: lang[29], dataIndex: 'uid', 		      hidden: true, 	tdCls: 'x-center-cell' },
-      {text: lang[30], dataIndex: 'login', 	      hidden: false },
-      {text: lang[31], dataIndex: 'rate', 		    hidden: true },
-      {text: lang[32], dataIndex: 'sign',		      hidden: true },
-      {text: lang[33], dataIndex: 'cash_type_id', hidden: true, 	tdCls: 'x-center-cell' },
-      {text: lang[34], dataIndex: 'cash_type', 	  hidden: true, 	tdCls: 'x-center-cell' },
-      {text: lang[35], dataIndex: 'note', 		    flex: 1 },
+      {text: lang(16), dataIndex: 'nmcl_id', 		  hidden: true , 	tdCls: 'x-center-cell'},
+      {text: lang(17), dataIndex: 'nom', 		      flex: 1, 	hideable: false},
+      {text: lang(18), dataIndex: 'group', 		    hidden: true , 	tdCls: 'x-center-cell'},
+      {text: lang(19), dataIndex: 'gname',		    hideable: true },
+      {text: lang(20), dataIndex: 'price',		    hideable: false, renderer: price, tdCls: 'x-price-cell' },
+      {text: lang(21), dataIndex: 'qnt',		      hideable: false, summaryType: 'sum', tdCls: 'x-center-cell' },
+      {text: lang(22), dataIndex: 'amount',		    hideable: true,  renderer: price_r, summaryType: 'sum' , tdCls: 'x-amount-cell' , summaryRenderer: price },
+      {text: lang(23), dataIndex: 'oper_date',	  hideable: true, renderer: dateRender, tdCls: 'x-center-cell'  },
+      {text: lang(24), dataIndex: 'date_edit', 	  hidden: true,   renderer: dateTimeRender, tdCls: 'x-center-cell' },
+      {text: lang(25), dataIndex: 'org_id', 		  hidden: true, 	tdCls: 'x-center-cell' },
+      {text: lang(26), dataIndex: 'oname',		    hideable: true },
+      {text: lang(27), dataIndex: 'type', 		    hidden: true , 	tdCls: 'x-center-cell'},
+      {text: lang(28), dataIndex: 'file',		      hidden: true },
+      {text: lang(29), dataIndex: 'uid', 		      hidden: true, 	tdCls: 'x-center-cell' },
+      {text: lang(30), dataIndex: 'login', 	      hidden: false },
+      {text: lang(31), dataIndex: 'rate', 		    hidden: true },
+      {text: lang(32), dataIndex: 'sign',		      hidden: true },
+      {text: lang(33), dataIndex: 'cash_type_id', hidden: true, 	tdCls: 'x-center-cell' },
+      {text: lang(34), dataIndex: 'cash_type', 	  hidden: true, 	tdCls: 'x-center-cell' },
+      {text: lang(35), dataIndex: 'note', 		    flex: 1 },
       {
             menuDisabled: true,
             sortable: false,
@@ -73,14 +73,14 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
             id: "cash_list_edit_col",
             items: [{
               iconCls: 'edit-cash-col',
-              tooltip: lang[36] + ' (Enter, Dbl click)',
+              tooltip: lang(36) + ' (Enter, Dbl click)',
               handler: function(grid, rowIndex, colIndex) {
                   var rec = grid.getStore().getAt(rowIndex);
                   editItem(rec.get('id'));
               }
             }, {
               iconCls: 'del-cash-col',
-              tooltip: lang[37] + ' (Del)',
+              tooltip: lang(37) + ' (Del)',
               handler: function(grid, rowIndex, colIndex) {
                   var rec = grid.getStore().getAt(rowIndex);
                   deleteItem(rec.get('id'));
@@ -111,7 +111,7 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
       encode: true,
       local: true,
       autoReload: false,
-      menuFilterText: lang[38],
+      menuFilterText: lang(38),
       filters: [
         {dataIndex: 'id', 		    type: 'int'},
         {dataIndex: 'nmcl_id', 		type: 'int'},
@@ -138,7 +138,7 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
     region:'center'
 }); //cash_list_grid
 
-var loadMask_cash_list_grid = new Ext.LoadMask(cash_list_grid, {msg:lang[39], store: cash_list_store});
+var loadMask_cash_list_grid = new Ext.LoadMask(cash_list_grid, {msg:lang(39), store: cash_list_store});
 
 
 function editItem(v_id) {
@@ -153,14 +153,14 @@ function editItem(v_id) {
 function deleteItem(v_id) {
   if(parseInt(rights.write) == 0) return;
   Ext.Msg.show({
-      title:lang[40],
-      msg: lang[41],
+      title:lang(40),
+      msg: lang(41),
       icon: Ext.MessageBox.QUESTION,
       buttons: Ext.Msg.OKCANCEL,
       fn: function(buttonId) {
         //if clicked ok
         if(buttonId == "ok") {
-            cash_list_grid.setLoading(lang[42]);
+            cash_list_grid.setLoading(lang(42));
             Ext.Ajax.request({
               url: "ajax/delete.php",
               method: "GET",
@@ -191,7 +191,7 @@ var cash_list_from_date =
 {
     xtype: 'datefield',
     startDay:1,
-    fieldLabel: lang[43],
+    fieldLabel: lang(43),
     name: 'cash_list_from_date',
     id: 'cash_list_from_date',
     labelWidth: 55,
@@ -205,7 +205,7 @@ var cash_list_from_date =
 var cash_list_to_date =
 {
     xtype: 'datefield',
-    fieldLabel: lang[44],
+    fieldLabel: lang(44),
     startDay:1,
     name: 'cash_list_to_date',
     id: 'cash_list_to_date',
@@ -273,7 +273,7 @@ var cash_list_filter_loading = Ext.create('Ext.Img', {
     id: 'cash_list_filter_loading',
     name: "cash_list_filter_loading",
     mode: 'element',
-    title: lang[45],
+    title: lang(45),
     style: {
       //display: "none",
       margin: "1px 0px 0px 5px"
@@ -282,7 +282,7 @@ var cash_list_filter_loading = Ext.create('Ext.Img', {
 
 var cash_list_filter = {
     xtype:      'checkboxfield',
-    boxLabel  : lang[46],
+    boxLabel  : lang(46),
     name      : 'cash_list_filter',
     inputValue: '0',
     id        : 'cash_list_filter',
@@ -310,19 +310,19 @@ var cash_list_filter = {
 var cash_list_edit_btn_add_check =
 {
 	xtype: 'filefield',
-	buttonText: lang[47],
-  tooltip: lang[47],
+	buttonText: lang(47),
+  tooltip: lang(47),
 	id: "cash_list_edit_btn_add_check",
   buttonOnly: true,
   buttonConfig: {
-      text: lang[47],
+      text: lang(47),
       iconCls: 'cash_list_edit_btn_add_check_ico'
   },
   listeners: {
     change: function( o, value, eOpts ){
       cash_list_edit_btn_ocr_check.submit({
-          waitTitle: lang[4],
-          waitMsg: lang[48],
+          waitTitle: lang(4),
+          waitMsg: lang(48),
           success: function(form, action) {
             addCheck(action.result.msg);
           },
@@ -346,8 +346,8 @@ var cash_list_edit_btn_ocr_check = new Ext.FormPanel({
 var cash_list_edit_btn_add =
 {
 	xtype: 'button',
-	text: lang[49],
-  tooltip: lang[50] + " (Insert)",
+	text: lang(49),
+  tooltip: lang(50) + " (Insert)",
 	id: "cash_list_edit_btn_add",
 	icon: settings.static + "/add.gif",
 	handler : function (){
@@ -521,8 +521,8 @@ var cash_list_panel = Ext.create('Ext.Panel', {
     collapsible: false,
     id: "cash_list_panel",
     tabConfig: {
-      title: lang[51],
-      tooltip: lang[51] + ' (Alt-1)'
+      title: lang(51),
+      tooltip: lang(51) + ' (Alt-1)'
     },
     height: Ext.getBody().getHeight() - 50,
     header: true,

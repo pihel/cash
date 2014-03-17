@@ -4,7 +4,7 @@ var cash_item_nmcl_cb_fltr = Ext.create('Ext.form.field.ComboBox', {
     store: cash_item_nmcl_store,
     id: "cash_item_nmcl_cb_fltr",
     name: "cash_item_nmcl_cb_fltr",
-    fieldLabel: lang[17],
+    fieldLabel: lang(17),
     labelWidth: 100,
     displayField: 'name',
     valueField: 'id',
@@ -16,7 +16,7 @@ var cash_item_nmcl_cb_fltr = Ext.create('Ext.form.field.ComboBox', {
     listeners: {
       select: function( combo, records, e) {
         if(records != undefined && records[0].get('id') != 0) {
-          Ext.getCmp('cash_list_tb_filter_bgrp').setLoading(lang[52]);
+          Ext.getCmp('cash_list_tb_filter_bgrp').setLoading(lang(52));
           Ext.Ajax.request({
             url: "ajax/nmcl_param.php",
             method: "GET",
@@ -38,7 +38,7 @@ var cash_item_nmcl_cb_fltr = Ext.create('Ext.form.field.ComboBox', {
 
 var cash_item_nmcl_cb_fltr_no = {
     xtype:      'checkboxfield',
-    boxLabel  : lang[68],
+    boxLabel  : lang(68),
     name      : 'cash_item_nmcl_cb_fltr_no',
     inputValue: '0',
     id        : 'cash_item_nmcl_cb_fltr_no'
@@ -49,7 +49,7 @@ var cash_item_prod_type_cb_fltr = Ext.create('Ext.form.field.ComboBox', {
     store: cash_item_prod_type_store,
     id: "cash_item_prod_type_cb_fltr",
     name: "cash_item_prod_type_cb_fltr",
-    fieldLabel: lang[19],
+    fieldLabel: lang(19),
     labelWidth: 100,
     displayField: 'name',
     valueField: 'id',
@@ -64,7 +64,7 @@ var cash_item_prod_type_cb_fltr = Ext.create('Ext.form.field.ComboBox', {
 
 var cash_item_prod_type_cb_fltr_no = {
     xtype:      'checkboxfield',
-    boxLabel  : lang[68],
+    boxLabel  : lang(68),
     name      : 'cash_item_prod_type_cb_fltr_no',
     inputValue: '0',
     id        : 'cash_item_prod_type_cb_fltr_no'
@@ -74,7 +74,7 @@ var cash_item_price_frm_fltr = {
     xtype: 'numberfield',
     id: "cash_item_price_frm_fltr",
     name: "cash_item_price_frm_fltr",
-    fieldLabel: lang[20],
+    fieldLabel: lang(20),
     labelWidth: 100,
     width: 200
 }; //cash_item_price_frm_fltr
@@ -83,7 +83,7 @@ var cash_item_price_to_fltr = {
     xtype: 'numberfield',
     id: "cash_item_price_to_fltr",
     name: "cash_item_price_to_fltr",
-    fieldLabel: lang[44],
+    fieldLabel: lang(44),
     labelWidth: 20,
     width: 120
 }; //cash_item_price_to_fltr
@@ -126,7 +126,7 @@ var cash_item_toper_cb_fltr = Ext.create('Ext.form.field.ComboBox', {
     valueField: 'id',
     queryMode: 'local',
     width: 200,
-    fieldLabel: lang[56],
+    fieldLabel: lang(56),
     labelWidth: 100,
     editable: false
 }); //cash_item_toper_cb_fltr
@@ -149,13 +149,13 @@ var cash_item_org_fltr_cb = Ext.create('Ext.form.field.ComboBox', {
     valueField: 'id',
     //queryMode: 'local',
     width: 474,
-    fieldLabel: lang[26],
+    fieldLabel: lang(26),
     labelWidth: 100
 }); //cash_item_org_fltr_cb
 
 var cash_item_org_fltr_cb_no = {
     xtype:      'checkboxfield',
-    boxLabel  : lang[68],
+    boxLabel  : lang(68),
     name      : 'cash_item_org_fltr_cb_no',
     inputValue: '0',
     id        : 'cash_item_org_fltr_cb_no'
@@ -165,14 +165,14 @@ var cash_item_note_fltr = {
     xtype: 'textareafield',
     name: 'cash_item_note_fltr',
     id: "cash_item_note_fltr",
-    fieldLabel: lang[35],
+    fieldLabel: lang(35),
     labelWidth: 100,
     width: 474
 };
 
 var cash_item_note_fltr_no = {
     xtype:      'checkboxfield',
-    boxLabel  : lang[68],
+    boxLabel  : lang(68),
     name      : 'cash_item_note_fltr_no',
     inputValue: '0',
     id        : 'cash_item_note_fltr_no'
@@ -196,7 +196,7 @@ var cash_item_user_cb_fltr = Ext.create('Ext.form.field.ComboBox', {
     store: cash_item_user_fltr_store,
     id: "cash_item_user_cb_fltr",
     name: "cash_item_user_cb_fltr",
-    fieldLabel: lang[30],
+    fieldLabel: lang(30),
     labelWidth: 100,
     displayField: 'name',
     valueField: 'id',
@@ -212,7 +212,7 @@ var cash_item_user_cb_fltr = Ext.create('Ext.form.field.ComboBox', {
 
 var cash_item_file_fltr = {
     xtype:      'checkboxfield',
-    boxLabel  : lang[28],
+    boxLabel  : lang(28),
     name      : 'cash_item_file_fltr',
     inputValue: '0',
     id        : 'cash_item_file_fltr'
@@ -220,7 +220,7 @@ var cash_item_file_fltr = {
 
 var cash_item_del_fltr = {
     xtype:      'checkboxfield',
-    boxLabel  : lang[69],
+    boxLabel  : lang(69),
     name      : 'cash_item_del_fltr',
     inputValue: '0',
     id        : 'cash_item_del_fltr'
@@ -229,9 +229,9 @@ var cash_item_del_fltr = {
 var cash_list_fltr_refresh =
 {
 	xtype: 'button',
-	text: lang[70],
+	text: lang(70),
 	icon: settings.static + "/refresh.gif",
-	tooltip: lang[71],
+	tooltip: lang(71),
 	border: true,
 	cls: "x-btn-default-small",
 	handler : listRefresh
@@ -240,8 +240,8 @@ var cash_list_fltr_refresh =
 var cash_list_fltr_clear =
 {
 	xtype: 'button',
-	text: lang[72],
-	tooltip: lang[73],
+	text: lang(72),
+	tooltip: lang(73),
 	border: true,
 	cls: "x-btn-default-small",
 	handler : setDefaultFltr

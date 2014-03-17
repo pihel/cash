@@ -5,7 +5,7 @@ var cash_item_date =
 {
     xtype: 'datefield',
     startDay:1,
-    fieldLabel: lang[23],
+    fieldLabel: lang(23),
     name: 'cash_item_date',
     id: 'cash_item_date',
     value: new Date(),
@@ -49,7 +49,7 @@ var cash_item_nmcl_cb = Ext.create('Ext.form.field.ComboBox', {
     store: cash_item_nmcl_store,
     id: "cash_item_nmcl_cb",
     name: "cash_item_nmcl_cb",
-    fieldLabel: lang[17],
+    fieldLabel: lang(17),
     labelWidth: 100,
     displayField: 'name',
     valueField: 'id',
@@ -63,7 +63,7 @@ var cash_item_nmcl_cb = Ext.create('Ext.form.field.ComboBox', {
     listeners: {
         select: function( combo, records, e) {
           if(records != undefined && records[0].get('id') != 0) {
-            cash_list_add.setLoading(lang[52]);
+            cash_list_add.setLoading(lang(52));
             Ext.Ajax.request({
               url: "ajax/nmcl_param.php",
               method: "GET",
@@ -104,7 +104,7 @@ var cash_item_prod_type_cb = Ext.create('Ext.form.field.ComboBox', {
     store: cash_item_prod_type_store,
     id: "cash_item_prod_type_cb",
     name: "cash_item_prod_type_cb",
-    fieldLabel: lang[19],
+    fieldLabel: lang(19),
     labelWidth: 100,
     displayField: 'name',
     valueField: 'id',
@@ -126,7 +126,7 @@ var cash_item_price = {
     xtype: 'numberfield',
     id: "cash_item_price",
     name: "cash_item_price",
-    fieldLabel: lang[20],
+    fieldLabel: lang(20),
     allowBlank: false,
     labelWidth: 100,
     width: 200,
@@ -193,7 +193,7 @@ var cash_item_qnt = {
     xtype: 'numberfield',
     id: "cash_item_qnt",
     name: "cash_item_qnt",
-    fieldLabel: lang[53],
+    fieldLabel: lang(53),
     allowBlank: false,
     labelWidth: 100,
     width: 200,
@@ -223,7 +223,7 @@ var cash_item_org_cb = Ext.create('Ext.form.field.ComboBox', {
     valueField: 'id',
     //queryMode: 'local',
     width: 474,
-    fieldLabel: lang[26],
+    fieldLabel: lang(26),
     allowBlank: false,
     tpl: '<tpl for="."><div class="x-boundlist-item">{name:htmlEncode}</div></tpl>',
     labelWidth: 100
@@ -234,8 +234,8 @@ var cash_item_org_cb = Ext.create('Ext.form.field.ComboBox', {
 var cash_item_toper_store = Ext.create('Ext.data.Store', {
   model: 'cash_id_name_model',
   data : [
-         {id: 0,    name: lang[54]},
-         {id: 1,    name: lang[55]}
+         {id: 0,    name: lang(54)},
+         {id: 1,    name: lang(55)}
      ]
 }); //cash_item_toper_store
 
@@ -247,7 +247,7 @@ var cash_item_toper_cb = Ext.create('Ext.form.field.ComboBox', {
     valueField: 'id',
     queryMode: 'local',
     width: 200,
-    fieldLabel: lang[56],
+    fieldLabel: lang(56),
     allowBlank: false,
     labelWidth: 100,
     value: 0,
@@ -261,10 +261,10 @@ var cash_item_file = {
     xtype: 'filefield',
     id: "cash_item_file",
     name: "cash_item_file",
-    fieldLabel: lang[28],
+    fieldLabel: lang(28),
     labelWidth: 100,
     width: 474,
-    buttonText: lang[57]
+    buttonText: lang(57)
 };
 
 //---- note
@@ -272,7 +272,7 @@ var cash_item_note = {
     xtype: 'textarea',
     name: 'cash_item_note',
     id: "cash_item_note",
-    fieldLabel: lang[35],
+    fieldLabel: lang(35),
     labelWidth: 100,
     width: 474,
     height: 50
@@ -280,10 +280,10 @@ var cash_item_note = {
 
 //---  save
 var cash_item_save = Ext.create('Ext.button.Button', {
-	text: lang[58],
+	text: lang(58),
 	formBind: true,
 	id: "cash_item_save",
-  tooltip: lang[59] + " (Enter)",
+  tooltip: lang(59) + " (Enter)",
 	icon: settings.static + "/yes.gif",
 	disabled: true,
 	handler : function() {
@@ -292,9 +292,9 @@ var cash_item_save = Ext.create('Ext.button.Button', {
 });
 
 var cash_item_add = Ext.create('Ext.button.Button', {
-	text: lang[49],
+	text: lang(49),
 	formBind: true,
-  tooltip: lang[60] + " (Ctrl-Enter)",
+  tooltip: lang(60) + " (Ctrl-Enter)",
 	id: "cash_item_add",
 	icon: settings.static + "/yes.gif",
 	disabled: true,
@@ -307,8 +307,8 @@ var cash_item_add = Ext.create('Ext.button.Button', {
 
 var cash_item_cancel = Ext.create('Ext.button.Button',
 {
-	text: lang[61],
-  tooltip: lang[62] + " (Escape)",
+	text: lang(61),
+  tooltip: lang(62) + " (Escape)",
 	handler : function() {
 	  cash_list_add.hide();
 	}
@@ -341,9 +341,9 @@ function submt_add(_add) {
   
   if(_add) {
     if(v_edit_id > 0) return;
-	  cash_list_add.setLoading(lang[63]);
+	  cash_list_add.setLoading(lang(63));
   } else {
-    cash_list_add.setLoading(lang[64]);
+    cash_list_add.setLoading(lang(64));
   }
   var form = Ext.getCmp('cash_item_form_add').getForm();
   form.submit({
@@ -430,7 +430,7 @@ function setDefault() {
   document.getElementById('cash_item_file-inputEl').onclick = null;
   Ext.getCmp('cash_item_note').setValue("");
   Ext.getCmp('cash_item_edit_id').setValue(0);
-  Ext.getCmp('cash_list_add').setTitle(lang[65]);
+  Ext.getCmp('cash_list_add').setTitle(lang(65));
 }
 
 function cash_list_add_load() {
@@ -475,7 +475,7 @@ function cash_list_add_load() {
           }
         }
         Ext.getCmp('cash_item_note').setValue(obj.note);
-        Ext.getCmp('cash_list_add').setTitle(lang[66]);
+        Ext.getCmp('cash_list_add').setTitle(lang(66));
 
         Ext.getCmp('cash_item_add').setVisible(false);
         
@@ -488,7 +488,7 @@ function cash_list_add_load() {
 
 ///-----window
 var cash_list_add = Ext.create('Ext.Window', {
-    title: lang[65],
+    title: lang(65),
     id: "cash_list_add",
     width: 510,
     height: 355,
@@ -506,7 +506,7 @@ var cash_list_add = Ext.create('Ext.Window', {
         },
         show: function(){
           Ext.getCmp('cash_list_add').setDisabled(parseInt(rights.write) == 0);
-          cash_list_add.setLoading(lang[67]);
+          cash_list_add.setLoading(lang(67));
 
           cash_item_nmcl_store.proxy.url = "ajax/nmcl_list.php?edit_id=" + v_edit_id;
           cash_item_org_store.proxy.url = "ajax/org_list.php?edit_id=" + v_edit_id;

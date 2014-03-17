@@ -2,7 +2,7 @@ var cash_set_db_model = Ext.define('cash_set_db_model', {
     extend: 'Ext.data.Model',
     fields: [
       {name: 'id', 		type: 'int'},
-      {name: 'name', 		type: 'string'}
+      {name: 'name', 	type: 'string'}
     ],
     idProperty: 'id'
 });
@@ -21,7 +21,7 @@ var cash_set_db_add = Ext.create('Ext.button.Button', {
   icon: settings.static + "/add.gif",
   handler : function () {
     var res = "";
-    Ext.MessageBox.prompt('Имя БД', 'Введи имя базы данных', function(id, txt) {
+    Ext.MessageBox.prompt(lang(105), lang(106), function(id, txt) {
       if (id == 'ok') {
         Ext.Ajax.request({
             url: "ajax/add_db.php",
@@ -42,7 +42,7 @@ var cash_set_db_add = Ext.create('Ext.button.Button', {
 var cash_set_db_grid = Ext.create('Ext.grid.Panel', {
     store: cash_set_db_store,
     id: "cash_set_db_grid",
-    title: 'Список баз данных',
+    title: lang(107),
     header: true,
     forceFit: true,
     width: 300,
@@ -53,7 +53,7 @@ var cash_set_db_grid = Ext.create('Ext.grid.Panel', {
     }],
     columns: [
       {text: "ID", 	  dataIndex: 'id', 	hidden: true, 	tdCls: 'x-center-cell' },
-      {text: "База", 	dataIndex: 'name', 	flex: 1, 	hideable: false},
+      {text: lang(7), dataIndex: 'name', 	flex: 1, 	hideable: false},
       {
         menuDisabled: true,
         sortable: false,
@@ -62,31 +62,31 @@ var cash_set_db_grid = Ext.create('Ext.grid.Panel', {
         width: 30,
         items: [{
             iconCls: 'del-cash-col',
-            tooltip: 'Удалить запись',
+            tooltip: lang(37),
             handler: function(grid, rowIndex, colIndex) {
                 var rec = grid.getStore().getAt(rowIndex);
                 //deleteItem(rec.get('id'));
                 Ext.Msg.show({
-                  title:'Удалить БД?',
-                  msg: 'Удалить БД "' + rec.get("name") + '"?',
+                  title: lang(108,[""]),
+                  msg: lang(108,[" " + rec.get("name")]),
                   buttons: Ext.Msg.YESNO,
                   icon: Ext.Msg.QUESTION,
                   fn: function(id) {
                     if(id == 'yes') {
-                  Ext.Ajax.request({
-                      url: "ajax/del_db.php",
-                      method: "GET",
-                      params: {
-                    id: rec.get('id')
-                      },
-                      success: function(data) {
-                    if(parseInt(data.responseText) > 0) {
-                      cash_set_db_store.load();
-                    } else {
-                      error(data.responseText);
-                    }
-                      }//success
-                  }); //Ext.Ajax.request
+                      Ext.Ajax.request({
+                          url: "ajax/del_db.php",
+                          method: "GET",
+                          params: {
+                            id: rec.get('id')
+                          },
+                          success: function(data) {
+                            if(parseInt(data.responseText) > 0) {
+                              cash_set_db_store.load();
+                            } else {
+                              error(data.responseText);
+                            }
+                          }//success
+                      }); //Ext.Ajax.request
                     }
                   } //fn
               }); //Ext.Msg.show
@@ -98,7 +98,7 @@ var cash_set_db_grid = Ext.create('Ext.grid.Panel', {
       itemclick: function(view,rec,item,index,eventObj) {
           cash_set_usr_store.proxy.url = 'ajax/usr_list.php?DB_ID=' + rec.get('id');
           cash_set_usr_store.load(function() {
-            cash_set_usr_grid.setTitle("Список пользователей базы '" + rec.get('name') + "' и их права");
+            cash_set_usr_grid.setTitle(lang(109, [rec.get('name')]));
             cash_set_usr_add.setDisabled(false);
           });
       }
@@ -108,7 +108,7 @@ var cash_set_db_grid = Ext.create('Ext.grid.Panel', {
     }
 }); //cash_set_db_grid
 
-var loadMask_cash_set_db_grid = new Ext.LoadMask(cash_set_db_grid, {msg:'Загрузка списка баз...', store: cash_set_db_store});
+var loadMask_cash_set_db_grid = new Ext.LoadMask(cash_set_db_grid, {msg: lang(110), store: cash_set_db_store});
 
 //---
 
@@ -152,22 +152,22 @@ var cash_set_usr_add = Ext.create('Ext.button.Button', {
 var cash_set_usr_grid = Ext.create('Ext.grid.Panel', {
     store: cash_set_usr_store,
     id: "cash_set_usr_grid",
-    title: 'Список пользователей базы данных и их права',
+    title: lang(115),
     header: true,
     width: Ext.getBody().getWidth() - 350,
     height: Ext.getBody().getHeight()/3,
     forceFit: true,
     tbar: [cash_set_usr_add],
         columns: [
-          {text: "ID", 		        dataIndex: 'id', 	      tdCls: 'x-center-cell', width: 20 },
-          {text: "ID базы", 	    dataIndex: 'bd_id', 	  hidden: true, 	tdCls: 'x-center-cell' },
-          {text: "Пользователь", 	dataIndex: 'login'	,   editor: {xtype: 'textfield', allowBlank: false} },
-          {text: "Пароль", 	      dataIndex: 'pasw'	,     editor: {xtype: 'textfield', allowBlank: false} },
-          {text: "Чтение", 	      dataIndex: 's_read'	,   xtype: 'checkcolumn'},
-          {text: "Запись", 	      dataIndex: 's_write'	, xtype: 'checkcolumn'},
-          {text: "Аналитика", 	  dataIndex: 's_analiz'	, xtype: 'checkcolumn'},
-          {text: "Настройки", 	  dataIndex: 's_setting'	,xtype: 'checkcolumn'},
-          {text: "Последний вход",dataIndex: 'oper_date', renderer: dateTimeRender },
+          {text: "ID", 		  dataIndex: 'id', 	      tdCls: 'x-center-cell', width: 20 },
+          {text: lang(84), 	dataIndex: 'bd_id', 	  hidden: true, 	tdCls: 'x-center-cell' },
+          {text: lang(30), 	dataIndex: 'login'	,   editor: {xtype: 'textfield', allowBlank: false} },
+          {text: lang(3), 	dataIndex: 'pasw'	,     editor: {xtype: 'textfield', allowBlank: false} },
+          {text: lang(111), dataIndex: 's_read'	,   xtype: 'checkcolumn'},
+          {text: lang(112), dataIndex: 's_write'	, xtype: 'checkcolumn'},
+          {text: lang(14), 	dataIndex: 's_analiz'	, xtype: 'checkcolumn'},
+          {text: lang(10), 	dataIndex: 's_setting'	,xtype: 'checkcolumn'},
+          {text: lang(113), dataIndex: 'oper_date', renderer: dateTimeRender },
           {
               menuDisabled: true,
               sortable: false,
@@ -176,7 +176,7 @@ var cash_set_usr_grid = Ext.create('Ext.grid.Panel', {
               width: 55,
               items: [{
                 iconCls: 'del-cash-col',
-                tooltip: 'Удалить запись',
+                tooltip: lang(37),
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
                     //rec.get('id')
@@ -184,24 +184,24 @@ var cash_set_usr_grid = Ext.create('Ext.grid.Panel', {
                       cash_set_usr_store.remove(rec);
                     } else {
                       Ext.Ajax.request({
-                    url: "ajax/del_usr.php",
-                    method: "GET",
-                    params: {
-                      id: rec.get('id')
-                    },
-                    success: function(data) {
-                        if(parseInt(data.responseText) > 0) {
-                    cash_set_usr_store.load();
-                        } else {
-                    error(data.responseText);
-                        }
-                    }//success
+                        url: "ajax/del_usr.php",
+                        method: "GET",
+                        params: {
+                          id: rec.get('id')
+                        },
+                        success: function(data) {
+                            if(parseInt(data.responseText) > 0) {
+                              cash_set_usr_store.load();
+                            } else {
+                              error(data.responseText);
+                            }
+                        }//success
                       }); //Ext.Ajax.request
                     }
                 }
               }, " ", {
                 icon: settings.static + "/yes.gif",
-                tooltip: 'Сохранить запись',
+                tooltip: lang(79),
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
                     Ext.Ajax.request({
@@ -233,7 +233,7 @@ var cash_set_usr_grid = Ext.create('Ext.grid.Panel', {
     ]
 }); //cash_set_usr_grid
 
-var loadMask_cash_set_usr_grid = new Ext.LoadMask(cash_set_usr_grid, {msg:'Загрузка списка пользователей...', store: cash_set_usr_store});
+var loadMask_cash_set_usr_grid = new Ext.LoadMask(cash_set_usr_grid, {msg: lang(114), store: cash_set_usr_store});
 
 var cash_set_panel = Ext.create('Ext.Panel', {
     id: "cash_set_panel",

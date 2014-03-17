@@ -30,18 +30,18 @@ function getPluginPlanSave() {
 var cash_plan_grid = Ext.create('Ext.grid.Panel', {
     store: cash_plan_store,
     id: "cash_plan_grid",
-    title: lang[77],
+    title: lang(77),
     header: true,
     width: Ext.getBody().getWidth() - 30,
     height: Ext.getBody().getHeight()/3,
     forceFit: true,
     columns: [
       {text: "ID", 		 dataIndex: 'id', 	    hidden: true, 	tdCls: 'x-center-cell', width: 30 },
-      {text: lang[84], dataIndex: 'db_id', 	  hidden: true, 	tdCls: 'x-center-cell', width: 30 },
-      {text: lang[29], dataIndex: 'usr_id',	  hidden: true, 	tdCls: 'x-center-cell', width: 30 },
-      {text: lang[18], dataIndex: 'grp_id',	  width: 75	},
-      {text: lang[19], dataIndex: 'name', 	  flex: true	},
-      {text: lang[78], dataIndex: 'plan'	,   editor: {xtype: 'numberfield', allowBlank: true}},
+      {text: lang(84), dataIndex: 'db_id', 	  hidden: true, 	tdCls: 'x-center-cell', width: 30 },
+      {text: lang(29), dataIndex: 'usr_id',	  hidden: true, 	tdCls: 'x-center-cell', width: 30 },
+      {text: lang(18), dataIndex: 'grp_id',	  width: 75	},
+      {text: lang(19), dataIndex: 'name', 	  flex: true	},
+      {text: lang(78), dataIndex: 'plan'	,   editor: {xtype: 'numberfield', allowBlank: true}},
       {
           menuDisabled: true,
           sortable: false,
@@ -51,7 +51,7 @@ var cash_plan_grid = Ext.create('Ext.grid.Panel', {
           width: 30,
           items: [ {
             icon: settings.static + "/yes.gif",
-            tooltip: lang[79],
+            tooltip: lang(79),
             handler: function(grid, rowIndex, colIndex) {
                 if(parseInt(rights.write) == 0) return;
 
@@ -77,7 +77,7 @@ var cash_plan_grid = Ext.create('Ext.grid.Panel', {
     plugins: getPluginPlanSave()
 }); //cash_plan_grid
 
-var loadMask_cash_plan_grid = new Ext.LoadMask(cash_plan_grid, {msg: lang[80], store: cash_plan_store});
+var loadMask_cash_plan_grid = new Ext.LoadMask(cash_plan_grid, {msg: lang(80), store: cash_plan_store});
 
 //-----
 
@@ -87,7 +87,7 @@ var cash_plan_mnth_from_date =
 {
     xtype: 'datefield',
     startDay:1,
-    fieldLabel: lang[43],
+    fieldLabel: lang(43),
     name: 'cash_plan_mnth_from_date',
     id: 'cash_plan_mnth_from_date',
     labelWidth: 55,
@@ -101,7 +101,7 @@ var cash_plan_mnth_from_date =
 var cash_plan_mnth_to_date =
 {
     xtype: 'datefield',
-    fieldLabel: lang[44],
+    fieldLabel: lang(44),
     startDay:1,
     name: 'cash_plan_mnth_to_date',
     id: 'cash_plan_mnth_to_date',
@@ -173,7 +173,7 @@ var cash_plan_mnth_chart = Ext.create('Ext.chart.Chart', {
       type: 'Category',
       position: 'bottom',
       fields: ['tname'],
-      title: lang[19]
+      title: lang(19)
     }],
     series: [{
       type: 'column',
@@ -197,7 +197,7 @@ var cash_plan_mnth_chart = Ext.create('Ext.chart.Chart', {
       },
       xField: 'tname',
       yField: ['plan', 'fact'],
-      title: [lang[78], lang[81]]
+      title: [lang(78), lang(81)]
     }]
 });
 
@@ -205,7 +205,7 @@ var cash_plan_mnth_chart = Ext.create('Ext.chart.Chart', {
 var cash_plan_panel = Ext.create('Ext.Panel', {
     id: "cash_plan_panel",
     border: false,
-    title: lang[82],
+    title: lang(82),
     frame: true,
     items: [cash_plan_grid, cash_plan_mnth_date, cash_plan_mnth_chart],
     listeners: {
@@ -225,7 +225,7 @@ var cash_plan_goal_panel = Ext.create('Ext.Panel', {
     border: false,
     frame: true,
     disabled: true,
-    title: lang[83],
+    title: lang(83),
     items: [],
     listeners: {
       //TODO

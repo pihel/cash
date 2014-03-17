@@ -6,7 +6,7 @@ var cash_check_date =
 {
     xtype: 'datefield',
     startDay:1,
-    fieldLabel: lang[23],
+    fieldLabel: lang(23),
     name: 'cash_check_date',
     id: 'cash_check_date',
     value: new Date(),
@@ -45,7 +45,7 @@ var cash_check_org_cb = Ext.create('Ext.form.field.ComboBox', {
     displayField: 'name',
     valueField: 'id',
     width: 474,
-    fieldLabel: lang[26],
+    fieldLabel: lang(26),
     allowBlank: false,
     tpl: '<tpl for="."><div class="x-boundlist-item">{name:htmlEncode}</div></tpl>',
     labelWidth: 100
@@ -73,7 +73,7 @@ var cash_check_currency_cb = Ext.create('Ext.form.field.ComboBox', {
     valueField: 'id',
     queryMode: 'local',
     allowBlank: false,
-    fieldLabel: lang[74],
+    fieldLabel: lang(74),
     allowBlank: false,
     labelWidth: 100,
     width: 200,
@@ -141,12 +141,12 @@ var cash_check_grid = Ext.create('Ext.grid.Panel', {
     store: cash_check_store,
     height: 440,
     columns: [
-      {text: lang[17], dataIndex: 'name',     flex: 1, 	hideable: false, editor: {xtype: 'textfield', allowBlank: false} },
-      {text: lang[18], dataIndex: 'gr_id', 	  hidden: true , 	tdCls: 'x-center-cell'},
-      {text: lang[19], dataIndex: 'gr_name',  hideable: false, editor: {xtype: 'textfield', allowBlank: false} },
-      {text: lang[20], dataIndex: 'price',    hideable: false, renderer: price, tdCls: 'x-price-cell', editor: {xtype: 'textfield', allowBlank: false} },
-      {text: lang[21], dataIndex: 'qnt',      hideable: false, tdCls: 'x-center-cell', editor: {xtype: 'textfield', allowBlank: false} },
-      {text: lang[22], dataIndex: 'amnt',		  hideable: false, summaryType: 'sum' , tdCls: 'x-amount-cell' 
+      {text: lang(17), dataIndex: 'name',     flex: 1, 	hideable: false, editor: {xtype: 'textfield', allowBlank: false} },
+      {text: lang(18), dataIndex: 'gr_id', 	  hidden: true , 	tdCls: 'x-center-cell'},
+      {text: lang(19), dataIndex: 'gr_name',  hideable: false, editor: {xtype: 'textfield', allowBlank: false} },
+      {text: lang(20), dataIndex: 'price',    hideable: false, renderer: price, tdCls: 'x-price-cell', editor: {xtype: 'textfield', allowBlank: false} },
+      {text: lang(21), dataIndex: 'qnt',      hideable: false, tdCls: 'x-center-cell', editor: {xtype: 'textfield', allowBlank: false} },
+      {text: lang(22), dataIndex: 'amnt',		  hideable: false, summaryType: 'sum' , tdCls: 'x-amount-cell' 
             , summaryRenderer: function(value) {
               var total = 0;
               cash_check_store.each(function(rec) {
@@ -168,7 +168,7 @@ var cash_check_grid = Ext.create('Ext.grid.Panel', {
             id: "cash_check_edit_col",
             items: [ {
               iconCls: 'del-cash-col',
-              tooltip: lang[37],
+              tooltip: lang(37),
               handler: function(grid, rowIndex, colIndex) {
                   var rec = grid.getStore().getAt(rowIndex);
                   grid.getStore().remove(rec);
@@ -203,7 +203,7 @@ var cash_check_save = Ext.create('Ext.button.Button', {
 	text: 'Сохранить',
 	formBind: true,
 	id: "cash_check_save",
-  tooltip: lang[59],
+  tooltip: lang(59),
 	icon: settings.static + "/yes.gif",
 	disabled: true,
 	handler : function() {
@@ -216,8 +216,8 @@ var cash_check_save = Ext.create('Ext.button.Button', {
     Ext.getCmp('cash_check_grid_hdn').setValue(Ext.JSON.encode(cash_check_grid_lines_arr));
     
 	  cash_check_form_add.submit({
-        waitTitle: lang[4],
-        waitMsg: lang[75],
+        waitTitle: lang(4),
+        waitMsg: lang(75),
         success: function(form, action) {
           cash_list_check.hide();
           listRefresh();
@@ -232,8 +232,8 @@ var cash_check_save = Ext.create('Ext.button.Button', {
 
 var cash_check_cancel = Ext.create('Ext.button.Button',
 {
-	text: lang[61],
-  tooltip: lang[62] + " (Escape)",
+	text: lang(61),
+  tooltip: lang(62) + " (Escape)",
 	handler : function() {
 	  cash_list_check.hide();
 	}
@@ -251,7 +251,7 @@ var cash_check_form_add = new Ext.FormPanel({
 }); //cash_check_form_add
 
 var cash_list_check = Ext.create('Ext.Window', {
-    title: lang[76],
+    title: lang(76),
     id: "cash_list_add_check",
     width: 800,
     height: 600,
@@ -268,7 +268,7 @@ var cash_list_check = Ext.create('Ext.Window', {
           setAnkhor();
         },
         show: function() {
-          cash_list_check.setLoading(lang[67]);
+          cash_list_check.setLoading(lang(67));
           //cash_check_nmcl_store.load(function() {
             //cash_check_prod_type_store.load(function() {
               cash_check_currency_store.load(function() {

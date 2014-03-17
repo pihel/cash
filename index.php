@@ -22,7 +22,7 @@ require_once('lib/init.php');
     <script src="<?=$settings['extjs'];?>/ext-all.js" 	type="text/javascript"></script>
     <script language="javascript">
       var settings = <?=json_encode($settings);?>;
-      var lang = <?=json_encode($lang);//, JSON_UNESCAPED_UNICODE?>;
+      var translate = <?=json_encode($lang);//, JSON_UNESCAPED_UNICODE?>;
     </script>
     <script src="<?=$settings['static'];?>/js/script.js?<?=$settings['version'];?>" charset="UTF-8" type="text/javascript"></script>
     <script src="<?=$settings['extjs'];?>/locale/ext-lang-<?=$settings['lang'];?>.js" charset="UTF-8" type="text/javascript"></script>

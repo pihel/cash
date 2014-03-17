@@ -92,9 +92,14 @@ function htmlRenderer(text) {
       .replace(/'/g, "&#039;");*/
 }
 
+function lang(id, params) {
+  var tpl = new Ext.Template( translate[id] );
+  return tpl.apply(params);
+}
+
 function error(text, _cb) {
   Ext.Msg.show({
-    title: lang[15],
+    title: lang(15),
     msg: text,
     icon: Ext.MessageBox.ERROR,
     buttons: Ext.Msg.OK,
