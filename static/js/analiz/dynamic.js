@@ -2,7 +2,7 @@ var cash_analiz_dyn_lbl = {
     id: "cash_analiz_dyn_lbl",
     xtype: 'label',
     cls: "cash_analiz_lbl",
-    text: 'Баланс расхода и прихода'
+    text: lang(119)
 };
 
 
@@ -10,7 +10,7 @@ var cash_analiz_dyn_from_date =
 {
     xtype: 'datefield',
     startDay:1,
-    fieldLabel: 'Период',
+    fieldLabel: lang(43),
     name: 'cash_analiz_dyn_from_date',
     id: 'cash_analiz_dyn_from_date',
     labelWidth: 55,
@@ -24,7 +24,7 @@ var cash_analiz_dyn_from_date =
 var cash_analiz_dyn_to_date =
 {
     xtype: 'datefield',
-    fieldLabel: 'по',
+    fieldLabel: lang(44),
     startDay:1,
     name: 'cash_analiz_dyn_to_date',
     id: 'cash_analiz_dyn_to_date',
@@ -70,8 +70,8 @@ var cash_analiz_dyn_store = Ext.create('Ext.data.Store', {
     model: 'cash_analiz_com_model',
     autoLoad: false,
     proxy: {
-	type: 'ajax',
-	url: 'ajax/analiz/dynamic.php?'
+      type: 'ajax',
+      url: 'ajax/analiz/dynamic.php?'
     }
 }); //cash_analiz_com_store
 
@@ -90,7 +90,7 @@ var cash_analiz_dyn_chart = Ext.create('Ext.chart.Chart', {
       type: 'Numeric',
       position: 'left',
       fields: ['in_data', 'out_data', 'dif_data'],
-      title: 'Сумма',
+      title: lang(22),
       minorTickSteps: 1,
       grid: {
           odd: {
@@ -104,7 +104,7 @@ var cash_analiz_dyn_chart = Ext.create('Ext.chart.Chart', {
       type: 'Category',
       position: 'bottom',
       fields: ['tdate'],
-      title: 'Дата'
+      title: lang(23)
     }],
     series: [{
       type: 'line',
@@ -117,14 +117,14 @@ var cash_analiz_dyn_chart = Ext.create('Ext.chart.Chart', {
         width: 290,
         height: 28,
         renderer: function(storeItem, item) {
-          this.setTitle("Приход от " + storeItem.get('tdate') + ": " + price_r(storeItem.get('in_data')));
+          this.setTitle(lang(120) + storeItem.get('tdate') + ": " + price_r(storeItem.get('in_data')));
         }
       },
       axis: 'left',
       smooth: true,
       xField: 'tdate',
       yField: 'in_data',
-      title: 'Приход',
+      title: lang(55),
       style: {
           stroke: '#94ae0a'
       },
@@ -147,14 +147,14 @@ var cash_analiz_dyn_chart = Ext.create('Ext.chart.Chart', {
         width: 290,
         height: 28,
         renderer: function(storeItem, item) {
-          this.setTitle("Расход от " + storeItem.get('tdate') + ": " + price_r(storeItem.get('out_data')));
+          this.setTitle(lang(121) + storeItem.get('tdate') + ": " + price_r(storeItem.get('out_data')));
         }
       },
       axis: 'left',
       smooth: true,
       xField: 'tdate',
       yField: 'out_data',
-      title: 'Расход',
+      title: lang(54),
       style: {
           stroke: '#a61120'
       },
@@ -177,10 +177,10 @@ var cash_analiz_dyn_chart = Ext.create('Ext.chart.Chart', {
         width: 290,
         height: 28,
         renderer: function(storeItem, item) {
-          this.setTitle("Баланс от " + storeItem.get('tdate') + ": " + price_r(storeItem.get('dif_data')));
+          this.setTitle(lang(122) + storeItem.get('tdate') + ": " + price_r(storeItem.get('dif_data')));
         }
       },
-      title: 'Баланс',
+      title: lang(87),
       axis: 'left',
       smooth: true,
       //fill: true,

@@ -2,7 +2,7 @@ var cash_analiz_org_lbl = {
     id: "cash_analiz_org_lbl",
     xtype: 'label',
     cls: "cash_analiz_lbl",
-    text: 'Анализ расхода по организациям'
+    text: lang(127)
 };
 
 
@@ -10,7 +10,7 @@ var cash_analiz_org_from_date =
 {
     xtype: 'datefield',
     startDay:1,
-    fieldLabel: 'Период',
+    fieldLabel: lang(43),
     name: 'cash_analiz_org_from_date',
     id: 'cash_analiz_org_from_date',
     labelWidth: 55,
@@ -24,7 +24,7 @@ var cash_analiz_org_from_date =
 var cash_analiz_org_to_date =
 {
     xtype: 'datefield',
-    fieldLabel: 'по',
+    fieldLabel: lang(44),
     startDay:1,
     name: 'cash_analiz_org_to_date',
     id: 'cash_analiz_org_to_date',
@@ -61,7 +61,7 @@ var cash_analiz_org_prod_type_cb = Ext.create('Ext.form.field.ComboBox', {
     store: cash_analiz_org_prod_type_store,
     id: "cash_analiz_org_prod_type_cb",
     name: "cash_analiz_org_prod_type_cb",
-    fieldLabel: 'Группа',
+    fieldLabel: lang(19),
     labelWidth: 50,
     displayField: 'name',
     valueField: 'id',
@@ -144,7 +144,7 @@ var cash_analiz_org_chart = Ext.create('Ext.chart.Chart', {
         renderer: function(storeItem, item) {
           var total = 0;
           cash_analiz_org_store.each(function(rec) {
-        total += rec.get('out_amount');
+            total += rec.get('out_amount');
           });
           this.setTitle(storeItem.get('tname') + ' ('+price_r(storeItem.get('out_amount'))+'): ' + Math.round(storeItem.get('out_amount') / total * 100) + '%');
         }
@@ -180,14 +180,14 @@ function cash_analiz_org_load(_cb) {
     Ext.getCmp('cash_analiz_org_from_date').setValue(new Date(cd.getFullYear(), cd.getMonth(), 1));
     Ext.getCmp('cash_analiz_org_to_date').setValue(cd);
     cash_analiz_org_prod_type_store.load(function() {
-      cash_analiz_org_prod_type_store.insert(0,  Ext.data.Record({id:0,name:"Любая"}));
+      cash_analiz_org_prod_type_store.insert(0,  Ext.data.Record({id:0,name:lang(128)}));
           cash_analiz_org_prod_type_cb.setValue(0);
           cash_analiz_org_refresh();
           if(_cb != undefined) _cb();
     });
   } else {
     cash_analiz_org_prod_type_store.load(function() {
-      cash_analiz_org_prod_type_store.insert(0,  Ext.data.Record({id:0,name:"Любая"}));
+      cash_analiz_org_prod_type_store.insert(0,  Ext.data.Record({id:0,name:lang(128)}));
           setAnalitAnkhorParam();
           cash_analiz_org_refresh();
           if(_cb != undefined) _cb();

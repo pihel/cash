@@ -2,7 +2,7 @@ var cash_analiz_purs_lbl = {
     id: "cash_analiz_purs_lbl",
     xtype: 'label',
     cls: "cash_analiz_lbl",
-    text: 'Анализ по кошелькам'
+    text: lang(129)
 };
 
 
@@ -10,7 +10,7 @@ var cash_analiz_purs_from_date =
 {
     xtype: 'datefield',
     startDay:1,
-    fieldLabel: 'Период',
+    fieldLabel: lang(43),
     name: 'cash_analiz_purs_from_date',
     id: 'cash_analiz_purs_from_date',
     labelWidth: 55,
@@ -24,7 +24,7 @@ var cash_analiz_purs_from_date =
 var cash_analiz_purs_to_date =
 {
     xtype: 'datefield',
-    fieldLabel: 'по',
+    fieldLabel: lang(44),
     startDay:1,
     name: 'cash_analiz_purs_to_date',
     id: 'cash_analiz_purs_to_date',
@@ -36,7 +36,7 @@ var cash_analiz_purs_to_date =
 
 var cash_analiz_purs_in = {
     xtype:      'checkboxfield',
-    boxLabel  : 'По приходу',
+    boxLabel  : lang(118),
     name      : 'cash_analiz_purs_in',
     disabled  : true,
     id        : 'cash_analiz_purs_in',

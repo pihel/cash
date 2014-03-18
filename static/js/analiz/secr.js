@@ -2,13 +2,13 @@ var cash_analiz_secr_lbl = {
     id: "cash_analiz_secr_lbl",
     xtype: 'label',
     cls: "cash_analiz_lbl",
-    text: 'Финансовая безопасность'
+    text: lang(130)
 };
 
 var cash_analiz_secr_amnt =
 {
     xtype: 'numberfield',
-    fieldLabel: 'Баланс на начало',
+    fieldLabel: lang(131),
     name: 'cash_analiz_secr_amnt',
     id: 'cash_analiz_secr_amnt',
     minValue: 0,
@@ -22,7 +22,7 @@ var cash_analiz_secr_amnt =
 var cash_analiz_secr_in =
 {
     xtype: 'numberfield',
-    fieldLabel: 'Средений месячный приход',
+    fieldLabel: lang(132),
     name: 'cash_analiz_secr_in',
     id: 'cash_analiz_secr_in',
     minValue: 0,
@@ -34,7 +34,7 @@ var cash_analiz_secr_in =
 var cash_analiz_secr_in_proc = Ext.create('Ext.slider.Single', {
     width: 450,
     id: 'cash_analiz_secr_in_proc',
-    fieldLabel: '% с остатка в год',
+    fieldLabel: lang(133),
     labelWidth: 150,
     value: 0,
     increment: 0.5,
@@ -71,7 +71,7 @@ var cash_analiz_secr_out_proc_qnt =
 var cash_analiz_secr_out_proc = Ext.create('Ext.slider.Single', {
     width: 450,
     id: 'cash_analiz_secr_out_proc',
-    fieldLabel: '% роста в год',
+    fieldLabel: lang(134),
     labelWidth: 150,
     value: 0,
     increment: 0.5,
@@ -88,7 +88,7 @@ var cash_analiz_secr_out_proc = Ext.create('Ext.slider.Single', {
 var cash_analiz_secr_out =
 {
     xtype: 'numberfield',
-    fieldLabel: 'Средний месячный расход',
+    fieldLabel: lang(135),
     name: 'cash_analiz_secr_out',
     id: 'cash_analiz_secr_out',
     minValue: 0,
@@ -143,8 +143,8 @@ function cash_analiz_secr_refresh() {
 var cash_analiz_secr_model = Ext.define('cash_analiz_secr_model', {
     extend: 'Ext.data.Model',
     fields: [
-	{name: 'tname',		type: 'string'},
-	{name: 'amount', 	type: 'double'}
+      {name: 'tname',		type: 'string'},
+      {name: 'amount', 	type: 'double'}
     ]
 }); //cash_analiz_secr_model
 
@@ -175,14 +175,14 @@ var cash_analiz_secr_chart = Ext.create('Ext.chart.Chart', {
       label: {
           renderer: price_r
       },
-      title: 'Сумма',
+      title: lang(22),
       grid: true/*,
       minimum: -10000*/
     }, {
       type: 'Category',
       position: 'bottom',
       fields: ['tname'],
-      title: 'Месяц'
+      title: lang(82)
     }],
     series: [{
       type: 'column',
@@ -206,7 +206,7 @@ var cash_analiz_secr_chart = Ext.create('Ext.chart.Chart', {
       },
       xField: 'tname',
       yField: ['amount'],
-      title: ['Баланс']
+      title: [lang(87)]
     }]
 });
 

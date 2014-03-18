@@ -17,7 +17,7 @@ var cash_set_db_store = Ext.create('Ext.data.Store', {
 }); //cash_set_db_store
 
 var cash_set_db_add = Ext.create('Ext.button.Button', {
-  text: 'Добавить',
+  text: lang(49),
   icon: settings.static + "/add.gif",
   handler : function () {
     var res = "";
@@ -48,7 +48,7 @@ var cash_set_db_grid = Ext.create('Ext.grid.Panel', {
     width: 300,
     dockedItems: [{
           xtype: 'toolbar',
-	  border: true,
+          border: true,
           items: [cash_set_db_add]
     }],
     columns: [
@@ -139,7 +139,7 @@ var cash_set_usr_store = Ext.create('Ext.data.Store', {
 
 
 var cash_set_usr_add = Ext.create('Ext.button.Button', {
-  text: 'Добавить',
+  text: lang(49),
   disabled: true,
   icon: settings.static + "/add.gif",
   handler : function () {

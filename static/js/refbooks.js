@@ -28,7 +28,7 @@ var colSave = {
     refbook: "",
     items: [ {
       icon: settings.static + "/yes.gif",
-      tooltip: 'Сохранить запись',
+      tooltip: lang(79),
       handler: function(grid, rowIndex, colIndex) {
         if(parseInt(rights.write) == 0) return;
 
@@ -69,9 +69,9 @@ var cash_refb_set_grid = Ext.create('Ext.grid.Panel', {
     forceFit: true,
     height: h-95,
     columns: [
-      {text: "Настройка", 	    dataIndex: 'name', 	width: 300 },
-      {text: "Описание", 	      dataIndex: 'descr', width: 400 },
-      {text: "Значение",        dataIndex: 'value', flex: 1, editor: {allowBlank: false}, renderer: htmlRenderer}
+      {text: lang(138), dataIndex: 'name', 	width: 300 },
+      {text: lang(139), dataIndex: 'descr', width: 400 },
+      {text: lang(140), dataIndex: 'value', flex: 1, editor: {allowBlank: false}, renderer: htmlRenderer}
       ,getColSave("cashes_setting")
     ],
     listeners: {
@@ -112,11 +112,11 @@ var cash_refb_cur_grid = Ext.create('Ext.grid.Panel', {
     forceFit: false,
     height: h-60,
     columns: [
-      {text: "ID", 	            dataIndex: 'id' },
-      {text: "Валюта", 	        dataIndex: 'name', 	flex: 1, editor: {allowBlank: false}, renderer: htmlRenderer},
-      {text: "Курс к основной", dataIndex: 'rate',  tdCls: 'x-price-cell', editor: {allowBlank: false}},
-      {text: "Знак", 	          dataIndex: 'sign'  , editor: {allowBlank: false}, renderer: htmlRenderer},
-      {text: "Краткое имя", 	  dataIndex: 'short_name', editor: {allowBlank: false} , renderer: htmlRenderer }
+      {text: "ID", 	    dataIndex: 'id' },
+      {text: lang(74), 	dataIndex: 'name', 	flex: 1, editor: {allowBlank: false}, renderer: htmlRenderer},
+      {text: lang(141), dataIndex: 'rate',  tdCls: 'x-price-cell', editor: {allowBlank: false}},
+      {text: lang(32), 	dataIndex: 'sign'  , editor: {allowBlank: false}, renderer: htmlRenderer},
+      {text: lang(142), dataIndex: 'short_name', editor: {allowBlank: false} , renderer: htmlRenderer }
       ,getColSave("currency")
     ],
     selType: 'cellmodel',
@@ -152,8 +152,8 @@ var cash_refb_ptype_grid = Ext.create('Ext.grid.Panel', {
     forceFit: true,
     columns: [
       {text: "ID", 	    dataIndex: 'id' },
-      {text: "Группа", 	dataIndex: 'name', 	flex: 1, editor: {allowBlank: false}, renderer: htmlRenderer},
-      {text: "Родительская группа", 	dataIndex: 'pid', editor: {allowBlank: false}}
+      {text: lang(19), 	dataIndex: 'name', 	flex: 1, editor: {allowBlank: false}, renderer: htmlRenderer},
+      {text: lang(143), dataIndex: 'pid', editor: {allowBlank: false}}
       ,getColSave("cashes_group")
     ],
     selType: 'cellmodel',
@@ -189,10 +189,10 @@ var cash_refb_org_grid = Ext.create('Ext.grid.Panel', {
     height: h-60,
     forceFit: true,
     columns: [
-      {text: "ID", 	          dataIndex: 'id' },
-      {text: "Организация", 	dataIndex: 'name', 	flex: 1, editor: {allowBlank: false}, renderer: htmlRenderer},
-      {text: "Родительская организация", 	dataIndex: 'pid', editor: {allowBlank: false}},
-      {text: "Город", 	      dataIndex: 'city', editor: {allowBlank: false}, renderer: htmlRenderer}
+      {text: "ID", 	    dataIndex: 'id' },
+      {text: lang(26), 	dataIndex: 'name', 	flex: 1, editor: {allowBlank: false}, renderer: htmlRenderer},
+      {text: lang(145), dataIndex: 'pid', editor: {allowBlank: false}},
+      {text: lang(144), dataIndex: 'city', editor: {allowBlank: false}, renderer: htmlRenderer}
       ,getColSave("cashes_org")
     ],
     selType: 'cellmodel',
@@ -229,8 +229,8 @@ var cash_refb_type_grid = Ext.create('Ext.grid.Panel', {
     forceFit: true,
     columns: [
       {text: "ID", 	dataIndex: 'id' },
-      {text: "Кошелек", 	dataIndex: 'name', 	flex: 1, editor: {allowBlank: false}, renderer: htmlRenderer},
-      {text: "Родительский кошелек", 	dataIndex: 'pid', editor: {allowBlank: false}}
+      {text: lang(34), 	dataIndex: 'name', 	flex: 1, editor: {allowBlank: false}, renderer: htmlRenderer},
+      {text: lang(146), dataIndex: 'pid', editor: {allowBlank: false}}
       ,getColSave("cashes_type")
     ],
     selType: 'cellmodel',
@@ -245,7 +245,7 @@ var cash_refb_nmcl_model = Ext.define('cash_refb_nmcl_model', {
     extend: 'Ext.data.Model',
     fields: [
       {name: 'id', 		type: 'int'},
-      {name: 'name', 		type: 'string'}
+      {name: 'name', 	type: 'string'}
     ],
     idProperty: 'id'
 });
@@ -266,7 +266,7 @@ var cash_refb_nmcl_grid = Ext.create('Ext.grid.Panel', {
     forceFit: true,
     columns: [
       {text: "ID", 	dataIndex: 'id' },
-      {text: "Номенклатура", 	dataIndex: 'name', 	flex: 1, editor: {allowBlank: false}, renderer: htmlRenderer}
+      {text: lang(17), 	dataIndex: 'name', 	flex: 1, editor: {allowBlank: false}, renderer: htmlRenderer}
       ,getColSave("cashes_nom")
     ],
     selType: 'cellmodel',
@@ -280,8 +280,8 @@ var cash_refb_nmcl_mask = new Ext.LoadMask(cash_refb_nmcl_grid, {msg:'Загру
 var cash_refb_dwnl_btn = {
   id: "cash_refb_dwnl_btn",
   xtype: 'button',
-  text: 'Скачать базу данных',
-  tooltip: 'В формате Sqlite 3',
+  text: lang(147),
+  tooltip: lang(148),
   border: true,
   icon: settings.static + "/files.gif",
   handler : function(){
@@ -292,8 +292,8 @@ var cash_refb_dwnl_btn = {
 
 var cash_refb_analize_btn = {
   xtype: 'button',
-  text: 'Оптимизировать БД',
-  tooltip: 'Удалить дубли записей в справочниках, пересобрать статистику индексов, дефрагментировать сегменты.',
+  text: lang(149),
+  tooltip: lang(150),
   border: true,
   icon: settings.static + "/yes.gif",
   handler : function(){
@@ -302,7 +302,7 @@ var cash_refb_analize_btn = {
       method: "GET",
       success: function(data) {
           if(parseInt(data.responseText) > 0) {
-            Ext.MessageBox.alert('Статус', 'Обработка прошла успешно!');
+            Ext.MessageBox.alert(lang(152), lang(151));
           } else {
             error(data.responseText);
           }
@@ -324,7 +324,7 @@ var cash_refb_set = Ext.create('Ext.Panel', {
     frame: true,
     id: "cash_refb_set",
     collapsible: false,
-    title: 'Настройки',
+    title: lang(10),
     header: true,
     items: [cash_refb_set_grid, cash_refb_dwnl],
     listeners: {
@@ -339,7 +339,7 @@ var cash_refb_group = Ext.create('Ext.Panel', {
     frame: true,
     id: "cash_refb_group",
     collapsible: false,
-    title: 'Группы товара',
+    title: lang(153),
     header: true,
     items: [cash_refb_ptype_grid],
     listeners: {
@@ -354,7 +354,7 @@ var cash_refb_cur = Ext.create('Ext.Panel', {
     frame: true,
     id: "cash_refb_cur",
     collapsible: false,
-    title: 'Валюты',
+    title: lang(154),
     header: true,
     items: [cash_refb_cur_grid],
     listeners: {
@@ -369,7 +369,7 @@ var cash_refb_org = Ext.create('Ext.Panel', {
     frame: true,
     id: "cash_refb_org",
     collapsible: false,
-    title: 'Организации',
+    title: lang(155),
     header: true,
     items: [cash_refb_org_grid],
     listeners: {
@@ -384,7 +384,7 @@ var cash_refb_type = Ext.create('Ext.Panel', {
     frame: true,
     id: "cash_refb_type",
     collapsible: false,
-    title: 'Кошельки',
+    title: lang(156),
     header: true,
     items: [cash_refb_type_grid],
     listeners: {
@@ -400,7 +400,7 @@ var cash_refb_nmcl = Ext.create('Ext.Panel', {
     frame: true,
     id: "cash_refb_nmcl",
     collapsible: false,
-    title: 'Номенклатуры',
+    title: lang(157),
     header: true,
     items: [cash_refb_nmcl_grid],
     listeners: {
@@ -415,7 +415,7 @@ var cash_refb_nmcl = Ext.create('Ext.Panel', {
 
 var cash_refb_tabs = Ext.widget('tabpanel', {
     id: "cash_refb_tabs",
-    title: 'Справочники',
+    title: lang(158),
     header: true,
     border: false,
     height: h,

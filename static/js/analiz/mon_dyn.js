@@ -2,7 +2,7 @@ var cash_analiz_mdyn_lbl = {
     id: "cash_analiz_mdyn_lbl",
     xtype: 'label',
     cls: "cash_analiz_lbl",
-    text: 'Помесячная динамика'
+    text: lang(126)
 };
 
 
@@ -10,7 +10,7 @@ var cash_analiz_mdyn_from_date =
 {
     xtype: 'datefield',
     startDay:1,
-    fieldLabel: 'Период',
+    fieldLabel: lang(43),
     name: 'cash_analiz_mdyn_from_date',
     id: 'cash_analiz_mdyn_from_date',
     labelWidth: 55,
@@ -24,7 +24,7 @@ var cash_analiz_mdyn_from_date =
 var cash_analiz_mdyn_to_date =
 {
     xtype: 'datefield',
-    fieldLabel: 'по',
+    fieldLabel: lang(44),
     startDay:1,
     name: 'cash_analiz_mdyn_to_date',
     id: 'cash_analiz_mdyn_to_date',
@@ -90,14 +90,14 @@ var cash_analiz_mdyn_chart = Ext.create('Ext.chart.Chart', {
       label: {
           renderer: price_r
       },
-      title: 'Сумма',
+      title: lang(22),
       grid: true,
       minimum: 0
     }, {
       type: 'Category',
       position: 'bottom',
       fields: ['tname'],
-      title: 'Месяц'
+      title: lang(82)
     }],
     series: [{
       type: 'column',
@@ -121,7 +121,7 @@ var cash_analiz_mdyn_chart = Ext.create('Ext.chart.Chart', {
       },
       xField: 'tname',
       yField: ['in_amount', 'out_amount'],
-      title: ['Приход', 'Расход']
+      title: [lang(55), lang(54)]
     }]
 });
 

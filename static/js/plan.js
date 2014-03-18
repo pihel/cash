@@ -166,7 +166,7 @@ var cash_plan_mnth_chart = Ext.create('Ext.chart.Chart', {
       label: {
           renderer: price_r
       },
-      title: 'Сумма',
+      title: lang(22),
       grid: true,
       minimum: 0
     }, {

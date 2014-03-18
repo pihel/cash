@@ -2,14 +2,14 @@ var cash_analiz_strg_lbl = {
     id: "cash_analiz_strg_lbl",
     xtype: 'label',
     cls: "cash_analiz_lbl",
-    text: 'Накопления'
+    text: lang(136)
 };
 
 var cash_analiz_storg_amount = {
     xtype: 'numberfield',
     id: "cash_analiz_storg_amount",
     name: "cash_analiz_storg_amount",
-    fieldLabel: 'Цель',
+    fieldLabel: lang(137),
     allowBlank: false,
     labelWidth: 100,
     width: 200,

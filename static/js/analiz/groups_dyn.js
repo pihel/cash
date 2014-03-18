@@ -4,7 +4,7 @@ var cash_analiz_grp_dyn_lbl = {
     id: "cash_analiz_grp_dyn_lbl",
     xtype: 'label',
     cls: "cash_analiz_lbl",
-    text: 'Анализ по группам товара в разрезе месяцев'
+    text: lang(124)
 };
 
 
@@ -12,7 +12,7 @@ var cash_analiz_grp_dyn_from_date =
 {
     xtype: 'datefield',
     startDay:1,
-    fieldLabel: 'Период',
+    fieldLabel: lang(43),
     name: 'cash_analiz_grp_dyn_from_date',
     id: 'cash_analiz_grp_dyn_from_date',
     labelWidth: 55,
@@ -26,7 +26,7 @@ var cash_analiz_grp_dyn_from_date =
 var cash_analiz_grp_dyn_to_date =
 {
     xtype: 'datefield',
-    fieldLabel: 'по',
+    fieldLabel: lang(44),
     startDay:1,
     name: 'cash_analiz_grp_dyn_to_date',
     id: 'cash_analiz_grp_dyn_to_date',
@@ -74,7 +74,7 @@ var cash_analiz_grp_dyn_chart_prm =
       type: 'Numeric',
       position: 'left',
       fields: [],
-      title: 'Группы',
+      title: lang(89),
       grid: {
           odd: {
               opacity: 1,
@@ -89,7 +89,7 @@ var cash_analiz_grp_dyn_chart_prm =
       type: 'Category',
       position: 'bottom',
       fields: ['name'],
-      title: 'Месяца',
+      title: lang(125),
       grid: true,
       label: {
           rotate: {
