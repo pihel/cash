@@ -117,10 +117,10 @@ class Plan {
   }
 
   public function savePlan($data) {
-    if(!$this->usr->canWrite()) return "Ошибка доступа";
+    if(!$this->usr->canWrite()) return lang(159);
 
-    if(intval($data['grp_id']) < 1) return "Укажите группу";
-    if(floatval($data['plan']) <= 0) return "Укажите План";
+    if(intval($data['grp_id']) < 1) return lang(189);
+    if(floatval($data['plan']) <= 0) return lang(190);
     $id = intval($data['id']);
 
     $this->db->start_tran();

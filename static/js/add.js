@@ -1,4 +1,5 @@
 var v_edit_id = 0;
+var v_copy = false;
 
 //---- date
 var cash_item_date =
@@ -478,6 +479,17 @@ function cash_list_add_load() {
         Ext.getCmp('cash_list_add').setTitle(lang(66));
 
         Ext.getCmp('cash_item_add').setVisible(false);
+        
+        if(v_copy) {
+          Ext.getCmp('cash_item_edit_id').setValue(0);
+          Ext.getCmp('cash_list_add').setTitle(lang(65));
+          Ext.getCmp('cash_item_add').setVisible(true);
+          Ext.getCmp('cash_item_edit_id_label').setText("");
+          Ext.getCmp('cash_item_date').setValue(new Date());
+          document.getElementById('cash_item_file-inputEl').value = "";
+          document.getElementById('cash_item_file-inputEl').onclick = null;
+          Ext.getCmp('cash_item_price').focus(false, 200);
+        }
         
         setAnkhor();
 

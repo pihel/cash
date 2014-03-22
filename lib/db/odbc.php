@@ -81,7 +81,7 @@ class ODBC extends FileCacheDB {
         $this->stat = array('mcr_time'=> (microtime(true) - $start_time), 'cache'=> true);
 
         if($this->debug) {
-          echo "<pre>".$sql."\n----------\n+Взято из кэша!\n+время выполнения запроса: ".$this->stat['mcr_time']." сек.</pre>";
+          echo "<pre>".$sql."\n----------\n+From cache!\n+query time: ".$this->stat['mcr_time']." sec.</pre>";
         }
 
         return $rows;
@@ -116,7 +116,7 @@ class ODBC extends FileCacheDB {
     $this->stat = array('mcr_time'=> (microtime(true) - $start_time), 'cache'=> false);
 
     if($this->debug) {
-      echo "<pre>".$sql."\n----------\n+время выполнения запроса: ".$this->stat['mcr_time']." сек.</pre>";
+      echo "<pre>".$sql."\n----------\n+query time: ".$this->stat['mcr_time']." sec.</pre>";
     }
 
     return $rows;

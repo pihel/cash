@@ -39,7 +39,7 @@ abstract class DB {
 
   public function connect() {
     $this->_con = $this->try_connect($this->_srv, $this->_usr, $this->_pwd, $this->_db);
-    if($this->_con === false) throw new Error("Ошибка подключения к БД");
+    if($this->_con === false) throw new Error("Error connect to DB");
 
     $this->after_connect();
   }
@@ -82,7 +82,7 @@ abstract class DB {
     //stat
     $this->stop_time = microtime(true);
     if($this->debug) {
-      echo "<pre>".$this->getRealSql($sql,$args)."\n----------\n+время выполнения запроса: ".($this->stop_time - $this->start_time)." сек.</pre>";
+      echo "<pre>".$this->getRealSql($sql,$args)."\n----------\n+quert time: ".($this->stop_time - $this->start_time)." sec.</pre>";
     }
 
     if($res === false) $this->raiseError();
@@ -136,7 +136,7 @@ abstract class DB {
         $this->stat = array('mcr_time'=> (microtime(true) - $start_time), 'cache'=> true);
 
         if($this->debug) {
-          echo "<pre>".$this->getRealSql($sql, $args)."\n----------\n+Взято из кэша!\n+время выполнения запроса: ".$this->stat['mcr_time']." сек.</pre>";
+          echo "<pre>".$this->getRealSql($sql, $args)."\n----------\n+From cache!\n+query time: ".$this->stat['mcr_time']." sec.</pre>";
         }
 
         return $rows;

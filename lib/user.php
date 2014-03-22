@@ -45,7 +45,7 @@ class User {
       $this->db->exec("UPDATE `users` SET oper_date = datetime(CURRENT_TIMESTAMP, 'localtime') WHERE bd_id = ? AND id = ? ", $this->db_id, $this->id);
       $this->db->commit();
     }
-    if(intval( $this->id ) == 0) return array('success'=>false, 'msg'=> "Ошибка авторизации");
+    if(intval( $this->id ) == 0) return array('success'=>false, 'msg'=> lang(175) );
 
     //rights
     $this->rghts = $this->getRights();

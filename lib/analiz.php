@@ -22,7 +22,7 @@ class CashAnaliz {
 
     $sql =
     " SELECT
-        CASE WHEN c.type = 1 THEN 'Приход' ELSE 'Расход' END as tname,
+        CASE WHEN c.type = 1 THEN '".lang(55)."' ELSE '".lang(54)."' END as tname,
         SUM(price*qnt*cr.rate) data
       FROM `cashes` c
       INNER JOIN currency cr
@@ -258,7 +258,7 @@ class CashAnaliz {
 
     $sql =
     "SELECT
-      'Достигнуто' as tname,
+      '".lang(191)."' as tname,
       SUM( CASE WHEN c.type = 1 THEN 1 ELSE -1 END * c.price * c.qnt * cr.rate ) out_amount
     FROM
       `cashes` c
@@ -274,7 +274,7 @@ class CashAnaliz {
     if($amount == 0) $amount = 1000000;
 
     $r[1]['out_amount'] = $amount - $r[0]['out_amount'];
-    $r[1]['tname'] = 'Осталось';
+    $r[1]['tname'] = lang(192);
 
     return $r;
   }

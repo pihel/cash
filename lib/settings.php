@@ -28,7 +28,7 @@ class CashSett {
   }
 
   public function addDB($name) {
-    if(!$this->usr->canSetting()) return "Ошибка доступа";
+    if(!$this->usr->canSetting()) return lang(159);
     $this->db->start_tran();
     $this->db->exec("INSERT INTO db(name) VALUES(?)", $name);
     $id = $this->db->last_id();
@@ -37,16 +37,16 @@ class CashSett {
   }
 
   public function delDB($id) {
-    if(!$this->usr->canSetting()) return "Ошибка доступа";
-    if( intval($id) == 1 ) return "Нельзя удалять основную БД";
+    if(!$this->usr->canSetting()) return lang(159);
+    if( intval($id) == 1 ) return lang(176);
 
     $cnt = $this->db->element("SELECT COUNT(id) cnt from cashes WHERE bd_id = ? AND visible = 1", $id);
     if(intval($cnt) > 0) {
-      return "Невозможно удалить БД. Активных записей ". $cnt;
+      return lang(177).$cnt;
     }
     $cnt = $this->db->element("SELECT COUNT(id) cnt from users WHERE bd_id = ?", $id);
     if(intval($cnt) > 0) {
-      return "Невозможно удалить БД. Активных пользователей ". $cnt;
+      return lang(178).$cnt;
     }
 
 
@@ -58,10 +58,10 @@ class CashSett {
   }
 
   public function saveUsr($data) {    
-    if(!$this->usr->canSetting()) return "Ошибка доступа";
-    if(intval($data['bd_id']) < 1) return "Укажите БД";
-    if(empty($data['login'])) return "Укажите Логин";
-    if(empty($data['pasw'])) return "Укажите Пароль";
+    if(!$this->usr->canSetting()) return lang(159);
+    if(intval($data['bd_id']) < 1) return lang(179);
+    if(empty($data['login'])) return lang(180);
+    if(empty($data['pasw'])) return lang(181);
 
     $id = intval($data['id']);
 
@@ -70,25 +70,25 @@ class CashSett {
       //insert
 
       $this->db->exec("INSERT INTO `users` (id, bd_id, login, pasw, `read`, `write`, analiz, setting, oper_date)
-		      VALUES( NULL, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)", intval($data['bd_id']),
+		      VALUES( NULL, ?, ?, ?, ?, ?, ?, ?, datetime(CURRENT_TIMESTAMP, 'localtime') )", intval($data['bd_id']),
 		      $data['login'], $this->usr->hash_pasw($data['pasw']), intval($data['s_read'] == "true"), intval($data['s_write'] == "true"), intval($data['s_analiz'] == "true"), intval($data['s_setting'] == "true"));
       $id = $this->db->last_id();
     } else {
       //update
       global $settings;
-      if($settings['demo'] == 1 && ($id == 1 || $id == 2)) return "Редактирование системных записей в режиме демостенда отключено";
+      if($settings['demo'] == 1 && ($id == 1 || $id == 2)) return lang(182);
       
       if( intval($data['s_setting'] == "true") == 0 && $id == 1) {
-        return "Нельзя отбирать права настроек у главного администратора";
+        return lang(183);
       }
       if($data['pasw'] != "***") {
         $this->db->exec("UPDATE `users`
-		      SET login = ?, pasw = ?, `read` = ?, `write` = ?, analiz = ?, setting = ?, oper_date = CURRENT_TIMESTAMP
+		      SET login = ?, pasw = ?, `read` = ?, `write` = ?, analiz = ?, setting = ?, oper_date = datetime(CURRENT_TIMESTAMP, 'localtime')
 		      WHERE id = ? ",
 		      $data['login'], $this->usr->hash_pasw($data['pasw']), intval($data['s_read'] == "true"), intval($data['s_write'] == "true"), intval($data['s_analiz'] == "true"), intval($data['s_setting'] == "true"), $id);
       } else {
         $this->db->exec("UPDATE `users`
-		      SET login = ?, `read` = ?, `write` = ?, analiz = ?, setting = ?, oper_date = CURRENT_TIMESTAMP
+		      SET login = ?, `read` = ?, `write` = ?, analiz = ?, setting = ?, oper_date = datetime(CURRENT_TIMESTAMP, 'localtime')
 		      WHERE id = ? ",
 		      $data['login'], intval($data['s_read'] == "true"), intval($data['s_write'] == "true"), intval($data['s_analiz'] == "true"), intval($data['s_setting'] == "true"), $id);
       }
@@ -101,13 +101,13 @@ class CashSett {
 
   public function delUsr($id) {
     global $settings;
-    if($settings['demo'] == 1 && ($id == 1 || $id == 2)) return "Удаление системных записей в режиме демостенда отключено";
+    if($settings['demo'] == 1 && ($id == 1 || $id == 2)) return lang(184);
     
-    if(!$this->usr->canSetting()) return "Ошибка доступа";
-    if( intval($id) == 1 ) return "Нельзя удалять главного администратора";
+    if(!$this->usr->canSetting()) return lang(159);
+    if( intval($id) == 1 ) return lang(185);
     $cnt = $this->db->element("SELECT COUNT(id) cnt from cashes WHERE uid = ? AND visible = 1", $id);
     if(intval($cnt) > 0) {
-      return "Невозможно удалить Пользователя. Активных записей ". $cnt;
+      return lang(186).$cnt;
     }
 
     $this->db->start_tran();
@@ -119,10 +119,10 @@ class CashSett {
   
   public function setSetting($refb, $indx, $data) {
     global $settings;
-    if($settings['demo'] == 1) return "Редактирование отключено в режиме демостенда";
-    if(!$this->usr->canSetting()) return "Ошибка доступа";
+    if($settings['demo'] == 1) return lang(187);
+    if(!$this->usr->canSetting()) return lang(159);
     $refbs = array("cashes_group", "cashes_nom", "cashes_org", "cashes_setting", "cashes_type", "currency");
-    if(!in_array($refb, $refbs)) return "Несуществующий справочник!";
+    if(!in_array($refb, $refbs)) return lang(188);
     $col = "id";
     if($refb == "cashes_setting") {
       $col = "name";

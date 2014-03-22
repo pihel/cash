@@ -1,12 +1,12 @@
 <?
 error_reporting(0);
-$data_path = __DIR__."/../data";
+$root = __DIR__."/../";
 
 /* режим отладки */
 $debug = 0;
 
 /* Путь до файла базы данных */
-$sqlite_path = $data_path."/cash.db3";
+$sqlite_path = $root."data/cash.db3";
 
 /* Допустимое время бездействия */
 $life_time = ini_get("session.gc_maxlifetime");
@@ -15,25 +15,41 @@ $life_time = ini_get("session.gc_maxlifetime");
 $demo = 0;
 
 /*Версия*/
-$version = "b=1.020";
+$version = "b=1.021";
 //$version = rand(); //для отладки
 
 if($debug) {
   error_reporting(~E_NOTICE);
 }
 
-require_once('error.php');
-require_once('db/db.php');
-require_once('db/sqlite.php');
+require_once($root.'lib/error.php');
+require_once($root.'lib/db/db.php');
+require_once($root.'lib/db/sqlite.php');
 
 $db = new SQLITE_DB($sqlite_path);
 $db->connect();
 
 if((bool)$short) return;
 
-require_once($data_path."/lang/ru.php");
-require_once('user.php');
-require_once('cash.php');
+//????
+require_once($root.'lang/ru.php');
+$lng = new Lang();
+function lang($id, $param = array() ) {
+  global $lng, $debug;
+  if($debug) {
+    return $id;
+  }
+  $l = $lng->translate[$id];
+  foreach($param as $k=>$v) {
+    $l = str_replace("{".$k."}", $v, $l);
+  }
+  
+  return $l;
+}//lang
+//????
+
+require_once($root.'lib/user.php');
+require_once($root.'lib/cash.php');
 
 if($debug) {
   $db->debug = true;
@@ -47,3 +63,4 @@ $ch = new Cash($db, $usr);
 $settings = $ch->getSettings();
 $settings['version'] = $version;
 $settings['demo'] = $demo;
+$settings['debug'] = $debug;

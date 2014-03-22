@@ -69,9 +69,16 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
             draggable: false,
             hideable: false,
             xtype: 'actioncolumn',
-            width: 55,
+            width: 80,
             id: "cash_list_edit_col",
             items: [{
+              iconCls: 'copy-cash-col',
+              tooltip: lang(193) + ' (C)',
+              handler: function(grid, rowIndex, colIndex) {
+                  var rec = grid.getStore().getAt(rowIndex);
+                  copyItem(rec.get('id'));
+              }
+            }, {
               iconCls: 'edit-cash-col',
               tooltip: lang(36) + ' (Enter, Dbl click)',
               handler: function(grid, rowIndex, colIndex) {
@@ -97,6 +104,8 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
           editItem(record.get('id'));
         } else if(key == Ext.EventObject.DELETE) {
           deleteItem(record.get('id'));
+        } else if(key == Ext.EventObject.C) {
+          copyItem(record.get('id'));
         }
       },
       itemdblclick: function(dv, record, item, index, e) {
@@ -145,6 +154,16 @@ function editItem(v_id) {
   if(parseInt(rights.write) == 0) return;
   loadScript('static/js/add.js', function() {
     v_edit_id = v_id;
+    v_copy = false;
+    cash_list_add.show();
+  });
+}
+
+function copyItem(v_id) {
+  if(parseInt(rights.write) == 0) return;
+  loadScript('static/js/add.js', function() {
+    v_edit_id = v_id;
+    v_copy = true;
     cash_list_add.show();
   });
 }
@@ -359,6 +378,7 @@ function addCheck(hash) {
   if(parseInt(rights.write) == 0) return;
   loadScript('static/js/check.js', function() {
     v_edit_id = 0;
+    v_copy = false;
     v_hash = hash;
     cash_list_check.show();
   });
@@ -368,6 +388,7 @@ function addItem() {
   if(parseInt(rights.write) == 0) return;
   loadScript('static/js/add.js', function() {
     v_edit_id = 0;
+    v_copy = false;
     cash_list_add.show();
   });
 }
@@ -376,7 +397,7 @@ var cash_list_tb = {
       xtype: 'toolbar',
       dock: 'top',
       ui: 'footer',
-      items: [cash_list_from_date, " ", cash_list_to_date, " ", cash_list_filter, cash_list_filter_loading, '->', cash_list_edit_btn_ocr_check, " ",cash_list_edit_btn_add],
+      items: [cash_list_from_date, " ", cash_list_to_date, " ", cash_list_filter, cash_list_filter_loading, '->', cash_list_edit_btn_ocr_check, " ", cash_list_edit_btn_add],
       region: 'north',
       id: "cash_list_tb"
 }; //cash_list_tb
@@ -482,6 +503,7 @@ function setListAnkhor() {
     if(h[0] == "item")  {
       loadScript('static/js/add.js', function() {
         v_edit_id = parseInt(h[1]);
+        v_copy = false;
         if(v_edit_id == undefined || v_edit_id == -1) v_edit_id = 0;
         cash_list_add.show();
       });
