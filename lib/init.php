@@ -15,7 +15,7 @@ $life_time = ini_get("session.gc_maxlifetime");
 $demo = 0;
 
 /*Версия*/
-$version = "b=1.021";
+$version = "b=1.022";
 //$version = rand(); //для отладки
 
 if($debug) {
@@ -31,22 +31,11 @@ $db->connect();
 
 if((bool)$short) return;
 
-//????
-require_once($root.'lang/ru.php');
-$lng = new Lang();
-function lang($id, $param = array() ) {
-  global $lng, $debug;
-  if($debug) {
-    return $id;
-  }
-  $l = $lng->translate[$id];
-  foreach($param as $k=>$v) {
-    $l = str_replace("{".$k."}", $v, $l);
-  }
-  
-  return $l;
-}//lang
-//????
+require_once($root.'lib/lang.php');
+$lang = "ru";
+require_once($root.'lang/'.$lang.'.php');
+$lang_cl = "Lang".$lang;
+$lng = new $lang_cl();
 
 require_once($root.'lib/user.php');
 require_once($root.'lib/cash.php');
@@ -55,11 +44,11 @@ if($debug) {
   $db->debug = true;
 }
 
-$usr = new User($db);
+$usr = new User($db, $lng);
 $usr->auth();
 
 
-$ch = new Cash($db, $usr);
+$ch = new Cash($db, $usr, $lng);
 $settings = $ch->getSettings();
 $settings['version'] = $version;
 $settings['demo'] = $demo;

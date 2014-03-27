@@ -15,10 +15,12 @@ CREATE UNIQUE INDEX "XIF_CASHES_GROUP_PLAN_GDU" on cashes_group_plan (grp_id ASC
 class Plan {
   private $db;
   private $usr;
+  private $lng;
 
-  public function __construct($_db, $_usr) {
+  public function __construct($_db, $_usr, $_lng) {
     $this->db = $_db;
     $this->usr = $_usr;
+    $this->lng = $_lng;
   }
 
   public function getList($uid = 0) {
@@ -117,10 +119,10 @@ class Plan {
   }
 
   public function savePlan($data) {
-    if(!$this->usr->canWrite()) return lang(159);
+    if(!$this->usr->canWrite()) return $this->lng->get(159);
 
-    if(intval($data['grp_id']) < 1) return lang(189);
-    if(floatval($data['plan']) <= 0) return lang(190);
+    if(intval($data['grp_id']) < 1) return $this->lng->get(189);
+    if(floatval($data['plan']) <= 0) return $this->lng->get(190);
     $id = intval($data['id']);
 
     $this->db->start_tran();

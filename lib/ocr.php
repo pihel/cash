@@ -2,25 +2,27 @@
 require_once('error.php');
 
 class OCR_Helper {
+  private $lng;
   private $dir;
   private $ext_type = array('gif','jpg','jpe','jpeg','png', 'tif', 'tiff', 'bmp');
   
   private $login = '';
   private $passw = '';
   
-  public function __construct() {
+  public function __construct($_lng) {
+    $this->lng = $_lng;
     $this->dir = __DIR__."/../files/ocr";
   }
   
   function recognize($file) {
     global $usr;
     if(!$usr->canWrite())  {
-      return array('failure'=>true, 'msg'=> 'Ошибка доступа!');
+      return array('failure'=>true, 'msg'=> $this->lng->get(159));
     }
     
     $ext = pathinfo($file['cash_list_edit_btn_add_check-inputEl']['name'], PATHINFO_EXTENSION);
     if(!in_array($ext, $this->ext_type)) {
-      return array('failure'=>true, 'msg'=> 'Разрешены чеки в форматах: '.implode(", ", $this->ext_type));
+      return array('failure'=>true, 'msg'=> $this->lng->get(195).implode(", ", $this->ext_type));
     }
 
     $hash = crc32(time().$file['cash_list_edit_btn_add_check-inputEl']['name']);
@@ -28,12 +30,12 @@ class OCR_Helper {
     
     if( !file_exists( $this->dir ) ) {
       if( !mkdir( $this->dir, 0777, true) ) {
-        return array('failure'=>true, 'msg'=> 'Невозможно создать временную дирректорию.');
+        return array('failure'=>true, 'msg'=> $this->lng->get(196));
       }
     }
     $fname = $this->dir.'/'.$hash.".".$ext;
     if(!move_uploaded_file($file['cash_list_edit_btn_add_check-inputEl']['tmp_name'], $fname)) {
-      return array('failure'=>true, 'msg'=> 'Ошибка загрузки файла');
+      return array('failure'=>true, 'msg'=> $this->lng->get(197));
     }
     
     //OCR
@@ -43,7 +45,7 @@ class OCR_Helper {
       $text = $ocr->recognize();
     }
     catch(Exception $e) {
-      return array('failure'=>true, 'msg'=> 'Ошибка распознания чека: '.$e->getMessage());
+      return array('failure'=>true, 'msg'=> $this->lng->get(198).$e->getMessage());
     }  
     file_put_contents($this->dir.'/'.$hash.".ocr", $text);
     //copy($this->dir."/ok.txt", $this->dir.'/'.$hash.".ocr"); //debug
@@ -54,7 +56,7 @@ class OCR_Helper {
   function parse($hash, $type) {
     global $usr;
     if(!$usr->canWrite())  {
-      return array('failure'=>true, 'msg'=> 'Ошибка доступа!');
+      return array('failure'=>true, 'msg'=> $this->lng->get(159) );
     }
     
     $hash = intval($hash);
@@ -506,7 +508,7 @@ class ABBYY extends OCR {
   
   public function recognize() {
     if(empty($this->applicationId) || empty($this->password)) {
-      throw new Error("Задайте в настройках пароль и логин");
+      throw new Error("Set the password and login in settings");
     }
     $this->send();
     $this->wait();

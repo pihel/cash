@@ -2,10 +2,12 @@
 class CashSett {
   private $db;
   private $usr;
+  private $lng;
 
-  public function __construct($_db, $_usr) {
+  public function __construct($_db, $_usr, $_lng) {
     $this->db = $_db;
     $this->usr = $_usr;
+    $this->lng = $_lng;
   }
 
   public function getDbs() {
@@ -28,7 +30,7 @@ class CashSett {
   }
 
   public function addDB($name) {
-    if(!$this->usr->canSetting()) return lang(159);
+    if(!$this->usr->canSetting()) return $this->lng->get(159);
     $this->db->start_tran();
     $this->db->exec("INSERT INTO db(name) VALUES(?)", $name);
     $id = $this->db->last_id();
@@ -37,16 +39,16 @@ class CashSett {
   }
 
   public function delDB($id) {
-    if(!$this->usr->canSetting()) return lang(159);
-    if( intval($id) == 1 ) return lang(176);
+    if(!$this->usr->canSetting()) return $this->lng->get(159);
+    if( intval($id) == 1 ) return $this->lng->get(176);
 
     $cnt = $this->db->element("SELECT COUNT(id) cnt from cashes WHERE bd_id = ? AND visible = 1", $id);
     if(intval($cnt) > 0) {
-      return lang(177).$cnt;
+      return $this->lng->get(177).$cnt;
     }
     $cnt = $this->db->element("SELECT COUNT(id) cnt from users WHERE bd_id = ?", $id);
     if(intval($cnt) > 0) {
-      return lang(178).$cnt;
+      return $this->lng->get(178).$cnt;
     }
 
 
@@ -58,10 +60,10 @@ class CashSett {
   }
 
   public function saveUsr($data) {    
-    if(!$this->usr->canSetting()) return lang(159);
-    if(intval($data['bd_id']) < 1) return lang(179);
-    if(empty($data['login'])) return lang(180);
-    if(empty($data['pasw'])) return lang(181);
+    if(!$this->usr->canSetting()) return $this->lng->get(159);
+    if(intval($data['bd_id']) < 1) return $this->lng->get(179);
+    if(empty($data['login'])) return $this->lng->get(180);
+    if(empty($data['pasw'])) return $this->lng->get(181);
 
     $id = intval($data['id']);
 
@@ -76,10 +78,10 @@ class CashSett {
     } else {
       //update
       global $settings;
-      if($settings['demo'] == 1 && ($id == 1 || $id == 2)) return lang(182);
+      if($settings['demo'] == 1 && ($id == 1 || $id == 2)) return $this->lng->get(182);
       
       if( intval($data['s_setting'] == "true") == 0 && $id == 1) {
-        return lang(183);
+        return $this->lng->get(183);
       }
       if($data['pasw'] != "***") {
         $this->db->exec("UPDATE `users`
@@ -101,13 +103,13 @@ class CashSett {
 
   public function delUsr($id) {
     global $settings;
-    if($settings['demo'] == 1 && ($id == 1 || $id == 2)) return lang(184);
+    if($settings['demo'] == 1 && ($id == 1 || $id == 2)) return $this->lng->get(184);
     
-    if(!$this->usr->canSetting()) return lang(159);
-    if( intval($id) == 1 ) return lang(185);
+    if(!$this->usr->canSetting()) return $this->lng->get(159);
+    if( intval($id) == 1 ) return $this->lng->get(185);
     $cnt = $this->db->element("SELECT COUNT(id) cnt from cashes WHERE uid = ? AND visible = 1", $id);
     if(intval($cnt) > 0) {
-      return lang(186).$cnt;
+      return $this->lng->get(186).$cnt;
     }
 
     $this->db->start_tran();
@@ -119,10 +121,10 @@ class CashSett {
   
   public function setSetting($refb, $indx, $data) {
     global $settings;
-    if($settings['demo'] == 1) return lang(187);
-    if(!$this->usr->canSetting()) return lang(159);
+    if($settings['demo'] == 1) return $this->lng->get(187);
+    if(!$this->usr->canSetting()) return $this->lng->get(159);
     $refbs = array("cashes_group", "cashes_nom", "cashes_org", "cashes_setting", "cashes_type", "currency");
-    if(!in_array($refb, $refbs)) return lang(188);
+    if(!in_array($refb, $refbs)) return $this->lng->get(188);
     $col = "id";
     if($refb == "cashes_setting") {
       $col = "name";

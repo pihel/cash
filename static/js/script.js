@@ -93,7 +93,7 @@ function htmlRenderer(text) {
 }
 
 function lang(id, params) {
-  if(settings.debug == 1) {
+  if(settings.debug == 1 || translate[id] == undefined ) {
     return String(id);
   }
   var tpl = new Ext.Template( translate[id] );

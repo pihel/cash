@@ -1,17 +1,19 @@
 <?
 class User {
   private $ip;
+  private $db, $lng;
 
   public $id, $login, $db_id;
 
-  public $rghts;
+  public $rghts;  
 
 
-  function __construct($_db) {
+  function __construct($_db, $_lng) {
     $this->ip = $_SERVER["REMOTE_ADDR"];
     $this->db = $_db;
     $this->id = 0;
     $this->db_id = 0;
+    $this->lng = $_lng;
   }
 
 
@@ -45,7 +47,7 @@ class User {
       $this->db->exec("UPDATE `users` SET oper_date = datetime(CURRENT_TIMESTAMP, 'localtime') WHERE bd_id = ? AND id = ? ", $this->db_id, $this->id);
       $this->db->commit();
     }
-    if(intval( $this->id ) == 0) return array('success'=>false, 'msg'=> lang(175) );
+    if(intval( $this->id ) == 0) return array('success'=>false, 'msg'=> $this->lng->get(175) );
 
     //rights
     $this->rghts = $this->getRights();

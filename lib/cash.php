@@ -2,12 +2,14 @@
 class Cash {
   private $db;
   private $usr;
+  private $lng;
   
   private $from = "-2 month";
 
-  public function __construct($_db, $_usr) {
+  public function __construct($_db, $_usr, $_lng) {
     $this->db = $_db;
     $this->usr = $_usr;
+    $this->lng = $_lng;
   }
 
   protected function makeFilter($name, $name_str, $val, $is_int, $not) {
@@ -300,7 +302,7 @@ class Cash {
   }
 
   public function del($id) {
-    if(!$this->usr->canWrite()) return lang(159);
+    if(!$this->usr->canWrite()) return $this->lng->get(159);
 
     $this->db->start_tran();
     $fl = $this->getFile($id);
@@ -335,14 +337,14 @@ class Cash {
 
     $ret = array();
 
-    if(empty($data) || !$this->usr->canWrite()) return array('failure'=>true, 'msg'=> lang(160));
+    if(empty($data) || !$this->usr->canWrite()) return array('failure'=>true, 'msg'=> $this->lng->get(160));
 
     $ret['file'] = '';
     if(is_array($files['cash_item_file'])) {
       global $settings;
       if($settings['demo'] == 1 && !empty($files['cash_item_file']['name'])) { 
         $this->db->rollback();
-        return array('failure'=>true, 'msg'=> lang(162));
+        return array('failure'=>true, 'msg'=> $this->lng->get(162));
       }
       
       $ext = pathinfo($files['cash_item_file']['name'], PATHINFO_EXTENSION);
@@ -353,31 +355,31 @@ class Cash {
     }
 
     $ret['cash_item_date'] = $data['cash_item_date'];
-    if(empty($ret['cash_item_date'])) 		        { $this->db->rollback(); return array('failure'=>true, 'msg'=> lang(163)); }
+    if(empty($ret['cash_item_date'])) 		        { $this->db->rollback(); return array('failure'=>true, 'msg'=> $this->lng->get(163)); }
 
     $ret['cash_item_nmcl_cb']                     = $this->add_refbook($data["cash_item_nmcl_cb"], "cashes_nom");
-    if( $ret['cash_item_nmcl_cb'] == 0) 	        { $this->db->rollback(); return array('failure'=>true, 'msg'=> lang(164)); }
+    if( $ret['cash_item_nmcl_cb'] == 0) 	        { $this->db->rollback(); return array('failure'=>true, 'msg'=> $this->lng->get(164)); }
 
     $ret['cash_item_prod_type_cb']                = $this->add_refbook($data["cash_item_prod_type_cb"], "cashes_group");
-    if($ret['cash_item_prod_type_cb'] == 0) 	    { $this->db->rollback(); return array('failure'=>true, 'msg'=> lang(165)); }
+    if($ret['cash_item_prod_type_cb'] == 0) 	    { $this->db->rollback(); return array('failure'=>true, 'msg'=> $this->lng->get(165)); }
 
     $ret['cash_item_price']                       = floatval( $data['cash_item_price'] );
-    if($ret['cash_item_price'] == 0)   	          { $this->db->rollback(); return array('failure'=>true, 'msg'=> lang(166)); }
+    if($ret['cash_item_price'] == 0)   	          { $this->db->rollback(); return array('failure'=>true, 'msg'=> $this->lng->get(166)); }
 
     $ret['cash_item_currency_cb']                 = $this->add_refbook($data["cash_item_currency_cb"], "currency");
-    if($ret['cash_item_currency_cb'] == 0) 	      { $this->db->rollback(); return array('failure'=>true, 'msg'=> lang(167)); }
+    if($ret['cash_item_currency_cb'] == 0) 	      { $this->db->rollback(); return array('failure'=>true, 'msg'=> $this->lng->get(167)); }
 
     $ret['cash_item_ctype_cb']                    = $this->add_refbook($data["cash_item_ctype_cb"], "cashes_type");
-    if($ret['cash_item_ctype_cb'] == 0) 	        { $this->db->rollback(); return array('failure'=>true, 'msg'=> lang(168)); }
+    if($ret['cash_item_ctype_cb'] == 0) 	        { $this->db->rollback(); return array('failure'=>true, 'msg'=> $this->lng->get(168)); }
 
     $ret['cash_item_qnt']                         = floatval( $data['cash_item_qnt'] );
-    if($ret['cash_item_qnt'] == 0)   		          { $this->db->rollback(); return array('failure'=>true, 'msg'=> lang(169)); }
+    if($ret['cash_item_qnt'] == 0)   		          { $this->db->rollback(); return array('failure'=>true, 'msg'=> $this->lng->get(169)); }
 
     $ret['cash_item_org_cb']                      = $this->add_refbook($data["cash_item_org_cb"], "cashes_org");
-    if($ret['cash_item_org_cb'] == 0) 		        { $this->db->rollback(); return array('failure'=>true, 'msg'=> lang(170)); }
+    if($ret['cash_item_org_cb'] == 0) 		        { $this->db->rollback(); return array('failure'=>true, 'msg'=> $this->lng->get(170)); }
 
     $ret['cash_item_toper_cb']                    = intval($data['cash_item_toper_cb']);
-    if( !in_array($ret['cash_item_toper_cb'], array(0,1)) )	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> lang(171)); }
+    if( !in_array($ret['cash_item_toper_cb'], array(0,1)) )	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> $this->lng->get(171)); }
 
     $ret['cash_item_note']                        = $data['cash_item_note'];
 
@@ -396,7 +398,7 @@ class Cash {
   }
 
   public function edit($data, $files) {
-    if(!$this->usr->canWrite()) return lang(159);
+    if(!$this->usr->canWrite()) return $this->lng->get(159);
 
     $this->db->start_tran();
 
@@ -442,7 +444,7 @@ class Cash {
     );
 
     $cnt = intval( $this->db->affect() );
-    if($cnt == 0) { $this->db->rollback(); return array('failure'=>true, 'msg'=> lang(172)); }
+    if($cnt == 0) { $this->db->rollback(); return array('failure'=>true, 'msg'=> $this->lng->get(172)); }
 
     $this->db->commit();
 
@@ -453,7 +455,7 @@ class Cash {
   }
   
   public function add_check($data) {
-    if(!$this->usr->canWrite()) return lang(159);
+    if(!$this->usr->canWrite()) return $this->lng->get(159);
     
     $this->db->start_tran();
     $cnt = 0;
@@ -482,7 +484,7 @@ class Cash {
       if($ret['failure'] === true ) {
         $this->db->rollback();
         $this->db->escape_result($line['name']);
-        return array('failure'=>true, 'msg'=> lang(173).": '".$line['name']."': ".$ret['msg']);
+        return array('failure'=>true, 'msg'=> $this->lng->get(173).": '".$line['name']."': ".$ret['msg']);
       }
       $cnt++;
     }
@@ -491,7 +493,7 @@ class Cash {
   } //add_check
 
   public function add($data, $files, $trans = true) {
-    if(!$this->usr->canWrite()) return lang(159);
+    if(!$this->usr->canWrite()) return $this->lng->get(159);
 
     if($trans) {
       $this->db->start_tran();
@@ -522,7 +524,7 @@ class Cash {
     );
 
     $id = intval( $this->db->last_id() );
-    if($id == 0) { $this->db->rollback(); return array('failure'=>true, 'msg'=> lang(174)); }
+    if($id == 0) { $this->db->rollback(); return array('failure'=>true, 'msg'=> $this->lng->get(174)); }
 
     if($trans) {
       $this->db->commit();
@@ -532,7 +534,7 @@ class Cash {
   } //add
 
   public function analize() {
-    if(!$this->usr->canWrite()) return lang(159);
+    if(!$this->usr->canWrite()) return $this->lng->get(159);
 
 
     $sql = 

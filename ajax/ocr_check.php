@@ -4,11 +4,11 @@ require_once("../lib/ocr.php");
 
 global $settings;
 if($settings['demo'] == 1) { 
-  echo json_encode( array('failure'=>true, 'msg'=> 'Извините, распознание чеков отключено в режиме демо стенда!') );
+  echo json_encode( array('failure'=>true, 'msg'=> $lng->get(194) ) );
   exit;
 }
 
-$hlp = new OCR_Helper();
+$hlp = new OCR_Helper($lng);
 
 $ret = array();
 if( !empty($_GET['hash']) ) {

@@ -1,5 +1,11 @@
 <?php
-$lang = array (
+class LangEn extends Lang {
+  public static $desc = array("name" => "Russian", "tname" => "Русский");
+  
+  public $start_week = 1;//проверить эту настройку в extjs
+  //остальное проверить
+  
+  public $translate = array (
   // login
   1 => " Log in accounting ",
   2 => " Login ",
@@ -72,4 +78,6 @@ $lang = array (
   65 => " Adding an operation ",
   66 => "Edit operation,",
   67 => " Loading form ... ",
-);
+  );
+
+}

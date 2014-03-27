@@ -2,12 +2,14 @@
 class CashAnaliz {
   private $db;
   private $usr;
+  private $lng;
 
   private $def_cur = "р.";
 
-  public function __construct($_db, $_usr) {
+  public function __construct($_db, $_usr, $_lng) {
     $this->db = $_db;
     $this->usr = $_usr;
+    $this->lng = $_lng;
     global $settings;
     $this->def_cur = $settings['sign'];
   }
@@ -22,7 +24,7 @@ class CashAnaliz {
 
     $sql =
     " SELECT
-        CASE WHEN c.type = 1 THEN '".lang(55)."' ELSE '".lang(54)."' END as tname,
+        CASE WHEN c.type = 1 THEN '".$this->lng->get(55)."' ELSE '".$this->lng->get(54)."' END as tname,
         SUM(price*qnt*cr.rate) data
       FROM `cashes` c
       INNER JOIN currency cr
@@ -258,7 +260,7 @@ class CashAnaliz {
 
     $sql =
     "SELECT
-      '".lang(191)."' as tname,
+      '".$this->lng->get(191)."' as tname,
       SUM( CASE WHEN c.type = 1 THEN 1 ELSE -1 END * c.price * c.qnt * cr.rate ) out_amount
     FROM
       `cashes` c
@@ -274,7 +276,7 @@ class CashAnaliz {
     if($amount == 0) $amount = 1000000;
 
     $r[1]['out_amount'] = $amount - $r[0]['out_amount'];
-    $r[1]['tname'] = lang(192);
+    $r[1]['tname'] = $this->lng->get(192);
 
     return $r;
   }
