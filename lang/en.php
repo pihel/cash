@@ -1,6 +1,5 @@
 <?php
-class LangEn extends Lang {
-  public static $desc = array("name" => "Russian", "tname" => "Русский");
+class LangEn extends iLang {
   
   public $start_week = 1;//проверить эту настройку в extjs
   //остальное проверить

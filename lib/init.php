@@ -15,7 +15,7 @@ $life_time = ini_get("session.gc_maxlifetime");
 $demo = 0;
 
 /*Версия*/
-$version = "b=1.022";
+$version = "b=1.023";
 //$version = rand(); //для отладки
 
 if($debug) {
@@ -32,10 +32,8 @@ $db->connect();
 if((bool)$short) return;
 
 require_once($root.'lib/lang.php');
-$lang = "ru";
-require_once($root.'lang/'.$lang.'.php');
-$lang_cl = "Lang".$lang;
-$lng = new $lang_cl();
+$lng = new Lang();
+$lng->set($_COOKIE['LANG']);
 
 require_once($root.'lib/user.php');
 require_once($root.'lib/cash.php');

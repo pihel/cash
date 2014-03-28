@@ -25,7 +25,8 @@ var login_db_name_list_cb = Ext.create('Ext.form.field.ComboBox', {
   id: "login_db_name_list_cb",
   name: "login_db_name_list_cb",
   fieldLabel: lang(7),
-  labelWidth: 100,
+  labelWidth: 70,
+  width: 255,
   displayField: 'name',
   valueField: 'id',
   queryMode: 'local',
@@ -60,12 +61,26 @@ var login_usr_name_list = Ext.create('Ext.data.Store', {
   }
 }); //login_usr_name_list
 
+var login_lang_list = Ext.create('Ext.data.Store', {
+  model: 'login_id_name_model',
+  autoDestroy: true,
+  proxy: {
+      // load using HTTP
+      type: 'ajax',
+      url: 'ajax/langs.php',
+      reader: {
+        type: 'json'
+      }
+  }
+}); //login_lang_list
+
 var login_usr_name_list_cb = Ext.create('Ext.form.field.ComboBox', {
     store: login_usr_name_list,
     id: "login_usr_name_list_cb",
     name: "login_usr_name_list_cb",
     fieldLabel: lang(6),
-    labelWidth: 100,
+    labelWidth: 70,
+    width: 255,
     editable: false,
     displayField: 'name',
     valueField: 'id',
@@ -79,6 +94,48 @@ var login_usr_name_list_cb = Ext.create('Ext.form.field.ComboBox', {
       }
     }
 }); //login_usr_name_list_cb
+
+var login_passw = {
+  xtype: 'textfield',
+  fieldLabel:lang(3),
+  name:'password',
+  id: "password",
+  inputType:'password',
+  anchor: '90%',
+  width: 200,
+  labelWidth: 68,
+  allowBlank:false
+};
+
+var login_lang_list_cb = Ext.create('Ext.form.field.ComboBox', {
+    store: login_lang_list,
+    id: "login_lang_list_cb",
+    name: "login_lang_list_cb",
+    editable: false,
+    displayField: 'name',
+    valueField: 'id',
+    queryMode: 'local',
+    allowBlank: false,
+    value: 0,
+    width: 50,
+    listConfig: {
+         itemTpl: Ext.create('Ext.XTemplate', '<div><img src="'+settings.static+'/{name}.png" class="login_flag"/>{name}</div>')
+    },
+    listeners: {
+      select: function( combo, records, e) {
+        var dt = Ext.Date.add(new Date(), Ext.Date.YEAR, 1);
+        Ext.util.Cookies.set("LANG", records[0].get('name'), dt );
+        
+        window.location.reload();
+      }
+    }
+}); //login_lang_list_cb
+
+var login_lang_pasw_list_tb = {
+      xtype: 'toolbar',
+      id: "login_lang_pasw_list_tb",
+      items: [login_passw, login_lang_list_cb]
+}; //cash_item_price_tb
 
 function submt() {
   if(Ext.getCmp('password').getValue() == "") return;
@@ -101,17 +158,7 @@ var loginForm = new Ext.FormPanel({
   bodyPadding: 5,
   id: "loginForm",
   frame: true,
-  items: [login_db_name_list_cb, login_usr_name_list_cb,
-      {
-        xtype: 'textfield',
-        fieldLabel:lang(3),
-        name:'password',
-        id: "password",
-        inputType:'password',
-        anchor: '90%',
-        allowBlank:false
-      }
-  ],
+  items: [login_db_name_list_cb, login_usr_name_list_cb, login_lang_pasw_list_tb],
   listeners: {
     afterRender: function(thisForm, options){
         this.keyNav = Ext.create('Ext.util.KeyNav', this.el, {
@@ -136,7 +183,7 @@ var loginWindow = new Ext.Window({
   frame:true,
   border: false,
   title: lang(1),
-  width:330,
+  width: 290,
   closable: false,
   resizable: false,
   items: loginForm,
@@ -151,17 +198,19 @@ var loginWindow = new Ext.Window({
         }
         
         login_usr_name_list.load(function() {
-          var uid = Ext.util.Cookies.get("USR_ID");
-          if( uid != undefined && parseInt(uid) > 0 ) {
-            login_usr_name_list_cb.setValue(parseInt(uid));
-          }
-          Ext.getCmp('password').focus(false, 100);
-          Ext.getCmp('password').setValue("");
-          if(db_id == 1 && uid == 1 && 1 == settings.demo) { //demo
-            Ext.getCmp('password').setValue("admin");
-          }
-        });
-      });
+          login_lang_list.load(function() {
+            var uid = Ext.util.Cookies.get("USR_ID");
+            if( uid != undefined && parseInt(uid) > 0 ) {
+              login_usr_name_list_cb.setValue(parseInt(uid));
+            }
+            Ext.getCmp('password').focus(false, 100);
+            Ext.getCmp('password').setValue("");
+            if(db_id == 1 && uid == 1 && 1 == settings.demo) { //demo
+              Ext.getCmp('password').setValue("admin");
+            }
+          }); //login_lang_list
+        });//login_usr_name_list
+      });//login_db_name_list
     }
   }
 });

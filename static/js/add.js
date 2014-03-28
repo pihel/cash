@@ -505,6 +505,7 @@ var cash_list_add = Ext.create('Ext.Window', {
     width: 510,
     height: 355,
     closeAction: 'hide',
+    resizable: false,
     modal: true,
     headerPosition: 'top',
     bodyPadding: 5,
