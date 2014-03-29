@@ -20,7 +20,7 @@ if(!empty($_POST['cash_item_save'])) {
 <html>
   <head>
     <meta charset=utf-8>
-    <title><?=$settings['site_name'];?> &mdash; Мобильная версия</title>
+    <title><?=$settings['site_name'];?> &mdash; <?=$lng->get(199);?></title>
     <link rel="shortcut icon" href="<?=$settings['static'];?>/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -220,7 +220,7 @@ if(!empty($_POST['cash_item_save'])) {
           <span class="amount ' + class_name + '">' + price(o.amount) + o.sign + '</span>\
           <h2 class="name">' + o.nom + '</h2>\
           <span class="org">' + o.oname + '</span>\
-          <span class="del"><a title="Удалить" href="#" onclick="return del('+o.id+');"><img src="<?=$settings['static'];?>/delete.gif"></a></span>\
+          <span class="del"><a title="<?=$lng->get(37);?>" href="#" onclick="return del('+o.id+');"><img src="<?=$settings['static'];?>/delete.gif"></a></span>\
         </li>';       
       } //getLineTpl
 	  
@@ -239,7 +239,7 @@ if(!empty($_POST['cash_item_save'])) {
           });
           //html = data.map(getLineTpl).join('');
           if(data.length == 0) {
-            id("list").innerHTML = '<div id="no_lines">Нет записей<div>';
+            id("list").innerHTML = '<div id="no_lines"><?=$lng->get(201);?><div>';
           } else {
             id("list").innerHTML += html;
           }
@@ -254,7 +254,7 @@ if(!empty($_POST['cash_item_save'])) {
       } //price
       
       function del(id) {
-        if(confirm("Удалить?")) {
+        if(confirm("<?=$lng->get(41);?>")) {
           ajax("ajax/delete.php?id=" + id, function(data) {
             if(parseInt(data) > 0) {
               refresh_list();
@@ -322,7 +322,7 @@ if(!empty($_POST['cash_item_save'])) {
       $set = new CashSett($db, $usr);
     ?>
       <form id="login_form" method="post">
-        <div><label for="db">База: </label>
+        <div><label for="db"><?=$lng->get(7);?>: </label>
         <select id="db" name="login_db_name_list_cb">
           <?
           $dbs = $set->getDbs();
@@ -331,7 +331,7 @@ if(!empty($_POST['cash_item_save'])) {
           <option value="<?=$db['id'];?>"<?if($db['id']==$_COOKIE['DB_ID']){?> selected<?}?>><?=$db['name'];?></option>
           <?}?>
         </select> </div>
-        <div><label for="login">Пользователь: </label>
+        <div><label for="login"><?=$lng->get(6);?>: </label>
         <select id="login" name="login_usr_name_list_cb">
           <?
           $usrs = $set->getUsrNames();
@@ -340,29 +340,29 @@ if(!empty($_POST['cash_item_save'])) {
           <option value="<?=$u['id'];?>"<?if($u['id']==$_COOKIE['USR_ID']){?> selected<?}?>><?=$u['name'];?></option>
           <?}?>
         </select></div>
-        <div><label for="pwd">Пароль: </label><input type="password" id="pwd" name="password"></div>
-        <div><input type="submit" value="Войти"></div>
+        <div><label for="pwd"><?=$lng->get(3);?>: </label><input type="password" id="pwd" name="password"></div>
+        <div><input type="submit" value="<?=$lng->get(2);?>"></div>
       <form>
     <?} else {?>
     <div id="add">
-      <input type="button" id="add_btn" value="Добавить ↓" onclick="return add_frm();">
+      <input type="button" id="add_btn" value="<?=$lng->get(49);?> ↓" onclick="return add_frm();">
       <?if(!empty($add_ret['msg'])) {?>
-        <h3>Ошибка добавления: <?=$add_ret['msg'];?></h3>
+        <h3><?=$lng->get(164);?>: <?=$add_ret['msg'];?></h3>
       <?}?>
       <form method="post" id="add_frm" onsubmit="return add(this);">
         <input type="hidden" id="cash_item_currency_cb" name="cash_item_currency_cb" value="<?=$settings['currency'];?>">
         <input type="hidden" id="cash_item_ctype_cb" name="cash_item_ctype_cb" value="1">
         <input type="hidden" id="cash_item_toper_cb" name="cash_item_toper_cb" value="0">
         <input type="hidden" id="cash_item_note" name="cash_item_note" value="">
-        <div><label for="cash_item_date">Дата</label><input type="date" name="cash_item_date" id="cash_item_date" value="<?=date('Y-m-d');?>"></div>
-        <div><label for="cash_item_nmcl_cb">Товар</label><input type="text" name="cash_item_nmcl_cb" id="cash_item_nmcl_cb" onchange="return nomChange(this);"></div>
-        <div><label for="cash_item_prod_type_cb">Группа</label><input type="text" name="cash_item_prod_type_cb" id="cash_item_prod_type_cb"></div>
-        <div><label for="cash_item_org_cb">Орг.</label><input type="text" name="cash_item_org_cb" id="cash_item_org_cb"></div>
+        <div><label for="cash_item_date"><?=$lng->get(23);?></label><input type="date" name="cash_item_date" id="cash_item_date" value="<?=date('Y-m-d');?>"></div>
+        <div><label for="cash_item_nmcl_cb"><?=$lng->get(17);?></label><input type="text" name="cash_item_nmcl_cb" id="cash_item_nmcl_cb" onchange="return nomChange(this);"></div>
+        <div><label for="cash_item_prod_type_cb"><?=$lng->get(19);?></label><input type="text" name="cash_item_prod_type_cb" id="cash_item_prod_type_cb"></div>
+        <div><label for="cash_item_org_cb"><?=$lng->get(200);?></label><input type="text" name="cash_item_org_cb" id="cash_item_org_cb"></div>
         <div>
-          <label for="cash_item_price">Цена</label><input type="number" name="cash_item_price" id="cash_item_price"> 
-          <label for="cash_item_qnt">Кол-во</label><input type="number" name="cash_item_qnt" id="cash_item_qnt" value="1">
+          <label for="cash_item_price"><?=$lng->get(20);?></label><input type="number" name="cash_item_price" id="cash_item_price"> 
+          <label for="cash_item_qnt"><?=$lng->get(21);?></label><input type="number" name="cash_item_qnt" id="cash_item_qnt" value="1">
         </div>
-        <input name="cash_item_save" id="cash_item_save" type="submit" value="Сохранить">        
+        <input name="cash_item_save" id="cash_item_save" type="submit" value="<?=$lng->get(58);?>">        
       </form>
     </div>
     <div id="filter">
