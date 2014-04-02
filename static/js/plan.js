@@ -86,7 +86,7 @@ var loadMask_cash_plan_grid = new Ext.LoadMask(cash_plan_grid, {msg: lang(80), s
 var cash_plan_mnth_from_date =
 {
     xtype: 'datefield',
-    startDay:1,
+    //startDay:1,
     fieldLabel: lang(43),
     name: 'cash_plan_mnth_from_date',
     id: 'cash_plan_mnth_from_date',
@@ -102,7 +102,7 @@ var cash_plan_mnth_to_date =
 {
     xtype: 'datefield',
     fieldLabel: lang(44),
-    startDay:1,
+    //startDay:1,
     name: 'cash_plan_mnth_to_date',
     id: 'cash_plan_mnth_to_date',
     labelWidth: 20,

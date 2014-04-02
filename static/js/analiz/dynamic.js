@@ -9,7 +9,7 @@ var cash_analiz_dyn_lbl = {
 var cash_analiz_dyn_from_date =
 {
     xtype: 'datefield',
-    startDay:1,
+    //startDay:1,
     fieldLabel: lang(43),
     name: 'cash_analiz_dyn_from_date',
     id: 'cash_analiz_dyn_from_date',
@@ -25,7 +25,7 @@ var cash_analiz_dyn_to_date =
 {
     xtype: 'datefield',
     fieldLabel: lang(44),
-    startDay:1,
+    //startDay:1,
     name: 'cash_analiz_dyn_to_date',
     id: 'cash_analiz_dyn_to_date',
     labelWidth: 20,

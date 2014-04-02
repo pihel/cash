@@ -5,7 +5,7 @@ var v_copy = false;
 var cash_item_date =
 {
     xtype: 'datefield',
-    startDay:1,
+    //startDay:1,
     fieldLabel: lang(23),
     name: 'cash_item_date',
     id: 'cash_item_date',

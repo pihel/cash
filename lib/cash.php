@@ -147,7 +147,7 @@ class Cash {
     
     $sql = "SELECT name, value FROM cashes_setting
             UNION 
-            SELECT 'sign', c.sign FROM currency c WHERE id = (SELECT value FROM cashes_setting WHERE name = 'currency')";
+            SELECT 'sign', c.sign FROM currency c WHERE id = 1"; //(SELECT value FROM cashes_setting WHERE name = 'currency')
     $set = $this->db->select($sql);
     
     $sk = array();
@@ -411,7 +411,6 @@ class Cash {
 
     if($refb['failure']) return $refb;
 
-    //CURRENT_TIMESTAMP перенести на сторону БД
     $sql =
     "UPDATE `cashes`
       SET nmcl_id = ?,

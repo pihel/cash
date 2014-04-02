@@ -49,7 +49,7 @@ function price(val, metaData, record) {
       val = -1*Ext.util.Format.round(Math.abs(val), 0);
     }
     val = Ext.util.Format.number(val, "0,0");
-  } else {      
+  } else {
     val = Ext.util.Format.number(val, "0,0.00");
   }  
   return val + v_def_currency;
@@ -99,6 +99,36 @@ function lang(id, params) {
   var tpl = new Ext.Template( translate[id] );
   return tpl.apply(params);
 }
+
+/* ----------- bugfix ext js ------------- */
+
+//extjs localization for datefield
+Ext.form.field.Date.override({
+    initComponent: function () {
+        if (!Ext.isDefined(this.initialConfig.startDay)) {
+            this.startDay = Ext.picker.Date.prototype.startDay;
+        }
+
+        this.callParent();
+    }
+});
+
+//bugfix extjs 4.2.1 negative number formater
+Ext.define('RevRec.util.Format', {
+    override: 'Ext.util.Format',
+    originalNumberFormatter: Ext.util.Format.number,
+    number: function(v, formatString) {
+        if (v < 0) {
+            //negative number: flip the sign, format then prepend '-' onto output
+            return '-' + this.originalNumberFormatter(v * -1, formatString);
+        } else {
+            //positive number: as you were
+            return this.originalNumberFormatter(v, formatString);
+        }
+    }
+});
+
+/* ----------- bugfix ext js ------------- */
 
 function error(text, _cb) {
   Ext.Msg.show({

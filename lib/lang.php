@@ -1,6 +1,6 @@
 <?php
 abstract class iLang {
-  public $start_week;
+  //public $start_week;
   public $translate;
 }
 

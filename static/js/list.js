@@ -209,7 +209,7 @@ function deleteItem(v_id) {
 var cash_list_from_date =
 {
     xtype: 'datefield',
-    startDay:1,
+    //startDay:1,
     fieldLabel: lang(43),
     name: 'cash_list_from_date',
     id: 'cash_list_from_date',
@@ -225,7 +225,7 @@ var cash_list_to_date =
 {
     xtype: 'datefield',
     fieldLabel: lang(44),
-    startDay:1,
+    //startDay:1,
     name: 'cash_list_to_date',
     id: 'cash_list_to_date',
     labelWidth: 20,

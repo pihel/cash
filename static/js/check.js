@@ -5,7 +5,7 @@ var v_hash = '';
 var cash_check_date =
 {
     xtype: 'datefield',
-    startDay:1,
+    //startDay:1,
     fieldLabel: lang(23),
     name: 'cash_check_date',
     id: 'cash_check_date',

@@ -1,22 +1,27 @@
 <?
 error_reporting(0);
+
+/* Root dir */
 $root = __DIR__."/../";
 
-/* режим отладки */
+/* Debug mode */
 $debug = 0;
 
-/* Путь до файла базы данных */
+/* Path to sqlite database */
 $sqlite_path = $root."data/cash.db3";
 
-/* Допустимое время бездействия */
+/* Time without actions */
 $life_time = ini_get("session.gc_maxlifetime");
 
-/* Демонстрационный стенд (запрет изменения настроек, смены прав, загрузка файлов)*/
+/* Demo stand (deny settings, file upload)*/
 $demo = 0;
 
-/*Версия*/
-$version = "b=1.023";
-//$version = rand(); //для отладки
+/* App version */
+//$version = "b=1.024";
+$version = rand(); //for reset cache
+
+/* Path to imgs and js */
+$static = "static";
 
 if($debug) {
   error_reporting(~E_NOTICE);
@@ -51,3 +56,4 @@ $settings = $ch->getSettings();
 $settings['version'] = $version;
 $settings['demo'] = $demo;
 $settings['debug'] = $debug;
+$settings['static'] = $static;

@@ -1,8 +1,5 @@
 <?php
-class LangRu extends iLang {  
-  public $start_week = 1;//проверить эту настройку в extjs
-  //остальное проверить
-  
+class LangRu extends iLang {    
   public $translate = array (
     //login
     1 => "Вход в бухгалтерию",
@@ -216,7 +213,8 @@ class LangRu extends iLang {
     198 => "Ошибка распознания чека: ",
     199 => "Мобильная версия",
     200 => "Орг.",
-    201 => "Нет записей"
+    201 => "Нет записей",
+    202 => "Любой"
   );
 
 }

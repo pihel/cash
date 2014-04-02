@@ -25,7 +25,7 @@ require_once('lib/init.php');
       var translate = <?=json_encode($lng->get());?>;
     </script>
     <script src="<?=$settings['static'];?>/js/script.js?<?=$settings['version'];?>" charset="UTF-8" type="text/javascript"></script>
-    <script src="<?=$settings['extjs'];?>/locale/ext-lang-<?=$settings['lang'];?>.js" charset="UTF-8" type="text/javascript"></script>
+    <script src="<?=$settings['extjs'];?>/locale/ext-lang-<?=$lng->slang;?>.js" charset="UTF-8" type="text/javascript"></script>
   </head>
   <body>
     <div id="logout"></div>
