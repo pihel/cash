@@ -17,8 +17,8 @@ $life_time = ini_get("session.gc_maxlifetime");
 $demo = 0;
 
 /* App version */
-//$version = "b=1.024";
-$version = rand(); //for reset cache
+$version = "b=1.025";
+//$version = rand(); //for reset cache
 
 /* Path to imgs and js */
 $static = "static";

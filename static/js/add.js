@@ -489,6 +489,7 @@ function cash_list_add_load() {
           document.getElementById('cash_item_file-inputEl').value = "";
           document.getElementById('cash_item_file-inputEl').onclick = null;
           Ext.getCmp('cash_item_price').focus(false, 200);
+          v_edit_id = 0;
         }
         
         setAnkhor();
