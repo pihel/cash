@@ -2,7 +2,7 @@
 class LangEn extends iLang {  
   public $translate = array (
     //login
-    1 => "Entrance to accountancy",
+    1 => "Entrance to bookkeeping",
     2 => "Enter",
     3 => "Password",
     4 => "Please wait...",
