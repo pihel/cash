@@ -52,7 +52,7 @@ class LangEn extends iLang {
     45 => "Loading filter",
     46 => "Advanced search",
     47 => "Recognize check",
-    !8 => "Check recognizing is processing",
+    48 => "Check recognizing is processing",
     49 => "Add",
     50 => "Add operation",
     51 => "Operations",
