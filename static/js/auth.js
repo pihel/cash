@@ -147,8 +147,9 @@ function submt() {
         authOk(action.result.msg);
       },
       failure: function(form, action) {
-        error(action.result.msg);
-        Ext.getCmp('password').focus(false, 100);
+        error(action.result.msg, function() {
+          Ext.getCmp('password').focus(false, 100);
+        });        
       }
   });
 }
