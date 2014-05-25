@@ -132,8 +132,15 @@ var cash_item_price = {
     labelWidth: 100,
     width: 200,
     allowBlank: false,
-    value: 0
-};
+    value: 0/*,
+    baseChars: '-+0123456789,.',
+    listeners: {
+      change: function(o, newValue, oldValue, eOpts){
+        //newValue = newValue.replace(",", ".");
+        console.log(oldValue);
+      }
+    }*/
+}; //cash_item_price
 
 //---- currency list
 var cash_item_currency_store = Ext.create('Ext.data.Store', {
@@ -185,7 +192,7 @@ var cash_item_ctype_cb = Ext.create('Ext.form.field.ComboBox', {
     queryMode: 'local',
     tpl: '<tpl for="."><div class="x-boundlist-item">{name:htmlEncode}</div></tpl>',
     width: 170,
-    value: 1
+    value: 1    
 }); //cash_item_ctype_cb
 
 
@@ -198,7 +205,8 @@ var cash_item_qnt = {
     allowBlank: false,
     labelWidth: 100,
     width: 200,
-    value: 1
+    value: 1/*,
+    baseChars: '-+0123456789,.'*/
 };
 
 
@@ -295,7 +303,7 @@ var cash_item_save = Ext.create('Ext.button.Button', {
 var cash_item_add = Ext.create('Ext.button.Button', {
 	text: lang(49),
 	formBind: true,
-  tooltip: lang(60) + " (Ctrl-Enter)",
+  tooltip: lang(60) + " (Shift-Enter)",
 	id: "cash_item_add",
 	icon: settings.static + "/yes.gif",
 	disabled: true,
@@ -393,7 +401,7 @@ var cash_item_form_add = new Ext.FormPanel({
           binding: [{
               key: Ext.EventObject.ENTER,
               fn: function(keyCode, e) { 
-                if( e.ctrlKey || e.target.name == "cash_item_note" ) {
+                if( e.shiftKey || e.target.name == "cash_item_note" ) {
                     //e.preventDefault();
                     return true;
                 }
@@ -402,10 +410,11 @@ var cash_item_form_add = new Ext.FormPanel({
               }
             }, {
               key: Ext.EventObject.ENTER,
-              ctrl: true,
+              shift: true,
               fn: function(keyCode, e) {
                 submt_add(true);
-                return true;
+
+                return false;
               }
         }]});
     }

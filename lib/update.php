@@ -122,6 +122,35 @@ class DbUpdate {
     $this->exec('CREATE UNIQUE INDEX "XPK_DB_ID" on db (id ASC)');
     $this->exec('CREATE UNIQUE INDEX "XPK_USERS_ID" on users (id ASC)'); 
   } //createIndexes
+  
+  public function createData() {
+    $this->db->start_tran();
+    
+    $this->db->exec("INSERT INTO db(name) VALUES(?)", 'Main DB');
+    $db_id = $this->db->last_id();
+    
+    $this->db->exec(
+          "INSERT INTO `users` (id, bd_id, login, pasw, `read`, `write`, analiz, setting, oper_date)
+		      VALUES( NULL, ?, ?, ?, ?, ?, ?, ?, datetime(CURRENT_TIMESTAMP, 'localtime') )", 
+          $db_id , "admin", $this->usr->hash_pasw("admin"), 1, 1, 1, 1);
+    $usr_id = $this->db->last_id();
+    
+    $this->db->exec("INSERT INTO cashes_type(name) VALUES(?)", "Наличные");
+    $this->db->exec("INSERT INTO cashes_type(name) VALUES(?)", "Карточный счет");
+    $this->db->exec("INSERT INTO cashes_type(name) VALUES(?)", "Электронные деньги");
+    
+    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "site_name",  "Имя бухгалтерии", "Домашняя бухгалтерия");
+    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "mail",       "Почта для уведомлений", "");    
+    
+    $this->db->exec("INSERT INTO cashes_group(name) VALUES(?)", "Еда"); 
+    $this->db->exec("INSERT INTO cashes_group(name) VALUES(?)", "Хозтовары");
+    $this->db->exec("INSERT INTO cashes_group(name) VALUES(?)", "Прочее");
+    
+    $this->db->exec("INSERT INTO currency(name,rate,sign,short_name) VALUES(?,?,?,?)", "");
+    
+    $this->db->commit();
+  } //createData
+  
 } //DbUpdate
 
 

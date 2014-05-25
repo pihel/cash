@@ -363,6 +363,7 @@ class Cash {
     $ret['cash_item_prod_type_cb']                = $this->add_refbook($data["cash_item_prod_type_cb"], "cashes_group");
     if($ret['cash_item_prod_type_cb'] == 0) 	    { $this->db->rollback(); return array('failure'=>true, 'msg'=> $this->lng->get(165)); }
 
+    $data['cash_item_price']                      = str_replace(",", ".", $data['cash_item_price']);
     $ret['cash_item_price']                       = floatval( $data['cash_item_price'] );
     if($ret['cash_item_price'] == 0)   	          { $this->db->rollback(); return array('failure'=>true, 'msg'=> $this->lng->get(166)); }
 
@@ -372,6 +373,7 @@ class Cash {
     $ret['cash_item_ctype_cb']                    = $this->add_refbook($data["cash_item_ctype_cb"], "cashes_type");
     if($ret['cash_item_ctype_cb'] == 0) 	        { $this->db->rollback(); return array('failure'=>true, 'msg'=> $this->lng->get(168)); }
 
+    $data['cash_item_qnt']                        = str_replace(",", ".", $data['cash_item_qnt']);
     $ret['cash_item_qnt']                         = floatval( $data['cash_item_qnt'] );
     if($ret['cash_item_qnt'] == 0)   		          { $this->db->rollback(); return array('failure'=>true, 'msg'=> $this->lng->get(169)); }
 

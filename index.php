@@ -2,7 +2,7 @@
 /*
 Проблемы:
 1. Всегда видеть итоговую строку ???? не понятно как
-2. формат для денежных полей (право, разделители)
+2. формат для денежных полей (право, разделители, запятая) http://workblog.neteos.eu/270/javascript/extjs/extjs-numberfield-accepts-comma-and-keeps-precision-on-display
 3. текст в прелоадерах (убрать стандартный)
 13. проблема с подгрузкой скриптов в IE
 14. сохранение настроек главного грида (баг - не сохранются настройки видимости, не сохраняется позиция actioncolumn)
@@ -22,7 +22,7 @@ require_once('lib/init.php');
     <script src="<?=$settings['extjs'];?>/ext-all.js" 	type="text/javascript"></script>
     <script language="javascript">
       var settings = <?=json_encode($settings);?>;
-      var translate = <?=json_encode($lng->get());?>;
+      var translate = <?=json_encode($lng->get(null));?>;
     </script>
     <script src="<?=$settings['static'];?>/js/script.js?<?=$settings['version'];?>" charset="UTF-8" type="text/javascript"></script>
     <script src="<?=$settings['extjs'];?>/locale/ext-lang-<?=$lng->slang;?>.js" charset="UTF-8" type="text/javascript"></script>
