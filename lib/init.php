@@ -16,7 +16,7 @@ $life_time = ini_get("session.gc_maxlifetime");
 /* Demo stand (deny settings, file upload)*/
 $demo = 0;
 
-$extjs = 'http://extjs-public.googlecode.com/svn/tags/extjs-4.2.1/release/';
+$extjs = 'extjs';
 
 /* App version */
 $version = "b=1.027";
