@@ -6,11 +6,11 @@ var cash_list_model = Ext.define('cash_list_model', {
       {name: 'nom', 		      type: 'string'},
       {name: 'group', 	      type: 'int'},
       {name: 'gname', 	      type: 'string'},
-      {name: 'price', 	      type: 'double'},
-      {name: 'qnt', 		      type: 'double'},
-      {name: 'amount', 	      type: 'double'},
-      {name: 'oper_date',	    type: 'DATE', dateFormat : "Y-m-d"},
-      {name: 'date_edit',     type: 'DATE', dateFormat: "Y-m-d H:i:s"},
+      {name: 'price', 	      type: 'number'},
+      {name: 'qnt', 		      type: 'number'},
+      {name: 'amount', 	      type: 'number'},
+      {name: 'oper_date',	    type: 'date', dateFormat : "Y-m-d"},
+      {name: 'date_edit',     type: 'date', dateFormat: "Y-m-d H:i:s"},
       {name: 'org_id', 	      type: 'int'},
       {name: 'oname', 	      type: 'string'},
       {name: 'type', 		      type: 'int'},
@@ -18,7 +18,7 @@ var cash_list_model = Ext.define('cash_list_model', {
       {name: 'file', 		      type: 'string'},
       {name: 'uid', 		      type: 'int'},
       {name: 'login', 	      type: 'string'},
-      {name: 'rate', 		      type: 'double'},
+      {name: 'rate', 		      type: 'number'},
       {name: 'sign', 		      type: 'string'},
       {name: 'cash_type_id', 	type: 'int'},
       {name: 'cash_type', 	  type: 'string'}
@@ -555,7 +555,7 @@ var cash_list_panel = Ext.create('Ext.Panel', {
         Ext.getCmp('cash_list_filter_loading').hide();
         
         var map = new Ext.util.KeyMap(document, {
-              key: [Ext.EventObject.INSERT], // this works,
+              key: [Ext.EventObject.INSERT], // extjs5: Ext.event.Event.INSERT (4: Ext.EventObject.INSERT)
               fn: function() { 
                 if( Ext.getCmp('cash_list_tabs').getActiveTab().id == "cash_list_panel" ) {
                   addItem();

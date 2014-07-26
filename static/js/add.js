@@ -21,8 +21,8 @@ var cash_item_date =
 var cash_id_name_model = Ext.define('cash_id_name_model', {
     extend: 'Ext.data.Model',
     fields: [
-      {name: 'id',      type: 'INT'},
-      {name: 'name',    type: 'text'}
+      {name: 'id',      type: 'int'},
+      {name: 'name',    type: 'string'}
     ],
     idProperty: 'id'
 });

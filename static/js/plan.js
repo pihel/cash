@@ -6,7 +6,7 @@ var cash_plan_model = Ext.define('cash_plan_model', {
       {name: 'usr_id', 	type: 'int'},
       {name: 'grp_id',	type: 'int'},
       {name: 'name',	  type: 'string'},
-      {name: 'plan', 		type: 'double'}
+      {name: 'plan', 		type: 'number'}
     ],
     idProperty: 'id'
 });
@@ -135,8 +135,8 @@ var cash_plan_mnth_model = Ext.define('cash_plan_mnth_model', {
     extend: 'Ext.data.Model',
     fields: [
       {name: 'tname',	type: 'string'},
-      {name: 'plan', 	type: 'double'},
-      {name: 'fact', 	type: 'double'}
+      {name: 'plan', 	type: 'number'},
+      {name: 'fact', 	type: 'number'}
     ]
 }); //cash_plan_mnth_model
 

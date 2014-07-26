@@ -90,7 +90,7 @@ var cash_refb_cur_model = Ext.define('cash_refb_cur_model', {
     fields: [
       {name: 'id', 		      type: 'int'},
       {name: 'name', 		    type: 'string'},
-      {name: 'rate', 		    type: 'double'},
+      {name: 'rate', 		    type: 'number'},
       {name: 'sign', 		    type: 'string'},
       {name: 'short_name',	type: 'string'}
     ],

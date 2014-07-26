@@ -123,7 +123,7 @@ var cash_set_usr_model = Ext.define('cash_set_usr_model', {
       {name: 's_write', 	type: 'bool'},
       {name: 's_analiz', 	type: 'bool'},
       {name: 's_setting', type: 'bool'},
-      {name: 'oper_date',	type: 'DATE', dateFormat : "Y-m-d H:i:s"}
+      {name: 'oper_date',	type: 'date', dateFormat : "Y-m-d H:i:s"}
     ],
     idProperty: 'id'
 });
