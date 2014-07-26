@@ -569,8 +569,9 @@ class Cash {
     foreach($orgs as $org) {
       $this->db->exec("UPDATE cashes SET org_id = ? WHERE nmcl_id = ?", $org['min_id'], $org['max_id']);
     }
-    $this->db->exec("DELETE FROM cashes_nom WHERE NOT EXISTS(SELECT 1 FROM cashes c WHERE c.nmcl_id = cashes_nom.id)");
-    $this->db->exec("DELETE FROM cashes_org WHERE NOT EXISTS(SELECT 1 FROM cashes c WHERE c.org_id = cashes_org.id)");
+    $this->db->exec("DELETE FROM cashes_nom   WHERE NOT EXISTS(SELECT 1 FROM cashes c WHERE c.nmcl_id = cashes_nom.id)");
+    $this->db->exec("DELETE FROM cashes_org   WHERE NOT EXISTS(SELECT 1 FROM cashes c WHERE c.org_id  = cashes_org.id)");
+    $this->db->exec("DELETE FROM cashes_group WHERE NOT EXISTS(SELECT 1 FROM cashes c WHERE c.`group` = cashes_group.id)");
     $this->db->commit();
 
     $this->db->exec("analyze cashes;");

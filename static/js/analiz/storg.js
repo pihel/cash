@@ -1,3 +1,5 @@
+var amount = 0;
+
 var cash_analiz_strg_lbl = {
     id: "cash_analiz_strg_lbl",
     xtype: 'label',
@@ -109,16 +111,16 @@ function cash_analiz_strg_load(_cb) {
     return;
   }
   
-  var amount = parseInt( Ext.util.Cookies.get("cash_analiz_storg_amount") );
-
-  Ext.getCmp('cash_analiz_rest').add(cash_analiz_strg_lbl);
-  Ext.getCmp('cash_analiz_rest').add(cash_analiz_storg);
-  Ext.getCmp('cash_analiz_rest').add(cash_analiz_strg_chart);
-  cash_analiz_rest_refresh();
+  amount = parseInt( Ext.util.Cookies.get("cash_analiz_storg_amount") );
   
   if(amount > 0) {
-    Ext.getCmp('cash_analiz_storg_amount').setValue(amount);
+    cash_analiz_storg_amount.value = amount;
   }
+  
+  Ext.getCmp('cash_analiz_rest').add(cash_analiz_strg_lbl);
+  Ext.getCmp('cash_analiz_rest').add(cash_analiz_storg);
+  Ext.getCmp('cash_analiz_rest').add(cash_analiz_strg_chart);  
+  cash_analiz_rest_refresh();
 
   if(_cb != undefined) _cb();
 }
