@@ -19,7 +19,8 @@ var cash_analiz_storg_amount = {
     value: 1000000,
     listeners: {
       change: function( o, newValue, oldValue, eOpts ) {
-        Ext.util.Cookies.set("cash_analiz_storg_amount", newValue, new Date(+new Date + 10e10) );
+        var dt = Ext.Date.add(new Date(), Ext.Date.YEAR, 1);
+        Ext.util.Cookies.set("cash_analiz_storg_amount", newValue, dt );
         cash_analiz_rest_refresh();
       }
     }
