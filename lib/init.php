@@ -19,7 +19,7 @@ $demo = 0;
 $extjs = 'extjs';
 
 /* App version */
-$version = "b=1.029";
+$version = "1.030";
 //$version = rand(); //for reset cache
 
 /* Path to imgs and js */
@@ -44,6 +44,7 @@ $lng->set($_COOKIE['LANG']);
 
 require_once($root.'lib/user.php');
 require_once($root.'lib/cash.php');
+require_once($root.'lib/update.php');
 
 if($debug) {
   $db->debug = true;
@@ -52,9 +53,19 @@ if($debug) {
 $usr = new User($db, $lng);
 $usr->auth();
 
+$upd = new Update($db, $lng, $usr);
+
 
 $ch = new Cash($db, $usr, $lng);
-$settings = $ch->getSettings();
+
+$settings = array();
+if( $upd->needSetup() ) {
+  $settings['setup'] = 1;
+  $settings['site_name'] = $lng->get(213);
+} else {
+  $settings = $ch->getSettings();
+  $settings['setup'] = 0;
+}
 $settings['version'] = $version;
 $settings['demo'] = $demo;
 $settings['debug'] = $debug;

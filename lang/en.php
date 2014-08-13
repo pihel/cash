@@ -1,5 +1,10 @@
 <?php
 class LangEn extends iLang {  
+  public $currency = array(
+    1 => array("Euro", 1, "€", "eur."),
+    2 => array("Dollar", 0.75, "$", "dol."),
+  );
+  
   public $translate = array (
     //login
     1 => "Entrance to bookkeeping",
@@ -214,7 +219,24 @@ class LangEn extends iLang {
     199 => "Mobile version",
     200 => "Org.",
     201 => "No records",
-    202 => "Any"
+    202 => "Any",
+    //setup
+    203 => "Main DB",
+    204 => "Cash",
+    205 => "Card Account",
+    206 => "Electronic money",
+    207 => "The name of the accounting",
+    208 => "Home Bookkeeping",
+    209 => "Mail Notification",
+    210 => "Food",
+    211 => "Household Goods",
+    212 => "Other",    
+    213 => "Installing...",
+    214 => "Choose a password and language",
+    215 => "Install",
+    216 => "Installs and configures. Please wait ...",
+    217 => "Installation was successful",
+    218 => "Installation failed, contact support https://github.com/pihel/cash/issues"
   );
 
 }

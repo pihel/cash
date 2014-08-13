@@ -2,6 +2,7 @@
 abstract class iLang {
   //public $start_week;
   public $translate;
+  public $currency;
 }
 
 class Lang {
@@ -11,6 +12,10 @@ class Lang {
   
   public function __construct() {
     $this->list = $this->lst();
+  }
+  
+  public function getCurrencys() {
+    return $this->data->currency;
   }
   
   public function set($_slang) {

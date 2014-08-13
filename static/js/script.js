@@ -301,6 +301,12 @@ function checkAuth() {
   }); //Ext.Ajax.request
 }
 
+function setup() {
+  loadScript(settings.static + "/js/setup.js", function() {
+        setupWindow.show();
+  });
+}
+
 function logout() {
   Ext.Ajax.request({
     url: "ajax/logout.php",
@@ -320,6 +326,11 @@ if(window.addEventListener) {
 
 Ext.onReady(function(){
   Ext.QuickTips.init();
-  checkAuth();
+  
+  if(settings.setup == 1) {
+    setup();
+  } else {
+    checkAuth();
+  }
   Ext.getBody().setHeight(Ext.getBody().getHeight()-10);
 }); //Ext.onReady
