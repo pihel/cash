@@ -128,7 +128,11 @@ class CashSett {
     $col = "id";
     if($refb == "cashes_setting") {
       $col = "name";
-    }
+      
+      if( in_array('version', $data) ) {
+        return $this->lng->get(220);
+      } //in_array
+    } //refb
     
     $set = "";
     unset($data[$col]);//unset ID col

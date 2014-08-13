@@ -19,7 +19,7 @@ $demo = 0;
 $extjs = 'extjs';
 
 /* App version */
-$version = "1.030";
+$version = "1.031";
 //$version = rand(); //for reset cache
 
 /* Path to imgs and js */
@@ -59,15 +59,21 @@ $upd = new Update($db, $lng, $usr);
 $ch = new Cash($db, $usr, $lng);
 
 $settings = array();
-if( $upd->needSetup() ) {
-  $settings['setup'] = 1;
-  $settings['site_name'] = $lng->get(213);
-} else {
-  $settings = $ch->getSettings();
-  $settings['setup'] = 0;
-}
 $settings['version'] = $version;
 $settings['demo'] = $demo;
 $settings['debug'] = $debug;
 $settings['static'] = $static;
 $settings['extjs'] = $extjs;
+
+//setup or update
+$settings['setup'] = 0;
+$settings['update'] = 0;
+if( $upd->needSetup() ) {
+  $settings['setup'] = 1;
+  $settings['site_name'] = $lng->get(213);
+} elseif( $upd->needUpdate() ) {
+  $settings['update'] = 1;
+  $settings['site_name'] = $lng->get(219);
+} else {
+  $settings = array_merge($settings, $ch->getSettings() );
+}

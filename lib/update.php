@@ -47,8 +47,10 @@ class DbUpdate {
     $this->db->exec("INSERT INTO cashes_type(name) VALUES(?)", $this->lng->get(205));
     $this->db->exec("INSERT INTO cashes_type(name) VALUES(?)", $this->lng->get(206));
     
+    global $settings;
     $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "site_name",  $this->lng->get(207), $this->lng->get(208));
-    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "mail",       $this->lng->get(209), "");    
+    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "mail",       $this->lng->get(209), "");
+    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "version",    $this->lng->get(221), $settings['version'] );
     
     $this->db->exec("INSERT INTO cashes_group(name) VALUES(?)", $this->lng->get(210)); 
     $this->db->exec("INSERT INTO cashes_group(name) VALUES(?)", $this->lng->get(211));
@@ -76,6 +78,10 @@ class DbUpdate {
     $this->db->commit();
   } //clean
   
+  public function difChange() {
+    //
+  } //difChange
+  
 } //DbUpdate
 
 
@@ -102,8 +108,11 @@ class Update {
   } //needSetup
   
   public function needUpdate() {
-    global $version;//хранить гдето версию бд??
-    return false;
+    global $settings;
+    $file_ver = doubleval( $settings['version'] );
+    $db_ver = doubleval( $this->db->element("SELECT value FROM cashes_setting WHERE name = 'version'") );
+    
+    return ( $file_ver > $db_ver && false ); //TODO
   } //needUpdate
   
   

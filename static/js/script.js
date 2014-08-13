@@ -307,6 +307,12 @@ function setup() {
   });
 }
 
+function update() {
+  loadScript(settings.static + "/js/update.js", function() {
+        updateWindow.show();
+  });
+}
+
 function logout() {
   Ext.Ajax.request({
     url: "ajax/logout.php",
@@ -329,6 +335,8 @@ Ext.onReady(function(){
   
   if(settings.setup == 1) {
     setup();
+  } else if(settings.update == 1) {
+    update();
   } else {
     checkAuth();
   }
