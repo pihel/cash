@@ -225,22 +225,22 @@ class LangEn extends iLang {
     204 => "Cash",
     205 => "Card Account",
     206 => "Electronic money",
-    207 => "The name of the accounting",
+    207 => "Name of bookkeeping",
     208 => "Home Bookkeeping",
-    209 => "Mail Notification",
+    209 => "Mail for notifications",
     210 => "Food",
     211 => "Household Goods",
     212 => "Other",    
     213 => "Installing...",
     214 => "Choose a password and language",
     215 => "Install",
-    216 => "Installs and configures. Please wait ...",
+    216 => "Installing and configuring. Please wait ...",
     217 => "Installation was successful",
     218 => "Installation failed, contact support https://github.com/pihel/cash/issues",
     //update
     219 => "Updating ...",
-    220 => "Manually change the version is forbidden",
-    221 => "The version of the database"
+    220 => "Manual change of the version is forbidden",
+    221 => "Database version"
   );
 
 }
