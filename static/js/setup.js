@@ -30,7 +30,7 @@ var setup_passw = {
   inputType:'password',
   anchor: '90%',
   width: 300,
-  labelWidth: 168,
+  labelWidth: 210,
   allowBlank:false
 };
 
@@ -118,7 +118,7 @@ var setupWindow = new Ext.Window({
   frame:true,
   border: false,
   title: lang(213),
-  width: 400,
+  width: 390,
   closable: false,
   resizable: false,
   items: setupForm,
