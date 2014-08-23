@@ -1,9 +1,12 @@
 <?php
 require_once("en.php");
-class LangUs extends LangEn {  
-  public $currency = array(
-    //todo: развернуть массив без дублирования
-    1 => array("Dollar", 1, "$", "dol."),
-    2 => array("Euro", 1.33, "€", "eur.")
-  );
+class LangUs extends LangEn {
+  
+  function __construct() {
+    //swap currencys
+    $cur = $this->currency;
+    $this->currency = array( 1 => $cur[2], 2 => $cur[1] );
+    $this->currency[2][1] = round( 1/$this->currency[1][1], 2);
+    $this->currency[1][1] = 1;
+  }
 }
