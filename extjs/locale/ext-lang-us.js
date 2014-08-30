@@ -1,1 +1,0 @@
-loadScript(settings.extjs + "/locale/ext-lang-en.js");
