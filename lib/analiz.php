@@ -387,6 +387,7 @@ class CashAnaliz {
 
     $secr = array();
     $cnt = 0;
+    $base = strtotime(date('Y-m',time()) . '-01 00:00:01');
     while($cnt < 24 && $amnt >= 0) {
       //получаем процент с баланса (предполагается капитализация раз в месяц)
       $amnt = $amnt * ( 1+$pin/100 );
@@ -395,7 +396,7 @@ class CashAnaliz {
       $out = $out * ( 1+$pout/100 );
 
       $amnt = $amnt + $in - $out;
-      $secr[] = array('tname'=> date("Y-m", strtotime("+".$cnt." months")) , 'amount'=>$amnt);
+      $secr[] = array('tname'=> date("Y-m", strtotime("+".$cnt." months", $base)) , 'amount'=>$amnt);
 
       $cnt++;
     }

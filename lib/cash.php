@@ -348,7 +348,10 @@ class Cash {
       }
       
       $ext = pathinfo($files['cash_item_file']['name'], PATHINFO_EXTENSION);
-      $fname = 'files/'.crc32(time().$files['cash_item_file']['name']).".".$ext;
+      $name = crc32(time().$files['cash_item_file']['name']);
+      $dir = 'files/'.$_SERVER['HTTP_HOST'];
+      if(!is_dir("../".$dir)) mkdir("../".$dir);
+      $fname = $dir."/".$name.".".$ext;
       if(move_uploaded_file($files['cash_item_file']['tmp_name'], "../".$fname)) {
         $ret['file'] = $fname;
       }
@@ -388,7 +391,7 @@ class Cash {
     return $ret;
   }
 
-  public function getFile($id) {
+  public function getFile($id, $short = false) {
     if($id == -1) {      
       if(!$this->usr->canSetting()) return "";
       global $sqlite_path;
@@ -396,6 +399,10 @@ class Cash {
     }
     if(!$this->usr->canRead()) return "";
     $file = $this->db->element("SELECT `file` FROM `cashes` WHERE id = ? AND bd_id = ?", $id, $this->usr->db_id);
+    
+    if($short) {
+      return $file;
+    } 
     return __DIR__."/../".$file;
   }
 
@@ -404,12 +411,14 @@ class Cash {
 
     $this->db->start_tran();
 
-    $fl = $this->getFile($data['cash_item_edit_id']);
-    if(!empty($fl)) {
+    $fl = $this->getFile($data['cash_item_edit_id'], true);
+    //#15
+    /*if(!empty($fl)) {
       @unlink(__DIR__."/../".$fl);
-    }
+    }*/
 
     $refb = $this->refbook_check($data, $files);
+    if( empty($refb['file']) && !empty($fl) ) $refb['file'] = $fl;
 
     if($refb['failure']) return $refb;
 
