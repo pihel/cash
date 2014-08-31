@@ -348,7 +348,7 @@ class Cash {
       }
       
       global $max_file_size;
-      if($files['cash_item_file']['size'] > $max_file_size || $files['cash_item_file']['error'] == 1) {
+      if( ( $files['cash_item_file']['size'] > $max_file_size && intval($max_file_size) > 0 ) || $files['cash_item_file']['error'] == 1 ) {
         return array('failure'=>true, 'msg'=> $this->lng->get(222, array(round($max_file_size/1024/1024,2))) );
       }
       
