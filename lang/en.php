@@ -240,7 +240,8 @@ class LangEn extends iLang {
     //update
     219 => "Updating ...",
     220 => "Manual change of the version is forbidden",
-    221 => "Database version"
+    221 => "Database version",
+    222 => "Error loading file. Maximum file size of {0} MBytes"
   );
 
 }

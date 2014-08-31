@@ -347,6 +347,11 @@ class Cash {
         return array('failure'=>true, 'msg'=> $this->lng->get(162));
       }
       
+      global $max_file_size;
+      if($files['cash_item_file']['size'] > $max_file_size || $files['cash_item_file']['error'] == 1) {
+        return array('failure'=>true, 'msg'=> $this->lng->get(222, array(round($max_file_size/1024/1024,2))) );
+      }
+      
       $ext = pathinfo($files['cash_item_file']['name'], PATHINFO_EXTENSION);
       $name = crc32(time().$files['cash_item_file']['name']);
       $dir = 'files/'.$_SERVER['HTTP_HOST'];

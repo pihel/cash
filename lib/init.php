@@ -29,9 +29,13 @@ if($debug) {
   error_reporting(~E_NOTICE);
 }
 
+require_once($root.'lib/functions.php');
 require_once($root.'lib/error.php');
 require_once($root.'lib/db/db.php');
 require_once($root.'lib/db/sqlite.php');
+
+/* Max uploaded file size*/
+$max_file_size = get_max_fileupload_size();
 
 $db = new SQLITE_DB($sqlite_path);
 $db->connect();
