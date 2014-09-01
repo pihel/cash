@@ -1,5 +1,10 @@
 <?
 require_once('lib/init.php');
+if($settings['setup'] == 1 || $settings['update'] == 1) {
+  header("Location: index.php");
+  exit;
+}
+
 $auth = array();
 if(!empty($_POST['login_usr_name_list_cb'])) {
   $auth = $usr->auth($_POST);
