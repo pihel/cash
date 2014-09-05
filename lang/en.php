@@ -232,7 +232,7 @@ class LangEn extends iLang {
     211 => "Household Goods",
     212 => "Other",    
     213 => "Installing...",
-    214 => "Choose a password and language",
+    214 => "Set a password ",
     215 => "Install",
     216 => "Installing and configuring. Please wait ...",
     217 => "Installation was successful",
@@ -241,7 +241,9 @@ class LangEn extends iLang {
     219 => "Updating ...",
     220 => "Manual change of the version is forbidden",
     221 => "Database version",
-    222 => "Error loading file. Maximum file size of {0} MBytes"
+    222 => "Error loading file. Maximum file size of {0} MBytes",
+    223 => "Rounding prices to the nearest whole (1 - Yes, 0 - No)",
+    224 => "Choose language"
   );
 
 }

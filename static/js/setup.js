@@ -28,9 +28,8 @@ var setup_passw = {
   name:'password',
   id: "password",
   inputType:'password',
-  anchor: '90%',
-  width: 300,
-  labelWidth: 210,
+  width: 250,
+  labelWidth: 130,
   allowBlank:false
 };
 
@@ -38,13 +37,16 @@ var setup_lang_list_cb = Ext.create('Ext.form.field.ComboBox', {
     store: setup_lang_list,
     id: "setup_lang_list_cb",
     name: "setup_lang_list_cb",
+    fieldLabel:lang(224),
+    name:'password',
     editable: false,
     displayField: 'name',
     valueField: 'id',
     queryMode: 'local',
     allowBlank: false,
     value: 0,
-    width: 50,
+    width: 200,
+    labelWidth: 130,
     listConfig: {
          itemTpl: Ext.create('Ext.XTemplate', '<div><img src="'+settings.static+'/{name}.png" class="setup_flag"/>{name}</div>')
     },
@@ -57,12 +59,6 @@ var setup_lang_list_cb = Ext.create('Ext.form.field.ComboBox', {
       }
     }
 }); //setup_lang_list_cb
-
-var setup_lang_pasw_list_tb = {
-      xtype: 'toolbar',
-      id: "setup_lang_pasw_list_tb",
-      items: [setup_passw, setup_lang_list_cb]
-}; //cash_item_price_tb
 
 function submt() {
   if(Ext.getCmp('password').getValue() == "") return;
@@ -93,7 +89,7 @@ var setupForm = new Ext.FormPanel({
   bodyPadding: 5,
   id: "setupForm",
   frame: true,
-  items: [setup_lang_pasw_list_tb],
+  items: [setup_passw, setup_lang_list_cb],
   listeners: {
     afterRender: function(thisForm, options){
         this.keyNav = Ext.create('Ext.util.KeyNav', this.el, {
@@ -118,7 +114,7 @@ var setupWindow = new Ext.Window({
   frame:true,
   border: false,
   title: lang(213),
-  width: 390,
+  width: 290,
   closable: false,
   resizable: false,
   items: setupForm,

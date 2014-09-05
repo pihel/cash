@@ -347,7 +347,7 @@ if(!empty($_POST['cash_item_save'])) {
         </select></div>
         <div><label for="pwd"><?=$lng->get(3);?>: </label><input type="password" id="pwd" name="password"></div>
         <div><input type="submit" value="<?=$lng->get(2);?>"></div>
-      <form>
+      </form>
     <?} else {?>
     <div id="add">
       <input type="button" id="add_btn" value="<?=$lng->get(49);?> ↓" onclick="return add_frm();">

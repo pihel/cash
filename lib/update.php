@@ -51,6 +51,7 @@ class DbUpdate {
     $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "site_name",  $this->lng->get(207), $this->lng->get(208));
     $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "mail",       $this->lng->get(209), "");
     $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "version",    $this->lng->get(221), $settings['version'] );
+    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "round",      $this->lng->get(223), 0 );
     
     $this->db->exec("INSERT INTO cashes_group(name) VALUES(?)", $this->lng->get(210)); 
     $this->db->exec("INSERT INTO cashes_group(name) VALUES(?)", $this->lng->get(211));
