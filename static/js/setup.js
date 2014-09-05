@@ -38,7 +38,6 @@ var setup_lang_list_cb = Ext.create('Ext.form.field.ComboBox', {
     id: "setup_lang_list_cb",
     name: "setup_lang_list_cb",
     fieldLabel:lang(224),
-    name:'password',
     editable: false,
     displayField: 'name',
     valueField: 'id',
