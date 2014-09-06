@@ -76,14 +76,44 @@ class Plan {
     $this->db->escape_res = true;
     return $this->db->select($sql, $this->usr->db_id, $uid, $uid, $from, $to);
   }
+  
+  public function getSumAmount($from, $to, $uid = 0) {
+    if(!$this->usr->canRead()) return array();
+
+    if( empty($from) ) $from = date("Y-m-01");
+    if( empty($to) ) $to = date("Y-m-d");
+
+    $sql =
+    "select
+		    c.`group`, cg.name,
+		    SUM(c.qnt*c.price*cr.rate) as amount
+	    FROM  cashes c
+	    INNER JOIN  currency cr
+		    ON( cr.id = c.cur_id)
+	    INNER JOIN  cashes_group cg
+		    ON( cg.id = c.`group`)
+	    WHERE
+		    c.type = 0
+		    AND c.visible = 1
+		    AND c.bd_id = ?
+		    AND ( c.uid = ? OR ? = 0 )
+		    AND c.`date` BETWEEN ? AND ?
+	    GROUP BY
+		    c.`group`, cg.name";
+
+    $this->db->escape_res = true;
+    return $this->db->select($sql, $this->usr->db_id, $uid, $uid, $from, $to);
+  }
 
   public function getAvgAmountPerPlan($from, $to) {
     if(!$this->usr->canRead()) return array();
 
     //можно заменить на FULL OUTER JOIN , когда будет реалзован в SQLITE
 
-    $amounts = $this->getAvgAmount($from, $to);
+    //$amounts = $this->getAvgAmount($from, $to);
+    $amounts = $this->getSumAmount($from, $to);
     $plans = $this->getList();
+    $mb = months_between($from, $to);
 
     $ret = array();
 
@@ -94,12 +124,15 @@ class Plan {
       $sum = 0;
       foreach($amounts as $amount) {
         if($amount['group'] == $plan["grp_id"]) {
-          $sum = $amount["avg_amount"];
+          $sum = $amount["amount"];
           break;
         }
       }
 
       if(floatval($plan["plan"]) == 0 && $sum == 0) continue;
+      
+      //months between
+      $plan["plan"] = round( $plan["plan"] * $mb, 2);
 
       $sum_plan += floatval($plan["plan"]);
       $sum_fact += $sum;

@@ -24,3 +24,24 @@ function get_max_fileupload_size() {
 
   return $max_upload_size;
 }
+
+function months_between($d1, $d2) {
+  $ts1 = strtotime($d1);
+  $ts2 = strtotime($d2);
+
+  $year1 = date('Y', $ts1);
+  $year2 = date('Y', $ts2);
+
+  $month1 = date('m', $ts1);
+  $month2 = date('m', $ts2);
+  
+  $day_of_month1 = cal_days_in_month(CAL_GREGORIAN, $month1, $year1);
+  $day_of_month2 = cal_days_in_month(CAL_GREGORIAN, $month2, $year2);
+  
+  $day1 = date('d', $ts1);
+  $day2 = date('d', $ts2);
+  
+  if($day1 == 1) $day1 = 0;
+  
+  return (($year2 - $year1) * 12) + ($month2 - $month1) + ( $day2 / $day_of_month2 - $day1 / $day_of_month1 );
+}
