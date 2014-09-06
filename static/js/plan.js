@@ -214,7 +214,7 @@ var cash_plan_panel = Ext.create('Ext.Panel', {
         cash_plan_store.load();
         var cd = new Date();
         Ext.getCmp('cash_plan_mnth_from_date').setValue(new Date(cd.getFullYear(), cd.getMonth(), 1));
-        Ext.getCmp('cash_plan_mnth_to_date').setValue(new Date(cd.getFullYear(), cd.getMonth() + 1, 0)); //последний день месяца
+        Ext.getCmp('cash_plan_mnth_to_date').setValue(cd);
       }
     }
 
