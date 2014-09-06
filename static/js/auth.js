@@ -206,6 +206,9 @@ var loginWindow = new Ext.Window({
             }
             Ext.getCmp('password').focus(false, 100);
             Ext.getCmp('password').setValue("");
+            
+            uid = login_usr_name_list_cb.getValue();
+            db_id = login_db_name_list_cb.getValue();
             if(db_id == 1 && uid == 1 && 1 == settings.demo) { //demo
               Ext.getCmp('password').setValue("admin");
             }
