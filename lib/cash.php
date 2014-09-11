@@ -417,10 +417,13 @@ class Cash {
     $this->db->start_tran();
 
     $fl = $this->getFile($data['cash_item_edit_id'], true);
-    //#15
-    /*if(!empty($fl)) {
-      @unlink(__DIR__."/../".$fl);
-    }*/
+    
+    if(intval($data['cash_item_file_del']) == 1 ) {
+      if(!empty($fl)) {
+        @unlink(__DIR__."/../".$fl);
+        $fl = "";
+      }
+    }
 
     $refb = $this->refbook_check($data, $files);
     if( empty($refb['file']) && !empty($fl) ) $refb['file'] = $fl;

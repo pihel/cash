@@ -276,6 +276,24 @@ var cash_item_file = {
     buttonText: lang(57)
 };
 
+
+var cash_item_file_del = {
+    xtype:      'checkboxfield',
+    boxLabel  : lang(225),
+    name      : 'cash_item_file_del',
+    id        : 'cash_item_file_del',
+    inputValue: 1,
+    width: 74,
+    hidden: true
+}; //cash_item_file_del
+
+var cash_item_file_tb = {
+      xtype: 'toolbar',
+      id: "cash_item_file_tb",
+      ui: 'footer',
+      items: [cash_item_file, cash_item_file_del]
+}; //cash_item_file_tb
+
 //---- note
 var cash_item_note = {
     xtype: 'textarea',
@@ -390,7 +408,7 @@ var cash_item_form_add = new Ext.FormPanel({
 	  cash_item_qnt,
 	  cash_item_org_cb,
 	  cash_item_toper_cb,
-	  cash_item_file,
+	  cash_item_file_tb,
 	  cash_item_note,
 	  cash_item_edit_id
  	 ],
@@ -441,6 +459,9 @@ function setDefault() {
   Ext.getCmp('cash_item_note').setValue("");
   Ext.getCmp('cash_item_edit_id').setValue(0);
   Ext.getCmp('cash_list_add').setTitle(lang(65));
+  Ext.getCmp('cash_item_file_del').setValue(false);
+  Ext.getCmp('cash_item_file_del').hide();
+  Ext.getCmp('cash_item_file').setWidth(Ext.getCmp('cash_item_nmcl_cb').getWidth());
 }
 
 function cash_list_add_load() {
@@ -477,12 +498,19 @@ function cash_list_add_load() {
         Ext.getCmp('cash_item_org_cb').setValue(obj.org_id);
         Ext.getCmp('cash_item_toper_cb').setValue(obj.type);
         //Ext.getCmp('cash_item_file_value').setText(obj.file);
+        Ext.getCmp('cash_item_file_del').setValue(false);
         if(obj.file) {
+          Ext.getCmp('cash_item_file_del').show();
+          Ext.getCmp('cash_item_file').setWidth(cash_item_file.width - cash_item_file_del.width);
+          
           document.getElementById('cash_item_file-inputEl').value = "get.php?id=" + v_edit_id;
           document.getElementById('cash_item_file-inputEl').onclick = function() {
             window.open("get.php?id=" + v_edit_id, "_blank");
             return false;
           }
+        } else {
+          Ext.getCmp('cash_item_file_del').hide();
+          Ext.getCmp('cash_item_file').setWidth(Ext.getCmp('cash_item_nmcl_cb').getWidth());
         }
         Ext.getCmp('cash_item_note').setValue(obj.note);
         Ext.getCmp('cash_list_add').setTitle(lang(66));
@@ -497,6 +525,9 @@ function cash_list_add_load() {
           Ext.getCmp('cash_item_date').setValue(new Date());
           document.getElementById('cash_item_file-inputEl').value = "";
           document.getElementById('cash_item_file-inputEl').onclick = null;
+          Ext.getCmp('cash_item_file_del').setValue(0);
+          Ext.getCmp('cash_item_file_del').hide();
+          Ext.getCmp('cash_item_file').setWidth(Ext.getCmp('cash_item_nmcl_cb').getWidth());
           Ext.getCmp('cash_item_price').focus(false, 200);
           v_edit_id = 0;
         }
