@@ -22,8 +22,8 @@ class Error extends Exception {
     }
     $file_name = $dir."/".date('Y_m_d').".log";
     
-    $log_str = "%s; ip: %s; file: %s; line: %s; msg: %s; stack: %s\n";
-    $log_str = sprintf($log_str, date('Y-m-d H:i:s'), $_SERVER["REMOTE_ADDR"], $this->file, $this->line, $this->message, $this->getTraceAsString());
+    $log_str = "%s; host:%s; ip: %s; file: %s; line: %s; msg: %s; stack: %s\n";
+    $log_str = sprintf($log_str, date('Y-m-d H:i:s'), $_SERVER["HTTP_HOST"], $_SERVER["REMOTE_ADDR"], $this->file, $this->line, $this->message, $this->getTraceAsString());
 
     $this->sendMail($log_str);
 
