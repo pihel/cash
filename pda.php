@@ -201,6 +201,7 @@ if(!empty($_POST['cash_item_save'])) {
         } else {
           request.open('GET', url, true);
         }
+        request.setRequestHeader("X-CSRFToken", "<?=$settings['csrf'];?>");
 
         request.onload = function() {
           if (request.status >= 200 && request.status < 400){

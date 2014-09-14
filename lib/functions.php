@@ -17,13 +17,13 @@ function convert_size_to_num($size) {
     break;
   }
   return $ret;
-}
+} //convert_size_to_num
 
 function get_max_fileupload_size() {
   $max_upload_size = min(convert_size_to_num(ini_get('post_max_size')), convert_size_to_num(ini_get('upload_max_filesize')));
 
   return $max_upload_size;
-}
+} //get_max_fileupload_size
 
 function months_between($d1, $d2) {
   $ts1 = strtotime($d1);
@@ -44,4 +44,27 @@ function months_between($d1, $d2) {
   if($day1 == 1) $day1 = 0;
   
   return (($year2 - $year1) * 12) + ($month2 - $month1) + ( $day2 / $day_of_month2 - $day1 / $day_of_month1 );
-}
+} //months_between
+
+function csrf_protect() {
+  session_start(); 
+  
+  $uri = basename( $_SERVER['REQUEST_URI'] );  
+  if( in_array($uri, array("", "index.php", "pda.php")) )  {
+    if( empty($_SESSION['csrftoken']) ) {
+      $csrftoken = md5( $_SERVER['SERVER_NAME'].rand(1, 10000000).$_SERVER['HTTP_HOST'] ); 
+      $_SESSION['csrftoken'] = $csrftoken; 
+    } else {
+      $csrftoken = $_SESSION['csrftoken'];
+    }    
+  } else {
+    $csrftoken = $_SESSION['csrftoken'];
+    $headers = apache_request_headers();
+    global $debug;
+    if( $debug == 0 && $headers['X-CSRFToken'] != $csrftoken) $csrftoken = "";
+  }
+  
+  session_write_close();
+  
+  return $csrftoken;
+} //csrf_protect

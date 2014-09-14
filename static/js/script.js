@@ -128,6 +128,15 @@ Ext.define('RevRec.util.Format', {
     }
 });
 
+//CSRF protection
+Ext.Ajax.on('beforerequest', function (conn, options) {
+  if (typeof(options.headers) == "undefined") {
+   options.headers = {'X-CSRFToken': settings.csrf };
+  } else {
+   options.headers.extend({'X-CSRFToken': settings.csrf });
+  } 
+}, this);
+
 /* ----------- bugfix ext js ------------- */
 
 function error(text, _cb) {

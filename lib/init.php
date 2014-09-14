@@ -19,7 +19,7 @@ $demo = 0;
 $extjs = 'extjs';
 
 /* App version */
-$version = "1.037";
+$version = "1.040";
 //$version = rand(); //for reset cache
 
 /* Path to imgs and js */
@@ -29,12 +29,18 @@ if($debug) {
   error_reporting(~E_NOTICE);
 }
 
+$settings = array();
+
 require_once($root.'lib/functions.php');
 require_once($root.'lib/error.php');
 require_once($root.'lib/db/db.php');
 require_once($root.'lib/db/sqlite.php');
 
-/* Max uploaded file size*/
+/* csrf token protection */
+$settings['csrf'] = csrf_protect();
+if( empty( $settings['csrf'] ) ) exit;
+
+/* Max uploaded file size */
 $max_file_size = get_max_fileupload_size();
 
 $db = new SQLITE_DB($sqlite_path);
@@ -62,7 +68,6 @@ $upd = new Update($db, $lng, $usr);
 
 $ch = new Cash($db, $usr, $lng);
 
-$settings = array();
 $settings['version'] = $version;
 $settings['demo'] = $demo;
 $settings['debug'] = $debug;
