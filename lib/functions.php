@@ -49,6 +49,7 @@ function months_between($d1, $d2) {
 function csrf_protect() {
   session_start(); 
   
+  $csrftoken = "";
   $uri = basename( $_SERVER['REQUEST_URI'] );  
   if( in_array($uri, array("", "index.php", "pda.php")) )  {
     if( empty($_SESSION['csrftoken']) ) {
