@@ -285,7 +285,7 @@ var cash_refb_dwnl_btn = {
   border: true,
   icon: settings.static + "/files.gif",
   handler : function(){
-    window.open("get.php?id=-1");
+    window.open("get.php?id=-1&xcsrf="+settings.csrf);
     return false;
   }
 }

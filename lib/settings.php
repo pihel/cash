@@ -136,6 +136,7 @@ class CashSett {
     
     $set = "";
     unset($data[$col]);//unset ID col
+    unset($data['xcsrf']);//unset xcsrf col    
     foreach($data as $k=>$v) {
       if(!empty($set)) $set .= ", ";
       $set .= "`".$k."` = ?";

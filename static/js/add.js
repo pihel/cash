@@ -505,7 +505,7 @@ function cash_list_add_load() {
           
           document.getElementById('cash_item_file-inputEl').value = "get.php?id=" + v_edit_id;
           document.getElementById('cash_item_file-inputEl').onclick = function() {
-            window.open("get.php?id=" + v_edit_id, "_blank");
+            window.open("get.php?id=" + v_edit_id + "&xcsrf=" + settings.csrf, "_blank");
             return false;
           }
         } else {
