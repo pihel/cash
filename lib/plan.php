@@ -155,7 +155,7 @@ class Plan {
     if(!$this->usr->canWrite()) return $this->lng->get(159);
 
     if(intval($data['grp_id']) < 1) return $this->lng->get(189);
-    if(floatval($data['plan']) <= 0) return $this->lng->get(190);
+    if(floatval($data['plan']) < 0) return $this->lng->get(190);
     $id = intval($data['id']);
 
     $this->db->start_tran();

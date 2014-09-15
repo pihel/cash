@@ -60,9 +60,8 @@ function csrf_protect() {
     }    
   } else {
     $csrftoken = $_SESSION['csrftoken'];
-    $headers = apache_request_headers();
     global $debug;
-    if( $debug == 0 && $headers['X-CSRFToken'] != $csrftoken) $csrftoken = "";
+    if( $debug == 0 && $_REQUEST['xcsrf'] != $csrftoken) $csrftoken = "";
   }
   
   session_write_close();
