@@ -50,8 +50,8 @@ function csrf_protect() {
   session_start(); 
   
   $csrftoken = "";
-  $uri = basename( $_SERVER['REQUEST_URI'] );  
-  if( in_array($uri, array("", "index.php", "pda.php")) )  {
+  $uri = pathinfo( $_SERVER['REQUEST_URI'], PATHINFO_FILENAME ); 
+  if( in_array($uri, array("", "index", "pda", "demo")) )  {
     if( empty($_SESSION['csrftoken']) ) {
       $csrftoken = md5( $_SERVER['SERVER_NAME'].rand(1, 10000000).$_SERVER['HTTP_HOST'] ); 
       $_SESSION['csrftoken'] = $csrftoken; 

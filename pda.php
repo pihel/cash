@@ -194,14 +194,21 @@ if(!empty($_POST['cash_item_save'])) {
       
       function ajax(url, _cb, np, post) {
         request = new XMLHttpRequest;
+        
+        if( url.indexOf("?") == -1 ) {
+          url = url + "?";
+        } else {
+          url = url + "&";
+        }
+        url = url + "xcsrf=<?=$settings['csrf'];?>";
+        
         if(post != undefined) {
           request.open('POST', url, true);
           request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-          request.setRequestHeader("Content-Length", post.length);
+          //request.setRequestHeader("Content-Length", post.length);
         } else {
           request.open('GET', url, true);
         }
-        request.setRequestHeader("X-CSRFToken", "<?=$settings['csrf'];?>");
 
         request.onload = function() {
           if (request.status >= 200 && request.status < 400){
@@ -308,7 +315,7 @@ if(!empty($_POST['cash_item_save'])) {
           id("cash_item_prod_type_cb").value = data.gr_name;
           id("cash_item_org_cb").value = data.org_name;
           id("cash_item_price").focus();
-          console.log(data);
+          //console.log(data);
         } );
       }
     </script>
