@@ -228,10 +228,13 @@ var cash_plan_goal_panel = Ext.create('Ext.Panel', {
     title: lang(83),
     items: [],
     listeners: {
-      //TODO
+      afterrender: function(){
+        loadScript(settings.static + "/js/goal.js", function() {
+          Ext.getCmp('cash_plan_goal_panel').add(Ext.getCmp('cash_goal_grid'));
+        }); //loadScript
+      } //afterrender
     }
-
-});//cash_plan_panel
+});//cash_plan_goal_panel
 
 var cash_plan_tabs = Ext.widget('tabpanel', {
     id: "cash_plan_tabs",

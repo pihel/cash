@@ -1,2 +1,3 @@
 AddDefaultCharset UTF-8
 Options All -Indexes
+php_flag short_open_tag 1

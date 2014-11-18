@@ -1,4 +1,4 @@
-<?
+<?php
 error_reporting(0);
 
 /* Root dir */
@@ -19,7 +19,7 @@ $demo = 0;
 $extjs = 'extjs';
 
 /* App version */
-$version = "1.041";
+$version = "1.042";
 //$version = rand(); //for reset cache
 
 /* Path to imgs and js */
@@ -42,6 +42,11 @@ if( empty( $settings['csrf'] ) ) exit;
 
 /* Max uploaded file size */
 $max_file_size = get_max_fileupload_size();
+
+if (!extension_loaded('sqlite3')) {
+  echo "SqLite3 module not loaded";
+  throw new Error("SqLite3 module not loaded");
+}
 
 $db = new SQLITE_DB($sqlite_path);
 $db->connect();
