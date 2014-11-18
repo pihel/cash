@@ -133,14 +133,14 @@ if(!empty($_POST['cash_item_save'])) {
     }
     #login_form {
       border: 1px solid #A6C9F4;
-      width: 300px;
+      width: 240px;
       padding: 5px;
     }
     #login_form div {
       margin-bottom: 5px;
     }
     #login_form input, #login_form select {
-      width: 150px;
+      width: 140px;
       margin: 0px auto;
       border: 1px solid #A6C9F4;
       font-size: 15px;
@@ -151,9 +151,10 @@ if(!empty($_POST['cash_item_save'])) {
     }
     #login_form input[type=submit] {
       cursor: pointer;
+      width: 99%;
     }
     #login_form label {
-      min-width: 140px;
+      min-width: 90px;
       display: inline-block;
     }
     #add_frm {
@@ -318,6 +319,10 @@ if(!empty($_POST['cash_item_save'])) {
           //console.log(data);
         } );
       }
+      window.onload = function () {
+          refresh_list();
+      }
+
     </script>
     
     <meta http-equiv="x-ua-compatible" content="IE=edge">
@@ -326,7 +331,7 @@ if(!empty($_POST['cash_item_save'])) {
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
   </head>
-  <body onload="return refresh_list();">
+  <body>
     <?if(!empty($auth)) {?>
       <h3><?=$auth['msg'];?></h3>
     <?}?>
