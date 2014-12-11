@@ -158,10 +158,12 @@ class Cash {
     return $sk;
   }
 
-  public function nmcl_list($query, $id) {
+  public function nmcl_list($query, $id, $limit = 0) {
     $id = intval($id);
     //if(empty($query) && $id == 0) return array();
     if(!$this->usr->canRead()) return array();
+    $limit = intval($limit);
+    if($limit == 0) $limit = 50;
 
     if( !empty($query) && $id > 0 ) {
       $filter = " AND ( UPPER_UTF8(cn.name) like UPPER_UTF8('%". $this->db->escape($query) ."%') OR c.id = ". $id ." )";
@@ -184,7 +186,7 @@ class Cash {
       cn.id, cn.name
     ORDER BY
       SUM(CASE WHEN c.uid = ? THEN 100 ELSE 1 END) DESC, COUNT(1) DESC, cn.id
-    LIMIT 50 ";
+    LIMIT " . $limit;
     //1 к 100 кол-во чужих записей
     
     return $this->db->select($sql, $this->usr->db_id, $this->usr->id);

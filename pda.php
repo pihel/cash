@@ -187,6 +187,33 @@ if(!empty($_POST['cash_item_save'])) {
       width: 110px;   
       border: 1px solid #A6C9F4;      
     }
+    #lgif {
+      margin-left: 15px;
+      vertical-align: middle;
+      width: 23px;
+      display: none;
+    }
+    #nmcl_list {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      left: 55px;
+      margin-top: -3px;
+      position: absolute;
+      width: 165px;
+    }
+    #nmcl_list div {
+      height: 22px;
+      overflow: hidden;
+      padding: 5px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 155px;
+      margin: 0px;
+    }
+    #nmcl_list div:hover {
+      cursor: pointer;
+      background-color: #eee;
+    }
     </style>
     <script language="javascript">
       function id(p_id) {
@@ -231,7 +258,7 @@ if(!empty($_POST['cash_item_save'])) {
         }
         return '<li>\
           <span class="date">'+o.dt+'</span>\
-          <span class="amount ' + class_name + '">' + price(o.amount) + o.sign + '</span>\
+          <span class="amount ' + class_name + '">' + price(o.amount) + '<?=$settings['sign'];?></span>\
           <h2 class="name">' + o.nom + '</h2>\
           <span class="org">' + o.oname + '</span>\
           <span class="del"><a title="<?=$lng->get(37);?>" href="#" onclick="return del('+o.id+');"><img src="<?=$settings['static'];?>/delete.gif"></a></span>\
@@ -289,6 +316,7 @@ if(!empty($_POST['cash_item_save'])) {
       
       function add(o) {
         var send = "";
+        id("lgif").style.display = 'inline';        
         for(var i = 0; i < id("add_frm").elements.length; i++) {
           if(i > 0) send += "&";
           send += id("add_frm").elements[i].name + "=" + encodeURIComponent( id("add_frm").elements[i].value );
@@ -306,22 +334,62 @@ if(!empty($_POST['cash_item_save'])) {
           } else {
             alert(data.msg);
           }
+          id("lgif").style.display = 'none';
           id("cash_item_nmcl_cb").focus();
         }, 0, send);
         return false;
       }//add
       
       function nomChange(o) {
+        if( id("nmcl_list").style.display == 'block' ) return;
+        if( o.value == "" ) return;
+        id("lgif").style.display = 'inline';
         ajax("ajax/nmcl_param.php?nmcl_name=" + encodeURIComponent( o.value ), function(data) {
-          id("cash_item_prod_type_cb").value = data.gr_name;
-          id("cash_item_org_cb").value = data.org_name;
-          id("cash_item_price").focus();
-          //console.log(data);
+          if(data != null) {
+            id("cash_item_prod_type_cb").value = data.gr_name;
+            id("cash_item_org_cb").value = data.org_name;
+            id("cash_item_price").focus();
+          } else {
+            id("cash_item_prod_type_cb").value = "";
+            id("cash_item_org_cb").value = "";
+          }
+          id("lgif").style.display = 'none';
         } );
-      }
+      } //nomChange
+      
       window.onload = function () {
           refresh_list();
       }
+      
+      function fillcheck() {
+        var t = id("cash_item_nmcl_cb").value;
+        id("nmcl_list").style.display = 'none';
+        if(t.length > 3 ) {
+          id("lgif").style.display = 'inline';
+          ajax("ajax/nmcl_list.php?edit_id=0&limit=5&query=" + encodeURIComponent( t ), function(data) {
+            if(data != null) {
+              var h = "";
+              for (var k in data) {
+                h += "<div onclick=\"return fill('"+data[k].name+"')\">"+data[k].name+"</div>";
+              } 
+              if(h != "") {
+                id("nmcl_list").innerHTML = h;
+                id("nmcl_list").style.display = 'block';
+              }
+            }
+            id("lgif").style.display = 'none';
+          } );
+        }
+        return true;
+      } //fillcheck
+      
+      function fill(itm) {
+        id("nmcl_list").style.display = 'none';
+        if(itm != undefined) {
+          id("cash_item_nmcl_cb").value = itm;
+          nomChange(id("cash_item_nmcl_cb"));
+        }
+      } //fill
 
     </script>
     
@@ -331,7 +399,7 @@ if(!empty($_POST['cash_item_save'])) {
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
   </head>
-  <body>
+  <body onclick="return fill();">
     <?if(!empty($auth)) {?>
       <h3><?=$auth['msg'];?></h3>
     <?}?>
@@ -372,8 +440,11 @@ if(!empty($_POST['cash_item_save'])) {
         <input type="hidden" id="cash_item_ctype_cb" name="cash_item_ctype_cb" value="1">
         <input type="hidden" id="cash_item_toper_cb" name="cash_item_toper_cb" value="0">
         <input type="hidden" id="cash_item_note" name="cash_item_note" value="">
-        <div><label for="cash_item_date"><?=$lng->get(23);?></label><input type="date" name="cash_item_date" id="cash_item_date" value="<?=date('Y-m-d');?>"></div>
-        <div><label for="cash_item_nmcl_cb"><?=$lng->get(17);?></label><input type="text" name="cash_item_nmcl_cb" id="cash_item_nmcl_cb" onchange="return nomChange(this);"></div>
+        <div><label for="cash_item_date"><?=$lng->get(23);?></label><input type="date" name="cash_item_date" id="cash_item_date" value="<?=date('Y-m-d');?>"><img id="lgif" src="<?=$settings['static'];?>/loading.gif"></div>
+        <div style="position:relative;">
+          <label for="cash_item_nmcl_cb"><?=$lng->get(17);?></label><input type="text" name="cash_item_nmcl_cb" id="cash_item_nmcl_cb" onkeyup="return fillcheck();" onchange="return nomChange(this);">
+          <div id="nmcl_list"></div>
+        </div>
         <div><label for="cash_item_prod_type_cb"><?=$lng->get(19);?></label><input type="text" name="cash_item_prod_type_cb" id="cash_item_prod_type_cb"></div>
         <div><label for="cash_item_org_cb"><?=$lng->get(200);?></label><input type="text" name="cash_item_org_cb" id="cash_item_org_cb"></div>
         <div>
