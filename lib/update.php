@@ -33,7 +33,11 @@ class DbUpdate {
     
     if($file_ver >= 1.05 && $db_ver < 1.05) $this->updateData_v1_050();
     
-    $this->db->exec("UPDATE cashes_setting SET value = ? WHERE name = ?", $file_ver, "version" );
+    if($db_ver == 0) {
+      $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "version", $this->lng->get(221), $db_ver );
+    } else {    
+      $this->db->exec("UPDATE cashes_setting SET value = ? WHERE name = ?", $file_ver, "version" );
+    }
     
     $this->db->commit();
   } //updateData
