@@ -19,11 +19,14 @@ $demo = 0;
 $extjs = 'extjs';
 
 /* App version */
-$version = "1.043";
+$version = "1.051";
 //$version = rand(); //for reset cache
 
 /* Path to imgs and js */
 $static = "static";
+
+/* Path to OCR service */
+$ocr_host = "http://homebuh.pro/api/ocr/recognize.php";
 
 if($debug) {
   error_reporting(~E_NOTICE);
@@ -78,6 +81,7 @@ $settings['demo'] = $demo;
 $settings['debug'] = $debug;
 $settings['static'] = $static;
 $settings['extjs'] = $extjs;
+$settings['ocr_host'] = $ocr_host;
 
 //setup or update
 $settings['setup'] = 0;
@@ -85,9 +89,11 @@ $settings['update'] = 0;
 if( $upd->needSetup() ) {
   $settings['setup'] = 1;
   $settings['site_name'] = $lng->get(213);
-} elseif( $upd->needUpdate() ) {
-  $settings['update'] = 1;
-  $settings['site_name'] = $lng->get(219);
 } else {
+  if($upd->needUpdate()) {
+    /*$settings['update'] = 1;
+    $settings['site_name'] = $lng->get(219);*/
+    $upd->update();
+  }
   $settings = array_merge($settings, $ch->getSettings() );
 }

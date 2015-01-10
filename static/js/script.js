@@ -316,6 +316,17 @@ function update() {
   });
 }
 
+function getLocation(_fnc) {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(pos) {
+          //console.log("lat:" + pos.coords.latitude + ", long:" + pos.coords.longitude);
+          if(typeof _fnc != "undefined") _fnc(pos.coords.latitude, pos.coords.longitude);
+        });
+    } else {
+        if(typeof _fnc != "undefined") _fnc(0, 0);
+    }
+} //getLocation
+
 function logout() {
   Ext.Ajax.request({
     url: "ajax/logout.php",

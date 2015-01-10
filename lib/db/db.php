@@ -81,9 +81,7 @@ abstract class DB {
 
     //stat
     $this->stop_time = microtime(true);
-    if($this->debug) {
-      echo "<pre>".$this->getRealSql($sql,$args)."\n----------\n+quert time: ".($this->stop_time - $this->start_time)." sec.</pre>";
-    }
+    $this->debug($this->getRealSql($sql,$args)."\n+query time: ".($this->stop_time - $this->start_time)." sec.");
 
     if($res === false) $this->raiseError();
     return $res;
@@ -120,24 +118,31 @@ abstract class DB {
       $value = htmlspecialchars($value, ENT_QUOTES);
     }
   }
+  
+  protected function debug($str) {
+    if($this->debug) {
+      file_put_contents(__DIR__."/debug.log", "[".date("Y-m-d H:i:s")."]\n".$str."\n\n", FILE_APPEND);
+    }
+  }
 
   protected function _select($sql, $args, $type) {
     //сам sql запрос не параметр
     unset($args[0]);
     
     $rows = array();
+    
+    $this->start_time = microtime(true);
 
     if($this->try_cache) {
-      $start_time = microtime(true);
+      
 
       $rows = $this->getCacheBySql($sql, $args);
       $this->try_cache = false;
       if(!empty($rows)) {
-        $this->stat = array('mcr_time'=> (microtime(true) - $start_time), 'cache'=> true);
+        $this->stop_time = microtime(true);
+        $this->stat = array('mcr_time'=> ($this->stop_time - $this->start_time), 'cache'=> true);
 
-        if($this->debug) {
-          echo "<pre>".$this->getRealSql($sql, $args)."\n----------\n+From cache!\n+query time: ".$this->stat['mcr_time']." sec.</pre>";
-        }
+        $this->debug( $this->getRealSql($sql, $args)."\n+From cache!\n+query time: ".$this->stat['mcr_time']." sec. ");
 
         return $rows;
       }
@@ -160,8 +165,9 @@ abstract class DB {
       //первый элемент
       $rows = @array_shift($rows[0]);
     }
-
+    $this->stop_time = microtime(true);
     $this->stat = array('mcr_time'=> ($this->stop_time - $this->start_time), 'cache'=> false);
+    $this->debug($this->getRealSql($sql,$args)."\n+query time: ".($this->stat['mcr_time'])." sec.");
 
     return $rows;
   }

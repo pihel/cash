@@ -28,6 +28,21 @@ class DbUpdate {
     return false;
   }
   
+  public function updateData($file_ver, $db_ver) {
+    $this->db->start_tran();
+    
+    if($file_ver >= 1.05 && $db_ver < 1.05) $this->updateData_v1_050();
+    
+    $this->db->exec("UPDATE cashes_setting SET value = ? WHERE name = ?", $file_ver, "version" );
+    
+    $this->db->commit();
+  } //updateData
+    
+  public function updateData_v1_050() {
+    $this->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "ocr", $this->lng->get(226), "" );
+    $this->exec("ALTER TABLE cashes ADD COLUMN geo_pos VARCHAR(64)");
+  } //updateData_v1_050
+  
   public function createData($pasw) {  
     $login = "admin";
     if(empty($pasw)) $pasw = $login;
@@ -52,6 +67,7 @@ class DbUpdate {
     $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "mail",       $this->lng->get(209), "");
     $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "version",    $this->lng->get(221), $settings['version'] );
     $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "round",      $this->lng->get(223), 0 );
+    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "ocr",        $this->lng->get(226), "" );
     
     $this->db->exec("INSERT INTO cashes_group(name) VALUES(?)", $this->lng->get(210)); 
     $this->db->exec("INSERT INTO cashes_group(name) VALUES(?)", $this->lng->get(211));
@@ -90,30 +106,38 @@ class Update {
   private $db, $lng, $usr;
   
   private $db_upd;
+  
+  public $file_ver, $db_ver;
 
   function __construct($_db, $_lng, $_usr) {
     $this->db = $_db;
     $this->lng = $_lng;
     $this->usr = $_usr;
+    
+    $this->db_upd = new DbUpdate($this->db, $this->lng, $this->usr);
   }
   
   public function setup($pasw) {
-    $dupd = new DbUpdate($this->db, $this->lng, $this->usr);
-    $dupd->createData($pasw);
+    $this->db_upd->createData($pasw);
+    return true;
+  }
+  
+  public function update() {
+    $this->db_upd->updateData($this->file_ver, $this->db_ver);
     return true;
   }
   
   public function needSetup() {
-    $exst = $this->db->element("SELECT 1 as exst FROM db");
+    $exst = $this->db_upd->select("SELECT 1 as exst FROM db");
     return ( 0 == intval($exst) );
   } //needSetup
   
   public function needUpdate() {
     global $settings;
-    $file_ver = doubleval( $settings['version'] );
-    $db_ver = doubleval( $this->db->element("SELECT value FROM cashes_setting WHERE name = 'version'") );
+    $this->file_ver = doubleval( $settings['version'] );
+    $this->db_ver = doubleval( $this->db->element("SELECT value FROM cashes_setting WHERE name = 'version'") );
     
-    return ( $file_ver > $db_ver && false ); //TODO
+    return ( $this->file_ver > $this->db_ver ); //TODO
   } //needUpdate
   
   

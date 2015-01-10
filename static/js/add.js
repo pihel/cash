@@ -305,6 +305,12 @@ var cash_item_note = {
     height: 50
 };
 
+var cash_item_geo = Ext.create('Ext.form.field.Hidden', {
+    name: 'cash_item_geo',
+    id: "cash_item_geo",
+    value: '0;0'
+});//cash_item_geo
+
 //---  save
 var cash_item_save = Ext.create('Ext.button.Button', {
 	text: lang(58),
@@ -410,7 +416,8 @@ var cash_item_form_add = new Ext.FormPanel({
 	  cash_item_toper_cb,
 	  cash_item_file_tb,
 	  cash_item_note,
-	  cash_item_edit_id
+	  cash_item_edit_id,
+    cash_item_geo
  	 ],
   listeners: {
     afterRender: function(thisForm, options) {
@@ -462,6 +469,7 @@ function setDefault() {
   Ext.getCmp('cash_item_file_del').setValue(false);
   Ext.getCmp('cash_item_file_del').hide();
   Ext.getCmp('cash_item_file').setWidth(Ext.getCmp('cash_item_nmcl_cb').getWidth());
+  Ext.getCmp('cash_item_geo').setValue("0;0");
 }
 
 function cash_list_add_load() {
@@ -565,6 +573,10 @@ var cash_list_add = Ext.create('Ext.Window', {
           cash_item_nmcl_store.proxy.url = "ajax/nmcl_list.php?edit_id=" + v_edit_id;
           cash_item_org_store.proxy.url = "ajax/org_list.php?edit_id=" + v_edit_id;
           if(v_edit_id == 0) {
+            cash_item_geo.setValue("0;0");
+            getLocation(function(lat, lon) {
+              cash_item_geo.setValue(lat+";"+lon);
+            }); //getLocation
             //cash_item_nmcl_store.load(function() {
               cash_item_prod_type_store.load(function() {
                 cash_item_currency_store.load(function() {
@@ -582,6 +594,7 @@ var cash_list_add = Ext.create('Ext.Window', {
                 cash_item_currency_store.load(function() {
                   cash_item_ctype_store.load(function() {
                     cash_item_org_store.load(function() {
+                      cash_item_geo.setValue("0;0");
                       cash_list_add_load();
                     });
                   });

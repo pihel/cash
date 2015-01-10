@@ -1,20 +1,9 @@
 <?
 require_once("../lib/init.php");
-require_once("../lib/ocr.php");
+require_once("../lib/functions.php");
 
-global $settings;
-if($settings['demo'] == 1) { 
-  echo json_encode( array('failure'=>true, 'msg'=> $lng->get(194) ) );
-  exit;
-}
+$ret = load_check($_FILES['cash_list_edit_btn_add_check-inputEl']);
+if(empty($ret)) $ret = json_encode( array('failure'=>true, 'msg'=> $this->lng->get(198)) );
 
-$hlp = new OCR_Helper($lng);
-
-$ret = array();
-if( !empty($_GET['hash']) ) {
-  $ret = $hlp->parse($_GET['hash'], $_GET['type']);
-} else {
-  $ret = $hlp->recognize($_FILES);
-}
-echo json_encode($ret);
+echo $ret;
 ?>

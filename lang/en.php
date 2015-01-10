@@ -245,6 +245,7 @@ class LangEn extends iLang {
     223 => "Rounding prices to the nearest whole (1 - Yes, 0 - No)",
     224 => "Choose language",
     225 => "Delete"
+    226 => "Access key to the recognition of checks"
   );
 
 }

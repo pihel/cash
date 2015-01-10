@@ -15,7 +15,7 @@ class MySQLi_DB extends FileCacheDB {
     if(intval($this->_con->errno) < 1) return;
 
     $error_msg = "[".$this->_con->errno."] ".$this->_con->error;
-    $this->_con->close();
+    //$this->_con->close();
     throw new Error($error_msg);
   }
 

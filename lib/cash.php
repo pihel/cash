@@ -394,6 +394,7 @@ class Cash {
     if( !in_array($ret['cash_item_toper_cb'], array(0,1)) )	{ $this->db->rollback(); return array('failure'=>true, 'msg'=> $this->lng->get(171)); }
 
     $ret['cash_item_note']                        = $data['cash_item_note'];
+    $ret['cash_item_geo']                         = $data['cash_item_geo'];
 
     return $ret;
   }
@@ -524,8 +525,8 @@ class Cash {
     if($refb['failure']) return $refb;
 
     $sql =
-    "INSERT INTO `cashes` (nmcl_id, `group`, price, cash_type_id, qnt, `date`, org_id, bd_id, uid, `file`, `type` ,note, cur_id, date_edit)
-     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime(CURRENT_TIMESTAMP, 'localtime'))";
+    "INSERT INTO `cashes` (nmcl_id, `group`, price, cash_type_id, qnt, `date`, org_id, bd_id, uid, `file`, `type` ,note, cur_id, geo_pos, visible, date_edit)
+     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, datetime(CURRENT_TIMESTAMP, 'localtime'))";
 
     $this->db->exec($sql,
       $refb['cash_item_nmcl_cb'],
@@ -540,7 +541,8 @@ class Cash {
       $refb['file'],
       $refb['cash_item_toper_cb'],
       $refb['cash_item_note'],
-      $refb['cash_item_currency_cb']
+      $refb['cash_item_currency_cb'],
+      $refb['cash_item_geo']
     );
 
     $id = intval( $this->db->last_id() );

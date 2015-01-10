@@ -27,7 +27,7 @@ class ODBC extends FileCacheDB {
     $error_id = odbc_error($this->_con);
     if(strlen($error_id) == 5) {
       $error_msg = "[".$error_id."] ".odbc_errormsg($this->_con);
-      odbc_close($this->_con);
+      //odbc_close($this->_con);
       if(!empty($sql)) {
         $error_msg = $error_msg."-------------------------\nSQL trace: ".$sql.", \n-------------------------\nParams: ".print_r($prms,1);
       }

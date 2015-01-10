@@ -23,7 +23,7 @@ class SQLITE_DB extends DB {
     if($code < 1) return;
 
     $error_msg = "[".$code."] ".$this->_con->lastErrorMsg();
-    $this->_con->close();
+    //$this->_con->close();
     throw new Error($error_msg);
   }
 
@@ -96,6 +96,7 @@ class SQLITE_DB extends DB {
         }
       } else {
         $rsql = str_replace($k, $v, $rsql);
+        $rsql = preg_replace('/\?/', $v, $rsql, 1); 
       }
     }
 
