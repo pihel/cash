@@ -20,6 +20,7 @@ require_once('lib/init.php');
     <link href="<?=$settings['extjs']?>/examples/ux/grid/css/GridFilters.css" rel="stylesheet" type="text/css" />
     <link href="<?=$settings['extjs']?>/examples/ux/grid/css/RangeMenu.css" rel="stylesheet" type="text/css" />
     <script src="<?=$settings['extjs'];?>/ext-all.js" 	type="text/javascript"></script>
+    <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
     <script language="javascript">
       var settings = <?=json_encode($settings);?>;
       var translate = <?=json_encode($lng->get(null));?>;

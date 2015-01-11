@@ -149,7 +149,7 @@ function error(text, _cb) {
 
 
 //require once js script
-function loadScript(path, _calb) {
+function loadScript(path, _calb, _sync) {
   var elms = document.getElementsByTagName('head')[0].children;
   for(var i = 0; i < elms.length; i++) {
     if( (typeof elms[i].src != "undefined") && elms[i].src.indexOf(path) > -1 ) {
@@ -157,9 +157,26 @@ function loadScript(path, _calb) {
       return false;
     }
   }
-
+  if(_sync == true) {
+    var head = document.getElementsByTagName('head')[0];
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = path;
+    script.async = false;
+    head.appendChild(script);
+    
+    if(_calb != undefined) {
+      script.onreadystatechange= function () {
+          if (this.readyState == 'complete') _calb();
+      }
+      script.onload = _calb;
+    }
+   
+    return true;
+  }
+  
   path = path + "?" + settings.version;
-
+  
   Ext.Loader.loadScript({url: path, scope: this,
     onLoad: function() {
       if(_calb != undefined) _calb();

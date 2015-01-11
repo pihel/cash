@@ -334,7 +334,36 @@ class CashAnaliz {
 
     $this->db->escape_res = true;
     return $this->db->select($sql, $this->usr->db_id, $in, $from, $to, $uid, $uid);
-  }
+  } //getCurAmount
+  
+  public function getGeoMap($from, $to, $in = 0, $uid = 0) {
+    if(!$this->usr->canAnaliz()) return array();
+
+    if(empty($from)) $from = date("Y-m-01");
+    if(empty($to)) $to = date("Y-m-d");
+    $uid = intval($uid);
+
+    $sql =
+    "SELECT
+      c.geo_pos, cn.name, c.date,
+      SUM( c.price * c.qnt * cr.rate ) amount
+    FROM
+      `cashes` c
+    INNER JOIN currency cr
+      ON( c.cur_id = cr.id )
+    INNER JOIN cashes_nom cn
+      ON( c.nmcl_id = cn.id )
+    WHERE
+      c.geo_pos is not null AND c.geo_pos <> '0;0'
+      AND c.visible = 1 AND c.bd_id = ? AND c.type = ?
+      AND c.date BETWEEN ? AND ?
+      AND ( c.uid = ? OR 0 = ? )
+    GROUP BY
+      c.geo_pos, cn.name, c.date";
+
+    $this->db->escape_res = true;
+    return $this->db->select($sql, $this->usr->db_id, $in, $from, $to, $uid, $uid);
+  } //getGeoMap
 
   public function getAvgInOut($uid = 0) {
     if(!$this->usr->canAnaliz()) return array();

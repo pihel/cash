@@ -244,8 +244,9 @@ class LangEn extends iLang {
     222 => "Error loading file. Maximum file size of {0} MBytes",
     223 => "Rounding prices to the nearest whole (1 - Yes, 0 - No)",
     224 => "Choose language",
-    225 => "Delete"
-    226 => "Access key to the recognition of checks"
+    225 => "Delete",
+    226 => "Access key to the recognition of checks",
+    227 => "Purchase map"
   );
 
 }

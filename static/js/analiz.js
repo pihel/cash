@@ -245,6 +245,33 @@ var cash_analiz_curr = Ext.create('Ext.Panel', {
 
 });//cash_analiz_curr
 
+var cash_analiz_geo = Ext.create('Ext.Panel', {
+    frame: true,
+    id: "cash_analiz_geo",
+    height: h,
+    width: w,
+    title: lang(227),
+    items: [],
+    listeners: {
+      activate: function(tab){
+        //document.write('<' + 'script async="false" src="http://maps.google.com/maps/api/js?sensor=false"><' + '/script>');
+        //document.write('<' + 'script async="false" src="' + settings.extjs + '/examples/ux/GMapPanel.js"><' + '/script>');
+        //loadScript("http://maps.google.com/maps/api/js?sensor=false", function() {
+        //  loadScript(settings.extjs + "/examples/ux/GMapPanel.js", function() {
+            Ext.getCmp('cash_analiz_geo').setLoading(lang(227));
+            loadScript(settings.static + "/js/analiz/geo_map.js", function() {
+              cash_analiz_geo_load(function() {
+                Ext.getCmp('cash_analiz_geo').setLoading(false);
+                setAnkhor();
+              });
+            }); //loadScript: geo_map
+        //  }, true); //loadScript: GMapPanel
+        //}, true); //loadScript: maps.google.com
+      }
+    }
+
+});//cash_analiz_geo
+
 var cash_analiz_secr = Ext.create('Ext.Panel', {
     frame: true,
     id: "cash_analiz_secr",
@@ -374,5 +401,5 @@ var cash_analit_tabs = Ext.widget('tabpanel', {
     },
     border: false,
     items: [cash_analiz_com, cash_analiz_dyn, cash_analiz_mondyn, cash_analiz_group, cash_analiz_group_dyn,
-	    cash_analiz_org, cash_analiz_cash_type, cash_analiz_curr, cash_analiz_secr, cash_analiz_rest]
+	    cash_analiz_org, cash_analiz_cash_type, cash_analiz_curr, cash_analiz_geo, cash_analiz_secr, cash_analiz_rest]
 }); //cash_analit_tabs
