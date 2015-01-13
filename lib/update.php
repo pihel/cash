@@ -43,7 +43,7 @@ class DbUpdate {
   } //updateData
     
   public function updateData_v1_050() {
-    $this->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "ocr", $this->lng->get(226), "" );
+    $this->exec("INSERT INTO cashes_setting(name, descr, value) VALUES('ocr', '".$this->lng->get(226)."', '')");
     $this->exec("ALTER TABLE cashes ADD COLUMN geo_pos VARCHAR(64)");
   } //updateData_v1_050
   

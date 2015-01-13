@@ -310,9 +310,7 @@ if(!empty($_POST['cash_item_save'])) {
       function add_frm() {
         id("add_frm").style.display = 'block';
         id("add_btn").style.display = 'none';
-        getLocation(function(lat, lon) {
-          id("cash_item_geo").value = lat+";"+lon;
-        });        
+        reloadLocation();      
         id("cash_item_nmcl_cb").focus();
         return false;
       } //add_frm
@@ -320,9 +318,7 @@ if(!empty($_POST['cash_item_save'])) {
       function add(o) {
         var send = "";
         id("lgif").style.display = 'inline';
-        getLocation(function(lat, lon) {
-          id("cash_item_geo").value = lat+";"+lon;
-        }); 
+        reloadLocation();
         for(var i = 0; i < id("add_frm").elements.length; i++) {
           if(i > 0) send += "&";
           send += id("add_frm").elements[i].name + "=" + encodeURIComponent( id("add_frm").elements[i].value );
@@ -407,6 +403,13 @@ if(!empty($_POST['cash_item_save'])) {
               if(typeof _fnc != "undefined") _fnc(0, 0);
           }
       } //getLocation
+      
+      function reloadLocation() {
+        getLocation(function(lat, lon) {
+          id("cash_item_geo").value = lat+";"+lon;
+        });
+        return true;
+      }
 
     </script>
     
@@ -460,7 +463,7 @@ if(!empty($_POST['cash_item_save'])) {
         <input type="hidden" id="cash_item_geo" name="cash_item_geo" value="0;0">
         <div><label for="cash_item_date"><?=$lng->get(23);?></label><input type="date" name="cash_item_date" id="cash_item_date" value="<?=date('Y-m-d');?>"><img id="lgif" src="<?=$settings['static'];?>/loading.gif"></div>
         <div style="position:relative;">
-          <label for="cash_item_nmcl_cb"><?=$lng->get(17);?></label><input type="text" name="cash_item_nmcl_cb" id="cash_item_nmcl_cb" onkeyup="return fillcheck();" onchange="return nomChange(this);">
+          <label for="cash_item_nmcl_cb"><?=$lng->get(17);?></label><input type="text" name="cash_item_nmcl_cb" id="cash_item_nmcl_cb" onkeyup="return fillcheck();" onchange="return nomChange(this);" onclick="return reloadLocation();">
           <div id="nmcl_list"></div>
         </div>
         <div><label for="cash_item_prod_type_cb"><?=$lng->get(19);?></label><input type="text" name="cash_item_prod_type_cb" id="cash_item_prod_type_cb"></div>
