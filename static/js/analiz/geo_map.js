@@ -73,6 +73,7 @@ function cash_analiz_geo_refresh() {
 } //cash_analiz_geo_refresh
 
 var map = undefined;
+var markers = [];
 
 function drawMap() {
   if(map == undefined) {
@@ -83,16 +84,24 @@ function drawMap() {
     };
     map = new google.maps.Map(document.getElementById("cash_analiz_geo_map"), mapOptions);
   }
+  for (var i = 0; i < markers.length; i++ ) {
+    markers[i].setMap(null);
+  }
+  markers = [];
+  
   var latlng = [];
   cash_analiz_geo_store.each( function(record){
     var tp = record.data.geo_pos.split(";");
+    //console.log(record.data);
     var p = new google.maps.LatLng(tp[0], tp[1]);
     latlng.push(p);
-    var marker = new google.maps.Marker({
+    markers.push( 
+      new google.maps.Marker({
         position: p,
         map: map,
         title: record.data.date + ". " + record.data.name + " = " + price_r(record.data.amount)
-    }); //marker
+      }) 
+    ); //marker
   });
   
   //set center
