@@ -319,13 +319,18 @@ class Cash {
 
   protected function add_refbook($name, $ref) {
     if(!$this->usr->canWrite()) return NULL;
-
-    if(intval($name) > 0) return $name;
+    
+    $ref_id = 0;
     $name = trim($name);
     if(empty($name)) return 0;
-
-    $ref_id = 0;
-    $ref_id = $this->db->element("SELECT MAX(id) id from ".$ref." WHERE UPPER_UTF8(name) = UPPER_UTF8(?)", $name );
+    
+    if(is_numeric($name) && intval($name) > 0) {
+      //число или название?
+      $ref_id = $this->db->element("SELECT MAX(id) id from ".$ref." WHERE ID = ?", $name );
+    } else {
+      //название
+      $ref_id = $this->db->element("SELECT MAX(id) id from ".$ref." WHERE UPPER_UTF8(name) = UPPER_UTF8(?)", $name );
+    }
     $ref_id = intval($ref_id);
 
     if($ref_id == 0) {
@@ -395,7 +400,7 @@ class Cash {
 
     $ret['cash_item_note']                        = $data['cash_item_note'];
     $ret['cash_item_geo']                         = $data['cash_item_geo'];
-
+    
     return $ret;
   }
 

@@ -13,6 +13,31 @@ class CashAnaliz {
     global $settings;
     $this->def_cur = $settings['sign'];
   }
+  
+  protected function reduce($arr, $col_amnt, $col_name) {
+    global $settings;
+    $proc = floatval( $settings['proc_analiz'] );
+    $ret = array();
+    $sum = 0;
+    foreach($arr as $k=>$v) {
+        $sum += $v[$col_amnt];
+    }
+    if($sum == 0) return $arr;
+    
+    $stop_k = 0;
+    foreach($arr as $k=>$v) {
+        //if($k < $cnt) {
+        if( ($v[$col_amnt] / $sum) >= $proc ) {
+          $ret[] = $v;
+          $stop_k = $k;
+        } else {
+            $v[$col_name] = $this->lng->get(228);
+            $v[$col_amnt] += $ret[$stop_k+1][$col_amnt];
+            $ret[$stop_k+1] = $v;
+        }
+    }
+    return $ret;
+  } //reduce
 
   public function getCommon($from, $to, $uid = 0) {
     if(!$this->usr->canAnaliz()) return array();
@@ -108,7 +133,8 @@ class CashAnaliz {
       out_amount DESC";
 
     $this->db->escape_res = true;
-    return $this->db->select($sql, $this->usr->db_id, intval($in), $from, $to, $uid, $uid);
+    //return $this->db->select($sql, $this->usr->db_id, intval($in), $from, $to, $uid, $uid);
+    return $this->reduce( $this->db->select($sql, $this->usr->db_id, intval($in), $from, $to, $uid, $uid), "out_amount", "tname" );
   }
   
   public function getGroupsDyn($from, $to, $gr = 0, $uid = 0) {
@@ -118,24 +144,14 @@ class CashAnaliz {
     if(empty($to)) $to = date("Y-m-d");
     $uid = intval($uid);
     
-    $sql =
-      "SELECT
-        replace(g.name, '.', ' ') name
-      FROM
-        `cashes_group` g
-      WHERE
-        EXISTS( SELECT 
-                  1 
-                FROM 
-                  `cashes` c 
-                WHERE 
-                  g.id = c.`group`
-                  AND c.visible = 1 AND c.bd_id = ? AND c.type = 0
-                  AND c.date BETWEEN ? AND ?
-                  AND ( c.uid = ? OR 0 = ? )  
-              ) ";
-    $this->db->escape_res = true;
-    $grps = $this->db->select($sql, $this->usr->db_id, $from, $to, $uid, $uid);
+    //отсечем малозначащие группы
+    $grps = array();
+    $grps_v = array();
+    $grps_ = $this->getGroups($from, $to, 0, $uid);
+    foreach($grps_ as $g) {
+      $grps[]['name'] = $g['tname'];
+      $grps_v[] = $g['tname'];
+    }
     
     $grps_key = $grps;
     if($gr == 1) {
@@ -172,6 +188,8 @@ class CashAnaliz {
     $i = -1;
     $this->db->escape_res = true;
     $data = $this->db->select($sql, $this->usr->db_id, $from, $to, $uid, $uid);
+    
+    $other = $this->lng->get(228);
     foreach($data as $d) {
       if(empty($d['mname'])) continue;
       if($m <> $d['mname']) {
@@ -181,8 +199,13 @@ class CashAnaliz {
         $ret[$i]['name'] = $m;
         
       }
-      $ret[$i][$d['tname']] = $d['out_amount'];
+      if(in_array($d['tname'], $grps_v)) {
+        $ret[$i][$d['tname']] += $d['out_amount'];
+      } else {
+        $ret[$i][$other] += $d['out_amount'];        
+      }
     } //foreach
+    
     
     return $ret;
   }
@@ -221,7 +244,7 @@ class CashAnaliz {
       out_amount DESC";
 
     $this->db->escape_res = true;
-    return $this->db->select($sql, $this->usr->db_id, $from, $to, $uid, $uid, $gr);
+    return $this->reduce( $this->db->select($sql, $this->usr->db_id, $from, $to, $uid, $uid, $gr), "out_amount", "tname" );
   }
 
   public function getPurs($from, $to, $in = 0, $uid = 0) {
@@ -380,7 +403,7 @@ class CashAnaliz {
 		    SUM(c.price * c.qnt) as amount
 	    FROM cashes c
 	    WHERE
-		    c.`date` >= DATETIME('now', '-11 month', 'start of month')
+		    c.`date` >= DATETIME('now', '-6 month', 'start of month')
 		    AND c.bd_id = ?
 		    AND c.visible = 1
         AND ( c.uid = ? OR 0 = ? )

@@ -246,7 +246,8 @@ class LangEn extends iLang {
     224 => "Choose language",
     225 => "Delete",
     226 => "Access key to the recognition of checks",
-    227 => "Purchase map"
+    227 => "Purchase map",
+    228 => "Another"
   );
 
 }
