@@ -149,9 +149,19 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
 
 var loadMask_cash_list_grid = new Ext.LoadMask(cash_list_grid, {msg:lang(39), store: cash_list_store});
 
+function checkWriteSec(v_id) {
+  if( parseInt(settings.secure_user) == 1 ) {
+    if( cash_list_store.findRecord("id", v_id).get('uid') != uid ) {
+      return false;
+    }
+  }  
+  return true;
+} //checkWriteSec
 
 function editItem(v_id) {
   if(parseInt(rights.write) == 0) return;
+  if(!checkWriteSec(v_id)) return;
+  
   loadScript('static/js/add.js', function() {
     v_edit_id = v_id;
     v_copy = false;
@@ -171,6 +181,8 @@ function copyItem(v_id) {
 
 function deleteItem(v_id) {
   if(parseInt(rights.write) == 0) return;
+  if(!checkWriteSec(v_id)) return;
+  
   Ext.Msg.show({
       title:lang(40),
       msg: lang(41),

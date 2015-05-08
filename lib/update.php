@@ -32,6 +32,7 @@ class DbUpdate {
     $this->db->start_tran();
     
     if($file_ver >= 1.05 && $db_ver < 1.05) $this->updateData_v1_050();
+    if($file_ver >= 1.055 && $db_ver < 1.055) $this->updateData_v1_055();
     
     if($db_ver == 0) {
       $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "version", $this->lng->get(221), $file_ver );
@@ -45,6 +46,11 @@ class DbUpdate {
   public function updateData_v1_050() {
     $this->exec("INSERT INTO cashes_setting(name, descr, value) VALUES('ocr', '".$this->lng->get(226)."', '')");
     $this->exec("ALTER TABLE cashes ADD COLUMN geo_pos VARCHAR(64)");
+  } //updateData_v1_050
+  
+  public function updateData_v1_055() {
+    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "proc_analiz",  $this->lng->get(229), "1.5" );
+    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "secure_user",  $this->lng->get(230), "0" );
   } //updateData_v1_050
   
   public function createData($pasw) {  
@@ -67,11 +73,13 @@ class DbUpdate {
     $this->db->exec("INSERT INTO cashes_type(name) VALUES(?)", $this->lng->get(206));
     
     global $settings;
-    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "site_name",  $this->lng->get(207), $this->lng->get(208));
-    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "mail",       $this->lng->get(209), "");
-    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "version",    $this->lng->get(221), $settings['version'] );
-    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "round",      $this->lng->get(223), 0 );
-    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "ocr",        $this->lng->get(226), "" );
+    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "site_name",    $this->lng->get(207), $this->lng->get(208));
+    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "mail",         $this->lng->get(209), "");
+    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "version",      $this->lng->get(221), $settings['version'] );
+    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "round",        $this->lng->get(223), 0 );
+    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "ocr",          $this->lng->get(226), "" );
+    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "proc_analiz",  $this->lng->get(229), "1.5" );
+    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "secure_user",  $this->lng->get(230), "0" );
     
     $this->db->exec("INSERT INTO cashes_group(name) VALUES(?)", $this->lng->get(210)); 
     $this->db->exec("INSERT INTO cashes_group(name) VALUES(?)", $this->lng->get(211));

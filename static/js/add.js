@@ -538,6 +538,12 @@ function cash_list_add_load() {
           Ext.getCmp('cash_item_file').setWidth(Ext.getCmp('cash_item_nmcl_cb').getWidth());
           Ext.getCmp('cash_item_price').focus(false, 200);
           v_edit_id = 0;
+        } else {
+          if( parseInt(settings.secure_user) == 1 ) {
+            if( obj.uid != uid ) {
+              Ext.getCmp('cash_list_add').setDisabled(1);
+            }            
+          } 
         }
         
         setAnkhor();

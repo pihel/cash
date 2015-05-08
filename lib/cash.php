@@ -420,7 +420,14 @@ class Cash {
   }
 
   public function edit($data, $files) {
-    if(!$this->usr->canWrite()) return $this->lng->get(159);
+    if(!$this->usr->canWrite()) return array('failure'=>true, 'msg'=> $this->lng->get(159) );
+    global $settings;
+    if(intval($settings['secure_user']) == 1) {
+      $uid = $this->db->element("SELECT uid from cashes WHERE ID = ?", $data['cash_item_edit_id'] );
+      if( intval($uid) != $this->usr->id ) {
+        return array('failure'=>true, 'msg'=> $this->lng->get(159) );
+      }
+    }
 
     $this->db->start_tran();
 

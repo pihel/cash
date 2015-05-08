@@ -247,7 +247,9 @@ class LangEn extends iLang {
     225 => "Delete",
     226 => "Access key to the recognition of checks",
     227 => "Purchase map",
-    228 => "Another"
+    228 => "Another",
+    229 => "Threshold sector \"Another\" in graph analysts (in % of total)",
+    230 => "Prohibition editing other people's records"
   );
 
 }

@@ -16,7 +16,7 @@ class CashAnaliz {
   
   protected function reduce($arr, $col_amnt, $col_name) {
     global $settings;
-    $proc = floatval( $settings['proc_analiz'] );
+    $proc = floatval( $settings['proc_analiz'] ) / 100;
     $ret = array();
     $sum = 0;
     foreach($arr as $k=>$v) {
