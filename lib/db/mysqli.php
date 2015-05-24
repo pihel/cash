@@ -6,15 +6,20 @@ class MySQLi_DB extends FileCacheDB {
   }
 
   public function after_connect() {
+    $this->raiseError();
     $this->_con->set_charset($this->encode);
     $this->_con->autocommit($this->autocommit);
   }
 
   public function raiseError() {
     if(!$this->_con) return;
-    if(intval($this->_con->errno) < 1) return;
+    if(intval($this->_con->errno) < 1 && intval($this->_con->connect_errno) < 1 ) return;
 
-    $error_msg = "[".$this->_con->errno."] ".$this->_con->error;
+    if(empty($this->_con->errno)) {
+      $error_msg = "[".$this->_con->connect_errno."] ".$this->_con->connect_error;
+    } else {
+      $error_msg = "[".$this->_con->errno."] ".$this->_con->error;
+    }
     //$this->_con->close();
     throw new Error($error_msg);
   }
@@ -36,7 +41,9 @@ class MySQLi_DB extends FileCacheDB {
   }
 
   protected function _exec($sql, $args) {
-
+    unset($this->_stmt);
+    unset($this->_con->results);
+    if(!$this->_con) $this->raiseError();
     $this->_stmt = $this->_con->prepare($sql);
     if(!$this->_stmt) $this->raiseError();
     //биндим параменты
@@ -54,6 +61,8 @@ class MySQLi_DB extends FileCacheDB {
     call_user_func_array(array($this->_stmt, 'bind_param'), $refs);
 
     if(!$this->_stmt->execute()) $this->raiseError();
+    
+    
 
     //получаем результаты
     $meta = $this->_stmt->result_metadata();
@@ -63,7 +72,6 @@ class MySQLi_DB extends FileCacheDB {
       $cols = array();
       //tnx http://www.php.net/manual/en/mysqli-stmt.fetch.php#72720
       $fields = $meta->fetch_fields();
-      $cnt_fields = count($fields);
       foreach($fields as $field) {
         $cols[] = &$this->_con->results[$field->name];
       }
