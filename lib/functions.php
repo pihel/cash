@@ -184,3 +184,18 @@ function optimize_check($src, $dest, $width, $height, $rgb=0xFFFFFF) {
 
   return true;
 } //optimize_check
+
+//mime_content_type
+if(!function_exists('mime_content_type')) {
+ if (extension_loaded('fileinfo')) {
+  function mime_content_type($filename) {
+   $finfo = new finfo(FILEINFO_MIME_TYPE);
+   $ctype = $finfo->file($filename);
+   return $ctype;
+  }
+ } else {
+  function mime_content_type($filename) {
+   return "application/octet-stream";
+  }
+ }
+} //mime_content_type
