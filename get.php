@@ -14,9 +14,13 @@ if (file_exists($file)) {
  if (ob_get_level()) {
    ob_end_clean();
  }
+ $ctype = mime_content_type($file);
+ if (empty($ctype)) {
+  $ctype = "application/octet-stream";
+ }
  header('Content-Description: File Transfer');
- header('Content-Type: application/octet-stream');
- header('Content-Disposition: attachment; filename=' . $name);
+ header('Content-Type: ' . $ctype);
+ header('Content-Disposition: inline; filename=' . $name);
  header('Content-Transfer-Encoding: binary');
  header('Expires: 0');
  header('Cache-Control: must-revalidate');
