@@ -16,7 +16,7 @@ class Error extends Exception {
   }
 
   private function saveLog() {
-    $dir = __DIR__."/../files/log";
+    $dir = dirname(__FILE__)."/../files/log";
     if( !file_exists( $dir ) ) {
       mkdir( $dir, 0777, true);
     }

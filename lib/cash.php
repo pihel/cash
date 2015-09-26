@@ -309,7 +309,7 @@ class Cash {
     $this->db->start_tran();
     $fl = $this->getFile($id);
     if(!empty($fl)) {
-      @unlink(__DIR__."/".$fl);
+      @unlink(dirname(__FILE__)."/".$fl);
     }
     $this->db->exec("UPDATE cashes SET visible = 0 WHERE id = ? AND bd_id = ?", $id, $this->usr->db_id );
     $cnt = intval( $this->db->affect() );
@@ -416,7 +416,7 @@ class Cash {
     if($short) {
       return $file;
     } 
-    return __DIR__."/../".$file;
+    return dirname(__FILE__)."/../".$file;
   }
 
   public function edit($data, $files) {
@@ -435,7 +435,7 @@ class Cash {
     
     if(intval($data['cash_item_file_del']) == 1 ) {
       if(!empty($fl)) {
-        @unlink(__DIR__."/../".$fl);
+        @unlink(dirname(__FILE__)."/../".$fl);
         $fl = "";
       }
     }

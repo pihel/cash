@@ -2,7 +2,7 @@
 error_reporting(0);
 
 /* Root dir */
-$root = __DIR__."/../";
+$root = dirname(__FILE__)."/../";
 
 /* Debug mode */
 $debug = 0;
