@@ -121,7 +121,7 @@ abstract class DB {
   
   protected function debug($str) {
     if($this->debug) {
-      file_put_contents(__DIR__."/debug.log", "[".date("Y-m-d H:i:s")."]\n".$str."\n\n", FILE_APPEND);
+      file_put_contents(dirname(__FILE__)."/debug.log", "[".date("Y-m-d H:i:s")."]\n".$str."\n\n", FILE_APPEND);
     }
   }
 
