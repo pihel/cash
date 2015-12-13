@@ -224,13 +224,17 @@ var cash_plan_goal_panel = Ext.create('Ext.Panel', {
     id: "cash_plan_goal_panel",
     border: false,
     frame: true,
-    disabled: true,
+    //disabled: true,
     title: lang(83),
     items: [],
     listeners: {
       afterrender: function(){
         loadScript(settings.static + "/js/goal.js", function() {
+          Ext.getCmp('cash_plan_goal_panel').add(Ext.getCmp('cash_goal_usr_name_list_cb'));
           Ext.getCmp('cash_plan_goal_panel').add(Ext.getCmp('cash_goal_grid'));
+          Ext.getCmp('cash_goal_edit_col').setVisible(parseInt(rights.write) == 1);
+          cash_goal_usr_name_list.load();
+          cash_goal_refresh();
         }); //loadScript
       } //afterrender
     }

@@ -71,12 +71,14 @@ function price_r (val) {
 }
 
 function dateRender(value) {
+  if(value == undefined) return "";
   var dt = new Date(value);
   var val = Ext.Date.format(dt,'Y-m-d');
   return val;
 }
 
 function dateTimeRender(value) {
+  if(value == undefined) return "";
   var dt = new Date(value);
   var val = Ext.Date.format(dt,'Y-m-d H:i');
   return val;

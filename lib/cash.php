@@ -317,7 +317,7 @@ class Cash {
     return $cnt;
   }
 
-  protected function add_refbook($name, $ref) {
+  public function add_refbook($name, $ref) {
     if(!$this->usr->canWrite()) return NULL;
     
     $ref_id = 0;
