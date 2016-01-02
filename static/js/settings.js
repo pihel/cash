@@ -175,6 +175,24 @@ var cash_set_usr_grid = Ext.create('Ext.grid.Panel', {
               xtype: 'actioncolumn',
               width: 55,
               items: [{
+                icon: settings.static + "/yes.gif",
+                tooltip: lang(79),
+                handler: function(grid, rowIndex, colIndex) {
+                    var rec = grid.getStore().getAt(rowIndex);
+                    Ext.Ajax.request({
+                      url: "ajax/save_usr.php",
+                      method: "POST",
+                      params: rec.data,
+                      success: function(data) {
+                          if(parseInt(data.responseText) > 0) {
+                            cash_set_usr_store.load();
+                          } else {
+                            error(data.responseText);
+                          }
+                      }//success
+                    }); //Ext.Ajax.request
+                }
+              }, " ", {
                 iconCls: 'del-cash-col',
                 tooltip: lang(37),
                 handler: function(grid, rowIndex, colIndex) {
@@ -198,24 +216,6 @@ var cash_set_usr_grid = Ext.create('Ext.grid.Panel', {
                         }//success
                       }); //Ext.Ajax.request
                     }
-                }
-              }, " ", {
-                icon: settings.static + "/yes.gif",
-                tooltip: lang(79),
-                handler: function(grid, rowIndex, colIndex) {
-                    var rec = grid.getStore().getAt(rowIndex);
-                    Ext.Ajax.request({
-                      url: "ajax/save_usr.php",
-                      method: "POST",
-                      params: rec.data,
-                      success: function(data) {
-                          if(parseInt(data.responseText) > 0) {
-                            cash_set_usr_store.load();
-                          } else {
-                            error(data.responseText);
-                          }
-                      }//success
-                    }); //Ext.Ajax.request
                 }
               }]
           }

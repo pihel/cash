@@ -49,6 +49,7 @@ var cash_plan = Ext.create('Ext.Panel', {
           Ext.getCmp('cash_plan').add(Ext.getCmp('cash_plan_tabs'));
           setAnkhor();
           Ext.getCmp('cash_plan').setLoading(false);
+          setPlanAnkhor(p);
         });
       }
     }

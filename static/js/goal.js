@@ -5,11 +5,13 @@ var cash_goal_model = Ext.define('cash_goal_model', {
       {name: 'id', 		  type: 'int'},
       {name: 'db_id',		type: 'int'},
       {name: 'usr_id', 	type: 'int'},
+      {name: 'login',	  type: 'string'},
       {name: 'nmcl_id',	type: 'int'},
       {name: 'gname',	  type: 'string'},
       {name: 'plan', 		type: 'number'},
       {name: 'qnt', 		type: 'number'},
       {name: 'plan_date', 		type: 'date', dateFormat : "Y-m-d", submitFormat: 'Y-m-d'},
+      {name: 'fact_date', 		type: 'date', dateFormat : "Y-m-d", submitFormat: 'Y-m-d'},
       {name: 'iord', 		type: 'int'},
     ],
     idProperty: 'id'
@@ -109,49 +111,65 @@ var cash_goal_usr_name_list_cb = Ext.create('Ext.form.field.ComboBox', {
 
 function cash_goal_refresh() {
   var goal_uid = Ext.getCmp('cash_goal_usr_name_list_cb').getValue();
+  var show_fact = Ext.getCmp('cash_goal_show_fact').getValue();
   if(goal_uid == null) goal_uid = uid;
+  if(show_fact) show_fact = 1; else show_fact = 0;
 
-  cash_goal_store.proxy.url = "ajax/goal.php?uid=" + goal_uid;
+  cash_goal_store.proxy.url = "ajax/goal.php?uid=" + goal_uid + "&show_fact="+show_fact;
   cash_goal_store.load();
 } //cash_plan_mnth_refresh
+
+var cash_goal_show_fact = {
+    xtype:      'checkboxfield',
+    boxLabel  : lang(231),
+    name      : 'cash_goal_show_fact',
+    id        : 'cash_goal_show_fact',
+    inputValue: 1,
+    width: 120,
+    onChange: function(newVal, oldVal) {
+      cash_goal_refresh();
+    } //onChange
+}; //cash_goal_show_fact
 
 var cash_goal_grid = Ext.create('Ext.grid.Panel', {
     store: cash_goal_store,
     id: "cash_goal_grid",
     title: lang(83),
     header: true,
-    width: Ext.getBody().getWidth() - 30,
-    height: Ext.getBody().getHeight() - 30,
+    width: Ext.getBody().getWidth() - 40,
+    height: Ext.getBody().getHeight() - 130,
     forceFit: true,
-    tbar: [cash_goal_add],
+    tbar: [cash_goal_add, "->", cash_goal_show_fact],
     columns: [
       {text: "ID", 		 dataIndex: 'id', 	    hidden: true, 	tdCls: 'x-center-cell', width: 30 },
       {text: lang(84), dataIndex: 'db_id', 	  hidden: true, 	tdCls: 'x-center-cell', width: 30 },
       {text: lang(29), dataIndex: 'usr_id',	  hidden: true, 	tdCls: 'x-center-cell', width: 30 },
       {text: lang(16), dataIndex: 'nmcl_id',	hidden: true, 	tdCls: 'x-center-cell', width: 30	},
       {text: lang(17), dataIndex: 'gname', 	  flex: true, editor: cash_goal_item_nmcl_cb},
+      {text: lang(30), dataIndex: 'login',    hidden: false },
       {text: lang(78), dataIndex: 'plan'	,   editor: {xtype: 'numberfield', allowBlank: true}},
       {text: lang(21), dataIndex: 'qnt'	,     editor: {xtype: 'numberfield', allowBlank: true}},
-      {text: "Дата", dataIndex: 'plan_date'	, format: "Y-m-d", renderer: dateRender, field: {xtype: 'datefield', format: 'Y-m-d', submitFormat: 'Y-m-d', allowBlank: true }},
-      {text: "Приоритет", dataIndex: 'iord',  editor: {xtype: 'numberfield', allowBlank: true} },
+      {text: lang(232), dataIndex: 'plan_date'	, format: "Y-m-d", renderer: dateRender, field: {xtype: 'datefield', format: 'Y-m-d', submitFormat: 'Y-m-d', allowBlank: true }},
+      {text: lang(233), dataIndex: 'fact_date'	, format: "Y-m-d", renderer: dateRender, field: {xtype: 'datefield', format: 'Y-m-d', submitFormat: 'Y-m-d', allowBlank: true }},
+      {text: lang(234), dataIndex: 'iord',  editor: {xtype: 'numberfield', allowBlank: true} },
       {
           menuDisabled: true,
           sortable: false,
           hideable: false,
           xtype: 'actioncolumn',
           id: "cash_goal_edit_col",
-          width: 75,
+          width: 110,
           items: [{
-                iconCls: 'del-cash-col',
-                tooltip: lang(37),
-                handler: function(grid, rowIndex, colIndex) {
-                    var rec = grid.getStore().getAt(rowIndex);
-                    //rec.get('id')
-                    if(rec.get('id') == 0) {
-                      cash_goal_store.remove(rec);
-                    } else {
+                  icon: settings.static + "/finish.png",
+                  tooltip: lang(235),
+                  handler: function(grid, rowIndex, colIndex) {
+                      if(parseInt(rights.write) == 0) return;
+                      loadMask_cash_goal_grid.show();
+
+                      var rec = grid.getStore().getAt(rowIndex);
+
                       Ext.Ajax.request({
-                        url: "ajax/del_goal.php",
+                        url: "ajax/finish_goal.php",
                         method: "GET",
                         params: {
                           id: rec.get('id')
@@ -162,32 +180,75 @@ var cash_goal_grid = Ext.create('Ext.grid.Panel', {
                             } else {
                               error(data.responseText);
                             }
+                            loadMask_cash_goal_grid.hide();
                         }//success
                       }); //Ext.Ajax.request
-                    }
-                }
-              }, " ", {
-            icon: settings.static + "/yes.gif",
-            tooltip: lang(79),
-            handler: function(grid, rowIndex, colIndex) {
-                if(parseInt(rights.write) == 0) return;
+                  }
+                }, " ", {
+                  icon: settings.static + "/yes.gif",
+                  tooltip: lang(79),
+                  handler: function(grid, rowIndex, colIndex) {
+                      if(parseInt(rights.write) == 0) return;
+                      loadMask_cash_goal_grid.show();
 
-                var rec = grid.getStore().getAt(rowIndex);
+                      var rec = grid.getStore().getAt(rowIndex);
 
-                Ext.Ajax.request({
-                  url: "ajax/save_goal.php",
-                  method: "POST",
-                  params: rec.data,
-                  success: function(data) {
-                      if(parseInt(data.responseText) > 0) {
-                        cash_goal_store.load();
-                      } else {
-                        error(data.responseText);
-                      }
-                  }//success
-                }); //Ext.Ajax.request
-            }
-          }]
+                      Ext.Ajax.request({
+                        url: "ajax/save_goal.php",
+                        method: "POST",
+                        params: rec.data,
+                        success: function(data) {
+                            if(parseInt(data.responseText) > 0) {
+                              cash_goal_store.load();
+                            } else {
+                              error(data.responseText);
+                            }
+                            loadMask_cash_goal_grid.hide();
+                            grid.getStore().getAt(rowIndex);
+                        }//success
+                      }); //Ext.Ajax.request
+                  }
+                }, " ", {
+                iconCls: 'del-cash-col',
+                tooltip: lang(37),
+                handler: function(grid, rowIndex, colIndex) {
+                  if(parseInt(rights.write) == 0) return;
+                  Ext.Msg.show({
+                      title: lang(236),
+                      msg: lang(236),
+                      buttons: Ext.Msg.YESNO,
+                      icon: Ext.Msg.QUESTION,
+                      fn: function(id) {
+                        if(id == 'yes') {
+                          loadMask_cash_goal_grid.show();
+                  
+                          var rec = grid.getStore().getAt(rowIndex);
+                          //rec.get('id')
+                          if(rec.get('id') == 0) {
+                            cash_goal_store.remove(rec);
+                          } else {
+                            Ext.Ajax.request({
+                              url: "ajax/del_goal.php",
+                              method: "GET",
+                              params: {
+                                id: rec.get('id')
+                              },
+                              success: function(data) {
+                                  if(parseInt(data.responseText) > 0) {
+                                    cash_goal_store.load();
+                                  } else {
+                                    error(data.responseText);
+                                  }
+                                  loadMask_cash_goal_grid.hide();
+                              }//success
+                            }); //Ext.Ajax.request
+                          }
+                          loadMask_cash_goal_grid.hide();
+                        } //yes
+                      } //fn
+                  }); //Ext.Msg.show
+                } //handler
+              }]
       }
     ],
     selType: 'cellmodel',

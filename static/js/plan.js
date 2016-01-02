@@ -215,10 +215,33 @@ var cash_plan_panel = Ext.create('Ext.Panel', {
         var cd = new Date();
         Ext.getCmp('cash_plan_mnth_from_date').setValue(new Date(cd.getFullYear(), cd.getMonth(), 1));
         Ext.getCmp('cash_plan_mnth_to_date').setValue(cd);
+        setAnkhor();
+      }, 
+      activate: function(tab){
+        setAnkhor();
       }
     }
 
 });//cash_plan_panel
+
+function getPlanAnkhor() {
+  var hash = "act=plan";
+  if(Ext.getCmp('cash_plan_tabs').getActiveTab().id == "cash_plan_goal_panel") {
+    hash += "&type=goal";
+  }
+  return hash;
+} //getPlanAnkhor
+
+function setPlanAnkhor(p) {
+  if(p.length < 2) return false;
+  if(p[0] != "#act=plan") return false;
+  
+  if(p[1] == "type=goal") {
+    Ext.getCmp('cash_plan_tabs').setActiveTab("cash_plan_goal_panel");
+  }
+  
+  return true;
+} //setPlanAnkhor
 
 var cash_plan_goal_panel = Ext.create('Ext.Panel', {
     id: "cash_plan_goal_panel",
@@ -237,6 +260,9 @@ var cash_plan_goal_panel = Ext.create('Ext.Panel', {
           cash_goal_refresh();
         }); //loadScript
       } //afterrender
+      , activate: function(tab){
+        setAnkhor();
+      }
     }
 });//cash_plan_goal_panel
 

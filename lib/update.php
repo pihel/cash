@@ -33,6 +33,7 @@ class DbUpdate {
     
     if($file_ver >= 1.05 && $db_ver < 1.05) $this->updateData_v1_050();
     if($file_ver >= 1.055 && $db_ver < 1.055) $this->updateData_v1_055();
+    if($file_ver >= 1.061 && $db_ver < 1.061) $this->updateData_v1_061();
     
     if($db_ver == 0) {
       $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "version", $this->lng->get(221), $file_ver );
@@ -52,6 +53,23 @@ class DbUpdate {
     $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "proc_analiz",  $this->lng->get(229), "1.5" );
     $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "secure_user",  $this->lng->get(230), "0" );
   } //updateData_v1_050
+  
+  public function updateData_v1_061() {
+    $this->db->exec('DROP TABLE "cashes_goal"');
+    $this->db->exec('CREATE TABLE "cashes_goal" (
+        "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        "nmcl_id" INTEGER NOT NULL,
+        "db_id" INTEGER NOT NULL,
+        "usr_id" INTEGER NOT NULL,
+        "plan_date" DATE,
+        "order_id" INTEGER,
+        "plan" REAL,
+        "qnt" REAL,
+        "fact_date" DATE
+    )');
+    $this->db->exec('CREATE UNIQUE INDEX "XPK_CASHES_GOAL" on cashes_goal (id ASC)');
+    $this->db->exec('CREATE INDEX "XIF_CASHES_GOAL_DU" on cashes_goal (db_id ASC, usr_id ASC)');
+  } //updateData_v1_061
   
   public function createData($pasw) {  
     $login = "admin";
@@ -98,6 +116,7 @@ class DbUpdate {
     $this->db->exec('delete from cashes_nom');
     $this->db->exec('delete from cashes_group_plan');
     $this->db->exec('delete from cashes_group');
+    $this->db->exec('delete from cashes_goal');
     $this->db->exec('delete from cashes_org');
     $this->db->exec('delete from cashes_setting');
     $this->db->exec('delete from cashes_type');

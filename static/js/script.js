@@ -225,7 +225,9 @@ function setAnkhor() {
     }
   }
   else if(tab == "cash_plan") {
-    hash += "act=plan";
+    if(typeof getPlanAnkhor != "undefined") {
+      hash += getPlanAnkhor();
+    }
   }
   else if(tab == "cash_sett") {
     hash += "act=set";

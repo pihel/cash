@@ -598,11 +598,12 @@ class Cash {
     $this->db->start_tran();
     foreach($dbls as $dbl) {
       $this->db->exec("UPDATE cashes SET nmcl_id = ? WHERE nmcl_id = ?", $dbl['min_id'], $dbl['max_id']);
+      $this->db->exec("UPDATE cashes_goal SET nmcl_id = ? WHERE nmcl_id = ?", $dbl['min_id'], $dbl['max_id']);
     }
     foreach($orgs as $org) {
       $this->db->exec("UPDATE cashes SET org_id = ? WHERE nmcl_id = ?", $org['min_id'], $org['max_id']);
     }
-    $this->db->exec("DELETE FROM cashes_nom   WHERE NOT EXISTS(SELECT 1 FROM cashes c WHERE c.nmcl_id = cashes_nom.id)");
+    $this->db->exec("DELETE FROM cashes_nom   WHERE NOT EXISTS(SELECT 1 FROM cashes c WHERE c.nmcl_id = cashes_nom.id union SELECT 1 FROM cashes_goal c WHERE c.nmcl_id = cashes_nom.id)");
     $this->db->exec("DELETE FROM cashes_org   WHERE NOT EXISTS(SELECT 1 FROM cashes c WHERE c.org_id  = cashes_org.id)");
     $this->db->exec("DELETE FROM cashes_group WHERE NOT EXISTS(SELECT 1 FROM cashes c WHERE c.`group` = cashes_group.id)");
     $this->db->commit();
@@ -610,6 +611,7 @@ class Cash {
     $this->db->exec("analyze cashes;");
     $this->db->exec("analyze cashes_group;");
     $this->db->exec("analyze cashes_group_plan;");
+    $this->db->exec("analyze cashes_goal;");
     $this->db->exec("analyze cashes_nom;");
     $this->db->exec("analyze cashes_org;");
     $this->db->exec("analyze cashes_type;");

@@ -249,7 +249,13 @@ class LangEn extends iLang {
     227 => "Purchase map",
     228 => "Another",
     229 => "Threshold sector \"Another\" in graph analysts (in % of total)",
-    230 => "Prohibition editing other people's records"
+    230 => "Prohibition editing other people's records",
+    231 => "Completed",
+    232 => "Plan date",
+    233 => "Fact date",
+    234 => "Order",
+    235 => "Complete goal",
+    236 => "Delete goal?"
   );
 
 }
