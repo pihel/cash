@@ -229,7 +229,7 @@ var cash_list_from_date =
     format: "Y-m-d",
     maxValue: new Date(),
     width: 160,
-    onChange: listRefresh
+    onChange: function() { listRefresh(function() {}); }
 }; // cash_list_from_date
 
 
@@ -243,7 +243,7 @@ var cash_list_to_date =
     labelWidth: 20,
     format: "Y-m-d",
     width: 120,
-    onChange: listRefresh
+    onChange: function() { listRefresh(function() {}); }
 }; // cash_list_to_date
 
 function listRefresh(_cb) {

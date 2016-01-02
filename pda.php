@@ -359,8 +359,24 @@ if(!empty($_POST['cash_item_save'])) {
         } );
       } //nomChange
       
+      function checkLifeTime() {
+        if(<?=$usr->id;?> == 0) return;
+        
+        ajax("ajax/session.php", function(data) {
+          if(parseInt(data) != 1 || data == "" || data == undefined) {
+            window.location.reload();
+          }
+        }, 1);
+      } //checkLifeTime
+      
+      if(window.addEventListener) {
+        window.addEventListener('focus', function() {
+            checkLifeTime();
+        });
+      }
+      
       window.onload = function () {
-          refresh_list();
+        refresh_list();
       }
       
       function fillcheck() {
