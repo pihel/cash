@@ -55,7 +55,7 @@ class DbUpdate {
   } //updateData_v1_050
   
   public function updateData_v1_061() {
-    $this->db->exec('DROP TABLE "cashes_goal"');
+    $this->exec('DROP TABLE IF EXISTS "cashes_goal"');
     $this->db->exec('CREATE TABLE "cashes_goal" (
         "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         "nmcl_id" INTEGER NOT NULL,
