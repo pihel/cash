@@ -147,7 +147,7 @@ var cash_goal_grid = Ext.create('Ext.grid.Panel', {
       {text: lang(16), dataIndex: 'nmcl_id',	hidden: true, 	tdCls: 'x-center-cell', width: 30	},
       {text: lang(17), dataIndex: 'gname', 	  flex: true, editor: cash_goal_item_nmcl_cb},
       {text: lang(30), dataIndex: 'login',    hidden: false },
-      {text: lang(78), dataIndex: 'plan'	,   editor: {xtype: 'numberfield', allowBlank: true}},
+      {text: lang(78), dataIndex: 'plan'	,   renderer: price, tdCls: 'x-price-cell', editor: {xtype: 'numberfield', allowBlank: true} },
       {text: lang(21), dataIndex: 'qnt'	,     editor: {xtype: 'numberfield', allowBlank: true}},
       {text: lang(232), dataIndex: 'plan_date'	, format: "Y-m-d", renderer: dateRender, field: {xtype: 'datefield', format: 'Y-m-d', submitFormat: 'Y-m-d', allowBlank: true }},
       {text: lang(233), dataIndex: 'fact_date'	, format: "Y-m-d", renderer: dateRender, field: {xtype: 'datefield', format: 'Y-m-d', submitFormat: 'Y-m-d', allowBlank: true }},
