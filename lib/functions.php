@@ -50,7 +50,8 @@ function csrf_protect() {
   session_start(); 
   
   $csrftoken = "";
-  $uri = pathinfo(array_pop(explode("/", $_SERVER['REQUEST_URI'])), PATHINFO_FILENAME);
+  $exp = explode("/", $_SERVER['REQUEST_URI']);
+  $uri = pathinfo(array_pop($exp), PATHINFO_FILENAME);
   
   if( in_array($uri, array("", "index", "pda", "demo")) )  {
     if( empty($_SESSION['csrftoken']) ) {
@@ -58,7 +59,7 @@ function csrf_protect() {
       $_SESSION['csrftoken'] = $csrftoken; 
     } else {
       $csrftoken = $_SESSION['csrftoken'];
-    }    
+    }
   } else {
     $csrftoken = $_SESSION['csrftoken'];
     global $debug;
