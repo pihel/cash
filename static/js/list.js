@@ -288,6 +288,15 @@ function listRefresh(_cb) {
   setAnkhor();
 }
 
+function setPeriod(d1, d2) {
+  if (new Date(d1) > Ext.getCmp('cash_list_from_date').maxValue) return;
+  var ChangeHandler = Ext.getCmp('cash_list_from_date').onChange;
+  Ext.getCmp('cash_list_from_date').onChange = function(){};
+  Ext.getCmp('cash_list_from_date').setValue(new Date(d1));
+  Ext.getCmp('cash_list_to_date').setValue(new Date(d2));
+  Ext.getCmp('cash_list_from_date').onChange = ChangeHandler;
+}
+
 /*var cash_list_refresh =
 {
 	xtype: 'button',
@@ -544,8 +553,8 @@ function setListAnkhor() {
 }
 
 function setDefaultListVal() {
-  Ext.getCmp('cash_list_from_date').setValue(new Date((new Date).getTime() - (3600000*24*7)));
-  Ext.getCmp('cash_list_to_date').setValue(new Date());
+  setPeriod(new Date((new Date).getTime() - (3600000*24*7)),
+            new Date());
 }
 
 
@@ -583,3 +592,5 @@ var cash_list_panel = Ext.create('Ext.Panel', {
     }
 
 });//cash_list_panel
+
+
