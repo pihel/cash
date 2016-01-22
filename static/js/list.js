@@ -218,6 +218,28 @@ function deleteItem(v_id) {
 
 
 /* panel with grid */
+var cash_list_prev_period =
+{
+    xtype: 'button',
+    text: '<',
+    tooltip: 'Prev period',
+    name: 'cash_list_prev_period',
+    id: 'cash_list_prev_period',
+    handler: setPrevPeriod 
+}; // cash_list_prev_period
+
+var cash_list_next_period =
+{
+    xtype: 'button',
+    text: '>',
+    tooltip: 'Next period',
+    name: 'cash_list_next_period',
+    id: 'cash_list_next_period',
+    handler: setNextPeriod 
+}; // cash_list_next_period
+
+
+
 var cash_list_from_date =
 {
     xtype: 'datefield',
@@ -295,6 +317,20 @@ function setPeriod(d1, d2) {
   Ext.getCmp('cash_list_from_date').setValue(new Date(d1));
   Ext.getCmp('cash_list_to_date').setValue(new Date(d2));
   Ext.getCmp('cash_list_from_date').onChange = ChangeHandler;
+}
+
+function setPrevPeriod() {
+  var d1 = Ext.getCmp('cash_list_from_date').getValue();
+  var d2 = Ext.getCmp('cash_list_to_date').getValue();
+  var ddiff = d2 - d1;
+  setPeriod(d1.getTime()-ddiff, d2.getTime()-ddiff);
+}
+
+function setNextPeriod() {
+  var d1 = Ext.getCmp('cash_list_from_date').getValue();
+  var d2 = Ext.getCmp('cash_list_to_date').getValue();
+  var ddiff = d2 - d1;
+  setPeriod(d1.getTime()+ddiff, d2.getTime()+ddiff);
 }
 
 /*var cash_list_refresh =
@@ -418,7 +454,14 @@ var cash_list_tb = {
       xtype: 'toolbar',
       dock: 'top',
       ui: 'footer',
-      items: [cash_list_from_date, " ", cash_list_to_date, " ", cash_list_filter, cash_list_filter_loading, '->', cash_list_edit_btn_ocr_check, " ", cash_list_edit_btn_add],
+      items: [cash_list_prev_period, 
+              cash_list_from_date, " ",
+              cash_list_to_date,
+              cash_list_next_period, " ",
+              cash_list_filter,
+              cash_list_filter_loading, '->',
+              cash_list_edit_btn_ocr_check, " ",
+              cash_list_edit_btn_add],
       region: 'north',
       id: "cash_list_tb"
 }; //cash_list_tb
