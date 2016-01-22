@@ -222,7 +222,7 @@ var cash_list_prev_period =
 {
     xtype: 'button',
     text: '<',
-    tooltip: 'Prev period',
+    tooltip: lang(237),
     name: 'cash_list_prev_period',
     id: 'cash_list_prev_period',
     handler: cashListSetPrevPeriod 
@@ -232,7 +232,7 @@ var cash_list_next_period =
 {
     xtype: 'button',
     text: '>',
-    tooltip: 'Next period',
+    tooltip: lang(238),
     name: 'cash_list_next_period',
     id: 'cash_list_next_period',
     handler: cashListSetNextPeriod 
@@ -323,7 +323,7 @@ function cashListSetPrevPeriod() {
   var d1 = Ext.getCmp('cash_list_from_date').getValue();
   var d2 = Ext.getCmp('cash_list_to_date').getValue();
   var ddiff = d2 - d1;
-  setPeriod(d1.getTime()-ddiff, d2.getTime()-ddiff);
+  cashListSetPeriod(d1.getTime()-ddiff, d2.getTime()-ddiff);
 }
 
 function cashListSetNextPeriod() {
