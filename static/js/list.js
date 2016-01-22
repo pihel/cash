@@ -310,6 +310,15 @@ function listRefresh(_cb) {
   setAnkhor();
 }
 
+function periodIsWholeMonth(start, end) {
+  var d1 = new Date(start);
+  var d2 = new Date(end);
+  return (
+    (d1.getDate()==1) &&
+    (d2.getDate()==32-new Date(d2.getYear(),d2.getMonth(), 32).getDate()) &&
+    ((d2-d1) < 32*24*3600000)  );
+}
+
 function cashListSetPeriod(d1, d2) {
   if (new Date(d1) > Ext.getCmp('cash_list_from_date').maxValue) return;
   var ChangeHandler = Ext.getCmp('cash_list_from_date').onChange;
@@ -323,14 +332,26 @@ function cashListSetPrevPeriod() {
   var d1 = Ext.getCmp('cash_list_from_date').getValue();
   var d2 = Ext.getCmp('cash_list_to_date').getValue();
   var ddiff = d2 - d1;
-  cashListSetPeriod(d1.getTime()-ddiff, d2.getTime()-ddiff);
+  if (periodIsWholeMonth(d1,d2)) {
+    d2 = d1-3600000;
+    d1 = new Date(d2);
+    d1.setDate(1);
+    cashListSetPeriod(d1,d2);
+  } else
+    cashListSetPeriod(d1.getTime()-ddiff, d2.getTime()-ddiff);
 }
 
 function cashListSetNextPeriod() {
   var d1 = Ext.getCmp('cash_list_from_date').getValue();
   var d2 = Ext.getCmp('cash_list_to_date').getValue();
   var ddiff = d2 - d1;
-  cashListSetPeriod(d1.getTime()+ddiff, d2.getTime()+ddiff);
+  if (periodIsWholeMonth(d1,d2)) {
+    d1 = d2.getTime()+24*3600000;
+    d2 = new Date(d1);
+    d2.setDate(32-new Date(d2.getYear(), d2.getMonth(), 32).getDate());
+    cashListSetPeriod(d1,d2);
+  } else
+    cashListSetPeriod(d1.getTime()+ddiff, d2.getTime()+ddiff);
 }
 
 /*var cash_list_refresh =
