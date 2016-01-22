@@ -225,7 +225,7 @@ var cash_list_prev_period =
     tooltip: 'Prev period',
     name: 'cash_list_prev_period',
     id: 'cash_list_prev_period',
-    handler: setPrevPeriod 
+    handler: cashListSetPrevPeriod 
 }; // cash_list_prev_period
 
 var cash_list_next_period =
@@ -235,7 +235,7 @@ var cash_list_next_period =
     tooltip: 'Next period',
     name: 'cash_list_next_period',
     id: 'cash_list_next_period',
-    handler: setNextPeriod 
+    handler: cashListSetNextPeriod 
 }; // cash_list_next_period
 
 
@@ -310,7 +310,7 @@ function listRefresh(_cb) {
   setAnkhor();
 }
 
-function setPeriod(d1, d2) {
+function cashListSetPeriod(d1, d2) {
   if (new Date(d1) > Ext.getCmp('cash_list_from_date').maxValue) return;
   var ChangeHandler = Ext.getCmp('cash_list_from_date').onChange;
   Ext.getCmp('cash_list_from_date').onChange = function(){};
@@ -319,18 +319,18 @@ function setPeriod(d1, d2) {
   Ext.getCmp('cash_list_from_date').onChange = ChangeHandler;
 }
 
-function setPrevPeriod() {
+function cashListSetPrevPeriod() {
   var d1 = Ext.getCmp('cash_list_from_date').getValue();
   var d2 = Ext.getCmp('cash_list_to_date').getValue();
   var ddiff = d2 - d1;
   setPeriod(d1.getTime()-ddiff, d2.getTime()-ddiff);
 }
 
-function setNextPeriod() {
+function cashListSetNextPeriod() {
   var d1 = Ext.getCmp('cash_list_from_date').getValue();
   var d2 = Ext.getCmp('cash_list_to_date').getValue();
   var ddiff = d2 - d1;
-  setPeriod(d1.getTime()+ddiff, d2.getTime()+ddiff);
+  cashListSetPeriod(d1.getTime()+ddiff, d2.getTime()+ddiff);
 }
 
 /*var cash_list_refresh =
@@ -596,8 +596,8 @@ function setListAnkhor() {
 }
 
 function setDefaultListVal() {
-  setPeriod(new Date((new Date).getTime() - (3600000*24*7)),
-            new Date());
+  cashListSetPeriod(new Date((new Date).getTime() - (3600000*24*7)),
+                    new Date());
 }
 
 
