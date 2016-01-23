@@ -218,6 +218,28 @@ function deleteItem(v_id) {
 
 
 /* panel with grid */
+var cash_list_prev_period =
+{
+    xtype: 'button',
+    text: '<',
+    tooltip: lang(237),
+    name: 'cash_list_prev_period',
+    id: 'cash_list_prev_period',
+    handler: cashListSetPrevPeriod 
+}; // cash_list_prev_period
+
+var cash_list_next_period =
+{
+    xtype: 'button',
+    text: '>',
+    tooltip: lang(238),
+    name: 'cash_list_next_period',
+    id: 'cash_list_next_period',
+    handler: cashListSetNextPeriod 
+}; // cash_list_next_period
+
+
+
 var cash_list_from_date =
 {
     xtype: 'datefield',
@@ -286,6 +308,50 @@ function listRefresh(_cb) {
   });
 
   setAnkhor();
+}
+
+function periodIsWholeMonth(start, end) {
+  var d1 = new Date(start);
+  var d2 = new Date(end);
+  return (
+    (d1.getDate()==1) &&
+    (d2.getDate()==32-new Date(d2.getYear(),d2.getMonth(), 32).getDate()) &&
+    ((d2-d1) < 32*24*3600000)  );
+}
+
+function cashListSetPeriod(d1, d2) {
+  if (new Date(d1) > Ext.getCmp('cash_list_from_date').maxValue) return;
+  var ChangeHandler = Ext.getCmp('cash_list_from_date').onChange;
+  Ext.getCmp('cash_list_from_date').onChange = function(){};
+  Ext.getCmp('cash_list_from_date').setValue(new Date(d1));
+  Ext.getCmp('cash_list_to_date').setValue(new Date(d2));
+  Ext.getCmp('cash_list_from_date').onChange = ChangeHandler;
+}
+
+function cashListSetPrevPeriod() {
+  var d1 = Ext.getCmp('cash_list_from_date').getValue();
+  var d2 = Ext.getCmp('cash_list_to_date').getValue();
+  var ddiff = d2 - d1;
+  if (periodIsWholeMonth(d1,d2)) {
+    d2 = d1-3600000;
+    d1 = new Date(d2);
+    d1.setDate(1);
+    cashListSetPeriod(d1,d2);
+  } else
+    cashListSetPeriod(d1.getTime()-ddiff, d2.getTime()-ddiff);
+}
+
+function cashListSetNextPeriod() {
+  var d1 = Ext.getCmp('cash_list_from_date').getValue();
+  var d2 = Ext.getCmp('cash_list_to_date').getValue();
+  var ddiff = d2 - d1;
+  if (periodIsWholeMonth(d1,d2)) {
+    d1 = d2.getTime()+24*3600000;
+    d2 = new Date(d1);
+    d2.setDate(32-new Date(d2.getYear(), d2.getMonth(), 32).getDate());
+    cashListSetPeriod(d1,d2);
+  } else
+    cashListSetPeriod(d1.getTime()+ddiff, d2.getTime()+ddiff);
 }
 
 /*var cash_list_refresh =
@@ -409,7 +475,14 @@ var cash_list_tb = {
       xtype: 'toolbar',
       dock: 'top',
       ui: 'footer',
-      items: [cash_list_from_date, " ", cash_list_to_date, " ", cash_list_filter, cash_list_filter_loading, '->', cash_list_edit_btn_ocr_check, " ", cash_list_edit_btn_add],
+      items: [cash_list_prev_period, 
+              cash_list_from_date, " ",
+              cash_list_to_date,
+              cash_list_next_period, " ",
+              cash_list_filter,
+              cash_list_filter_loading, '->',
+              cash_list_edit_btn_ocr_check, " ",
+              cash_list_edit_btn_add],
       region: 'north',
       id: "cash_list_tb"
 }; //cash_list_tb
@@ -544,8 +617,8 @@ function setListAnkhor() {
 }
 
 function setDefaultListVal() {
-  Ext.getCmp('cash_list_from_date').setValue(new Date((new Date).getTime() - (3600000*24*7)));
-  Ext.getCmp('cash_list_to_date').setValue(new Date());
+  cashListSetPeriod(new Date((new Date).getTime() - (3600000*24*7)),
+                    new Date());
 }
 
 
@@ -583,3 +656,5 @@ var cash_list_panel = Ext.create('Ext.Panel', {
     }
 
 });//cash_list_panel
+
+
