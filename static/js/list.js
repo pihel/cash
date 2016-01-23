@@ -221,7 +221,7 @@ function deleteItem(v_id) {
 var cash_list_prev_period =
 {
     xtype: 'button',
-    text: '<',
+    text: '&lt;',
     tooltip: lang(237),
     name: 'cash_list_prev_period',
     id: 'cash_list_prev_period',
@@ -231,7 +231,7 @@ var cash_list_prev_period =
 var cash_list_next_period =
 {
     xtype: 'button',
-    text: '>',
+    text: '&gt;',
     tooltip: lang(238),
     name: 'cash_list_next_period',
     id: 'cash_list_next_period',
@@ -315,7 +315,7 @@ function periodIsWholeMonth(start, end) {
   var d2 = new Date(end);
   return (
     (d1.getDate()==1) &&
-    (d2.getDate()==32-new Date(d2.getYear(),d2.getMonth(), 32).getDate()) &&
+    (d2.getDate()==32-new Date(d2.getFullYear(),d2.getMonth(), 32).getDate()) &&
     ((d2-d1) < 32*24*3600000)  );
 }
 
@@ -331,7 +331,7 @@ function cashListSetPeriod(d1, d2) {
 function cashListSetPrevPeriod() {
   var d1 = Ext.getCmp('cash_list_from_date').getValue();
   var d2 = Ext.getCmp('cash_list_to_date').getValue();
-  var ddiff = d2 - d1;
+  var ddiff = d2 - d1 + 1;
   if (periodIsWholeMonth(d1,d2)) {
     d2 = d1-3600000;
     d1 = new Date(d2);
@@ -344,11 +344,11 @@ function cashListSetPrevPeriod() {
 function cashListSetNextPeriod() {
   var d1 = Ext.getCmp('cash_list_from_date').getValue();
   var d2 = Ext.getCmp('cash_list_to_date').getValue();
-  var ddiff = d2 - d1;
+  var ddiff = d2 - d1 + 1;
   if (periodIsWholeMonth(d1,d2)) {
     d1 = d2.getTime()+24*3600000;
     d2 = new Date(d1);
-    d2.setDate(32-new Date(d2.getYear(), d2.getMonth(), 32).getDate());
+    d2.setDate(32-new Date(d2.getFullYear(), d2.getMonth(), 32).getDate());
     cashListSetPeriod(d1,d2);
   } else
     cashListSetPeriod(d1.getTime()+ddiff, d2.getTime()+ddiff);
