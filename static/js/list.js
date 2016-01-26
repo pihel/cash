@@ -344,7 +344,7 @@ function cashListSetPrevPeriod() {
 function cashListSetNextPeriod() {
   var d1 = Ext.getCmp('cash_list_from_date').getValue();
   var d2 = Ext.getCmp('cash_list_to_date').getValue();
-  var ddiff = d2 - d1 + 1;
+  var ddiff = d2 - d1 + 24*3600000;
   if (periodIsWholeMonth(d1,d2)) {
     d1 = d2.getTime()+24*3600000;
     d2 = new Date(d1);
