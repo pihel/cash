@@ -14,7 +14,7 @@ var cash_analiz_dyn_from_date =
     name: 'cash_analiz_dyn_from_date',
     id: 'cash_analiz_dyn_from_date',
     labelWidth: 55,
-    format: langDateFormat,
+    format: settings.date_format,
     maxValue: new Date(),
     width: 160,
     onChange: cash_analiz_dyn_refresh
@@ -29,7 +29,7 @@ var cash_analiz_dyn_to_date =
     name: 'cash_analiz_dyn_to_date',
     id: 'cash_analiz_dyn_to_date',
     labelWidth: 20,
-    format: langDateFormat,
+    format: settings.date_format,
     width: 120,
     onChange: cash_analiz_dyn_refresh
 }; // cash_analiz_dyn_to_date

@@ -248,7 +248,7 @@ var cash_list_from_date =
     name: 'cash_list_from_date',
     id: 'cash_list_from_date',
     labelWidth: 55,
-    format: langDateFormat,
+    format: settings.date_format,
     maxValue: new Date(),
     width: 160,
     onChange: function() { listRefresh(function() {}); }
@@ -263,7 +263,7 @@ var cash_list_to_date =
     name: 'cash_list_to_date',
     id: 'cash_list_to_date',
     labelWidth: 20,
-    format: langDateFormat,
+    format: settings.date_format,
     width: 120,
     onChange: function() { listRefresh(function() {}); }
 }; // cash_list_to_date

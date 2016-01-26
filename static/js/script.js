@@ -73,7 +73,7 @@ function price_r (val) {
 function dateRender(value) {
   if(value == undefined) return "";
   var dt = new Date(value);
-  var val = Ext.Date.format(dt,langDateFormat);
+  var val = Ext.Date.format(dt,settings.date_format);
   return val;
 }
 
