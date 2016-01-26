@@ -3,6 +3,7 @@ abstract class iLang {
   //public $start_week;
   public $translate;
   public $currency;
+  public $dateFormat;
 }
 
 class Lang {
@@ -42,6 +43,11 @@ class Lang {
     
     return $l;
   }//get
+
+  public function getDateFormat() {
+    if (empty($this->data->dateFormat)) return "Y-m-d";
+    return $this->data->dateFormat;
+  }//getDateFormat
   
   public function lst() {
     global $root;

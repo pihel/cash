@@ -91,7 +91,7 @@ var cash_plan_mnth_from_date =
     name: 'cash_plan_mnth_from_date',
     id: 'cash_plan_mnth_from_date',
     labelWidth: 55,
-    format: "Y-m-d",
+    format: langDateFormat,
     maxValue: new Date(),
     width: 160,
     onChange: cash_plan_mnth_refresh
@@ -106,7 +106,7 @@ var cash_plan_mnth_to_date =
     name: 'cash_plan_mnth_to_date',
     id: 'cash_plan_mnth_to_date',
     labelWidth: 20,
-    format: "Y-m-d",
+    format: langDateFormat,
     width: 120,
     onChange: cash_plan_mnth_refresh
 }; // cash_plan_mnth_to_date

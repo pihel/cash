@@ -9,7 +9,7 @@ var cash_list_model = Ext.define('cash_list_model', {
       {name: 'price', 	      type: 'number'},
       {name: 'qnt', 		      type: 'number'},
       {name: 'amount', 	      type: 'number'},
-      {name: 'oper_date',	    type: 'date', dateFormat : "Y-m-d"},
+      {name: 'oper_date',	    type: 'date', dateFormat: "Y-m-d"},
       {name: 'date_edit',     type: 'date', dateFormat: "Y-m-d H:i:s"},
       {name: 'org_id', 	      type: 'int'},
       {name: 'oname', 	      type: 'string'},
@@ -248,7 +248,7 @@ var cash_list_from_date =
     name: 'cash_list_from_date',
     id: 'cash_list_from_date',
     labelWidth: 55,
-    format: "Y-m-d",
+    format: langDateFormat,
     maxValue: new Date(),
     width: 160,
     onChange: function() { listRefresh(function() {}); }
@@ -263,7 +263,7 @@ var cash_list_to_date =
     name: 'cash_list_to_date',
     id: 'cash_list_to_date',
     labelWidth: 20,
-    format: "Y-m-d",
+    format: langDateFormat,
     width: 120,
     onChange: function() { listRefresh(function() {}); }
 }; // cash_list_to_date

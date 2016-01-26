@@ -15,6 +15,7 @@ require_once('lib/init.php');
     <script src="//maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
     <script language="javascript">
       var settings = <? unset($settings['ocr']); echo json_encode($settings);?>;
+      var langDateFormat = <?=json_encode($lng->getDateFormat());?>;
       var translate = <?=json_encode($lng->get(null));?>;
     </script>
     <script src="<?=$settings['static'];?>/js/script.js?<?=$settings['version'];?>" charset="UTF-8" type="text/javascript"></script>

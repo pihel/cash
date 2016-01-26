@@ -11,7 +11,7 @@ var cash_item_date =
     id: 'cash_item_date',
     value: new Date(),
     labelWidth: 100,
-    format: "Y-m-d",
+    format: langDateFormat,
     allowBlank: false,
     width: 200
 }; // cash_item_date

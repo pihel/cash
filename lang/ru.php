@@ -6,6 +6,8 @@ class LangRu extends iLang {
     2 => array("Доллар", 51, "$", "дол."),
     3 => array("Евро", 57, "€", "евр."),
   );
+
+  public $dateFormat = "d.m.Y";
   
   public $translate = array (
     //login
