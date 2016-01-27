@@ -181,7 +181,11 @@ var cash_goal_grid = Ext.create('Ext.grid.Panel', {
                               error(data.responseText);
                             }
                             loadMask_cash_goal_grid.hide();
-                        }//success
+                        },//success
+                        failure: function(response) {
+                            error(response.statusText);
+                            loadMask_cash_goal_grid.hide();
+                        }//failure
                       }); //Ext.Ajax.request
                   }
                 }, " ", {
@@ -205,7 +209,11 @@ var cash_goal_grid = Ext.create('Ext.grid.Panel', {
                             }
                             loadMask_cash_goal_grid.hide();
                             grid.getStore().getAt(rowIndex);
-                        }//success
+                        },//success
+                        failure: function(response) {
+                            error(response.statusText);
+                            loadMask_cash_goal_grid.hide();
+                        }//failure
                       }); //Ext.Ajax.request
                   }
                 }, " ", {
@@ -240,7 +248,11 @@ var cash_goal_grid = Ext.create('Ext.grid.Panel', {
                                     error(data.responseText);
                                   }
                                   loadMask_cash_goal_grid.hide();
-                              }//success
+                              },//success
+                              failure: function(response) {
+                                  error(response.statusText);
+                                  loadMask_cash_goal_grid.hide();
+                              }//failure
                             }); //Ext.Ajax.request
                           }
                           loadMask_cash_goal_grid.hide();
