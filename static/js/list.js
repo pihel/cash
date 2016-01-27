@@ -209,7 +209,11 @@ function deleteItem(v_id) {
                 }
                 cash_list_grid.setLoading(false);
                 listRefresh();
-              } //success
+              },//success
+              failure: function(response) {
+                error(response.statusText);
+                cash_list_grid.setLoading(false);
+              }//failure
           }); //Ext.Ajax.request
         } //buttonId == "ok"
       } // fn - button click
