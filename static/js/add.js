@@ -12,6 +12,7 @@ var cash_item_date =
     value: new Date(),
     labelWidth: 100,
     format: settings.date_format,
+    submitFormat: "Y-m-d",
     allowBlank: false,
     width: 200
 }; // cash_item_date
