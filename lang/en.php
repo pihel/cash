@@ -4,6 +4,8 @@ class LangEn extends iLang {
     1 => array("Euro", 1, "€", "eur."),
     2 => array("Dollar", 0.75, "$", "dol."),
   );
+
+  public $dateFormat = "m/d/Y";
   
   public $translate = array (
     //login

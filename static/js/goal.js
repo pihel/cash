@@ -149,8 +149,8 @@ var cash_goal_grid = Ext.create('Ext.grid.Panel', {
       {text: lang(30), dataIndex: 'login',    hidden: false },
       {text: lang(78), dataIndex: 'plan'	,   renderer: price, tdCls: 'x-price-cell', editor: {xtype: 'numberfield', allowBlank: true} },
       {text: lang(21), dataIndex: 'qnt'	,     editor: {xtype: 'numberfield', allowBlank: true}},
-      {text: lang(232), dataIndex: 'plan_date'	, format: "Y-m-d", renderer: dateRender, field: {xtype: 'datefield', format: 'Y-m-d', submitFormat: 'Y-m-d', allowBlank: true }},
-      {text: lang(233), dataIndex: 'fact_date'	, format: "Y-m-d", renderer: dateRender, field: {xtype: 'datefield', format: 'Y-m-d', submitFormat: 'Y-m-d', allowBlank: true }},
+      {text: lang(232), dataIndex: 'plan_date'	, renderer: dateRender, field: {xtype: 'datefield', submitFormat: 'Y-m-d', allowBlank: true }},
+      {text: lang(233), dataIndex: 'fact_date'	, renderer: dateRender, field: {xtype: 'datefield', submitFormat: 'Y-m-d', allowBlank: true }},
       {text: lang(234), dataIndex: 'iord',  editor: {xtype: 'numberfield', allowBlank: true} },
       {
           menuDisabled: true,
@@ -181,7 +181,11 @@ var cash_goal_grid = Ext.create('Ext.grid.Panel', {
                               error(data.responseText);
                             }
                             loadMask_cash_goal_grid.hide();
-                        }//success
+                        },//success
+                        failure: function(response) {
+                            error(response.statusText);
+                            loadMask_cash_goal_grid.hide();
+                        }//failure
                       }); //Ext.Ajax.request
                   }
                 }, " ", {
@@ -205,7 +209,11 @@ var cash_goal_grid = Ext.create('Ext.grid.Panel', {
                             }
                             loadMask_cash_goal_grid.hide();
                             grid.getStore().getAt(rowIndex);
-                        }//success
+                        },//success
+                        failure: function(response) {
+                            error(response.statusText);
+                            loadMask_cash_goal_grid.hide();
+                        }//failure
                       }); //Ext.Ajax.request
                   }
                 }, " ", {
@@ -240,7 +248,11 @@ var cash_goal_grid = Ext.create('Ext.grid.Panel', {
                                     error(data.responseText);
                                   }
                                   loadMask_cash_goal_grid.hide();
-                              }//success
+                              },//success
+                              failure: function(response) {
+                                  error(response.statusText);
+                                  loadMask_cash_goal_grid.hide();
+                              }//failure
                             }); //Ext.Ajax.request
                           }
                           loadMask_cash_goal_grid.hide();
