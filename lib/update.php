@@ -12,7 +12,7 @@ class DbUpdate {
     try {
       return $this->db->exec($sql);
     }
-    catch(Exception $e) {
+    catch(Throwable $t) {
       return false;
     }
     catch(Exception $e) {
@@ -25,7 +25,7 @@ class DbUpdate {
     try {
       return $this->db->element($sql);
     }
-    catch(Exception $e) {
+    catch(Throwable $t) {
       return false;
     }
     catch(Exception $e) {
