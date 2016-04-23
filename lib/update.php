@@ -1,4 +1,4 @@
-<?
+<?php
 class DbUpdate {
   private $db, $lng, $usr;
   
@@ -15,12 +15,18 @@ class DbUpdate {
     catch(Exception $e) {
       return false;
     }
+    catch(Exception $e) {
+      return false;
+    }
     return false;
   }
   
   public function select($sql) {
     try {
       return $this->db->element($sql);
+    }
+    catch(Exception $e) {
+      return false;
     }
     catch(Exception $e) {
       return false;
