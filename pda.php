@@ -426,7 +426,7 @@ if(!empty($_POST['cash_item_save'])) {
                 //console.log("lat:" + pos.coords.latitude + ", long:" + pos.coords.longitude);
                 if(typeof _fnc != "undefined") _fnc(pos.coords.latitude, pos.coords.longitude);
               }, function(error) {
-                if(error.code == error.PERMISSION_DENIED && error.message.indexOf("Only secure origins are allowed") == 0) {
+                if(error.code == error.PERMISSION_DENIED /*&& error.message.indexOf("Only secure origins are allowed") == 0*/) {
                   getGmapLocation(function(lat, lon) {
                     //console.log(lat, lon);
                     if(typeof _fnc != "undefined") _fnc(lat, lon);
