@@ -1,4 +1,4 @@
-<?
+<?php
 class DbUpdate {
   private $db, $lng, $usr;
   
@@ -12,6 +12,9 @@ class DbUpdate {
     try {
       return $this->db->exec($sql);
     }
+    catch(Throwable $t) {
+      return false;
+    }
     catch(Exception $e) {
       return false;
     }
@@ -21,6 +24,9 @@ class DbUpdate {
   public function select($sql) {
     try {
       return $this->db->element($sql);
+    }
+    catch(Throwable $t) {
+      return false;
     }
     catch(Exception $e) {
       return false;
