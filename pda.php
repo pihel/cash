@@ -221,7 +221,9 @@ if(!empty($_POST['cash_item_save'])) {
       } //id
       
       function ajax(url, _cb, np, post) {
-        request = new XMLHttpRequest;
+        var request = [];
+        var k = url;
+        request[k] = new XMLHttpRequest;
         
         if( url.indexOf("?") == -1 ) {
           url = url + "?";
@@ -231,24 +233,24 @@ if(!empty($_POST['cash_item_save'])) {
         url = url + "xcsrf=<?=$settings['csrf'];?>";
         
         if(post != undefined) {
-          request.open('POST', url, true);
-          request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-          //request.setRequestHeader("Content-Length", post.length);
+          request[k].open('POST', url, true);
+          request[k].setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          //request[k].setRequestHeader("Content-Length", post.length);
         } else {
-          request.open('GET', url, true);
+          request[k].open('GET', url, true);
         }
 
-        request.onload = function() {
-          if (request.status >= 200 && request.status < 400){
+        request[k].onload = function() {
+          if (request[k].status >= 200 && request[k].status < 400){
             if(np) {
-              _cb(request.responseText);
+              _cb(request[k].responseText);
             } else {
-              _cb(JSON.parse(request.responseText));
+              _cb(JSON.parse(request[k].responseText));
             }
           } 
         }
 
-        request.send(post);
+        request[k].send(post);
       } //ajax
       
       function getLineTpl(o) {
@@ -318,12 +320,14 @@ if(!empty($_POST['cash_item_save'])) {
       function add(o) {
         var send = "";
         id("lgif").style.display = 'inline';
+        //debugger;
         reloadLocation();
         for(var i = 0; i < id("add_frm").elements.length; i++) {
           if(i > 0) send += "&";
           send += id("add_frm").elements[i].name + "=" + encodeURIComponent( id("add_frm").elements[i].value );
         }
         ajax("ajax/add.php", function(data) {
+          //console.log(data);
           if(data.success) {
             //clear
             id("cash_item_nmcl_cb").value = "";
@@ -334,6 +338,7 @@ if(!empty($_POST['cash_item_save'])) {
             //refresh
             refresh_list();
           } else {
+            //console.log(data);
             alert(data.msg);
           }
           id("lgif").style.display = 'none';
@@ -409,11 +414,24 @@ if(!empty($_POST['cash_item_save'])) {
         }
       } //fill
       
+      function getGmapLocation(_fnc) {
+        ajax( "https://www.googleapis.com/geolocation/v1/geolocate?key=<?=$settings['g_key'];?>", function(s) {
+            if(typeof _fnc != "undefined") _fnc(s.location.lat, s.location.lng);
+        }, false, "");
+      };
+      
       function getLocation(_fnc) {
           if (navigator.geolocation) {
               navigator.geolocation.getCurrentPosition(function(pos) {
                 //console.log("lat:" + pos.coords.latitude + ", long:" + pos.coords.longitude);
                 if(typeof _fnc != "undefined") _fnc(pos.coords.latitude, pos.coords.longitude);
+              }, function(error) {
+                if(error.code == error.PERMISSION_DENIED && error.message.indexOf("Only secure origins are allowed") == 0) {
+                  getGmapLocation(function(lat, lon) {
+                    //console.log(lat, lon);
+                    if(typeof _fnc != "undefined") _fnc(lat, lon);
+                  });
+                } //PERMISSION_DENIED
               });
           } else {
               if(typeof _fnc != "undefined") _fnc(0, 0);

@@ -337,11 +337,34 @@ function update() {
   });
 }
 
+function getGmapLocation(_fnc) {
+  Ext.Ajax.extraParams = {} //disable xcsrf for external systems
+  Ext.Ajax.request({
+    url: "https://www.googleapis.com/geolocation/v1/geolocate?key=" + settings.g_key,
+    method: "POST",
+    headers : {
+        'Content-Type' : 'application/json;charset=utf-8'
+    },
+    success: function(data) {
+      var obj = Ext.decode(data.responseText);
+      console.log(obj);
+      if(typeof _fnc != "undefined") _fnc(obj.location.lat, obj.location.lng);
+    }
+  }); //Ext.Ajax.request
+  Ext.Ajax.extraParams = {'xcsrf': settings.csrf }
+};
+
 function getLocation(_fnc) {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(pos) {
           //console.log("lat:" + pos.coords.latitude + ", long:" + pos.coords.longitude);
           if(typeof _fnc != "undefined") _fnc(pos.coords.latitude, pos.coords.longitude);
+        }, function(error) {
+          if(error.code == error.PERMISSION_DENIED && error.message.indexOf("Only secure origins are allowed") == 0) {
+            getGmapLocation(function(lat, lon) {
+              if(typeof _fnc != "undefined") _fnc(lat, lon);
+            });
+          } //PERMISSION_DENIED
         });
     } else {
         if(typeof _fnc != "undefined") _fnc(0, 0);

@@ -19,7 +19,7 @@ $demo = 0;
 $extjs = 'extjs';
 
 /* App version */
-$version = "1.066";
+$version = "1.067";
 //$version = rand(); //for reset cache
 
 /* Path to imgs and js */
@@ -27,6 +27,9 @@ $static = "static";
 
 /* Path to OCR service */
 $ocr_host = "http://homebuh.pro/api/ocr/recognize.php";
+
+/* Google map key */
+$g_key = '';
 
 if($debug) {
   error_reporting(~E_NOTICE);
@@ -82,6 +85,7 @@ $settings['debug'] = $debug;
 $settings['static'] = $static;
 $settings['extjs'] = $extjs;
 $settings['ocr_host'] = $ocr_host;
+$settings['g_key'] = $g_key;
 
 //setup or update
 $settings['setup'] = 0;
@@ -98,3 +102,4 @@ if( $upd->needSetup() ) {
   $settings = array_merge($settings, $ch->getSettings() );
 }
 $settings['date_format'] = $lng->getDateFormat();
+$settings['extjs'] = 'extjs';
