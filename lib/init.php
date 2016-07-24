@@ -102,4 +102,3 @@ if( $upd->needSetup() ) {
   $settings = array_merge($settings, $ch->getSettings() );
 }
 $settings['date_format'] = $lng->getDateFormat();
-$settings['extjs'] = 'extjs';
