@@ -1,4 +1,4 @@
 <?
 require_once("lib/init.php");
-throw new Error("TODO");
+throw new CashError("TODO");
 ?>

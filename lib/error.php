@@ -1,5 +1,5 @@
 <?
-class Error extends Exception {
+class CashError extends Exception {
   public $message;
 
   function __construct($msg, $code = 0) {

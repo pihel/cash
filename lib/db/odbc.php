@@ -31,7 +31,7 @@ class ODBC extends FileCacheDB {
       if(!empty($sql)) {
         $error_msg = $error_msg."-------------------------\nSQL trace: ".$sql.", \n-------------------------\nParams: ".print_r($prms,1);
       }
-      throw new Error($error_msg);
+      throw new CashError($error_msg);
     }
   }
 
