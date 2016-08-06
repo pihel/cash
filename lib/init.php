@@ -51,7 +51,7 @@ $max_file_size = get_max_fileupload_size();
 
 if (!extension_loaded('sqlite3')) {
   echo "SqLite3 module not loaded";
-  throw new Error("SqLite3 module not loaded");
+  throw new CashError("SqLite3 module not loaded");
 }
 
 $db = new SQLITE_DB($sqlite_path);

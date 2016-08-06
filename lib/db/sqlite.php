@@ -24,7 +24,7 @@ class SQLITE_DB extends DB {
 
     $error_msg = "[".$code."] ".$this->_con->lastErrorMsg();
     //$this->_con->close();
-    throw new Error($error_msg);
+    throw new CashError($error_msg);
   }
 
   public function start_tran() {

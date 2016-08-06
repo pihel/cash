@@ -21,7 +21,7 @@ class MySQLi_DB extends FileCacheDB {
       $error_msg = "[".$this->_con->errno."] ".$this->_con->error;
     }
     //$this->_con->close();
-    throw new Error($error_msg);
+    throw new CashError($error_msg);
   }
 
   public function commit() {
