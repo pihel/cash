@@ -39,7 +39,7 @@ abstract class DB {
 
   public function connect() {
     $this->_con = $this->try_connect($this->_srv, $this->_usr, $this->_pwd, $this->_db);
-    if($this->_con === false) throw new Error("Error connect to DB");
+    if($this->_con === false) throw new CashError("Error connect to DB");
 
     $this->after_connect();
   }

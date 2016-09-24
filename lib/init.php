@@ -19,7 +19,7 @@ $demo = 0;
 $extjs = 'extjs';
 
 /* App version */
-$version = "1.067";
+$version = "1.068";
 //$version = rand(); //for reset cache
 
 /* Path to imgs and js */
@@ -38,7 +38,7 @@ if($debug) {
 $settings = array();
 
 require_once($root.'lib/functions.php');
-require_once($root.'lib/error.php');
+require_once($root.'lib/casherror.php');
 require_once($root.'lib/db/db.php');
 require_once($root.'lib/db/sqlite.php');
 
@@ -51,7 +51,7 @@ $max_file_size = get_max_fileupload_size();
 
 if (!extension_loaded('sqlite3')) {
   echo "SqLite3 module not loaded";
-  throw new Error("SqLite3 module not loaded");
+  throw new CashError("SqLite3 module not loaded");
 }
 
 $db = new SQLITE_DB($sqlite_path);

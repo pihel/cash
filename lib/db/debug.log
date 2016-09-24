@@ -1,0 +1,50 @@
+[2016-09-24 11:09:45]
+SELECT 1 as exst FROM db
++query time: 0.0010719299316406 sec.
+
+[2016-09-24 11:09:45]
+SELECT value FROM cashes_setting WHERE name = 'version'
++query time: 0.00033402442932129 sec.
+
+[2016-09-24 11:09:45]
+SELECT name, value FROM cashes_setting
+            UNION 
+            SELECT 'sign', c.sign FROM currency c WHERE id = 1
++query time: 0.00034713745117188 sec.
+
+[2016-09-24 11:09:56]
+SELECT 1 as exst FROM db
++query time: 0.00084400177001953 sec.
+
+[2016-09-24 11:09:56]
+SELECT value FROM cashes_setting WHERE name = 'version'
++query time: 0.00023794174194336 sec.
+
+[2016-09-24 11:09:56]
+SELECT name, value FROM cashes_setting
+            UNION 
+            SELECT 'sign', c.sign FROM currency c WHERE id = 1
++query time: 0.00035905838012695 sec.
+
+[2016-09-24 11:10:57]
+SELECT 1 as exst FROM db
++query time: 0.0009310245513916 sec.
+
+[2016-09-24 11:10:57]
+SELECT value FROM cashes_setting WHERE name = 'version'
++query time: 0.0002439022064209 sec.
+
+[2016-09-24 11:10:57]
+SELECT name, value FROM cashes_setting
+            UNION 
+            SELECT 'sign', c.sign FROM currency c WHERE id = 1
++query time: 0.00032591819763184 sec.
+
+[2016-09-24 11:11:19]
+SELECT 1 as exst FROM db
++query time: 0.00084280967712402 sec.
+
+[2016-09-24 11:11:20]
+SELECT 1 as exst FROM db
++query time: 0.00084686279296875 sec.
+

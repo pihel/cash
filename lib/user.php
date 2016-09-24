@@ -43,9 +43,7 @@ class User {
       session_write_close();
 
       //last auth
-      $this->db->start_tran();
-      $this->db->exec("UPDATE `users` SET oper_date = datetime(CURRENT_TIMESTAMP, 'localtime') WHERE bd_id = ? AND id = ? ", $this->db_id, $this->id);
-      $this->db->commit();
+      $this->setLastActive();
     }
     if(intval( $this->id ) == 0) return array('success'=>false, 'msg'=> $this->lng->get(175) );
 
@@ -53,6 +51,13 @@ class User {
     $this->rghts = $this->getRights();
 
     return array('success'=>true, 'msg'=> $this->id);
+  }
+  
+  public function setLastActive() {
+    //last auth
+    $this->db->start_tran();
+    $this->db->exec("UPDATE `users` SET oper_date = datetime(CURRENT_TIMESTAMP, 'localtime') WHERE bd_id = ? AND id = ? ", $this->db_id, $this->id);
+    $this->db->commit();
   }
 
   public function hash_pasw($pasw, $salt = "cash") {
