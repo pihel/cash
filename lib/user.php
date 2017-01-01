@@ -56,7 +56,7 @@ class User {
   public function setLastActive() {
     //last auth
     $this->db->start_tran();
-    $this->db->exec("UPDATE `users` SET oper_date = datetime(CURRENT_TIMESTAMP, 'localtime') WHERE bd_id = ? AND id = ? ", $this->db_id, $this->id);
+    $this->db->exec("UPDATE `users` SET oper_date = ". $this->db->getDateFnc() ." WHERE bd_id = ? AND id = ? ", $this->db_id, $this->id);
     $this->db->commit();
   }
 

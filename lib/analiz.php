@@ -166,7 +166,7 @@ class CashAnaliz {
     $sql =
     "SELECT
       replace(g.name, '.', ' ') as tname,
-      strftime('%Y-%m', c.date) as mname,
+      ". $this->db->getDateFormatFnc("%Y-%m", "c.date") ." as mname,
       SUM( c.price * c.qnt * cr.rate ) out_amount
     FROM
       `cashes_group` g
@@ -179,7 +179,7 @@ class CashAnaliz {
       AND c.date BETWEEN ? AND ?
       AND ( c.uid = ? OR 0 = ? )
     GROUP BY
-      strftime('%Y-%m', c.date), g.name
+      ". $this->db->getDateFormatFnc("%Y-%m", "c.date") .", g.name
     ORDER BY
       mname, g.name";
 
@@ -313,7 +313,7 @@ class CashAnaliz {
 
     $sql =
     "SELECT
-      strftime('%Y-%m', c.date) as tname,
+      ". $this->db->getDateFormatFnc("%Y-%m", "c.date") ." as tname,
       IFNULL(SUM( CASE WHEN c.type = 1 THEN c.price * c.qnt * cr.rate END ),0) in_amount,
       IFNULL(SUM( CASE WHEN c.type = 0 THEN c.price * c.qnt * cr.rate END ),0) out_amount
     FROM
@@ -325,7 +325,7 @@ class CashAnaliz {
       AND c.date BETWEEN ? AND  ?
       AND ( c.uid = ? OR 0 = ? )
     GROUP BY
-      strftime('%Y-%m', c.date)
+      ". $this->db->getDateFormatFnc("%Y-%m", "c.date") ."
     ORDER BY
       tname";
 
@@ -391,6 +391,8 @@ class CashAnaliz {
   public function getAvgInOut($uid = 0) {
     if(!$this->usr->canAnaliz()) return array();
     $uid = intval($uid);
+    
+    $from_date = strtotime(date('Y-m-01').' -6 months');
 
     $sql =
     "SELECT
@@ -398,18 +400,18 @@ class CashAnaliz {
     FROM
     (
 	    SELECT
-		    strftime('%Y-%m', c.date) as mnth,
+		    ". $this->db->getDateFormatFnc("%Y-%m", "c.date") ." as mnth,
 		    c.type,
 		    SUM(c.price * c.qnt) as amount
 	    FROM cashes c
 	    WHERE
-		    c.`date` >= DATETIME('now', '-6 month', 'start of month')
+		    c.`date` >= ".$from_date."
 		    AND c.bd_id = ?
 		    AND c.visible = 1
         AND ( c.uid = ? OR 0 = ? )
 	    GROUP BY
 		    c.type,
-		    strftime('%Y-%m', c.date)
+		    ". $this->db->getDateFormatFnc("%Y-%m", "c.date") ."
     )
     GROUP BY type
     ORDER BY type";

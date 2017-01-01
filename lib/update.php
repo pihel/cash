@@ -88,7 +88,7 @@ class DbUpdate {
     
     $this->db->exec(
           "INSERT INTO `users` (id, bd_id, login, pasw, `read`, `write`, analiz, setting, oper_date)
-		      VALUES( NULL, ?, ?, ?, ?, ?, ?, ?, datetime(CURRENT_TIMESTAMP, 'localtime') )", 
+		      VALUES( NULL, ?, ?, ?, ?, ?, ?, ?, ". $this->db->getDateFnc() ." )", 
           $db_id , $login, $this->usr->hash_pasw($pasw), 1, 1, 1, 1);
     $usr_id = $this->db->last_id();
     

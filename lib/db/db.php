@@ -55,6 +55,10 @@ abstract class DB {
   public function raiseError() {
     //virtual
   }
+  
+  public function start_tran() {
+    //virtual
+  }
 
   public function commit() {
     //virtual
@@ -192,6 +196,14 @@ abstract class DB {
   }
 
   function resetOldCache() {
+    //virtual
+  }
+  
+  public function getUpperFnc() {
+    //virtual
+  }
+  
+  public function getDateFnc() {
     //virtual
   }
 }

@@ -14,7 +14,7 @@ class SQLITE_DB extends DB {
   }
 
   public function after_connect() {
-    $this->_con->createFunction('UPPER_UTF8', array('SQLITE_DB', 'upper_utf'), 1);
+    $this->_con->createFunction($this->getUpperFnc(), array('SQLITE_DB', 'upper_utf'), 1);
   }
 
   public function raiseError() {
@@ -101,6 +101,22 @@ class SQLITE_DB extends DB {
     }
 
     return $rsql;
+  }
+  
+  public function getUpperFnc() {
+    return "UPPER_UTF8";
+  }
+  
+  public function getDateFnc() {
+    return "datetime(CURRENT_TIMESTAMP, 'localtime')";
+  }
+  
+  public function getDateFormatFnc($format, $col) {
+    return "strftime('".$format."', ".$col.")";
+  }
+  
+  public function getDateAddFnc($col, $interval) {
+    return "DATETIME(".$col.", '".interval. "')";
   }
 
   function __destruct() {

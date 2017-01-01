@@ -23,6 +23,10 @@ class MySQLi_DB extends FileCacheDB {
     //$this->_con->close();
     throw new CashError($error_msg);
   }
+  
+  public function start_tran() {
+    //
+  }
 
   public function commit() {
     $this->_con->commit();
@@ -91,11 +95,31 @@ class MySQLi_DB extends FileCacheDB {
 
     return $ret;
   }
+  
+  public function escape($s) {
+    return $this->_con->real_escape_string($s);
+  }
 
   public function getRealSql($sql, $args) {
     $sql = str_replace("?", "%s", $sql);
     $sql = vsprintf($sql, $args);
     return $sql;
+  }
+  
+  public function getUpperFnc() {
+    return "UPPER";
+  }
+  
+  public function getDateFnc() {
+    return "NOW()";
+  }
+  
+  public function getDateFormatFnc($format, $col) {
+    return "DATE_FORMAT(".$col.", '".$format."')";
+  }
+  
+  public function getDateAddFnc($col, $interval) {
+    return "DATE_ADD(".$col.", INTERVAL ".$interval.")";
   }
 
   function __destruct() {

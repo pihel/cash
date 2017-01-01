@@ -25,7 +25,7 @@ class Cash {
     if($is_int) {
       $f = " AND ".$name." ".$no."= ". $val;
     } else {
-      $f = " AND UPPER_UTF8(".$name_str.") ".$nos." like UPPER_UTF8('%". $this->db->escape($val)."%')";
+      $f = " AND ". $this->db->getUpperFnc() ."(".$name_str.") ".$nos." like ". $this->db->getUpperFnc() ."('%". $this->db->escape($val)."%')";
     }
     return $f;
   }
@@ -77,7 +77,7 @@ class Cash {
     $this->db->escape_res = true;
     $desc = "ASC";
     $select = 
-      "c.id, c.nmcl_id, cn.name as nom, c.`group`, cg.name gname, c.price, c.qnt, c.date as oper_date, datetime(c.date_edit, 'localtime') date_edit,
+      "c.id, c.nmcl_id, cn.name as nom, c.`group`, cg.name gname, c.price, c.qnt, c.date as oper_date, c.date_edit,
         c.org_id, co.name as oname, c.type, c.note, c.file, c.uid, u.login, cr.rate, cr.sign, c.cash_type_id, ct.name as cash_type,
         CASE WHEN c.type = 0 THEN -1 ELSE 1 END * c.price * c.qnt * cr.rate as amount";
     if($short) {
@@ -166,11 +166,11 @@ class Cash {
     if($limit == 0) $limit = 50;
 
     if( !empty($query) && $id > 0 ) {
-      $filter = " AND ( UPPER_UTF8(cn.name) like UPPER_UTF8('%". $this->db->escape($query) ."%') OR c.id = ". $id ." )";
+      $filter = " AND ( ". $this->db->getUpperFnc() ."(cn.name) like ". $this->db->getUpperFnc() ."('%". $this->db->escape($query) ."%') OR c.id = ". $id ." )";
     } else if($id > 0) {
       $filter = " AND c.id = ". $id;
     } else if(!empty($query)) {
-      $filter = " AND UPPER_UTF8(cn.name) like UPPER_UTF8('%". $this->db->escape($query) ."%') ";
+      $filter = " AND ". $this->db->getUpperFnc() ."(cn.name) like ". $this->db->getUpperFnc() ."('%". $this->db->escape($query) ."%') ";
     }
 
     $sql =
@@ -220,11 +220,11 @@ class Cash {
       ON(cg.id = c.`group`)
     WHERE
       ( c.nmcl_id = ? OR (c.nmcl_id IN(SELECT n.id FROM cashes_nom n 
-                                 WHERE UPPER_UTF8(n.name) like UPPER_UTF8('%". $this->db->escape($nmcl_name)."%')) AND ? = 0) 
+                                 WHERE ". $this->db->getUpperFnc() ."(n.name) like ". $this->db->getUpperFnc() ."('%". $this->db->escape($nmcl_name)."%')) AND ? = 0) 
       )
       AND c.bd_id = ? AND c.visible = 1
       AND c.date > ( SELECT 
-                        DATETIME(MAX(c1.date), '".$this->from. "') 
+                        ".$this->db->getDateAddFnc("MAX(c1.date)", $this->from)."
                      FROM 
                         cashes c1 
                      WHERE 
@@ -278,11 +278,11 @@ class Cash {
     if(!$this->usr->canRead()) return array();
 
     if( !empty($query) && $id > 0 ) {
-      $filter = " AND ( UPPER_UTF8(co.name) like UPPER_UTF8('%". $this->db->escape($query) ."%') OR c.id = ". $id ." )";
+      $filter = " AND ( ". $this->db->getUpperFnc() ."(co.name) like ". $this->db->getUpperFnc() ."('%". $this->db->escape($query) ."%') OR c.id = ". $id ." )";
     } else if($id > 0) {
       $filter = " AND c.id = ". $id;
     } else if(!empty($query)) {
-      $filter = " AND UPPER_UTF8(co.name) like UPPER_UTF8('%". $this->db->escape($query) ."%') ";
+      $filter = " AND ". $this->db->getUpperFnc() ."(co.name) like ". $this->db->getUpperFnc() ."('%". $this->db->escape($query) ."%') ";
     }
 
     $sql =
@@ -329,7 +329,7 @@ class Cash {
       $ref_id = $this->db->element("SELECT MAX(id) id from ".$ref." WHERE ID = ?", $name );
     } else {
       //название
-      $ref_id = $this->db->element("SELECT MAX(id) id from ".$ref." WHERE UPPER_UTF8(name) = UPPER_UTF8(?)", $name );
+      $ref_id = $this->db->element("SELECT MAX(id) id from ".$ref." WHERE ". $this->db->getUpperFnc() ."(name) = ". $this->db->getUpperFnc() ."(?)", $name );
     }
     $ref_id = intval($ref_id);
 
@@ -458,7 +458,7 @@ class Cash {
           `type` = ?,
           note = ?,
           cur_id = ?,
-          date_edit = datetime(CURRENT_TIMESTAMP, 'localtime')
+          date_edit = ". $this->db->getDateFnc() ."
      WHERE id = ? ";
 
     $this->db->exec($sql,
@@ -538,7 +538,7 @@ class Cash {
 
     $sql =
     "INSERT INTO `cashes` (nmcl_id, `group`, price, cash_type_id, qnt, `date`, org_id, bd_id, uid, `file`, `type` ,note, cur_id, geo_pos, visible, date_edit)
-     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, datetime(CURRENT_TIMESTAMP, 'localtime'))";
+     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ". $this->db->getDateFnc() .")";
 
     $this->db->exec($sql,
       $refb['cash_item_nmcl_cb'],
@@ -578,7 +578,7 @@ class Cash {
 	  FROM
       cashes_nom cn
 	  GROUP BY
-      UPPER_UTF8(cn.name)
+      ". $this->db->getUpperFnc() ."(cn.name)
 	  HAVING
       COUNT(*) > 1";
     $dbls = $this->db->select($sql);
@@ -590,7 +590,7 @@ class Cash {
 	  FROM
       cashes_org cn
 	  GROUP BY
-      UPPER_UTF8(cn.name)
+      ". $this->db->getUpperFnc() ."(cn.name)
 	  HAVING
       COUNT(*) > 1";
     $orgs = $this->db->select($sql);
