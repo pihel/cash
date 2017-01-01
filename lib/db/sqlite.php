@@ -116,7 +116,7 @@ class SQLITE_DB extends DB {
   }
   
   public function getDateAddFnc($col, $interval) {
-    return "DATETIME(".$col.", '".interval. "')";
+    return "DATETIME(".$col.", '".$interval. "')";
   }
 
   function __destruct() {

@@ -8,7 +8,7 @@ $root = dirname(__FILE__)."/../";
 $debug = 0;
 
 /* Database type */
-$db_name = 'MYSQL';
+$db_name = 'SQLITE';
 
 /* Time without actions */
 $life_time = ini_get("session.gc_maxlifetime");
