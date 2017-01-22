@@ -1,6 +1,20 @@
 var v_edit_id = 0;
 var v_copy = false;
 
+//allow comma separator on numberfield (replace to dot)
+Ext.override(Ext.form.NumberField, {
+    //all allowed chars with dot and comma
+    baseChars: "-0123456789,.бю",
+    setValue: function(v){
+        v = typeof v == 'number' ? v : String(v).replace(",", ".").replace("б", ".").replace("ю", ".").replace(/,/g, "");
+        return Ext.form.NumberField.superclass.setValue.call(this, v);
+    },
+    parseValue: function(value){
+        value = parseFloat(String(value).replace(",", ".").replace("б", ".").replace("ю", ".").replace(/,/g, "") );
+        return isNaN(value) ? '' : value;
+    }
+}); //Ext.override(Ext.form.NumberField
+
 //---- date
 var cash_item_date =
 {
@@ -122,7 +136,6 @@ var cash_item_prod_type_cb = Ext.create('Ext.form.field.ComboBox', {
     }
 }); //cash_item_prod_type_cb
 
-
 //----price
 var cash_item_price = {
     xtype: 'numberfield',
@@ -132,15 +145,7 @@ var cash_item_price = {
     allowBlank: false,
     labelWidth: 100,
     width: 200,
-    allowBlank: false,
-    value: 0/*,
-    baseChars: '-+0123456789,.',
-    listeners: {
-      change: function(o, newValue, oldValue, eOpts){
-        //newValue = newValue.replace(",", ".");
-        console.log(oldValue);
-      }
-    }*/
+    value: 0
 }; //cash_item_price
 
 //---- currency list
