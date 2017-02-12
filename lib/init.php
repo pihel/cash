@@ -45,7 +45,7 @@ require_once($root.'lib/db/db.php');
 $db = null;
 
 if($db_name == 'MYSQL') {
-  require_once($root.'lib/db/filecachdb.php');
+  require_once($root.'lib/db/filecachedb.php');
   require_once($root.'lib/db/mysqli.php');
   
   /* MYSQL config */
