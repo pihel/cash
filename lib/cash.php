@@ -218,20 +218,18 @@ class Cash {
       ON(co.id = c.org_id)
     INNER JOIN cashes_group cg
       ON(cg.id = c.`group`)
-    WHERE
-      ( c.nmcl_id = ? OR (c.nmcl_id IN(SELECT n.id FROM cashes_nom n 
-                                 WHERE ". $this->db->getUpperFnc() ."(n.name) like ". $this->db->getUpperFnc() ."('%". $this->db->escape($nmcl_name)."%')) AND ? = 0) 
-      )
-      AND c.bd_id = ? AND c.visible = 1
-      AND c.date > ( SELECT 
-                        ".$this->db->getDateAddFnc("MAX(c1.date)", $this->from)."
-                     FROM 
-                        cashes c1 
-                     WHERE 
-                        c1.nmcl_id = c.nmcl_id
-                        AND c1.bd_id = c.bd_id
-                        AND c1.visible = c.visible
-                    )
+    INNER JOIN ( 
+      SELECT c1.nmcl_id as nm_id,
+          ".$this->db->getDateAddFnc("MAX(c1.date)", $this->from)." as date
+      FROM 
+          cashes c1 
+      WHERE
+          ( c1.nmcl_id = ? OR (c1.nmcl_id IN(SELECT n.id FROM cashes_nom n 
+                                     WHERE ". $this->db->getUpperFnc() ."(n.name) like ". $this->db->getUpperFnc() ."('%". $this->db->escape($nmcl_name)."%')) AND ? = 0) 
+          )
+          AND c1.bd_id = ? AND c1.visible = 1
+      GROUP BY c1.nmcl_id
+    )  v ON ( c.nmcl_id = v.nm_id AND c.date >= v.date )
     GROUP BY c.`group`, c.org_id
     ORDER BY
       SUM(CASE WHEN c.uid = ? THEN 100 ELSE 1 END) DESC, COUNT(1) DESC
