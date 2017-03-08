@@ -489,12 +489,12 @@ function addFPD() {
 
 var cash_list_edit_btn_fpd =
 {
-	xtype: 'button',
-	text: lang(239),
+  xtype: 'button',
+  text: lang(239),
   tooltip: lang(240),
-	id: "cash_list_edit_btn_fpd",
-	icon: settings.static + "/check.png",
-	handler : function (){
+  id: "cash_list_edit_btn_fpd",
+  icon: settings.static + "/check.png",
+  handler : function (){
     addFPD();
 	}
 };

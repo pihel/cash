@@ -15,10 +15,10 @@ var cash_check_fpd = {
 
 var cash_check_fpd_load = Ext.create('Ext.button.Button',
 {
-	text: lang(241),
+  text: lang(241),
   tooltip: lang(241),
   cls: "x-btn-default-small",
-	handler : function() {
+  handler : function() {
     cash_list_check.setLoading(true);
 	  
     cash_check_store.proxy.url = 'ajax/fpd_check.php?type=body&fpd=' + Ext.getCmp('cash_check_fpd').getValue();
@@ -42,14 +42,14 @@ var cash_check_fpd_load = Ext.create('Ext.button.Button',
         }//success
       }); //Ext.Ajax.request
     });
-	}
+  }
 });//cash_check_fpd_load
 
 var cash_check_cancel = Ext.create('Ext.button.Button',
 {
-	text: lang(61),
+  text: lang(61),
   tooltip: lang(62) + " (Escape)",
-	handler : function() {
+  handler : function() {
 	  cash_list_check.hide();
 	}
 });//cash_check_cancel
