@@ -259,7 +259,10 @@ class LangEn extends iLang {
     235 => "Complete goal",
     236 => "Delete goal?",
     237 => "Step to previous period",
-    238 => "Step to next period"
+    238 => "Step to next period",
+    239 => "FPD",
+    240 => "Add check from FPD",
+    241 => "Load"
   );
 
 }

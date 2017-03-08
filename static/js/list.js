@@ -48,7 +48,7 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
       {text: lang(18), dataIndex: 'group', 		    hidden: true , 	tdCls: 'x-center-cell'},
       {text: lang(19), dataIndex: 'gname',		    hideable: true },
       {text: lang(20), dataIndex: 'price',		    hideable: false, renderer: price, tdCls: 'x-price-cell' },
-      {text: lang(21), dataIndex: 'qnt',		      hideable: false, summaryType: 'sum', tdCls: 'x-center-cell' },
+      {text: lang(21), dataIndex: 'qnt',		      hideable: false, summaryType: 'sum', tdCls: 'x-center-cell', summaryRenderer: qnt },
       {text: lang(22), dataIndex: 'amount',		    hideable: true,  renderer: price_r, summaryType: 'sum' , tdCls: 'x-amount-cell' , summaryRenderer: price },
       {text: lang(23), dataIndex: 'oper_date',	  hideable: true, renderer: dateRender, tdCls: 'x-center-cell'  },
       {text: lang(24), dataIndex: 'date_edit', 	  hidden: true,   renderer: dateTimeRender, tdCls: 'x-center-cell' },
@@ -441,7 +441,7 @@ var cash_list_edit_btn_ocr_check = new Ext.FormPanel({
   id: "cash_list_edit_btn_ocr_check",
   frame: false,
   border: false,
-  items: [cash_list_edit_btn_add_check ]
+  items: [cash_list_edit_btn_add_check]
 }); //cash_list_edit_btn_ocr_check
 
 var cash_list_edit_btn_add =
@@ -462,6 +462,7 @@ function addCheck(hash) {
     v_edit_id = 0;
     v_copy = false;
     v_hash = hash;
+    v_fpd = false;
     cash_list_check.show();
   });
 }
@@ -475,6 +476,29 @@ function addItem() {
   });
 }
 
+function addFPD() {
+  if(parseInt(rights.write) == 0) return;
+  loadScript('static/js/check.js', function() {
+    v_edit_id = 0;
+    v_copy = false;
+    v_hash = '';
+    v_fpd = true;
+    cash_list_check.show();
+  });
+}
+
+var cash_list_edit_btn_fpd =
+{
+	xtype: 'button',
+	text: lang(239),
+  tooltip: lang(240),
+	id: "cash_list_edit_btn_fpd",
+	icon: settings.static + "/check.png",
+	handler : function (){
+    addFPD();
+	}
+};
+
 var cash_list_tb = {
       xtype: 'toolbar',
       dock: 'top',
@@ -485,7 +509,8 @@ var cash_list_tb = {
               cash_list_next_period, " ",
               cash_list_filter,
               cash_list_filter_loading, '->',
-              cash_list_edit_btn_ocr_check, " ",
+              //cash_list_edit_btn_ocr_check, " ",
+              cash_list_edit_btn_fpd, " ",
               cash_list_edit_btn_add],
       region: 'north',
       id: "cash_list_tb"

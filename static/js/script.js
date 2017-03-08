@@ -55,6 +55,10 @@ function price(val, metaData, record) {
   return val + v_def_currency;
 }
 
+function qnt(val) {
+  return Ext.util.Format.round(val, 3);
+}
+
 function price_r (val) {
   Ext.util.Format.thousandSeparator = " ";
   if(settings.round == 1) {

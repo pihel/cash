@@ -1,5 +1,58 @@
 var v_edit_id = 0;
 var v_hash = '';
+var v_fpd = false;
+
+var cash_check_fpd = {
+    xtype: 'textfield',
+    id: "cash_check_fpd",
+    name: "cash_check_fpd",
+    fieldLabel: lang(239),
+    allowBlank: false,
+    labelWidth: 100,
+    width: 200,
+    value: ""
+}; //cash_check_fpd
+
+var cash_check_fpd_load = Ext.create('Ext.button.Button',
+{
+	text: lang(241),
+  tooltip: lang(241),
+  cls: "x-btn-default-small",
+	handler : function() {
+    cash_list_check.setLoading(true);
+	  
+    cash_check_store.proxy.url = 'ajax/fpd_check.php?type=body&fpd=' + Ext.getCmp('cash_check_fpd').getValue();
+    cash_check_store.load(function() {
+      Ext.Ajax.request({
+        url: "ajax/fpd_check.php?type=head&fpd=" + Ext.getCmp('cash_check_fpd').getValue(),
+        method: "GET",
+        success: function(data) {
+            var obj = Ext.decode(data.responseText);
+
+            Ext.getCmp('cash_check_org_cb').setValue(obj.org);
+            Ext.getCmp('cash_check_date').setValue(Ext.Date.parse(obj.date, "d.m.Y H:i"));
+            if(obj.sum_card > 0) {
+              Ext.getCmp('cash_check_ctype_cb').setValue(2);
+            } else {
+              Ext.getCmp('cash_check_ctype_cb').setValue(1);
+            }
+            Ext.getCmp('cash_check_prod_type_cb').setValue(1);
+            
+            cash_list_check.setLoading(false);
+        }//success
+      }); //Ext.Ajax.request
+    });
+	}
+});//cash_check_fpd_load
+
+var cash_check_cancel = Ext.create('Ext.button.Button',
+{
+	text: lang(61),
+  tooltip: lang(62) + " (Escape)",
+	handler : function() {
+	  cash_list_check.hide();
+	}
+});//cash_check_cancel
 
 //---- date
 var cash_check_date =
@@ -13,7 +66,8 @@ var cash_check_date =
     labelWidth: 100,
     format: settings.date_format,
     allowBlank: false,
-    width: 200
+    width: 200,
+    submitFormat: "Y-m-d"
 }; // cash_check_date
 
 var cash_check_id_name_model = Ext.define('cash_check_id_name_model', {
@@ -50,6 +104,40 @@ var cash_check_org_cb = Ext.create('Ext.form.field.ComboBox', {
     tpl: '<tpl for="."><div class="x-boundlist-item">{name:htmlEncode}</div></tpl>',
     labelWidth: 100
 }); //cash_check_org_cb
+
+//---- prod type list
+var cash_check_prod_type_store = Ext.create('Ext.data.Store', {
+  model: 'cash_check_id_name_model',
+  autoDestroy: true,
+  proxy: {
+      // load using HTTP
+      type: 'ajax',
+      url: 'ajax/prod_type_list.php',
+      reader: {
+        type: 'json'
+      }
+  }
+}); //cash_check_prod_type_store
+
+var cash_check_prod_type_cb = Ext.create('Ext.form.field.ComboBox', {
+    store: cash_check_prod_type_store,
+    id: "cash_check_prod_type_cb",
+    name: "cash_check_prod_type_cb",
+    fieldLabel: lang(19),
+    labelWidth: 100,
+    displayField: 'name',
+    valueField: 'id',
+    queryMode: 'local',
+    allowBlank: false,
+    width: 474,
+    tpl: '<tpl for="."><div class="x-boundlist-item">{name:htmlEncode}</div></tpl>',
+    doQuery: function(queryString, forceAll) {
+        this.expand();
+        this.store.clearFilter(true);
+        this.store.filter(this.displayField, new RegExp(Ext.String.escapeRegex(queryString), 'i'));
+        Ext.getCmp('cash_check_prod_type_cb').focus(false, 1);
+    }
+}); //cash_check_prod_type_cb
 
 //---- currency list
 var cash_check_currency_store = Ext.create('Ext.data.Store', {
@@ -114,13 +202,19 @@ var cash_check_price_tb = {
       items: [cash_check_currency_cb, cash_check_ctype_cb]
 }; //cash_check_price_tb
 
+var cash_check_geo = Ext.create('Ext.form.field.Hidden', {
+    name: 'cash_check_geo',
+    id: "cash_check_geo",
+    value: '0;0'
+});//cash_check_geo
+
 //lines
 var cash_check_model = Ext.define('cash_check_model', {
     extend: 'Ext.data.Model',
     fields: [
       {name: 'name', 	type: 'string'},
-      {name: 'gr_id', 	type: 'int'},
-      {name: 'gr_name', type: 'string'},
+      //{name: 'gr_id', 	type: 'int'},
+      //{name: 'gr_name', type: 'string'},
       {name: 'price', 	type: 'double'},
       {name: 'qnt', 	type: 'double'},
       {name: 'amnt', 	type: 'double'}
@@ -139,11 +233,11 @@ var cash_check_store = Ext.create('Ext.data.Store', {
 
 var cash_check_grid = Ext.create('Ext.grid.Panel', {
     store: cash_check_store,
-    height: 440,
+    height: 390,
     columns: [
       {text: lang(17), dataIndex: 'name',     flex: 1, 	hideable: false, editor: {xtype: 'textfield', allowBlank: false} },
-      {text: lang(18), dataIndex: 'gr_id', 	  hidden: true , 	tdCls: 'x-center-cell'},
-      {text: lang(19), dataIndex: 'gr_name',  hideable: false, editor: {xtype: 'textfield', allowBlank: false} },
+      //{text: lang(18), dataIndex: 'gr_id', 	  hidden: true , 	tdCls: 'x-center-cell'},
+      //{text: lang(19), dataIndex: 'gr_name',  hideable: false, editor: {xtype: 'textfield', allowBlank: false} },
       {text: lang(20), dataIndex: 'price',    hideable: false, renderer: price, tdCls: 'x-price-cell', editor: {xtype: 'textfield', allowBlank: false} },
       {text: lang(21), dataIndex: 'qnt',      hideable: false, tdCls: 'x-center-cell', editor: {xtype: 'textfield', allowBlank: false} },
       {text: lang(22), dataIndex: 'amnt',		  hideable: false, summaryType: 'sum' , tdCls: 'x-amount-cell' 
@@ -239,6 +333,12 @@ var cash_check_cancel = Ext.create('Ext.button.Button',
 	}
 });//cash_check_cancel
 
+var cash_check_fpd_tb = {
+      xtype: 'toolbar',
+      id: "cash_check_fpd_tb",
+      items: [cash_check_fpd,cash_check_fpd_load]
+}; //cash_check_fpd_tb
+
 //---- form add
 var cash_check_form_add = new Ext.FormPanel({
   url:'ajax/add_check.php',
@@ -246,7 +346,8 @@ var cash_check_form_add = new Ext.FormPanel({
   id: "cash_check_form_add",
   frame: true,
   border: false,
-  items: [cash_check_date, cash_check_org_cb, cash_check_price_tb, { xtype: 'hiddenfield', id: 'cash_check_grid_hdn', name: 'cash_check_grid_hdn' }, cash_check_grid ],
+  items: [cash_check_fpd_tb, cash_check_date, cash_check_org_cb, cash_check_prod_type_cb, cash_check_price_tb, 
+    { xtype: 'hiddenfield', id: 'cash_check_grid_hdn', name: 'cash_check_grid_hdn' }, cash_check_grid, cash_check_geo ],
   buttons: ["->", cash_check_save, " ", cash_check_cancel]
 }); //cash_check_form_add
 
@@ -269,30 +370,50 @@ var cash_list_check = Ext.create('Ext.Window', {
         },
         show: function() {
           cash_list_check.setLoading(lang(67));
+          
+          getLocation(function(lat, lon) {
+            cash_item_geo.setValue(lat+";"+lon);
+          }); //getLocation
+          
           //cash_check_nmcl_store.load(function() {
-            //cash_check_prod_type_store.load(function() {
+            cash_check_prod_type_store.load(function() {
               cash_check_currency_store.load(function() {
                 cash_check_ctype_store.load(function() {
+                  
+                  if(v_fpd) {
+                    Ext.getCmp('cash_check_fpd_tb').show();
+                    cash_check_store.removeAll();
+                    Ext.getCmp('cash_check_fpd').setValue("");
+                    Ext.getCmp('cash_check_org_cb').setValue("");
+                    Ext.getCmp('cash_check_date').setValue("");
+                    Ext.getCmp('cash_check_ctype_cb').setValue(1);
+                    Ext.getCmp('cash_check_prod_type_cb').setValue(1);
+                    
+                    cash_list_check.setLoading(false);
+                  } else {
+                    
+                    Ext.getCmp('cash_check_fpd_tb').hide();
                 
-                  cash_check_store.proxy.url = 'ajax/ocr_check.php?type=body&hash=' + v_hash;
-                  cash_check_store.load(function() {
-                    cash_check_currency_cb.setValue(parseInt(settings.currency));
-                    Ext.Ajax.request({
-                      url: "ajax/ocr_check.php?type=head&hash=" + v_hash,
-                      method: "GET",
-                      success: function(data) {
-                          var obj = Ext.decode(data.responseText);
+                    cash_check_store.proxy.url = 'ajax/ocr_check.php?type=body&hash=' + v_hash;
+                    cash_check_store.load(function() {
+                      cash_check_currency_cb.setValue(parseInt(settings.currency));
+                      Ext.Ajax.request({
+                        url: "ajax/ocr_check.php?type=head&hash=" + v_hash,
+                        method: "GET",
+                        success: function(data) {
+                            var obj = Ext.decode(data.responseText);
 
-                          Ext.getCmp('cash_check_org_cb').setValue(obj.org);
-                          Ext.getCmp('cash_check_date').setValue(Ext.Date.parse(obj.date, "d.m.Y"));
-                          
-                          cash_list_check.setLoading(false);
-                      }//success
-                    }); //Ext.Ajax.request
-                  });
+                            Ext.getCmp('cash_check_org_cb').setValue(obj.org);
+                            Ext.getCmp('cash_check_date').setValue(Ext.Date.parse(obj.date, "d.m.Y"));
+                            
+                            cash_list_check.setLoading(false);
+                        }//success
+                      }); //Ext.Ajax.request
+                    });
+                  } //v_fpd
                 });
               });
-            //});
+            });
           //});          
         }
     }

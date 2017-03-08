@@ -497,6 +497,7 @@ class Cash {
     } else {
       $lines = json_decode( $data['cash_check_grid_hdn'] );
     }
+    
     foreach($lines as $line) {
       $line = (array)$line;
       $item = array(
@@ -511,6 +512,9 @@ class Cash {
           'cash_item_toper_cb'      => 0,
           'cash_item_note'          => ''
       );
+      if(empty($item['cash_item_prod_type_cb'])) {
+        $item['cash_item_prod_type_cb'] = $data['cash_check_prod_type_cb'];
+      }
       $ret = $this->add($item, NULL, false);
       if($ret['failure'] === true ) {
         $this->db->rollback();
