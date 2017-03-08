@@ -294,13 +294,13 @@ var loadMask_cash_check_grid = new Ext.LoadMask(cash_check_grid, {msg:'Загр�
 
 //---  save
 var cash_check_save = Ext.create('Ext.button.Button', {
-	text: 'Сохранить',
-	formBind: true,
-	id: "cash_check_save",
+  text: 'Сохранить',
+  formBind: true,
+  id: "cash_check_save",
   tooltip: lang(59),
-	icon: settings.static + "/yes.gif",
-	disabled: true,
-	handler : function() {
+  icon: settings.static + "/yes.gif",
+  disabled: true,
+  handler : function() {
     //save grid data to hidden
     var cash_check_grid_lines = cash_check_grid.store.getRange();
     var cash_check_grid_lines_arr = new Array();
@@ -309,7 +309,7 @@ var cash_check_save = Ext.create('Ext.button.Button', {
     });
     Ext.getCmp('cash_check_grid_hdn').setValue(Ext.JSON.encode(cash_check_grid_lines_arr));
     
-	  cash_check_form_add.submit({
+    cash_check_form_add.submit({
         waitTitle: lang(4),
         waitMsg: lang(75),
         success: function(form, action) {
@@ -320,17 +320,17 @@ var cash_check_save = Ext.create('Ext.button.Button', {
           error(action.result.msg);
         }
     }); //cash_check_form_add
-	}
+  }
 });
 
 
 var cash_check_cancel = Ext.create('Ext.button.Button',
 {
-	text: lang(61),
+  text: lang(61),
   tooltip: lang(62) + " (Escape)",
-	handler : function() {
-	  cash_list_check.hide();
-	}
+  handler : function() {
+    cash_list_check.hide();
+  }
 });//cash_check_cancel
 
 var cash_check_fpd_tb = {

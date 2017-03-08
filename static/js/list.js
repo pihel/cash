@@ -410,10 +410,10 @@ var cash_list_filter = {
 
 var cash_list_edit_btn_add_check =
 {
-	xtype: 'filefield',
-	buttonText: lang(47),
+  xtype: 'filefield',
+  buttonText: lang(47),
   tooltip: lang(47),
-	id: "cash_list_edit_btn_add_check",
+  id: "cash_list_edit_btn_add_check",
   buttonOnly: true,
   buttonConfig: {
       text: lang(47),
@@ -446,14 +446,14 @@ var cash_list_edit_btn_ocr_check = new Ext.FormPanel({
 
 var cash_list_edit_btn_add =
 {
-	xtype: 'button',
-	text: lang(49),
+  xtype: 'button',
+  text: lang(49),
   tooltip: lang(50) + " (Insert)",
-	id: "cash_list_edit_btn_add",
-	icon: settings.static + "/add.gif",
-	handler : function (){
+  id: "cash_list_edit_btn_add",
+  icon: settings.static + "/add.gif",
+  handler : function (){
     addItem();
-	}
+  }
 };
 
 function addCheck(hash) {
@@ -496,7 +496,7 @@ var cash_list_edit_btn_fpd =
   icon: settings.static + "/check.png",
   handler : function (){
     addFPD();
-	}
+  }
 };
 
 var cash_list_tb = {
