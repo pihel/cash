@@ -40,6 +40,7 @@ class DbUpdate {
     if($file_ver >= 1.05 && $db_ver < 1.05) $this->updateData_v1_050();
     if($file_ver >= 1.055 && $db_ver < 1.055) $this->updateData_v1_055();
     if($file_ver >= 1.061 && $db_ver < 1.061) $this->updateData_v1_061();
+    if($file_ver >= 1.081 && $db_ver < 1.081) $this->updateData_v1_081();
     
     if($db_ver == 0) {
       $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "version", $this->lng->get(221), $file_ver );
@@ -49,6 +50,12 @@ class DbUpdate {
     
     $this->db->commit();
   } //updateData
+  
+  public function updateData_v1_081() {
+    $this->exec("INSERT INTO cashes_setting(name, descr, value) VALUES('fpd', '".$this->lng->get(242)."', 'http://skahin.ru/api/cash/')");
+    $this->exec("ALTER TABLE cashes ADD COLUMN fpd INTEGER");
+    $this->db->exec('CREATE INDEX "XIF_CASHES_FPD" on cashes (fpd ASC)');
+  } //updateData_v1_081
     
   public function updateData_v1_050() {
     $this->exec("INSERT INTO cashes_setting(name, descr, value) VALUES('ocr', '".$this->lng->get(226)."', '')");

@@ -1,8 +1,10 @@
 <?php
-//require_once("../lib/init.php");
+require_once("../lib/init.php");
 //require_once("../lib/functions.php");
 
-$fpd = intval( $_GET['fpd'] );
-if($fpd == 0) exit;
+if(empty($settings['fpd'])) exit;
 
-echo file_get_contents("http://skahin.ru/api/cash/?type=".$_GET['type']."&fp=".$fpd);//1659429296
+$fpd = trim($_GET['fpd']);
+if(!is_numeric($fpd)) exit;
+
+echo file_get_contents($settings['fpd']."?type=".$_GET['type']."&fp=".$fpd);

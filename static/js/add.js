@@ -480,7 +480,7 @@ function setDefault() {
 
 function cash_list_add_load() {
   Ext.getCmp('cash_item_edit_id').setValue(v_edit_id);
-  Ext.getCmp('cash_item_edit_id_label').setText(v_edit_id);
+  Ext.getCmp('cash_item_edit_id_label').setText("id: " + v_edit_id);
 
   if(v_edit_id == 0) {
     setDefault();
@@ -525,6 +525,9 @@ function cash_list_add_load() {
         } else {
           Ext.getCmp('cash_item_file_del').hide();
           Ext.getCmp('cash_item_file').setWidth(Ext.getCmp('cash_item_nmcl_cb').getWidth());
+        }
+        if(obj.fpd) {
+          Ext.getCmp('cash_item_edit_id_label').setText("id: " + v_edit_id + "; fpd: " + obj.fpd);
         }
         Ext.getCmp('cash_item_note').setValue(obj.note);
         Ext.getCmp('cash_list_add').setTitle(lang(66));

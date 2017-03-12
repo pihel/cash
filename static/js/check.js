@@ -20,28 +20,42 @@ var cash_check_fpd_load = Ext.create('Ext.button.Button',
   cls: "x-btn-default-small",
   handler : function() {
     cash_list_check.setLoading(true);
-	  
-    cash_check_store.proxy.url = 'ajax/fpd_check.php?type=body&fpd=' + Ext.getCmp('cash_check_fpd').getValue();
-    cash_check_store.load(function() {
-      Ext.Ajax.request({
-        url: "ajax/fpd_check.php?type=head&fpd=" + Ext.getCmp('cash_check_fpd').getValue(),
-        method: "GET",
-        success: function(data) {
-            var obj = Ext.decode(data.responseText);
-
-            Ext.getCmp('cash_check_org_cb').setValue(obj.org);
-            Ext.getCmp('cash_check_date').setValue(Ext.Date.parse(obj.date, "d.m.Y H:i"));
-            if(obj.sum_card > 0) {
-              Ext.getCmp('cash_check_ctype_cb').setValue(2);
-            } else {
-              Ext.getCmp('cash_check_ctype_cb').setValue(1);
-            }
-            Ext.getCmp('cash_check_prod_type_cb').setValue(1);
-            
+    
+    cash_list_check_clear();
+    
+    Ext.Ajax.request({
+      url: "ajax/fpd_check.php?type=head&fpd=" + Ext.getCmp('cash_check_fpd').getValue(),
+      method: "GET",
+      success: function(data) {          
+          if(data.responseText == "") {
+            error(lang(15));
             cash_list_check.setLoading(false);
-        }//success
-      }); //Ext.Ajax.request
-    });
+            return;
+          }
+          
+          var obj = Ext.decode(data.responseText);
+          
+          if(obj.error) {
+            error(obj.text);
+            cash_list_check.setLoading(false);
+            return;
+          }
+
+          Ext.getCmp('cash_check_org_cb').setValue(obj.org);
+          Ext.getCmp('cash_check_date').setValue(Ext.Date.parse(obj.date, "d.m.Y H:i"));
+          if(obj.sum_card > 0) {
+            Ext.getCmp('cash_check_ctype_cb').setValue(2);
+          } else {
+            Ext.getCmp('cash_check_ctype_cb').setValue(1);
+          }
+          Ext.getCmp('cash_check_prod_type_cb').setValue(1);
+          
+          cash_check_store.proxy.url = 'ajax/fpd_check.php?type=body&fpd=' + Ext.getCmp('cash_check_fpd').getValue();
+          cash_check_store.load(function() {
+            cash_list_check.setLoading(false);
+          });
+      }//success
+    }); //Ext.Ajax.request
   }
 });//cash_check_fpd_load
 
@@ -292,15 +306,7 @@ var cash_check_grid = Ext.create('Ext.grid.Panel', {
 
 var loadMask_cash_check_grid = new Ext.LoadMask(cash_check_grid, {msg:'Загрузка списка операций...', store: cash_check_store});
 
-//---  save
-var cash_check_save = Ext.create('Ext.button.Button', {
-  text: 'Сохранить',
-  formBind: true,
-  id: "cash_check_save",
-  tooltip: lang(59),
-  icon: settings.static + "/yes.gif",
-  disabled: true,
-  handler : function() {
+function cash_check_save_hdlr() {  
     //save grid data to hidden
     var cash_check_grid_lines = cash_check_grid.store.getRange();
     var cash_check_grid_lines_arr = new Array();
@@ -320,6 +326,41 @@ var cash_check_save = Ext.create('Ext.button.Button', {
           error(action.result.msg);
         }
     }); //cash_check_form_add
+}
+
+//---  save
+var cash_check_save = Ext.create('Ext.button.Button', {
+  text: 'Сохранить',
+  formBind: true,
+  id: "cash_check_save",
+  tooltip: lang(59),
+  icon: settings.static + "/yes.gif",
+  disabled: true,
+  handler : function() {
+    //check if FPD already exists
+    Ext.Ajax.request({
+      url: "ajax/check_fpd.php?fpd=" + Ext.getCmp('cash_check_fpd').getValue(),
+      method: "GET",
+      success: function(data) {
+        var obj = Ext.decode(data.responseText);
+        if(obj.fpd == 1) {
+          Ext.Msg.show({
+            title:lang(239),
+            msg: lang(243),
+            icon: Ext.MessageBox.QUESTION,
+            buttons: Ext.Msg.OKCANCEL,
+            fn: function(buttonId) {
+              //if clicked ok
+              if(buttonId == "ok") {
+                  cash_check_save_hdlr();
+              } //buttonId == "ok"
+            } // fn - button click
+          });//Ext.Msg.show
+        } else { //obj.fpd
+          cash_check_save_hdlr();
+        }
+      }//success
+    }); //Ext.Ajax.request
   }
 });
 
@@ -351,6 +392,15 @@ var cash_check_form_add = new Ext.FormPanel({
   buttons: ["->", cash_check_save, " ", cash_check_cancel]
 }); //cash_check_form_add
 
+function cash_list_check_clear() {
+  Ext.getCmp('cash_check_fpd_tb').show();
+  cash_check_store.removeAll();
+  Ext.getCmp('cash_check_org_cb').setValue("");
+  Ext.getCmp('cash_check_date').setValue("");
+  Ext.getCmp('cash_check_ctype_cb').setValue(1);
+  Ext.getCmp('cash_check_prod_type_cb').setValue(1);
+} //cash_list_check_clear
+
 var cash_list_check = Ext.create('Ext.Window', {
     title: lang(76),
     id: "cash_list_add_check",
@@ -372,7 +422,7 @@ var cash_list_check = Ext.create('Ext.Window', {
           cash_list_check.setLoading(lang(67));
           
           getLocation(function(lat, lon) {
-            cash_item_geo.setValue(lat+";"+lon);
+            cash_check_geo.setValue(lat+";"+lon);
           }); //getLocation
           
           //cash_check_nmcl_store.load(function() {
@@ -381,14 +431,9 @@ var cash_list_check = Ext.create('Ext.Window', {
                 cash_check_ctype_store.load(function() {
                   
                   if(v_fpd) {
-                    Ext.getCmp('cash_check_fpd_tb').show();
-                    cash_check_store.removeAll();
+                    cash_list_check_clear();
                     Ext.getCmp('cash_check_fpd').setValue("");
-                    Ext.getCmp('cash_check_org_cb').setValue("");
-                    Ext.getCmp('cash_check_date').setValue("");
-                    Ext.getCmp('cash_check_ctype_cb').setValue(1);
-                    Ext.getCmp('cash_check_prod_type_cb').setValue(1);
-                    
+                    Ext.getCmp('cash_check_fpd').focus(false, 200);                    
                     cash_list_check.setLoading(false);
                   } else {
                     

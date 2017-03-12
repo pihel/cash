@@ -3,6 +3,7 @@ var cash_list_model = Ext.define('cash_list_model', {
     fields: [
       {name: 'id', 		        type: 'int'},
       {name: 'nmcl_id', 	    type: 'int'},
+      {name: 'fpd', 	        type: 'int'},
       {name: 'nom', 		      type: 'string'},
       {name: 'group', 	      type: 'int'},
       {name: 'gname', 	      type: 'string'},
@@ -44,6 +45,7 @@ var cash_list_grid = Ext.create('Ext.grid.Panel', {
     columns: [
       {text: "ID", 		 dataIndex: 'id', 		      hidden: true, 	tdCls: 'x-center-cell' },
       {text: lang(16), dataIndex: 'nmcl_id', 		  hidden: true , 	tdCls: 'x-center-cell'},
+      {text: lang(239), dataIndex: 'fpd', 		    hidden: true , 	tdCls: 'x-center-cell'},
       {text: lang(17), dataIndex: 'nom', 		      flex: 1, 	hideable: false},
       {text: lang(18), dataIndex: 'group', 		    hidden: true , 	tdCls: 'x-center-cell'},
       {text: lang(19), dataIndex: 'gname',		    hideable: true },

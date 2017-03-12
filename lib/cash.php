@@ -77,7 +77,7 @@ class Cash {
     $this->db->escape_res = true;
     $desc = "ASC";
     $select = 
-      "c.id, c.nmcl_id, cn.name as nom, c.`group`, cg.name gname, c.price, c.qnt, c.date as oper_date, c.date_edit,
+      "c.id, c.nmcl_id, c.fpd, cn.name as nom, c.`group`, cg.name gname, c.price, c.qnt, c.date as oper_date, c.date_edit,
         c.org_id, co.name as oname, c.type, c.note, c.file, c.uid, u.login, cr.rate, cr.sign, c.cash_type_id, ct.name as cash_type,
         CASE WHEN c.type = 0 THEN -1 ELSE 1 END * c.price * c.qnt * cr.rate as amount";
     if($short) {
@@ -119,13 +119,26 @@ class Cash {
     $sql =
     " SELECT
       c.nmcl_id, c.`group`, c.price, c.qnt, c.date as oper_date, c.cur_id,
-      c.org_id, c.type, c.note, c.file, c.uid, c.cash_type_id, c.type
+      c.org_id, c.type, c.note, c.file, c.uid, c.cash_type_id, c.type, c.fpd
      FROM cashes c
      WHERE
       c.id = ?
       AND c.bd_id = ?";
 
      return $this->db->line($sql, $id, $this->usr->db_id);
+  }
+  
+  public function checkFpd($fpd) {
+    if(!$this->usr->canRead()) return array();
+
+    $sql =
+    " SELECT MAX(1)
+     FROM cashes c
+     WHERE
+      c.fpd = ?
+      AND c.bd_id = ?";
+
+     return intval( $this->db->element($sql, $fpd, $this->usr->db_id) );
   }
   
   public function getSettings_flat() {
@@ -398,6 +411,7 @@ class Cash {
 
     $ret['cash_item_note']                        = $data['cash_item_note'];
     $ret['cash_item_geo']                         = $data['cash_item_geo'];
+    $ret['cash_item_fpd']                         = $data['cash_item_fpd'];   
     
     return $ret;
   }
@@ -508,9 +522,11 @@ class Cash {
           'cash_item_currency_cb'   => $data['cash_check_currency_cb'],
           'cash_item_ctype_cb'      => $data['cash_check_ctype_cb'],
           'cash_item_qnt'           => $line['qnt'],
+          'cash_item_geo'           => $data['cash_check_geo'],
           'cash_item_org_cb'        => $data['cash_check_org_cb'],
           'cash_item_toper_cb'      => 0,
-          'cash_item_note'          => ''
+          'cash_item_note'          => '',
+          'cash_item_fpd'           => $data['cash_check_fpd']
       );
       if(empty($item['cash_item_prod_type_cb'])) {
         $item['cash_item_prod_type_cb'] = $data['cash_check_prod_type_cb'];
@@ -537,10 +553,13 @@ class Cash {
     $refb = $this->refbook_check($data, $files);
 
     if($refb['failure']) return $refb;
+    
+    //print_r($refb);
+    //exit;
 
     $sql =
-    "INSERT INTO `cashes` (nmcl_id, `group`, price, cash_type_id, qnt, `date`, org_id, bd_id, uid, `file`, `type` ,note, cur_id, geo_pos, visible, date_edit)
-     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ". $this->db->getDateFnc() .")";
+    "INSERT INTO `cashes` (nmcl_id, `group`, price, cash_type_id, qnt, `date`, org_id, bd_id, uid, `file`, `type` ,note, cur_id, geo_pos, fpd, visible, date_edit)
+     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ". $this->db->getDateFnc() .")";
 
     $this->db->exec($sql,
       $refb['cash_item_nmcl_cb'],
@@ -556,9 +575,9 @@ class Cash {
       $refb['cash_item_toper_cb'],
       $refb['cash_item_note'],
       $refb['cash_item_currency_cb'],
-      $refb['cash_item_geo']
+      $refb['cash_item_geo'],
+      $refb['cash_item_fpd']
     );
-
     $id = intval( $this->db->last_id() );
     if($id == 0) { $this->db->rollback(); return array('failure'=>true, 'msg'=> $this->lng->get(174)); }
 
