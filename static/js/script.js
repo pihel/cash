@@ -286,6 +286,7 @@ function authOk(id) {
             Ext.getCmp('cash_plan').setDisabled(parseInt(rights.read) == 0);
 
             Ext.getCmp('cash_list_edit_btn_add').setDisabled(parseInt(rights.write) == 0);
+            Ext.getCmp('cash_list_edit_btn_fpd').setDisabled(parseInt(rights.write) == 0);            
             Ext.getCmp('cash_list_edit_btn_add_check').setDisabled(parseInt(rights.write) == 0);
             Ext.getCmp('cash_list_edit_col').setVisible(parseInt(rights.write) == 1);
 

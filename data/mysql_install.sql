@@ -6,7 +6,7 @@ CREATE TABLE `cashes` (
     `price` DECIMAL(10,2) NOT NULL,
     `cur_id` INT(10) NOT NULL DEFAULT 1,
     `qnt` INT(11) NOT NULL DEFAULT 1,
-    `date` DATE NOT NULL,
+    `date` DATETIME NOT NULL,
     `org_id` INT(10) NOT NULL,
     `file` VARCHAR(250) NOT NULL,
     `bd_id` INT(10) NOT NULL DEFAULT 1,
@@ -15,7 +15,8 @@ CREATE TABLE `cashes` (
     `note` TEXT NOT NULL,
     `date_edit` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `visible` TINYINT(4) NOT NULL DEFAULT 1, 
-    `geo_pos` VARCHAR(64)
+    `geo_pos` VARCHAR(64),
+    `fpd` INTEGER
 );
 
 CREATE TABLE `cashes_goal` (
@@ -89,7 +90,7 @@ CREATE TABLE users (
     `write` INTEGER,
     `analiz` INTEGER,
     `setting` INTEGER,
-    `oper_date` DATE
+    `oper_date` DATETIME
 );
 
 CREATE INDEX `XIF_CASHES_NMCL` on cashes (nmcl_id ASC);
@@ -133,3 +134,5 @@ CREATE UNIQUE INDEX `XPK_DB_ID` on db (id ASC);
 CREATE INDEX `XIF_USERS_BD` on users (bd_id ASC);
 
 CREATE UNIQUE INDEX `XPK_USERS_ID` on users (id ASC);
+
+CREATE INDEX `XIF_CASHES_FPD` on cashes (fpd ASC)

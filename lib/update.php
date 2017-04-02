@@ -111,6 +111,7 @@ class DbUpdate {
     $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "ocr",          $this->lng->get(226), "" );
     $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "proc_analiz",  $this->lng->get(229), "1.5" );
     $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", "secure_user",  $this->lng->get(230), "0" );
+    $this->db->exec("INSERT INTO cashes_setting(name, descr, value) VALUES(?, ?, ?)", 'fpd',          $this->lng->get(242), 'http://skahin.ru/api/cash/');
     
     $this->db->exec("INSERT INTO cashes_group(name) VALUES(?)", $this->lng->get(210)); 
     $this->db->exec("INSERT INTO cashes_group(name) VALUES(?)", $this->lng->get(211));

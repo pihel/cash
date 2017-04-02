@@ -1,6 +1,7 @@
 <?
 abstract class DB {
-  protected $_srv, $_drvr, $_usr, $_pwd, $_db;
+  protected $_srv, $_usr, $_pwd, $_db;
+  public $_drvr;
 
   //кэшировать (на один запрос)
   public $try_cache = false;

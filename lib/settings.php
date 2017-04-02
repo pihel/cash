@@ -72,7 +72,7 @@ class CashSett {
       //insert
 
       $this->db->exec("INSERT INTO `users` (id, bd_id, login, pasw, `read`, `write`, analiz, setting, oper_date)
-		      VALUES( NULL, ?, ?, ?, ?, ?, ?, ?, datetime(CURRENT_TIMESTAMP, 'localtime') )", intval($data['bd_id']),
+		      VALUES( NULL, ?, ?, ?, ?, ?, ?, ?, ".$this->db->getDateFnc()." )", intval($data['bd_id']),
 		      $data['login'], $this->usr->hash_pasw($data['pasw']), intval($data['s_read'] == "true"), intval($data['s_write'] == "true"), intval($data['s_analiz'] == "true"), intval($data['s_setting'] == "true"));
       $id = $this->db->last_id();
     } else {
@@ -85,12 +85,12 @@ class CashSett {
       }
       if($data['pasw'] != "***") {
         $this->db->exec("UPDATE `users`
-		      SET login = ?, pasw = ?, `read` = ?, `write` = ?, analiz = ?, setting = ?, oper_date = datetime(CURRENT_TIMESTAMP, 'localtime')
+		      SET login = ?, pasw = ?, `read` = ?, `write` = ?, analiz = ?, setting = ?, oper_date = ".$this->db->getDateFnc()."
 		      WHERE id = ? ",
 		      $data['login'], $this->usr->hash_pasw($data['pasw']), intval($data['s_read'] == "true"), intval($data['s_write'] == "true"), intval($data['s_analiz'] == "true"), intval($data['s_setting'] == "true"), $id);
       } else {
         $this->db->exec("UPDATE `users`
-		      SET login = ?, `read` = ?, `write` = ?, analiz = ?, setting = ?, oper_date = datetime(CURRENT_TIMESTAMP, 'localtime')
+		      SET login = ?, `read` = ?, `write` = ?, analiz = ?, setting = ?, oper_date = ".$this->db->getDateFnc()."
 		      WHERE id = ? ",
 		      $data['login'], intval($data['s_read'] == "true"), intval($data['s_write'] == "true"), intval($data['s_analiz'] == "true"), intval($data['s_setting'] == "true"), $id);
       }

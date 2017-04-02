@@ -37,6 +37,7 @@ function getPluginGoalSave() {
 var cash_goal_add = Ext.create('Ext.button.Button', {
   text: lang(49),
   icon: settings.static + "/add.gif",
+  id: "cash_goal_add",
   handler : function () {
     cash_goal_store.add({id:0, plan: undefined, qnt:1, plan_date:undefined, iord:undefined});
   }

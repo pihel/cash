@@ -119,7 +119,7 @@ class Cash {
     $sql =
     " SELECT
       c.nmcl_id, c.`group`, c.price, c.qnt, c.date as oper_date, c.cur_id,
-      c.org_id, c.type, c.note, c.file, c.uid, c.cash_type_id, c.type, c.fpd
+      c.org_id, c.type, c.note, c.file, c.uid, c.cash_type_id, c.fpd
      FROM cashes c
      WHERE
       c.id = ?
@@ -628,6 +628,10 @@ class Cash {
     $this->db->exec("DELETE FROM cashes_org   WHERE NOT EXISTS(SELECT 1 FROM cashes c WHERE c.org_id  = cashes_org.id)");
     $this->db->exec("DELETE FROM cashes_group WHERE NOT EXISTS(SELECT 1 FROM cashes c WHERE c.`group` = cashes_group.id)");
     $this->db->commit();
+    
+    if($this->db->_drvr != 'SQLITE') {
+      return true;
+    }
 
     $this->db->exec("analyze cashes;");
     $this->db->exec("analyze cashes_group;");

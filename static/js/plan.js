@@ -256,6 +256,7 @@ var cash_plan_goal_panel = Ext.create('Ext.Panel', {
           Ext.getCmp('cash_plan_goal_panel').add(Ext.getCmp('cash_goal_usr_name_list_cb'));
           Ext.getCmp('cash_plan_goal_panel').add(Ext.getCmp('cash_goal_grid'));
           Ext.getCmp('cash_goal_edit_col').setVisible(parseInt(rights.write) == 1);
+          Ext.getCmp('cash_goal_add').setDisabled(parseInt(rights.write) == 0); 
           cash_goal_usr_name_list.load();
           cash_goal_refresh();
         }); //loadScript
