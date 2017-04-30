@@ -53,13 +53,13 @@ class DbUpdate {
   
   public function updateData_v1_081() {
     $this->exec("INSERT INTO cashes_setting(name, descr, value) VALUES('fpd', '".$this->lng->get(242)."', 'http://skahin.ru/api/cash/')");
-    $this->exec("ALTER TABLE cashes ADD COLUMN fpd INTEGER");
+    $this->exec("ALTER TABLE cashes ADD fpd INTEGER");
     $this->db->exec('CREATE INDEX "XIF_CASHES_FPD" on cashes (fpd ASC)');
   } //updateData_v1_081
     
   public function updateData_v1_050() {
     $this->exec("INSERT INTO cashes_setting(name, descr, value) VALUES('ocr', '".$this->lng->get(226)."', '')");
-    $this->exec("ALTER TABLE cashes ADD COLUMN geo_pos VARCHAR(64)");
+    $this->exec("ALTER TABLE cashes ADD geo_pos VARCHAR(64)");
   } //updateData_v1_050
   
   public function updateData_v1_055() {
