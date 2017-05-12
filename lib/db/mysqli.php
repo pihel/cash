@@ -1,5 +1,7 @@
 <?
 class MySQLi_DB extends FileCacheDB {
+  
+  private $affected_rows;
 
   public function try_connect($srv, $login, $pasw, $db) {
     return new mysqli($srv, $login, $pasw, $db);
@@ -41,7 +43,10 @@ class MySQLi_DB extends FileCacheDB {
   }
 
   public function affect() {
-    return $this->_con->affected_rows;
+    if($this->_stmt->affected_rows > 1) {
+      $this->affected_rows = $this->_stmt->affected_rows;
+    }
+    return $this->affected_rows;
   }
 
   protected function _exec($sql, $args) {
@@ -91,6 +96,7 @@ class MySQLi_DB extends FileCacheDB {
       }
     }
 
+    $this->affected_rows = $this->_stmt->affected_rows;
     $this->_stmt->close();
 
     return $ret;
