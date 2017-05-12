@@ -6,7 +6,7 @@ CREATE TABLE `cashes` (
     `price` DECIMAL(10,2) NOT NULL,
     `cur_id` INT(10) NOT NULL DEFAULT 1,
     `qnt` INT(11) NOT NULL DEFAULT 1,
-    `date` DATETIME NOT NULL,
+    `date` DATE NOT NULL,
     `org_id` INT(10) NOT NULL,
     `file` VARCHAR(250) NOT NULL,
     `bd_id` INT(10) NOT NULL DEFAULT 1,
