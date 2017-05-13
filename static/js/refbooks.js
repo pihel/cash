@@ -39,7 +39,7 @@ var colSave = {
           method: "POST",
           params: rec.data,
           success: function(data) {
-              if(parseInt(data.responseText) > 0) {
+              if(parseInt(data.responseText) >= 0) {
                 grid.getStore().load();
               } else {
                 error(data.responseText);

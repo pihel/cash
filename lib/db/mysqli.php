@@ -57,6 +57,7 @@ class MySQLi_DB extends FileCacheDB {
     if(!$this->_stmt) $this->raiseError();
     //биндим параменты
     //tnx http://www.php.net/manual/en/mysqli-stmt.bind-param.php#100879
+    if(is_array(@$args[1])) $args = $args[1];
     $params = $args;
     $refs = array();
     array_unshift($params, str_repeat('s', count($args)));
