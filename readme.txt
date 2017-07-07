@@ -1,8 +1,8 @@
 Home Bookkeeping on ExtJS 4, PHP 5, SQLite 3.
-Demo - http://demo.homebuh.pro
+Demo - http://demobuh.skahin.ru
 Login and password: admin
 
-Opportunity Description: http://homebuh.pro
+Opportunity Description: http://buh.skahin.ru
 
 License: GNU GPL v3 http://www.gnu.org/licenses/gpl
 
@@ -12,10 +12,10 @@ Dependencies:
 -------------------------------------------------------
 
 Домашняя бухгалтерия на ExtJS 4, PHP 5, SQLite 3.
-Демо - http://demo.homebuh.pro
+Демо - http://demobuh.skahin.ru
 Пароль и логин: admin
 
-Описание возможностей: http://homebuh.pro
+Описание возможностей: http://buh.skahin.ru
 
 Лицензия: GNU GPL v3 http://www.gnu.org/licenses/gpl
 

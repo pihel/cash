@@ -19,7 +19,7 @@ $demo = 0;
 $extjs = 'extjs';
 
 /* App version */
-$version = "1.084";
+$version = "1.085";
 //$version = rand(); //for reset cache
 
 /* Path to imgs and js */
