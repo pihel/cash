@@ -249,6 +249,41 @@ class Cash {
     LIMIT 1  ";
     return $this->db->line($sql, $nmcl_id, $nmcl_id, $this->usr->db_id, $this->usr->id);
   }
+  
+  public function nmcl_param_byorg($org_name) {
+    if(!$this->usr->canRead()) return array();
+
+    //cn.id, cn.name,
+    $sql =
+    "SELECT
+      c.`group` grp_id,
+      c.nmcl_id,
+	  c.org_id,
+      cn.name as nm_name,
+      cg.name as gr_name
+    FROM
+      cashes c
+    INNER JOIN cashes_nom cn
+      ON(cn.id = c.nmcl_id)
+    INNER JOIN cashes_group cg
+      ON(cg.id = c.`group`)
+    INNER JOIN ( 
+      SELECT c1.org_id as or_id,
+          ".$this->db->getDateAddFnc("MAX(c1.date)", $this->from)." as date
+      FROM 
+          cashes c1 
+      WHERE
+          c1.org_id IN(SELECT n.id FROM cashes_org n 
+                                     WHERE ". $this->db->getUpperFnc() ."(n.name) like ". $this->db->getUpperFnc() ."('%". $this->db->escape($org_name)."%'))
+          AND c1.bd_id = ? AND c1.visible = 1
+      GROUP BY c1.org_id
+    )  v ON ( c.org_id = v.or_id AND c.date >= v.date )
+    GROUP BY c.`group`, c.nmcl_id, c.org_id
+    ORDER BY
+      SUM(CASE WHEN c.uid = ? THEN 100 ELSE 1 END) DESC, COUNT(1) DESC
+    LIMIT 1  ";
+    return $this->db->line($sql, $this->usr->db_id, $this->usr->id);
+  }
 
   public function prod_type_list() {
     if(!$this->usr->canRead()) return array();
@@ -514,17 +549,20 @@ class Cash {
     
     foreach($lines as $line) {
       $line = (array)$line;
+	  $cash_item_toper_cb = 0;
+	  if($line['price'] > 0) $cash_item_toper_cb = 1;
+	  $line['price'] = abs($line['price']);
       $item = array(
-          'cash_item_date'          => $data['cash_check_date'],
+          'cash_item_date'          => $line['cash_check_date'],
           'cash_item_nmcl_cb'       => $line['name'],
           'cash_item_prod_type_cb'  => $line['gr_name'],
           'cash_item_price'         => $line['price'],
           'cash_item_currency_cb'   => $data['cash_check_currency_cb'],
           'cash_item_ctype_cb'      => $data['cash_check_ctype_cb'],
-          'cash_item_qnt'           => $line['qnt'],
+          'cash_item_qnt'           => $data['qnt'],
           'cash_item_geo'           => $data['cash_check_geo'],
-          'cash_item_org_cb'        => $data['cash_check_org_cb'],
-          'cash_item_toper_cb'      => 0,
+          'cash_item_org_cb'        => $line['cash_check_org_cb'],
+          'cash_item_toper_cb'      => $cash_item_toper_cb,
           'cash_item_note'          => '',
           'cash_item_fpd'           => $data['cash_check_fpd']
       );

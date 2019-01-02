@@ -93,31 +93,45 @@ function http_post($url, $post, $file) {
   
 } //http_post
 
-function load_check($file) {
-  $ext_type = array('gif','jpg','jpe','jpeg','png', 'tif', 'tiff', 'bmp');
+function load_file($file, $ext_type, $ret_ext, $load_dir) {
   
   $file['name'] = strtolower($file['name']);
   $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
   if(!in_array($ext, $ext_type)) {
-    return false;
+    return array();
   }
   
   global $root;
-  $dir = $root."files/ocr";
+  $dir = $root."files/".$load_dir;
 
   $hash = crc32(time().$file['name']);
   $hash = intval($hash);
   
   if( !file_exists( $dir ) ) {
     if( !mkdir( $dir, 0777, true) ) {
-      return false;
+      return array();
     }
   }
   $fname = $dir.'/'.$hash.".".$ext;
-  $fname_new = $dir.'/'.$hash.".gif";
+  $fname_new = $dir.'/'.$hash.".".$ret_ext;
   if(!move_uploaded_file($file['tmp_name'], $fname)) {
-    return false;
+    return array();
   }
+  
+  return array($fname, realpath($fname_new), $hash);
+} //load_file
+
+function load_xlsx($file) {  
+  $ret_arr = load_file($file, array('xlsx'), "xlsx", "xlsx");
+  
+  return $ret_arr[1];
+} //load_xls
+
+function load_check($file) {  
+  $ret_arr = load_file($file, array('gif','jpg','jpe','jpeg','png', 'tif', 'tiff', 'bmp'), "gif", "ocr");
+  $fname = $ret_arr[0];
+  $fname_new = $ret_arr[1];
+  $hash = $ret_arr[2];
   
   if( !optimize_check($fname, $fname_new, 2048, 2048) ) {
     return false;
@@ -185,6 +199,22 @@ function optimize_check($src, $dest, $width, $height, $rgb=0xFFFFFF) {
 
   return true;
 } //optimize_check
+
+function getXLSXData($file_path) {
+	$xlsx = new XLSXReader($file_path);
+	$rows = $xlsx->getSheetData($xlsx->getSheetNameById(1));
+	$ret_rows = array();
+	foreach($rows as $row) {
+		if(intval(str_replace(".", "", $row[0])) >= 01012000) {
+			$dt = date_parse_from_format("d.m.Y", $row[0]);
+			$org_name = $row[2];
+			if(strpos($org_name, ",") > 0) $org_name = trim( substr($org_name,0,strpos($org_name, ",")) );
+			$amount = doubleval( $row[4] );
+			$ret_rows[] = array("oper_date"=>$dt["year"]."-".sprintf('%02d', $dt["month"])."-".sprintf('%02d', $dt["day"]), "org"=>$org_name, "amount"=>$amount);
+		}
+	}
+	return $ret_rows;
+}
 
 //mime_content_type
 if(!function_exists('mime_content_type')) {

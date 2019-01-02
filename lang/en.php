@@ -260,8 +260,8 @@ class LangEn extends iLang {
     236 => "Delete goal?",
     237 => "Step to previous period",
     238 => "Step to next period",
-    239 => "FPD",
-    240 => "Add check from FPD",
+    239 => "XLSX",
+    240 => "Add purchases by XLSX download from online bank",
     241 => "Load",
     242 => "API receipt from FPD",
     243 => "Receipt already exists, add again?"

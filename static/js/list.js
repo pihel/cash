@@ -458,17 +458,6 @@ var cash_list_edit_btn_add =
   }
 };
 
-function addCheck(hash) {
-  if(parseInt(rights.write) == 0) return;
-  loadScript('static/js/check.js', function() {
-    v_edit_id = 0;
-    v_copy = false;
-    v_hash = hash;
-    v_fpd = false;
-    cash_list_check.show();
-  });
-}
-
 function addItem() {
   if(parseInt(rights.write) == 0) return;
   loadScript('static/js/add.js', function() {
@@ -478,26 +467,22 @@ function addItem() {
   });
 }
 
-function addFPD() {
+function addXLS() {
   if(parseInt(rights.write) == 0) return;
   loadScript('static/js/check.js', function() {
-    v_edit_id = 0;
-    v_copy = false;
-    v_hash = '';
-    v_fpd = true;
     cash_list_check.show();
   });
 }
 
-var cash_list_edit_btn_fpd =
+var cash_list_edit_btn_xls =
 {
   xtype: 'button',
   text: lang(239),
   tooltip: lang(240),
-  id: "cash_list_edit_btn_fpd",
+  id: "cash_list_edit_btn_xls",
   icon: settings.static + "/check.png",
   handler : function (){
-    addFPD();
+    addXLS();
   }
 };
 
@@ -512,7 +497,7 @@ var cash_list_tb = {
               cash_list_filter,
               cash_list_filter_loading, '->',
               //cash_list_edit_btn_ocr_check, " ",
-              cash_list_edit_btn_fpd, " ",
+              cash_list_edit_btn_xls, " ",
               cash_list_edit_btn_add],
       region: 'north',
       id: "cash_list_tb"
