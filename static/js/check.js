@@ -158,7 +158,7 @@ var cash_check_gr_cb = Ext.create('Ext.form.field.ComboBox', {
 
 var cash_check_grid = Ext.create('Ext.grid.Panel', {
     store: cash_check_store,
-    height: 690,
+    height: 540,
     columns: [
 	  {text: lang(16), dataIndex: 'nmcl_id', hidden: true , 	tdCls: 'x-center-cell'},
       {text: lang(17), dataIndex: 'nm_name', flex: 1, editor: cash_check_nmcl_cb},
@@ -303,7 +303,7 @@ var cash_list_check = Ext.create('Ext.Window', {
     title: lang(240),
     id: "cash_list_add_check",
     width: 1000,
-    height: 800,
+    height: 650,
     closeAction: 'hide',
     modal: true,
     headerPosition: 'top',
