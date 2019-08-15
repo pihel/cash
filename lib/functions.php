@@ -205,12 +205,12 @@ function getXLSXData($file_path) {
 	$rows = $xlsx->getSheetData($xlsx->getSheetNameById(1));
 	$ret_rows = array();
 	foreach($rows as $row) {
-		if(intval($xlsx->toUnixTimeStamp($row[0])) > 1000000000) {
+		if(intval(str_replace(".", "", $row[0])) >= 01012000) {
 			$dt = date_parse_from_format("d.m.Y", $row[0]);
 			$org_name = $row[2];
 			if(strpos($org_name, ",") > 0) $org_name = trim( substr($org_name,0,strpos($org_name, ",")) );
 			$amount = doubleval( $row[4] );
-			$ret_rows[] = array("oper_date"=>date('Y-m-d', intval($xlsx->toUnixTimeStamp($row[0]))), "org"=>$org_name, "amount"=>$amount);
+			$ret_rows[] = array("oper_date"=>$dt["year"]."-".sprintf('%02d', $dt["month"])."-".sprintf('%02d', $dt["day"]), "org"=>$org_name, "amount"=>$amount);
 		}
 	}
 	return $ret_rows;

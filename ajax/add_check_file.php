@@ -2,13 +2,12 @@
 require_once("../lib/init.php");
 require('../lib/external/XLSXReader.php');
 
-//$loaded_file = trim( load_xlsx($_FILES['cash_check_file']) );
-$loaded_file='../201907310.xlsx';
+
+$loaded_file = trim( load_xlsx($_FILES['cash_check_file']) );
 
 $ret_array = array();
 $orgs_cache = array();
 $orgs = getXLSXData($loaded_file) ;
-
 foreach($orgs as $k=>$v) {
 	if(!array_key_exists($v["org"], $orgs_cache)) {
 		$orgs_cache[$v["org"]] = $ch->nmcl_param_byorg($v["org"]);
