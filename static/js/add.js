@@ -172,7 +172,7 @@ var cash_item_currency_cb = Ext.create('Ext.form.field.ComboBox', {
     allowBlank: false,
     tpl: '<tpl for="."><div class="x-boundlist-item">{name:htmlEncode}</div></tpl>',
     width: 100,
-    value: 3
+    value: settings.currency
 }); //cash_item_currency_cb
 
 //---- currency list
@@ -461,7 +461,7 @@ function setDefault() {
   Ext.getCmp('cash_item_nmcl_cb').setValue("");
   Ext.getCmp('cash_item_prod_type_cb').setValue("");
   Ext.getCmp('cash_item_price').setValue(0);
-  Ext.getCmp('cash_item_currency_cb').setValue(3);
+  Ext.getCmp('cash_item_currency_cb').setValue(settings.currency);
   Ext.getCmp('cash_item_ctype_cb').setValue(1);
   Ext.getCmp('cash_item_qnt').setValue(1);
   Ext.getCmp('cash_item_org_cb').setValue("");
