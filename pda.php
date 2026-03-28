@@ -490,7 +490,7 @@ if(!empty($_POST['cash_item_save'])) {
         <h3><?=$lng->get(164);?>: <?=$add_ret['msg'];?></h3>
       <?}?>
       <form method="post" id="add_frm" onsubmit="return add(this);">
-        <input type="hidden" id="cash_item_currency_cb" name="cash_item_currency_cb" value="1">
+        <input type="hidden" id="cash_item_currency_cb" name="cash_item_currency_cb" value="<?=$settings['currency'];?>">
         <input type="hidden" id="cash_item_ctype_cb" name="cash_item_ctype_cb" value="1">
         <input type="hidden" id="cash_item_toper_cb" name="cash_item_toper_cb" value="0">
         <input type="hidden" id="cash_item_note" name="cash_item_note" value="">

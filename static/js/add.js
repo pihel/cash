@@ -172,7 +172,7 @@ var cash_item_currency_cb = Ext.create('Ext.form.field.ComboBox', {
     allowBlank: false,
     tpl: '<tpl for="."><div class="x-boundlist-item">{name:htmlEncode}</div></tpl>',
     width: 100,
-    value: 1
+    value: 3
 }); //cash_item_currency_cb
 
 //---- currency list
@@ -319,38 +319,38 @@ var cash_item_geo = Ext.create('Ext.form.field.Hidden', {
 
 //---  save
 var cash_item_save = Ext.create('Ext.button.Button', {
-	text: lang(58),
-	formBind: true,
-	id: "cash_item_save",
+  text: lang(58),
+  formBind: true,
+  id: "cash_item_save",
   tooltip: lang(59) + " (Enter)",
-	icon: settings.static + "/yes.gif",
-	disabled: true,
-	handler : function() {
-	  submt_add();
-	}
+  icon: settings.static + "/yes.gif",
+  disabled: true,
+  handler : function() {
+    submt_add();
+  }
 });
 
 var cash_item_add = Ext.create('Ext.button.Button', {
-	text: lang(49),
-	formBind: true,
+  text: lang(49),
+  formBind: true,
   tooltip: lang(60) + " (Shift-Enter)",
-	id: "cash_item_add",
-	icon: settings.static + "/yes.gif",
-	disabled: true,
-	tabIndex: -1,
-	handler : function() {
-	  submt_add(true);
-	}
+  id: "cash_item_add",
+  icon: settings.static + "/yes.gif",
+  disabled: true,
+  tabIndex: -1,
+  handler : function() {
+    submt_add(true);
+  }
 });
 
 
 var cash_item_cancel = Ext.create('Ext.button.Button',
 {
-	text: lang(61),
+  text: lang(61),
   tooltip: lang(62) + " (Escape)",
-	handler : function() {
-	  cash_list_add.hide();
-	}
+  handler : function() {
+    cash_list_add.hide();
+  }
 });
 
 //---price
@@ -358,8 +358,8 @@ var cash_item_price_tb = {
       xtype: 'toolbar',
       id: "cash_item_price_tb",
       items: [cash_item_price,
-	      cash_item_currency_cb,
-	      cash_item_ctype_cb]
+        cash_item_currency_cb,
+        cash_item_ctype_cb]
 }; //cash_item_price_tb
 
 var cash_item_edit_id = Ext.create('Ext.form.field.Hidden', {
@@ -380,7 +380,7 @@ function submt_add(_add) {
   
   if(_add) {
     if(v_edit_id > 0) return;
-	  cash_list_add.setLoading(lang(63));
+    cash_list_add.setLoading(lang(63));
   } else {
     cash_list_add.setLoading(lang(64));
   }
@@ -414,17 +414,17 @@ var cash_item_form_add = new Ext.FormPanel({
   id: "cash_item_form_add",
   frame: true,
   items: [cash_item_date,
-	  cash_item_nmcl_cb,
-	  cash_item_prod_type_cb,
-	  cash_item_price_tb,
-	  cash_item_qnt,
-	  cash_item_org_cb,
-	  cash_item_toper_cb,
-	  cash_item_file_tb,
-	  cash_item_note,
-	  cash_item_edit_id,
+    cash_item_nmcl_cb,
+    cash_item_prod_type_cb,
+    cash_item_price_tb,
+    cash_item_qnt,
+    cash_item_org_cb,
+    cash_item_toper_cb,
+    cash_item_file_tb,
+    cash_item_note,
+    cash_item_edit_id,
     cash_item_geo
- 	 ],
+   ],
   listeners: {
     afterRender: function(thisForm, options) {
         var map = new Ext.util.KeyMap({
@@ -461,7 +461,7 @@ function setDefault() {
   Ext.getCmp('cash_item_nmcl_cb').setValue("");
   Ext.getCmp('cash_item_prod_type_cb').setValue("");
   Ext.getCmp('cash_item_price').setValue(0);
-  Ext.getCmp('cash_item_currency_cb').setValue(1);
+  Ext.getCmp('cash_item_currency_cb').setValue(3);
   Ext.getCmp('cash_item_ctype_cb').setValue(1);
   Ext.getCmp('cash_item_qnt').setValue(1);
   Ext.getCmp('cash_item_org_cb').setValue("");
